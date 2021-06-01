@@ -70,3 +70,4 @@ electrochemical system:
             crystallographic orientation: 111 # 100, 110, poly
             supplier: null
             geometric area: null
+            preparation procedure: null # Short description of sample preparation. This can be very useful. :)
