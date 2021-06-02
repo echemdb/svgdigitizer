@@ -17,7 +17,7 @@ curator:
     
 data description:
     type: d # d=digitized, o=original, r=raw
-    measurement type: cyclic voltammetry
+    measurement type: CV # CV, SCV, LSV see documentation
     scan rate: 
         value: 50
         unit: mV/s # V/s, mV/s
@@ -33,6 +33,7 @@ data description:
 
 electrochemical system:
     electrolyte:
+        type: aq # aqueous = aq, non-aqueous=naq
         components: # create as many components as necessary. A simple electrolyte consists of two components, i.e., H2SO4 and water
             - name: NaCl # replace name by something generic, i.e., for a complex organic compound
               sum formula:  NaCl
@@ -59,7 +60,7 @@ electrochemical system:
             value: 298.15 
             unit: K # [K, C, F]
     electrodes:
-        configuration: three electrodes
+        configuration: three # number of electrodes
         reference electrode:
             type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-3M, MSE-1M, RHE, AgCl2
         counter electrode:
