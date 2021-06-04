@@ -3,7 +3,7 @@ from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
 
-class SvgData():
+class SvgData:
     def __init__(self, filename, limitlist):
         self.filename = filename
         self.xyrefvalues = np.array(limitlist)
@@ -16,23 +16,21 @@ class SvgData():
         self.xtrafo = self.get_trafo(self.xyrefpoints[:2, 0], self.xyrefvalues[:2])
         self.ytrafo = self.get_trafo(self.xyrefpoints[2:, 1], self.xyrefvalues[2:])
         self.doc.unlink()
-        self.get_parsed() ###################### added function
+        self.get_parsed()
         
-    def get_parsed(self): #get_allresults
-        self.allresults = {} ################################# added self
+    def get_parsed(self):
+        self.allresults = {}
         for pathid, pvals in self.figpaths.items():
-            self.allresults[pathid] = self.get_real_values(pvals) ############ added self
-        #return self.allresults  ####################### removed 
+            self.allresults[pathid] = self.get_real_values(pvals)
 
     def plot(self):
-        resdict = self.allresults       # self.get_parsed() #------------------- removed and replaced
+        resdict = self.allresults
         for i, v in resdict.items():
             plt.plot(v[0], v[1], label=i)
 
         plt.legend()
         plt.tight_layout()
         plt.show()
-        
 
     def get_trafo(self, xrefpath, xrefvalues):
         # we assume a rectangular plot
@@ -66,7 +64,6 @@ class SvgData():
 
 
 
-        #print(rp_vals)
         xmax_ind = np.argmax(rp_vals[:, 0])
         # careful: y is measured from the top in svg file, how great is that!
         ymax_ind = np.argmin(rp_vals[:, 1])
@@ -99,7 +96,6 @@ class SvgData():
         return xypaths_all
 
     def get_points(self):
-        
         point_strings={}
         
         for shape in ['circle', 'ellipse']:
@@ -112,11 +108,10 @@ class SvgData():
         path = parse_path(path_string)
         posxy = []
         for e in path:
-            if True:  # isinstance(e, Line):
-                x0 = e.start.real
-                y0 = e.start.imag
-                x1 = e.end.real
-                y1 = e.end.imag
-                posxy.append([x0, y0])
+            x0 = e.start.real
+            y0 = e.start.imag
+            x1 = e.end.real
+            y1 = e.end.imag
+            posxy.append([x0, y0])
 
         return np.array(posxy)
