@@ -1,0 +1,74 @@
+# This file can exist with the "source" information only, the entry data exists should be marked as "False" 
+# to indcate that neither the metadata nor the actual data were digitized or provided.
+# use "null" to idicate that a value is not available in the literature
+version: 1 # Is this necessary. Isn't this anyway given by git versioning
+
+source: 
+    doi: https://doi.org/10.1016/0039-6028(85)90985-9
+    bib id: Beden1985 # First Author and YYYY. Cross check for duplicats in the bib file.
+    figure: 2b # depending on the subfigure labels use 1, 1b, or 1_3
+    curve identifier: First cycle # use a unique short description to identify the curve in the figure
+    data exists: True
+    
+curator:
+    name: Albert Engstfeld
+    orcid: https://orcid.org/0000-0002-9686-3948
+    date digitized: 2021.06.01 # YYYY.MM.DD
+    
+data description:
+    type: d # d=digitized, o=original, r=raw
+    measurement type: CV # CV, SCV, LSV see documentation
+    scan rate: 
+        value: 50
+        unit: mV/s # V/s, mV/s
+    potential scale:
+        unit: V # V, mV
+        reference: RHE # given in the plot and not in the experimental section: MSE-3M, MSE-1M, RHE, AgCl2
+    current:        
+        unit: mA # uA, mA, A
+        normalized to: cm-2 # cm-2, m-2, null
+    additional methods: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were employed
+    links: null #generated automatically
+    comment: # Add whatever you think is important to understand the data
+
+electrochemical system:
+    electrolyte:
+        type: aq # aqueous = aq, non-aqueous=naq
+        components: # create as many components as necessary. A simple electrolyte consists of two components, i.e., H2SO4 and water
+            - name: NaCl # replace name by something generic, i.e., for a complex organic compound
+              sum formula:  NaCl
+              concentration: 0.1
+              concentration Unit: M #[M, mM, µM, g kg-1, ...]
+              type: salt #
+              supplier: null
+            - name: water
+              sum formula: H2O
+              type: solvent
+              volumen percent: 50
+            - name: ethanol
+              sum formula: EtOH
+              type: solvent
+              volumen percent: 50
+            - name: NaCl 
+              sum formula: NaCl
+              type: salt
+              supplier: null
+              concentration: 0.1
+              concentration Unit: M #[M, mM, uM, g kg-1, ...]    
+        ph: 13
+        temperature: # provide the temperature as it is given in the article. Assume room temperature if nothing is provided
+            value: 298.15 
+            unit: K # [K, C, F]
+    electrodes:
+        configuration: three # number of electrodes
+        reference electrode:
+            type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-3M, MSE-1M, RHE, AgCl2
+        counter electrode:
+            material: Pt
+            crystallographic orientation: poly
+        working electrode:
+            material: Ni
+            crystallographic orientation: 111 # 100, 110, poly
+            supplier: null
+            geometric area: null
+            preparation procedure: null # Short description of sample preparation. This can be very useful. :)
