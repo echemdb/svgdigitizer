@@ -18,7 +18,7 @@ curator:
 data description:
     type: d # d=digitized, o=original, r=raw
     measurement type: CV # CV, SCV, LSV see documentation
-    scan rate: 
+    scan rate: # specific i
         value: 50
         unit: mV/s # V/s, mV/s
     potential scale:
@@ -37,38 +37,71 @@ electrochemical system:
         components: # create as many components as necessary. A simple electrolyte consists of two components, i.e., H2SO4 and water
             - name: NaCl # replace name by something generic, i.e., for a complex organic compound
               sum formula:  NaCl
-              concentration: 0.1
-              concentration Unit: M #[M, mM, µM, g kg-1, ...]
+              concentration:
+                  value: 0.1
+                  unit: M #[M, mM, µM, g kg-1, ...]
               type: salt #
-              supplier: null
+              source:
+                  supplier: null
+                  LOT: 
             - name: water
               sum formula: H2O
               type: solvent
-              volumen percent: 50
+              proportion:
+                  value: 50
+                  unit: volume percent
+              source:
+                  refinement: Sartorius Arium 611UV
+                  quality: ultrapure water
+                  total organic carbon: 
+                      value: 3
+                      unit: ppb
             - name: ethanol
               sum formula: EtOH
               type: solvent
-              volumen percent: 50
-            - name: NaCl 
-              sum formula: NaCl
-              type: salt
-              supplier: null
-              concentration: 0.1
-              concentration Unit: M #[M, mM, uM, g kg-1, ...]    
-        ph: 13
+              proportion:
+                  value: 50
+                  unit: volume percent
+            - name: sulfuric acid
+              sum formula: H2SO4
+              type: acid
+              source:
+                  supplier: null
+                  LOT: 
+              concentration:
+                  value: 0.1
+                  unit: M #[M, mM, µM, g kg-1, ...] 
+        ph: 
+            value: 13
+            uncertainty: 0.1
         temperature: # provide the temperature as it is given in the article. Assume room temperature if nothing is provided
             value: 298.15 
             unit: K # [K, C, F]
     electrodes:
         configuration: three # number of electrodes
         reference electrode:
-            type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-3M, MSE-1M, RHE, AgCl2
+            type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-sat, MSE-3M, MSE-1M, RHE, AgCl2
+            source:
+                supplier: SI Analytics
         counter electrode:
             material: Pt
             crystallographic orientation: poly
+            shape: wire
         working electrode:
             material: Ni
-            crystallographic orientation: 111 # 100, 110, poly
-            supplier: null
-            geometric area: null
+            crystallographic orientation: 111 # hkl, 100, 110, poly
+            source:
+                supplier: null
+                LOT: 
+            shape: # optional
+                type: cylinder # bead/sphere
+                height:
+                    value: 4
+                    unit: mm
+                diameter:
+                    value: 4
+                    unit: mm
+            geometric electrolyte contact area: 
+                value: null
+                unit: cm-2
             preparation procedure: null # Short description of sample preparation. This can be very useful. :)
