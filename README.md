@@ -7,7 +7,8 @@ svg = SvgData(filename)
 svg.plot()
 ```
 
-`csvcreater.py` should contain converters for specific data. At the moment to create CV data. It is based on `svgdigitizer.py` but only takes the first path into account.
+`csvcreater.py` should contain converters for specific data. At the moment to create CV data.   
+It is based on `svgdigitizer.py`. It only requires the filename without extension, which is generated automatically for the required svg and yaml file. These should however have the same filename.
 
 ```python
 from csvcreater import CreateCVdata
