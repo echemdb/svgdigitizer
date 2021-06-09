@@ -26,7 +26,7 @@ figure description:
         reference: RHE # given in the plot and not in the experimental section: MSE-3M, MSE-1M, RHE, AgCl2
     current:        
         unit: mA/cm-2 # uA, mA, A, mA/cm-2, uA/cm-2, A/cm-2, A/m-2, ...
-    additional methods: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were employed
+    linked measurements: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
     links: null #generated automatically
     comment: # Add whatever you think is important to understand the data
 
