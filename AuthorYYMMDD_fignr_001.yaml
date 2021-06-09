@@ -7,7 +7,7 @@ source:
     doi: https://doi.org/10.1016/0039-6028(85)90985-9
     bib: Beden_1985_Voltammetric_833 # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
     figure: 2b # depending on the subfigure labels use 1, 1b, or 1_3
-    curve identifier: First cycle # use a unique short description to identify the curve in the figure
+    curve: First cycle # use a unique short description to identify the curve in the figure
     data exists: True
     
 curator:
