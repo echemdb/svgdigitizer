@@ -1,7 +1,7 @@
 # This file can exist with the "source" information only, the entry data exists should be marked as "False" 
 # to indcate that neither the metadata nor the actual data were digitized or provided.
 # use "null" to idicate that a value is not available in the literature
-version: 1 # Is this necessary. Isn't this anyway given by git versioning
+version: 1
 
 source: 
     doi: https://doi.org/10.1016/0039-6028(85)90985-9
