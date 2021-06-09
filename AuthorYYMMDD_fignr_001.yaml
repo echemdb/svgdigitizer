@@ -8,7 +8,6 @@ source:
     bib: Beden_1985_Voltammetric_833 # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
     figure: 2b # depending on the subfigure labels use 1, 1b, or 1_3
     curve: First cycle # use a unique short description to identify the curve in the figure
-    data exists: True
     
 curator:
     name: Albert Engstfeld
