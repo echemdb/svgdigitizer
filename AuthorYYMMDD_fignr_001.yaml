@@ -15,7 +15,8 @@ curator:
     digitized: 2021-06-01 # YYYY-MM-DD
     
 figure description:
-    type: d # d=digitized, o=original, r=raw
+    type: digitized # digitized, original, raw
+
     measurement type: CV # CV, SCV, LSV see documentation
     scan rate: # specific i
         value: 50
