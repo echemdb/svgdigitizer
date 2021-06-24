@@ -20,7 +20,7 @@ Commands:
   plot
 $ python -m svgdigitizer plot test/data/Ni111_NaOH_Beden1985_Fig2c.svg
 [displays a plot]
-$ python -m svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c.csv.expected
+$ python -m svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
 [creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
 ```
 
