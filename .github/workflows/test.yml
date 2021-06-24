@@ -1,0 +1,15 @@
+name: Test
+on:
+  push: { branches: [ "master" ] }
+  pull_request: { branches: [ "master" ] }
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with: { submodules: recursive }
+      - name: install dependencies
+        shell: bash -l {0}
+        run: |
+          echo Hello World.
