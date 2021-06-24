@@ -1,3 +1,12 @@
+# SVGDigitizer — Create (x,y) Data Points from SVG files.
+
+![Logo](./logo.svg)
+
+The purpose of this project is to digitize plots in scientific publications, recovering the measured data visualized in such a plot.
+
+
+
+
 `svgdigitizer.py` can be used to generate xy data of any kind from svg files. It creates data from multiple paths in a single plot.  
  
 ```python
