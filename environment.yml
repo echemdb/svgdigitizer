@@ -1,7 +1,7 @@
-# This file lists the dependencies needed to build and test all of digitizer.
+# This file lists the dependencies needed to build and test all of svgdigitizer.
 # Create a conda environment with these dependencies preinstalled with:
 # conda env create -f environment.yml
-name: digitizer-build
+name: svgdigitizer-build
 channels:
   - conda-forge
   - defaults
@@ -9,3 +9,5 @@ dependencies:
   - svg.path
   - matplotlib-base
   - pandas
+  - click
+  - pyyaml

@@ -4,20 +4,39 @@
 
 The purpose of this project is to digitize plots in scientific publications, recovering the measured data visualized in such a plot.
 
+## Command Line Interface
 
+There's a simple command line interface.
 
+```
+$ python -m svgdigitizer
+Usage: python -m svgdigitizer [OPTIONS] COMMAND [ARGS]...
 
-`svgdigitizer.py` can be used to generate xy data of any kind from svg files. It creates data from multiple paths in a single plot.  
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  digitize
+  plot
+$ python -m svgdigitizer plot test/data/Ni111_NaOH_Beden1985_Fig2c.svg
+[displays a plot]
+$ python -m svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c.csv.expected
+[creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
+```
+
+## API
+
+You can also use the `svgdigitizer` package directly from Python.
  
 ```python
-from svgdigitizer import SvgData
+from svgdigitizer.svgdigitizer import SvgData
 filename='Ni111_NaOH_Beden1985_Fig2c.svg'
 svg = SvgData(filename)
 svg.plot()
 ```
 
-`csvcreator.py` should contain converters for specific data. At the moment to create CV data.   
-It is based on `svgdigitizer.py`. It only requires the filename without extension, which is generated automatically for the required svg and yaml file. These should however have the same filename.
+`svgdigitizer.csvcreator` should contain converters for specific data. At the moment to create CV data.   
+Note that it is invoked with the SVG's and YAML's basename without extension.
 
 ```python
 from csvcreator import CreateCVdata
