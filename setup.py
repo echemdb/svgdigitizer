@@ -8,6 +8,13 @@ setup(
     license = 'GPL 3.0+',
     long_description = open('README.md').read(),
     include_package_data=True,
+    installl_requires = [
+        'svg.path',
+        'matplotlib',
+        'pandas',
+        'click',
+        'pyyaml',
+    ],
     entry_points = {
         'console_scripts': [
             'svgdigitizer=svgdigitizer.__main__:cli'

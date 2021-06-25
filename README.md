@@ -4,12 +4,18 @@
 
 The purpose of this project is to digitize plots in scientific publications, recovering the measured data visualized in such a plot.
 
+## Installation
+
+```
+pip install -e .
+```
+
 ## Command Line Interface
 
 There's a simple command line interface.
 
 ```
-$ python -m svgdigitizer
+$ svgdigitizer
 Usage: python -m svgdigitizer [OPTIONS] COMMAND [ARGS]...
 
 Options:
@@ -18,9 +24,9 @@ Options:
 Commands:
   digitize
   plot
-$ python -m svgdigitizer plot test/data/Ni111_NaOH_Beden1985_Fig2c.svg
+$ svgdigitizer plot test/data/Ni111_NaOH_Beden1985_Fig2c.svg
 [displays a plot]
-$ python -m svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
+$ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
 [creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
 ```
 
