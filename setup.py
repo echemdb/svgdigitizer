@@ -8,4 +8,9 @@ setup(
     license = 'GPL 3.0+',
     long_description = open('README.md').read(),
     include_package_data=True,
+    entry_points = {
+        'console_scripts': [
+            'svgdigitizer=svgdigitizer.__main__:cli'
+        ],
+    },
 )

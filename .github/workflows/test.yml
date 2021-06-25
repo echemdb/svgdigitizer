@@ -19,8 +19,12 @@ jobs:
         run: |
           mamba env update --quiet -n test -f environment.yml
           conda list
+      - name: install svgdigitizer
+        shell: bash -l {0}
+        run: |
+          pip install -e .
       - name: cli-test
         shell: bash -l {0}
         run: |
-          python -m svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
+          svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
           diff test/data/Ni111_NaOH_Beden1985_Fig2c.csv test/data/Ni111_NaOH_Beden1985_Fig2c.csv.expected
