@@ -6,10 +6,25 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python: ["3.6", "3.7", "3.8", "3.9"]
     steps:
       - uses: actions/checkout@v2
         with: { submodules: recursive }
+      - uses: conda-incubator/setup-miniconda@v2
+        with: { mamba-version: "*", channels: "conda-forge", channel-priority: true }
       - name: install dependencies
         shell: bash -l {0}
         run: |
-          echo Hello World.
+          mamba env update --quiet -n test -f environment.yml
+          conda list
+      - name: install svgdigitizer
+        shell: bash -l {0}
+        run: |
+          pip install -e .
+      - name: cli-test
+        shell: bash -l {0}
+        run: |
+          svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
+          diff test/data/Ni111_NaOH_Beden1985_Fig2c.csv test/data/Ni111_NaOH_Beden1985_Fig2c.csv.expected
