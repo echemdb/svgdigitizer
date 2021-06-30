@@ -2,10 +2,9 @@ import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
-from svgdigitizer import SvgData
+from svgdigitizer.svgdigitizer import SvgData
 
 class CreateCVdata(SvgData):
-    
     def __init__(self, filename, create_csv=False):
         self.svgfile = filename + '.svg' # Minidom parse does not accept a Path?
         self.yamlfile = Path(filename).with_suffix('.yaml')
@@ -108,4 +107,3 @@ class CreateCVdata(SvgData):
         
     def create_csv(self):
         self.df.to_csv(self.csvfile, index=False)
-    
