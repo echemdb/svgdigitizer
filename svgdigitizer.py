@@ -92,7 +92,6 @@ class SvgData:
             regex_match = re.match(scaling_factor_regex_str, text_content)
 
             if regex_match:
-                print(regex_match.group("value"))
                 scaling_factors[regex_match.group("axis")] = float(regex_match.group("value"))
         return scaling_factors
 
@@ -113,7 +112,6 @@ class SvgData:
             mref = (p_real[f'{axis}2'] - p_real[f'{axis}1']) / (p_ref[f'{axis}2'][axis] - p_ref[f'{axis}1'][axis]) / self.scaling_factors[axis]
             trafo = lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
         except KeyError:
-            print(self.scaling_factors[axis])
             mref = -1/self.scalebars[axis]['ref'] * self.scalebars[axis]['real']  / self.scaling_factors[axis] # unclear why we need negative sign: now I know, position of origin !!
             trafo = lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
         return trafo
