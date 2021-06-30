@@ -3,6 +3,7 @@ from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from cached_property import cached_property
 
 import re
 
@@ -24,8 +25,6 @@ class SvgData:
         
         self.ref_points, self.real_points = self.get_points()
         
-        self.scalebars = self.get_scalebars()
-        self.scaling_factors = self.get_scaling_factors()
 
         self.trafo = {}
         for axis in ['x','y']:
@@ -61,7 +60,8 @@ class SvgData:
         print('point values: ',real_points)
         return ref_points, real_points
         
-    def get_scalebars(self):
+    @cached_property
+    def scalebars(self):
         scalebars = {}
 
         for path in self.doc.getElementsByTagName('path'):
@@ -82,7 +82,8 @@ class SvgData:
 
         return scalebars
 
-    def get_scaling_factors(self):
+    @cached_property
+    def scaling_factors(self):
         scaling_factors = {'x': 1, 'y': 1}
         for text in self.doc.getElementsByTagName('text'):
 
