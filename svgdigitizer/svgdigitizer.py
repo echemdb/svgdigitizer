@@ -3,7 +3,7 @@ from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from cached_property import cached_property
+from functools import cached_property
 
 import re
 

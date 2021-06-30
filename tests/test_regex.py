@@ -1,6 +1,6 @@
 import unittest
 import re
-from digitizer import ref_point_regex_str, scalebar_regex_str, scaling_factor_regex_str
+from svgdigitizer.svgdigitizer import ref_point_regex_str, scalebar_regex_str, scaling_factor_regex_str
 
 
 class RegexTest(unittest.TestCase):
