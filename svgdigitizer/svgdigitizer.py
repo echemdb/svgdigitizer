@@ -7,9 +7,9 @@ from functools import cached_property
 
 import re
 
-ref_point_regex_str = r'^(?P<point>(x|y)\d)\: ?(?P<value>\d+\.?\d*) ?(?P<unit>.+)?'
-scalebar_regex_str = r'^(?P<axis>x|y)(_scalebar|sb)\: ?(?P<value>\d+\.?\d*) ?(?P<unit>.+)?'
-scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>\d+\.?\d*)'
+ref_point_regex_str = r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
+scalebar_regex_str = r'^(?P<axis>x|y)(_scalebar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
+scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'
 
 class SvgData:
     def __init__(self, filename, xlabel=None, ylabel=None):
