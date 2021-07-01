@@ -14,10 +14,14 @@ setup(
         'pandas',
         'click',
         'pyyaml',
+        'pillow',
+        'pdf2image',
+        'svgwrite',
     ],
     entry_points = {
         'console_scripts': [
-            'svgdigitizer=svgdigitizer.__main__:cli'
+            'svgdigitizer=svgdigitizer.__main__:cli',
+            'preparesvg=svgdigitizer.helpers.converter:cli'
         ],
     },
 )
