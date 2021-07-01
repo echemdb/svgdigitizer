@@ -16,7 +16,7 @@ def digitize(basename):
     CreateCVdata(basename).create_csv()
 
 @click.command()
-@click.option('--onlypng', is_flag=True,)
+@click.option('--onlypng', is_flag=True, help='Only produce png files')
 @click.argument('pdf')
 def paginate(onlypng, pdf):
     from pdf2image import convert_from_path
