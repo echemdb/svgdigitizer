@@ -156,8 +156,14 @@ class SvgData:
         return np.array([xnorm, ynorm])
 
     def get_paths(self):
-        path_strings = [(path.getAttribute('id'), path.getAttribute('d')) for path
-                        in self.doc.getElementsByTagName('path')]
+        paths = self.doc.getElementsByTagName("path")
+        svg = self.doc.getElementsByTagName("svg")[0]
+        layer = svg.getElementsByTagName("g")[0] # layers are groups
+        # only take paths into account which are not in groups with text
+        path_strings = []
+        for path in paths:
+            if path.parentNode == layer:
+                path_strings.append((path.getAttribute('id'), path.getAttribute('d')))
 
         xypaths_all = {path_string[0]: self.parse_pathstring(path_string[1]) for path_string in path_strings}
 
@@ -179,6 +185,7 @@ class SvgData:
     def create_df(self):
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
         self.dfs = [pd.DataFrame(data[idx],columns=[self.xlabel,self.ylabel]) for idx, i in enumerate(data)]
+
         #for df in self.dfs:
         #    df['t'] = self.create_time_axis(df)
             #df = df[['t','U','I']].copy() #reorder columns does not work
@@ -191,8 +198,7 @@ class SvgData:
             
         fig, ax = plt.subplots(1,1)
         for i, df in enumerate(self.dfs):
-            if df.shape[0] > 2: # do not plot scale bars, which are only 2 points
-                df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}') 
+            df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}') 
         # do we want the path in the legend as it was in the previous version?
         #plt.legend()
         plt.xlabel(self.xlabel)
