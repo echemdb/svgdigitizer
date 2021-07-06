@@ -8,7 +8,7 @@ from functools import cached_property
 import re
 
 ref_point_regex_str = r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
-scalebar_regex_str = r'^(?P<axis>x|y)(_scalebar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
+scale_bar_regex_str = r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
 scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'
 
 class SvgData:
@@ -49,11 +49,29 @@ class SvgData:
             # parse text content
 
             text_content = text.firstChild.firstChild.data
-            regex_match =re.match(ref_point_regex_str, text_content)
+            regex_match = re.match(ref_point_regex_str, text_content)
             if regex_match:
                 ref_point_id = regex_match.group("point")
                 real_points[ref_point_id] = float(regex_match.group("value"))
-                ref_points[ref_point_id] = {'x': float(text.firstChild.getAttribute('x')), 'y': float(text.firstChild.getAttribute('y'))}
+           
+                x_text = float(text.firstChild.getAttribute('x'))
+                y_text = float(text.firstChild.getAttribute('y'))
+                # get path which is grouped with text
+                group = text.parentNode
+
+                parsed_path = parse_path(group.getElementsByTagName("path")[0].getAttribute('d'))
+
+                # always take the point of the path which is further away from text origin
+                path_points = []
+                path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
+                path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
+                if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 > 
+                ((path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2)**0.5):
+                    point = 0
+                else:
+                    point = 1
+            
+                ref_points[ref_point_id] = {'x': path_points[point][0], 'y': path_points[point][1]}
 
         
         print('Ref points: ', ref_points)
@@ -61,26 +79,42 @@ class SvgData:
         return ref_points, real_points
         
     @cached_property
-    def scalebars(self):
-        scalebars = {}
+    def scale_bars(self):
+        scale_bars = {}
 
-        for path in self.doc.getElementsByTagName('path'):
-            try:
-                title = path.getElementsByTagName('title')[0].firstChild.data
-            except IndexError: # skip without title text
-                continue
+        for text in self.doc.getElementsByTagName('text'):
+            # parse text content
 
-            regex_match = re.match(scalebar_regex_str, title)
+            text_content = text.firstChild.firstChild.data
+            regex_match = re.match(scale_bar_regex_str, text_content)
             if regex_match:
-                parsed_path = parse_path(path.getAttribute('d'))
-                scalebars[regex_match.group("axis")] = {}
+                x_text = float(text.firstChild.getAttribute('x'))
+                y_text = float(text.firstChild.getAttribute('y'))
+                # get paths which are grouped with text
+                group = text.parentNode.parentNode
+                paths = group.getElementsByTagName("path")
+                end_points = []
+                for path in paths:
+                    parsed_path = parse_path(path.getAttribute('d'))
+                # always take the point of the path which is further away from text origin
+                    path_points = []
+                    path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
+                    path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
+                    if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 > 
+                    ((path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2)**0.5):
+                        point = 0
+                    else:
+                        point = 1
+                    end_points.append(path_points[point])
+                
+                scale_bars[regex_match.group("axis")] = {}
                 if regex_match.group("axis") == 'x':
-                    scalebars[regex_match.group("axis")]['ref'] = abs(parsed_path.point(1).real - parsed_path.point(0).real)
+                    scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0] )
                 elif regex_match.group("axis") == 'y':
-                    scalebars[regex_match.group("axis")]['ref'] = abs(parsed_path.point(1).imag - parsed_path.point(0).imag)
-                scalebars[regex_match.group("axis")]['real'] = float(regex_match.group("value"))
+                    scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][1] - end_points[0][1])
+                scale_bars[regex_match.group("axis")]['real'] = float(regex_match.group("value"))
 
-        return scalebars
+        return scale_bars
 
     @cached_property
     def scaling_factors(self):
@@ -112,7 +146,7 @@ class SvgData:
             mref = (p_real[f'{axis}2'] - p_real[f'{axis}1']) / (p_ref[f'{axis}2'][axis] - p_ref[f'{axis}1'][axis]) / self.scaling_factors[axis]
             trafo = lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
         except KeyError:
-            mref = -1/self.scalebars[axis]['ref'] * self.scalebars[axis]['real']  / self.scaling_factors[axis] # unclear why we need negative sign: now I know, position of origin !!
+            mref = -1/self.scale_bars[axis]['ref'] * self.scale_bars[axis]['real']  / self.scaling_factors[axis] # unclear why we need negative sign: now I know, position of origin !!
             trafo = lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
         return trafo
     
@@ -157,7 +191,7 @@ class SvgData:
             
         fig, ax = plt.subplots(1,1)
         for i, df in enumerate(self.dfs):
-            if df.shape[0] > 2: # do not plot scalebars, which are only 2 points
+            if df.shape[0] > 2: # do not plot scale bars, which are only 2 points
                 df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}') 
         # do we want the path in the legend as it was in the previous version?
         #plt.legend()
