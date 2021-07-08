@@ -11,6 +11,7 @@ class CreateCVdata(SvgData):
         self.yamlfile = Path(filename).with_suffix('.yaml')
         self.csvfile = Path(filename).with_suffix('.csv')
         
+        # The labels should later be updated automatically based on the files metadata
         self.xlabel = 'U'
         self.ylabel = 'I' # should be j if both current and normalized to are given in the yaml file
 
@@ -20,7 +21,7 @@ class CreateCVdata(SvgData):
         SvgData.__init__(self, filename=self.svgfile, xlabel=self.xlabel, ylabel=self.ylabel) # in principle we only want the dataframe
         self.df_raw = self.dfs[0] # from SvgData
         
-        self.description = self.metadata['data description']
+        self.description = self.metadata['figure description']
 
         self.xunit = self.description['potential scale']['unit']
         
