@@ -1,6 +1,6 @@
 import unittest
 import re
-from svgdigitizer.svgdigitizer import ref_point_regex_str, scalebar_regex_str, scaling_factor_regex_str
+from svgdigitizer.svgdigitizer import ref_point_regex_str, scale_bar_regex_str, scaling_factor_regex_str
 
 
 class RegexTest(unittest.TestCase):
@@ -26,7 +26,7 @@ class RegexTest(unittest.TestCase):
     
     def testScaleBarRegex(self):
         test_cases = [
-            {'test_string': 'y_scalebar: 50.6 µA cm⁻²',
+            {'test_string': 'y_scale_bar: 50.6 µA cm⁻²',
             'value group': '50.6',
             'unit group': 'µA cm⁻²',
             },
@@ -36,7 +36,7 @@ class RegexTest(unittest.TestCase):
             },
         ]  
         for test_case in test_cases:
-            match = re.match(scalebar_regex_str, test_case['test_string'])
+            match = re.match(scale_bar_regex_str, test_case['test_string'])
             self.assertEqual(match.group('value'), test_case['value group'])
             self.assertEqual(match.group('unit'), test_case['unit group'])
 
