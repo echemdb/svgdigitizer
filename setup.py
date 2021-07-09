@@ -8,7 +8,7 @@ setup(
     license = 'GPL 3.0+',
     long_description = open('README.md').read(),
     include_package_data=True,
-    installl_requires = [
+    install_requires = [
         'svg.path',
         'matplotlib',
         'pandas',
