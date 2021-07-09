@@ -11,3 +11,6 @@ dependencies:
   - pandas
   - click
   - pyyaml
+  - pillow
+  - pdf2image
+  - svgwrite

@@ -14,6 +14,9 @@ setup(
         'pandas',
         'click',
         'pyyaml',
+        'pillow',
+        'pdf2image',
+        'svgwrite',
     ],
     entry_points = {
         'console_scripts': [
