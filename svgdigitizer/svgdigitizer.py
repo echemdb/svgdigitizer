@@ -157,12 +157,11 @@ class SvgData:
 
     def get_paths(self):
         paths = self.doc.getElementsByTagName("path")
-        svg = self.doc.getElementsByTagName("svg")[0]
-        layer = svg.getElementsByTagName("g")[0] # layers are groups
-        # only take paths into account which are not in groups with text
+        # only take paths into account which are not in groups
+        # Note that layers are groups
         path_strings = []
         for path in paths:
-            if path.parentNode == layer:
+            if path.parentNode.nodeName != 'g' or path.parentNode.getAttribute("inkscape:groupmode") == 'layer':
                 path_strings.append((path.getAttribute('id'), path.getAttribute('d')))
 
         xypaths_all = {path_string[0]: self.parse_pathstring(path_string[1]) for path_string in path_strings}
