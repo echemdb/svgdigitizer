@@ -8,14 +8,20 @@ def cli(): pass
 @click.argument('svg')
 def plot(svg):
     from svgdigitizer.svgdigitizer import SvgData
-    SvgData(svg, sampling_interval=sampling_interval).plot()
+    if sampling_interval:
+        SvgData(svg, sampling_interval=float(sampling_interval)).plot()
+    else:
+        SvgData(svg).plot()
 
 @click.command()
 @click.option('--sampling_interval',  help='specify sampling interval (for now in mV)')
 @click.argument('basename')
 def digitize(basename, sampling_interval):
     from svgdigitizer.csvcreator import CreateCVdata
-    CreateCVdata(basename, sampling_interval=float(sampling_interval)).create_csv()
+    if sampling_interval:
+        CreateCVdata(basename, sampling_interval=float(sampling_interval)).create_csv()
+    else:
+        CreateCVdata(basename).create_csv()
 
 @click.command()
 @click.option('--onlypng', is_flag=True, help='Only produce png files')
