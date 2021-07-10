@@ -15,7 +15,7 @@ curator:
     orcid: https://orcid.org/0000-0002-9686-3948
     date digitized: 2021.06.01 # YYYY.MM.DD
     
-data description:
+figure description:
     type: d # d=digitized, o=original, r=raw
     measurement type: CV # CV, SCV, LSV see documentation
     scan rate: 

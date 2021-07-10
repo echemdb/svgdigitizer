@@ -19,7 +19,7 @@ class CreateCVdata(SvgData):
         SvgData.__init__(self, filename=self.svgfile, xlabel=self.xlabel, ylabel=self.ylabel) # in principle we only want the dataframe
         self.df_raw = self.dfs[0] # from SvgData
         
-        self.description = self.metadata['data description']
+        self.description = self.metadata['figure description']
 
         self.xunit = self.description['potential scale']['unit']
         
@@ -60,7 +60,7 @@ class CreateCVdata(SvgData):
         self.df['t'] = self.create_df_time_axis(self.df_raw)
         
     def create_df_U_axis(self, df):
-        '''create voltage axis in the dataframe based on the units in the data description '''
+        '''create voltage axis in the dataframe based on the units given in the figure description '''
         
         df_ = df.copy()
         
@@ -75,7 +75,7 @@ class CreateCVdata(SvgData):
         return df_[['U_V', 'U_mV']]
     
     def creat_df_I_axis(self, df):
-        '''create current or current density axis in the dataframe based on the units in the data description'''
+        '''create current or current density axis in the dataframe based on the units given in the figure description'''
         df_ = df.copy()
         if self.yunit == 'A':
             df_['I_A'] = df['I']
@@ -92,7 +92,7 @@ class CreateCVdata(SvgData):
         return df_[['I_A', 'I_mA', 'I_uA']]
             
     def create_df_time_axis(self, df):
-        '''create a time axis in the dataframe based on the scan rate data description'''
+        '''create a time axis in the dataframe based on the scan rate given in the figure description'''
         df_ = df.copy() # Is required to prevent that in the final df columns 'deltaU' and 'cumdeltaU' appear.
         df_['deltaU'] = abs(df_[self.xlabel].diff())
         #df['deltaU'] = df['deltaU'].apply(lambda x : x*(-1) if x<0 else x)
