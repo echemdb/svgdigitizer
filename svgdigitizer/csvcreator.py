@@ -5,7 +5,7 @@ from pathlib import Path
 from svgdigitizer.svgdigitizer import SvgData
 
 class CreateCVdata(SvgData):
-    def __init__(self, filename, create_csv=False):
+    def __init__(self, filename, create_csv=False, sampling_interval=None):
         self.svgfile = filename + '.svg' # Minidom parse does not accept a Path?
         self.yamlfile = Path(filename).with_suffix('.yaml')
         self.csvfile = Path(filename).with_suffix('.csv')
@@ -16,7 +16,7 @@ class CreateCVdata(SvgData):
         with open(self.yamlfile) as f:
             self.metadata = yaml.load(f, Loader=yaml.FullLoader)
         
-        SvgData.__init__(self, filename=self.svgfile, xlabel=self.xlabel, ylabel=self.ylabel) # in principle we only want the dataframe
+        SvgData.__init__(self, filename=self.svgfile, xlabel=self.xlabel, ylabel=self.ylabel, sampling_interval=sampling_interval) # in principle we only want the dataframe
         self.df_raw = self.dfs[0] # from SvgData
         
         self.description = self.metadata['data description']
