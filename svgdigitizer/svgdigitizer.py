@@ -28,11 +28,8 @@ class SvgData:
         for axis in ['x','y']:
             self.trafo[axis] = self.get_trafo(axis)
 
-        
-        self.doc.unlink()
         self.get_parsed()
         self.create_df()
-        
     
     def get_points(self):
         '''Creates:
