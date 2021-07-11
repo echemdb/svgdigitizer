@@ -171,10 +171,8 @@ class SvgData:
             if path.parentNode == layer:
                 path_strings.append((path.getAttribute('id'), path.getAttribute('d')))
         if not self.sampling_interval:
-            print('parsing curve')
             xypaths_all = {path_string[0]: self.parse_pathstring(path_string[1]) for path_string in path_strings}
         elif self.sampling_interval:
-            print('sampling curve')
             xypaths_all = {path_string[0]: self.sample_path(path_string[1]) for path_string in path_strings}
         return xypaths_all    
     
@@ -204,7 +202,6 @@ class SvgData:
                 intersects = Path(Line(complex(x,ymin),complex(x,ymax))).intersect(Path(segment))
                 # it is possible that a segment includes both scan directions
                 # which leads to two intersections
-                #print(intersects)
                 for i in range(len(intersects)):
                     point = intersects[i][0][1].point(intersects[i][0][0])
                     segment_points[i].append((point.real, point.imag))   
