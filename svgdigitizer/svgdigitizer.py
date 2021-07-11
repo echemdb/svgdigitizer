@@ -156,17 +156,19 @@ class SvgData:
         return np.array([xnorm, ynorm])
 
     def get_paths(self):
-        paths = self.doc.getElementsByTagName("path")
-        # only take paths into account which are not in groups
-        # Note that layers are groups
-        path_strings = []
-        for path in paths:
-            if path.parentNode.nodeName != 'g' or path.parentNode.getAttribute("inkscape:groupmode") == 'layer':
-                path_strings.append((path.getAttribute('id'), path.getAttribute('d')))
+        # Only take paths into account which are not in groups since those are
+        # the paths pointing to labels on the axes.
+        # This is complicated by the fact that layers as created by inkscape
+        # are also groups. Though such layers have `inkscape:groupmode` set,
+        # this attribute goes away when exporting to plain SVG.
+        paths = []
+        for path in self.doc.getElementsByTagName("path"):
+            if path.parentNode.nodeName != 'g' or path.parentNode.getAttribute("inkscape:groupmode") == 'layer' or len(path.parentNode.getElementsByTagName("path")) > 1:
+                paths.append(path)
 
-        xypaths_all = {path_string[0]: self.parse_pathstring(path_string[1]) for path_string in path_strings}
+        xypaths = {path.getAttribute('id'): self.parse_pathstring(path.getAttribute('d')) for path in paths}
 
-        return xypaths_all    
+        return xypaths
     
 
     def parse_pathstring(self, path_string):
