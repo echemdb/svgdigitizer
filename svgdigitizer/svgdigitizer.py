@@ -166,10 +166,7 @@ class SvgData:
             if path.parentNode.nodeName != 'g' or path.parentNode.getAttribute("inkscape:groupmode") == 'layer' or len(path.parentNode.getElementsByTagName("path")) > 1:
                 paths.append(path)
 
-        xypaths = {path.getAttribute('id'): self.parse_pathstring(path.getAttribute('d')) for path in paths}
-
-        return xypaths
-    
+        return {path.getAttribute('id'): self.parse_pathstring(path.getAttribute('d')) for path in paths}
 
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
