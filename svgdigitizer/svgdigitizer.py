@@ -18,7 +18,7 @@ class SvgData:
         self.filename = filename
 
         self.xlabel = xlabel or 'x'
-        self.ylabel = ylabel or 'y'       
+        self.ylabel = ylabel or 'y'
 
         self.doc = minidom.parse(self.filename)
 
