@@ -10,6 +10,7 @@ import re
 ref_point_regex_str = r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
 scale_bar_regex_str = r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
 scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'
+curve_regex_str = r'^curve: ?(?P<curve_id>[\W|\w]*)'
 
 class SvgData:
     def __init__(self, filename, xlabel=None, ylabel=None):
@@ -157,20 +158,20 @@ class SvgData:
         the `<path>` tags that are not used for other purposes such as pointing
         to axis labels.
         """
-        return {
-            path.getAttribute('id'): self.parse_pathstring(path.getAttribute('d'))
-            for path in self.doc.getElementsByTagName("path")
-            # Only take paths into account which are not in groups since those are
-            # the paths pointing to labels on the axes.
-            if path.parentNode.nodeName != 'g' or
-                # This is complicated by the fact that layers as created by inkscape
-                # are also groups. Such layers have the 'inkscape:groupmode' set.
-                path.parentNode.getAttribute("inkscape:groupmode") == 'layer' or
-                # But this attribute goes away when exporting to plain SVG. In
-                # such case, we recover layers as the groups that contain more
-                # than one path.
-                len(path.parentNode.getElementsByTagName("path")) > 1
-        }
+        paths = {}
+        for text in self.doc.getElementsByTagName('text'):
+            # parse text content
+            text_content = text.firstChild.firstChild.data
+            regex_match = re.match(curve_regex_str, text_content)
+            if regex_match:
+                # get paths which are grouped with text
+                group = text.parentNode
+                labeled_paths = group.getElementsByTagName("path")
+
+                for path in labeled_paths:
+                    paths[path.getAttribute('id')] = self.parse_pathstring(path.getAttribute('d'))
+
+        return paths
 
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
