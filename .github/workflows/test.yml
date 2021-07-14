@@ -41,8 +41,8 @@ jobs:
       - name: sampling-many-points-test
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red --sampling_interval 1
-          diff test/data/sato_effect_2006_725_p728_4a_red.csv test/data/sato_effect_2006_725_p728_4a_red.csv.expected
+          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points --sampling_interval 1
+          diff test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points.csv test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points.csv.expected
       - name: unit-test
         shell: bash -l {0}
         run: |
