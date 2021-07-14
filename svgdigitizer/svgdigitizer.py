@@ -21,8 +21,6 @@ class SvgData:
         
         self.doc = minidom.parse(self.filename)
 
-        self.figpaths = self.get_paths()
-        
         self.ref_points, self.real_points = self.get_points()
         
 
@@ -30,11 +28,8 @@ class SvgData:
         for axis in ['x','y']:
             self.trafo[axis] = self.get_trafo(axis)
 
-        
-        self.doc.unlink()
         self.get_parsed()
         self.create_df()
-        
     
     def get_points(self):
         '''Creates:
@@ -132,7 +127,7 @@ class SvgData:
     def get_parsed(self):
         '''cuve function'''
         self.allresults = {}
-        for pathid, pvals in self.figpaths.items():
+        for pathid, pvals in self.paths.items():
             self.allresults[pathid] = self.get_real_values(pvals)
     
 
@@ -155,19 +150,27 @@ class SvgData:
         ynorm = self.trafo['y'](xpathdata[:, 1])
         return np.array([xnorm, ynorm])
 
-    def get_paths(self):
-        paths = self.doc.getElementsByTagName("path")
-        # only take paths into account which are not in groups
-        # Note that layers are groups
-        path_strings = []
-        for path in paths:
-            if path.parentNode.nodeName != 'g' or path.parentNode.getAttribute("inkscape:groupmode") == 'layer':
-                path_strings.append((path.getAttribute('id'), path.getAttribute('d')))
-
-        xypaths_all = {path_string[0]: self.parse_pathstring(path_string[1]) for path_string in path_strings}
-
-        return xypaths_all    
-    
+    @cached_property
+    def paths(self):
+        r"""
+        Return the paths that are tracing plots in the SVG, i.e., return all
+        the `<path>` tags that are not used for other purposes such as pointing
+        to axis labels.
+        """
+        return {
+            path.getAttribute('id'): self.parse_pathstring(path.getAttribute('d'))
+            for path in self.doc.getElementsByTagName("path")
+            # Only take paths into account which are not in groups since those are
+            # the paths pointing to labels on the axes.
+            if path.parentNode.nodeName != 'g' or
+                # This is complicated by the fact that layers as created by inkscape
+                # are also groups. Such layers have the 'inkscape:groupmode' set.
+                path.parentNode.getAttribute("inkscape:groupmode") == 'layer' or
+                # But this attribute goes away when exporting to plain SVG. In
+                # such case, we recover layers as the groups that contain more
+                # than one path.
+                len(path.parentNode.getElementsByTagName("path")) > 1
+        }
 
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
