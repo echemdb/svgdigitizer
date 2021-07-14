@@ -194,17 +194,22 @@ class SvgData:
         '''samples a path with equidistant x segment by segment'''
         path = Path(path_string)
         xmin, xmax, ymin, ymax = path.bbox()
-
+        x_samples = np.linspace(xmin, xmax, int(abs(xmin - xmax)/self.transformed_sampling_interval))
         points = []
-        for segment in path:    
-            segment_points = [[],[]]    
-            for x in np.linspace(xmin, xmax, int(abs(xmin - xmax)/self.transformed_sampling_interval)):
-                intersects = Path(Line(complex(x,ymin),complex(x,ymax))).intersect(Path(segment))
-                # it is possible that a segment includes both scan directions
-                # which leads to two intersections
-                for i in range(len(intersects)):
-                    point = intersects[i][0][1].point(intersects[i][0][0])
-                    segment_points[i].append((point.real, point.imag))   
+        for segment in path:
+            segment_path = Path(segment)
+            xmin_segment, xmax_segment, _, _ = segment.bbox()
+            segment_points = [[],[]]
+
+            for x in x_samples:
+                # only sample the x within the segment
+                if x >= xmin_segment and x <= xmax_segment:
+                    intersects = Path(Line(complex(x,ymin),complex(x,ymax))).intersect(segment_path)
+                    # it is possible that a segment includes both scan directions
+                    # which leads to two intersections
+                    for i in range(len(intersects)):
+                        point = intersects[i][0][1].point(intersects[i][0][0])
+                        segment_points[i].append((point.real, point.imag))   
 
             # second intersection is appended in reverse order!! 
             if len(segment_points[1]) > 0:    
