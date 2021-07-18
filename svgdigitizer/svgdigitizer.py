@@ -3,6 +3,7 @@ from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from functools import cached_property
 
 import re
@@ -189,9 +190,15 @@ class SvgData:
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
         self.dfs = [pd.DataFrame(data[idx],columns=[self.xlabel,self.ylabel]) for idx, i in enumerate(data)]
 
-        #for df in self.dfs:
-        #    df['t'] = self.create_time_axis(df)
-            #df = df[['t','U','I']].copy() #reorder columns does not work
+    def create_csvfile(self, csvfilename=None):
+        r"""
+        Creates only a csv file from the first dataframe.
+        """
+        if csvfilename:
+            self.csvfile = Path(csvfilename).with_suffix('.csv')
+        else:
+            self.csvfile = Path(self.filename).with_suffix('.csv')
+        self.dfs[0].to_csv(self.csvfile, index=False)
     
     def plot(self):
         '''curve function'''
