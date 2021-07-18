@@ -12,8 +12,8 @@ def plot(svg):
 @click.command()
 @click.argument('basename')
 def digitize(basename):
-    from svgdigitizer.csvcreator import CreateCVdata
-    CreateCVdata(basename).create_csv()
+    from svgdigitizer.svgdigitizer import SvgData
+    CSvgData(basename).create_csv()
 
 @click.command()
 @click.option('--onlypng', is_flag=True, help='Only produce png files')
