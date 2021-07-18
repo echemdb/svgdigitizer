@@ -13,7 +13,7 @@ def plot(svg):
 @click.argument('basename')
 def digitize(basename):
     from svgdigitizer.svgdigitizer import SvgData
-    CSvgData(basename).create_csv()
+    SvgData(basename).create_csv()
 
 @click.command()
 @click.option('--onlypng', is_flag=True, help='Only produce png files')
