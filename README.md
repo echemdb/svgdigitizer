@@ -27,9 +27,9 @@ Commands:
   plot
 $ svgdigitizer plot test/data/Ni111_NaOH_Beden1985_Fig2c.svg
 [displays a plot]
-$ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
+$ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c.svg
 [creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
-$ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
+$ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c.svg
 [creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
 $ svgdigitizer paginate <pdf file>
 [paginates the pdf file]
