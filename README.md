@@ -1,4 +1,4 @@
-# SVGDigitizer — Create (x,y) Data Points from SVG files.
+# SVGDigitizer — (x,y) Data Points from SVG files
 
 ![Logo](./logo.svg)
 

@@ -30,9 +30,6 @@ class SvgData:
 
         self.sampling_interval = sampling_interval
 
-        self.figpaths = self.get_paths()
-         
-        self.doc.unlink()
         self.get_parsed()
         self.create_df()
     
@@ -40,7 +37,6 @@ class SvgData:
     def transformed_sampling_interval(self):
         factor = 1/((self.trafo['x'](self.sampling_interval)-self.trafo['x'](0))/(self.sampling_interval/1000))
         return factor
-
     
     def get_points(self):
         '''Creates:
@@ -138,7 +134,7 @@ class SvgData:
     def get_parsed(self):
         '''cuve function'''
         self.allresults = {}
-        for pathid, pvals in self.figpaths.items():
+        for pathid, pvals in self.paths.items():
             self.allresults[pathid] = self.get_real_values(pvals)
     
 
@@ -161,22 +157,29 @@ class SvgData:
         ynorm = self.trafo['y'](xpathdata[:, 1])
         return np.array([xnorm, ynorm])
 
-    def get_paths(self):
-        paths = self.doc.getElementsByTagName("path")
-        svg = self.doc.getElementsByTagName("svg")[0]
-        layer = svg.getElementsByTagName("g")[0] # layers are groups
-        # only take paths into account which are not in groups with text
-        path_strings = []
-        for path in paths:
-            if path.parentNode == layer:
-                path_strings.append((path.getAttribute('id'), path.getAttribute('d')))
-        if not self.sampling_interval:
-            xypaths_all = {path_string[0]: self.parse_pathstring(path_string[1]) for path_string in path_strings}
-        elif self.sampling_interval:
-            xypaths_all = {path_string[0]: self.sample_path(path_string[1]) for path_string in path_strings}
-        return xypaths_all    
+    @cached_property
+    def paths(self):
+        r"""
+        Return the paths that are tracing plots in the SVG, i.e., return all
+        the `<path>` tags that are not used for other purposes such as pointing
+        to axis labels.
+        """
+        return {
+            path.getAttribute('id'): self.parse_pathstring(path.getAttribute('d'))
+            for path in self.doc.getElementsByTagName("path")
+            # Only take paths into account which are not in groups since those are
+            # the paths pointing to labels on the axes.
+            if path.parentNode.nodeName != 'g' or
+                # This is complicated by the fact that layers as created by inkscape
+                # are also groups. Such layers have the 'inkscape:groupmode' set.
+                path.parentNode.getAttribute("inkscape:groupmode") == 'layer' or
+                # But this attribute goes away when exporting to plain SVG. In
+                # such case, we recover layers as the groups that contain more
+                # than one path.
+                len(path.parentNode.getElementsByTagName("path")) > 1
+        }
     
-
+    
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
         posxy = []
