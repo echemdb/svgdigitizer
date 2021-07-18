@@ -4,16 +4,6 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from svgdigitizer.svgdigitizer import SvgData
 
-class CreateXYcsv(SvgData):
-    def __init__(self, filename, outputfilename=None, xlabel=None, ylabel=None):
-        self.svgfile = filename + '.svg' # Minidom parse does not accept a Path?
-        self.csvfile = Path(outputfilename).with_suffix('.csv') or Path(filename).with_suffix('.csv')
-
-        SvgData.__init__(self, filename=self.svgfile, xlabel=xlabel, ylabel=ylabel) # in principle we only want the dataframe
-        self.df_raw = self.dfs[0] # from SvgData
-
-        self.df_raw.to_csv(self.csvfile, index=False)
-
 class CreateCVdata(SvgData):
     def __init__(self, filename):
         self.svgfile = filename + '.svg' # Minidom parse does not accept a Path?
