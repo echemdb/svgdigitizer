@@ -190,7 +190,7 @@ class SvgData:
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
         self.dfs = [pd.DataFrame(data[idx],columns=[self.xlabel,self.ylabel]) for idx, i in enumerate(data)]
 
-    def create_csvfile(self, csvfilename=None):
+    def create_csv(self, csvfilename=None):
         r"""
         Creates only a csv file from the first dataframe.
         """
