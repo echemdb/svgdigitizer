@@ -28,6 +28,21 @@ jobs:
         run: |
           svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c
           diff test/data/Ni111_NaOH_Beden1985_Fig2c.csv test/data/Ni111_NaOH_Beden1985_Fig2c.csv.expected
+      - name: scalebar-test
+        shell: bash -l {0}
+        run: |
+          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red 
+          diff test/data/sato_effect_2006_725_p728_4a_red.csv test/data/sato_effect_2006_725_p728_4a_red.csv.expected
+      - name: sampling-test
+        shell: bash -l {0}
+        run: |
+          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red_sampling --sampling_interval 1
+          diff test/data/sato_effect_2006_725_p728_4a_red_sampling.csv test/data/sato_effect_2006_725_p728_4a_red_sampling.csv.expected
+      - name: sampling-many-points-test
+        shell: bash -l {0}
+        run: |
+          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points --sampling_interval 1
+          diff test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points.csv test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points.csv.expected
       - name: unit-test
         shell: bash -l {0}
         run: |

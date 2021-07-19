@@ -17,6 +17,7 @@ setup(
         'pillow',
         'pdf2image',
         'svgwrite',
+        'svgpathtools'
     ],
     entry_points = {
         'console_scripts': [
