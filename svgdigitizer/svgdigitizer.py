@@ -1,4 +1,5 @@
 from svg.path import parse_path
+from svgpathtools import Path, Line
 from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,24 +14,30 @@ scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d
 curve_regex_str = r'^curve: ?(?P<curve_id>.*)'
 
 class SvgData:
-    def __init__(self, filename, xlabel=None, ylabel=None):
+    def __init__(self, filename, xlabel=None, ylabel=None, sampling_interval=None):
         '''filename: should be a valid svg file created according to the documentation'''
         self.filename = filename
-        
+
         self.xlabel = xlabel or 'x'
         self.ylabel = ylabel or 'y'
-        
+
         self.doc = minidom.parse(self.filename)
 
         self.ref_points, self.real_points = self.get_points()
         
-
         self.trafo = {}
         for axis in ['x','y']:
             self.trafo[axis] = self.get_trafo(axis)
 
+        self.sampling_interval = sampling_interval
+
         self.get_parsed()
         self.create_df()
+    
+    @cached_property
+    def transformed_sampling_interval(self):
+        factor = 1/((self.trafo['x'](self.sampling_interval)-self.trafo['x'](0))/(self.sampling_interval/1000))
+        return factor
     
     def get_points(self):
         '''Creates:
@@ -173,6 +180,7 @@ class SvgData:
         the `<path>` tags that are not used for other purposes such as pointing
         to axis labels.
         """
+
         data_paths = {}
         for key_text, paths in self.labeled_paths.items():
             regex_match = re.match(curve_regex_str, key_text.firstChild.firstChild.data)
@@ -181,6 +189,7 @@ class SvgData:
                     data_paths[paths[0].getAttribute('id')] = self.parse_pathstring(paths[0].getAttribute('d'))
 
         return data_paths
+
 
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
@@ -193,7 +202,44 @@ class SvgData:
             posxy.append([x0, y0])
 
         return np.array(posxy)
-    
+
+
+    def sample_path(self, path_string):
+        '''samples a path with equidistant x segment by segment'''
+        path = Path(path_string)
+        xmin, xmax, ymin, ymax = path.bbox()
+        x_samples = np.linspace(xmin, xmax, int(abs(xmin - xmax)/self.transformed_sampling_interval))
+        points = []
+        for segment in path:
+            segment_path = Path(segment)
+            xmin_segment, xmax_segment, _, _ = segment.bbox()
+            segment_points = [[],[]]
+
+            for x in x_samples:
+                # only sample the x within the segment
+                if x >= xmin_segment and x <= xmax_segment:
+                    intersects = Path(Line(complex(x,ymin),complex(x,ymax))).intersect(segment_path)
+                    # it is possible that a segment includes both scan directions
+                    # which leads to two intersections
+                    for i in range(len(intersects)):
+                        point = intersects[i][0][1].point(intersects[i][0][0])
+                        segment_points[i].append((point.real, point.imag))   
+
+            # second intersection is appended in reverse order!! 
+            if len(segment_points[1]) > 0:    
+                segment_points[0].extend(segment_points[1][::-1]) 
+            # sometimes segments are shorter than sampling interval   
+            if len(segment_points[0]) > 0:    
+                first_segment_point = (segment.point(0).real, segment.point(0).imag)    
+
+                if (((segment_points[0][-1][0]-first_segment_point[0])**2+(segment_points[0][-1][1]-first_segment_point[1])**2)**0.5 >    
+                    ((segment_points[0][0][0]-first_segment_point[0])**2+(segment_points[0][0][1]-first_segment_point[1])**2)**0.5):    
+                    points.extend(segment_points[0])    
+                else:     
+                    points.extend(segment_points[0][::-1]) 
+
+        return np.array(points)  
+
     def create_df(self):
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
         self.dfs = [pd.DataFrame(data[idx],columns=[self.xlabel,self.ylabel]) for idx, i in enumerate(data)]
