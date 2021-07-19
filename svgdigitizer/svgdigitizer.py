@@ -10,7 +10,7 @@ import re
 ref_point_regex_str = r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
 scale_bar_regex_str = r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
 scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'
-curve_regex_str = r'^curve: ?(?P<curve_id>[\W|\w]*)'
+curve_regex_str = r'^curve: ?(?P<curve_id>.*)'
 
 class SvgData:
     def __init__(self, filename, xlabel=None, ylabel=None):
@@ -39,23 +39,17 @@ class SvgData:
         ref_points = {}
         real_points = {}
 
+        for key_text, paths in self.labeled_paths.items():
+            regex_match = re.match(ref_point_regex_str, key_text.firstChild.firstChild.data)
 
-        for text in self.doc.getElementsByTagName('text'):
-
-            # parse text content
-
-            text_content = text.firstChild.firstChild.data
-            regex_match = re.match(ref_point_regex_str, text_content)
             if regex_match:
                 ref_point_id = regex_match.group("point")
                 real_points[ref_point_id] = float(regex_match.group("value"))
            
-                x_text = float(text.firstChild.getAttribute('x'))
-                y_text = float(text.firstChild.getAttribute('y'))
-                # get path which is grouped with text
-                group = text.parentNode
+                x_text = float(key_text.firstChild.getAttribute('x'))
+                y_text = float(key_text.firstChild.getAttribute('y'))
 
-                parsed_path = parse_path(group.getElementsByTagName("path")[0].getAttribute('d'))
+                parsed_path = parse_path(paths[0].getAttribute('d'))
 
                 # always take the point of the path which is further away from text origin
                 path_points = []
@@ -78,17 +72,13 @@ class SvgData:
     def scale_bars(self):
         scale_bars = {}
 
-        for text in self.doc.getElementsByTagName('text'):
-            # parse text content
+        for key_text, paths in self.labeled_paths.items():
+            regex_match = re.match(scale_bar_regex_str, key_text.firstChild.firstChild.data)
 
-            text_content = text.firstChild.firstChild.data
-            regex_match = re.match(scale_bar_regex_str, text_content)
             if regex_match:
-                x_text = float(text.firstChild.getAttribute('x'))
-                y_text = float(text.firstChild.getAttribute('y'))
-                # get paths which are grouped with text
-                group = text.parentNode.parentNode
-                paths = group.getElementsByTagName("path")
+                x_text = float(key_text.firstChild.getAttribute('x'))
+                y_text = float(key_text.firstChild.getAttribute('y'))
+
                 end_points = []
                 for path in paths:
                     parsed_path = parse_path(path.getAttribute('d'))
@@ -123,6 +113,7 @@ class SvgData:
 
             if regex_match:
                 scaling_factors[regex_match.group("axis")] = float(regex_match.group("value"))
+
         return scaling_factors
 
     def get_parsed(self):
@@ -152,26 +143,44 @@ class SvgData:
         return np.array([xnorm, ynorm])
 
     @cached_property
+    def labeled_paths(self):
+        r"""
+        Return all paths which are grouped/label with text elements, warn if
+        unlabeled or ambiguous paths exist.
+        """
+        labeled_paths = {}
+        texts = self.doc.getElementsByTagName('text')
+        for text in texts:
+
+            group = text.parentNode
+            paths = group.getElementsByTagName('path')
+            # warn for ambiguous paths
+            # gives false positive for scale bars
+            #if len(paths) > 1:
+            #    print("""Multiple paths grouped with single text!
+#Only first will be taken into account. Please review supplied svg file!""")
+            labeled_paths[text] = paths
+        
+        if len(labeled_paths) != len(texts):
+            print("""Unlabeled paths found! Please review supplied svg file!""")
+
+        return labeled_paths
+
+    @cached_property
     def paths(self):
         r"""
         Return the paths that are tracing plots in the SVG, i.e., return all
         the `<path>` tags that are not used for other purposes such as pointing
         to axis labels.
         """
-        paths = {}
-        for text in self.doc.getElementsByTagName('text'):
-            # parse text content
-            text_content = text.firstChild.firstChild.data
-            regex_match = re.match(curve_regex_str, text_content)
+        data_paths = {}
+        for key_text, paths in self.labeled_paths.items():
+            regex_match = re.match(curve_regex_str, key_text.firstChild.firstChild.data)
+
             if regex_match:
-                # get paths which are grouped with text
-                group = text.parentNode
-                labeled_paths = group.getElementsByTagName("path")
+                    data_paths[paths[0].getAttribute('id')] = self.parse_pathstring(paths[0].getAttribute('d'))
 
-                for path in labeled_paths:
-                    paths[path.getAttribute('id')] = self.parse_pathstring(path.getAttribute('d'))
-
-        return paths
+        return data_paths
 
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
