@@ -11,7 +11,7 @@ import re
 ref_point_regex_str = r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
 scale_bar_regex_str = r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
 scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'
-curve_regex_str = r'^curve: ?(?P<curve_id>.*)'
+curve_regex_str = r'^curve: ?(?P<curve_id>[\w|\W]+)'
 
 class SvgData:
     def __init__(self, filename, xlabel=None, ylabel=None, sampling_interval=None):
@@ -152,23 +152,41 @@ class SvgData:
     @cached_property
     def labeled_paths(self):
         r"""
-        Return all paths which are grouped/label with text elements, warn if
+        Return all paths which are grouped/label with text elements. Warn if
         unlabeled or ambiguous paths exist.
         """
-        labeled_paths = {}
-        texts = self.doc.getElementsByTagName('text')
-        for text in texts:
 
-            group = text.parentNode
-            paths = group.getElementsByTagName('path')
-            # warn for ambiguous paths
-            # gives false positive for scale bars
-            #if len(paths) > 1:
-            #    print("""Multiple paths grouped with single text!
-#Only first will be taken into account. Please review supplied svg file!""")
-            labeled_paths[text] = paths
+        labeled_paths = {}
+
+        # determine top level group (layer or svg) by counting groups
+        # group with most subgroups is probably the relevant top level
+        svg = self.doc.getElementsByTagName('svg')[0]
+        group_counts = {}
+        for text in svg.getElementsByTagName('text'):
+            try:
+                group_counts[text.parentNode] += 1
+            except KeyError:
+                group_counts[text.parentNode] = 1
         
-        if len(labeled_paths) != len(texts):
+        sorted_counts = sorted(group_counts.items(), key=lambda item: item[1])
+        top_level = sorted_counts[0][0]
+
+        texts = top_level.getElementsByTagName('text')
+        for text in texts:
+            # group is group for grouped text otherwise it's a layer
+            parent = text.parentNode
+            paths = parent.getElementsByTagName('path')
+            # exclude non-grouped text e.g. scaling_factor
+            # and text without grouped paths
+            if parent != top_level and len(paths) >= 1:
+                    # warn for ambiguous paths
+                    # gives false positive for scale bars
+                    #if len(paths) > 1:
+                    #    print("""Multiple paths grouped with single text!
+                    #          Only first will be taken into account. Please review supplied svg file!""")
+                labeled_paths[text] = paths
+        # if more paths (lists) than texts exist it is likely that something is wrong
+        if len(labeled_paths) > len([text for text in texts]):
             print("""Unlabeled paths found! Please review supplied svg file!""")
 
         return labeled_paths
@@ -186,7 +204,13 @@ class SvgData:
             regex_match = re.match(curve_regex_str, key_text.firstChild.firstChild.data)
 
             if regex_match:
+
+                if not self.sampling_interval:
+                    # only consider first path since every curve has a label 
                     data_paths[paths[0].getAttribute('id')] = self.parse_pathstring(paths[0].getAttribute('d'))
+                # sample path if interval set
+                elif self.sampling_interval:
+                    data_paths[paths[0].getAttribute('id')] = self.sample_path(paths[0].getAttribute('d'))
 
         return data_paths
 
