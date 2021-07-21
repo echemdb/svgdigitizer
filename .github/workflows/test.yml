@@ -31,18 +31,18 @@ jobs:
       - name: scalebar-test
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red.svg
-          diff test/data/sato_effect_2006_725_p728_4a_red.csv test/data/sato_effect_2006_725_p728_4a_red.csv.expected
+          svgdigitizer digitize test/data/scaling_factor.svg
+          diff test/data/scaling_factor.csv test/data/scaling_factor.csv.expected
       - name: sampling-test
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red_sampling.svg --sampling_interval 1
-          diff test/data/sato_effect_2006_725_p728_4a_red_sampling.csv test/data/sato_effect_2006_725_p728_4a_red_sampling.csv.expected
+          svgdigitizer digitize test/data/sampling.svg --sampling_interval 1
+          diff test/data/sampling.csv test/data/sampling.csv.expected
       - name: sampling-many-points-test
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points.svg --sampling_interval 1
-          diff test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points.csv test/data/sato_effect_2006_725_p728_4a_red_sampling_many_points.csv.expected
+          svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval 1
+          diff test/data/sampling_many_points.csv test/data/sampling_many_points.csv.expected
       - name: unit-test
         shell: bash -l {0}
         run: |
