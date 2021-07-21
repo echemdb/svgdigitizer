@@ -4,6 +4,7 @@ from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from pathlib import Path as Pathlib
 from functools import cached_property
 
 import re
@@ -286,9 +287,9 @@ class SvgData:
         Creates only a csv file from the first dataframe.
         """
         if csvfilename:
-            self.csvfile = Path(csvfilename).with_suffix('.csv')
+            self.csvfile = Pathlib(csvfilename).with_suffix('.csv')
         else:
-            self.csvfile = Path(self.filename).with_suffix('.csv')
+            self.csvfile = Pathlib(self.filename).with_suffix('.csv')
         self.dfs[0].to_csv(self.csvfile, index=False)
     
     def plot(self):
