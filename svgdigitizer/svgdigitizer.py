@@ -163,7 +163,6 @@ class SvgData:
         group_counts = {}
 
         for group in svg.getElementsByTagName('g'):
-        for group in svg.getElementsByTagName('g'):
             try:
                 group_counts[group.parentNode] += 1
             except KeyError:
