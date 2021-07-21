@@ -40,9 +40,9 @@ $ svgdigitizer paginate <pdf file>
 You can also use the `svgdigitizer` package directly from Python.
  
 ```python
-from svgdigitizer.svgdigitizer import SvgData
+from svgdigitizer.svgplot import SVGPlot
 filename='Ni111_NaOH_Beden1985_Fig2c.svg'
-svg = SvgData(filename)
+svg = SVGPlot(filename)
 svg.plot()
 ```
 

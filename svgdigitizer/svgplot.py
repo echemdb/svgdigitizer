@@ -16,7 +16,7 @@ label_patterns = {
 'curve': r'^curve: ?(?P<curve_id>.+)',
 }
 
-class SvgData:
+class SVGPlot:
     def __init__(self, filename, xlabel=None, ylabel=None, sampling_interval=None):
         '''filename: should be a valid svg file created according to the documentation'''
         self.filename = filename
