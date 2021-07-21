@@ -8,9 +8,12 @@ from functools import cached_property
 
 import re
 
-ref_point_regex_str = r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
-scale_bar_regex_str = r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?'
-scaling_factor_regex_str = r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'
+label_patterns = {
+'ref_point': r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
+'scale_bar': r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
+'scaling_factor': r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)',
+'curve': r'^curve: ?(?P<curve_id>.+)',
+}
 
 class SvgData:
     def __init__(self, filename, xlabel=None, ylabel=None, sampling_interval=None):
@@ -21,7 +24,7 @@ class SvgData:
         self.ylabel = ylabel or 'y'
 
         self.doc = minidom.parse(self.filename)
-
+        self.labeled_paths
         self.ref_points, self.real_points = self.get_points()
         
         self.trafo = {}
@@ -45,25 +48,47 @@ class SvgData:
         ref_points = {}
         real_points = {}
 
+        for i in self.labeled_paths['ref_point']:
+            text, paths, regex_match = i
 
-        for text in self.doc.getElementsByTagName('text'):
+            ref_point_id = regex_match.group("point")
+            real_points[ref_point_id] = float(regex_match.group("value"))
 
-            # parse text content
+            x_text = float(text.firstChild.getAttribute('x'))
+            y_text = float(text.firstChild.getAttribute('y'))
 
-            text_content = text.firstChild.firstChild.data
-            regex_match = re.match(ref_point_regex_str, text_content)
-            if regex_match:
-                ref_point_id = regex_match.group("point")
-                real_points[ref_point_id] = float(regex_match.group("value"))
-           
-                x_text = float(text.firstChild.getAttribute('x'))
-                y_text = float(text.firstChild.getAttribute('y'))
-                # get path which is grouped with text
-                group = text.parentNode
+            parsed_path = parse_path(paths[0].getAttribute('d'))
 
-                parsed_path = parse_path(group.getElementsByTagName("path")[0].getAttribute('d'))
+            # always take the point of the path which is further away from text origin
+            path_points = []
+            path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
+            path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
+            if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 >
+            ((path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2)**0.5):
+                point = 0
+            else:
+                point = 1
 
-                # always take the point of the path which is further away from text origin
+            ref_points[ref_point_id] = {'x': path_points[point][0], 'y': path_points[point][1]}
+
+        return ref_points, real_points
+
+    @cached_property
+    def scale_bars(self):
+        scale_bars = {}
+
+
+        for i in self.labeled_paths['scale_bar']:
+            text, paths, regex_match = i
+
+
+            x_text = float(text.firstChild.getAttribute('x'))
+            y_text = float(text.firstChild.getAttribute('y'))
+
+            end_points = []
+            for path in paths:
+                parsed_path = parse_path(path.getAttribute('d'))
+            # always take the point of the path which is further away from text origin
                 path_points = []
                 path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
                 path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
@@ -72,49 +97,14 @@ class SvgData:
                     point = 0
                 else:
                     point = 1
+                end_points.append(path_points[point])
             
-                ref_points[ref_point_id] = {'x': path_points[point][0], 'y': path_points[point][1]}
-
-        
-        print('Ref points: ', ref_points)
-        print('point values: ',real_points)
-        return ref_points, real_points
-        
-    @cached_property
-    def scale_bars(self):
-        scale_bars = {}
-
-        for text in self.doc.getElementsByTagName('text'):
-            # parse text content
-
-            text_content = text.firstChild.firstChild.data
-            regex_match = re.match(scale_bar_regex_str, text_content)
-            if regex_match:
-                x_text = float(text.firstChild.getAttribute('x'))
-                y_text = float(text.firstChild.getAttribute('y'))
-                # get paths which are grouped with text
-                group = text.parentNode.parentNode
-                paths = group.getElementsByTagName("path")
-                end_points = []
-                for path in paths:
-                    parsed_path = parse_path(path.getAttribute('d'))
-                # always take the point of the path which is further away from text origin
-                    path_points = []
-                    path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
-                    path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
-                    if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 > 
-                    ((path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2)**0.5):
-                        point = 0
-                    else:
-                        point = 1
-                    end_points.append(path_points[point])
-                
-                scale_bars[regex_match.group("axis")] = {}
-                if regex_match.group("axis") == 'x':
-                    scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0] )
-                elif regex_match.group("axis") == 'y':
-                    scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][1] - end_points[0][1])
-                scale_bars[regex_match.group("axis")]['real'] = float(regex_match.group("value"))
+            scale_bars[regex_match.group("axis")] = {}
+            if regex_match.group("axis") == 'x':
+                scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0] )
+            elif regex_match.group("axis") == 'y':
+                scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][1] - end_points[0][1])
+            scale_bars[regex_match.group("axis")]['real'] = float(regex_match.group("value"))
 
         return scale_bars
 
@@ -125,10 +115,11 @@ class SvgData:
 
             # parse text content
             text_content = text.firstChild.firstChild.data
-            regex_match = re.match(scaling_factor_regex_str, text_content)
+            regex_match = re.match(label_patterns['scale_bar'], text_content)
 
             if regex_match:
                 scaling_factors[regex_match.group("axis")] = float(regex_match.group("value"))
+
         return scaling_factors
 
     def get_parsed(self):
@@ -158,28 +149,85 @@ class SvgData:
         return np.array([xnorm, ynorm])
 
     @cached_property
+    def labeled_paths(self):
+        r"""
+        Return all paths which are grouped/label with text elements. Warn if
+        unlabeled or ambiguous paths exist.
+        """
+
+        labeled_paths = {}
+
+        # determine top level group (layer or svg) by counting groups
+        # group with most subgroups is probably the relevant top level
+        svg = self.doc.getElementsByTagName('svg')[0]
+        group_counts = {}
+
+        for group in svg.getElementsByTagName('g'):
+            try:
+                group_counts[group.parentNode] += 1
+            except KeyError:
+                group_counts[group.parentNode] = 1
+
+        sorted_counts = sorted(group_counts.items(), key=lambda item: item[1],reverse=True)
+        top_level = sorted_counts[0][0]
+
+        texts = top_level.getElementsByTagName('text')
+        for text in texts:
+            # group is group for grouped text otherwise it's a layer
+            parent = text.parentNode
+            paths = parent.getElementsByTagName('path')
+            # exclude non-grouped text e.g. scaling_factor
+            # and text without grouped paths
+            if parent != top_level and len(paths) >= 1:
+                match = False
+                for key, val in label_patterns.items():
+                    regex_match = re.match(val, text.firstChild.firstChild.data)
+                    if isinstance(regex_match, re.Match):
+                        match = True
+
+                        try:
+                            labeled_paths[key].append((text, paths, regex_match))
+                        except KeyError:
+                            labeled_paths[key] = [(text, paths, regex_match)]
+
+                if not match:
+                    print(f"Label not obeying known patterns: \"{text.firstChild.firstChild.data}\"")
+
+                    # warn for ambiguous paths
+                    # gives false positive for scale bars
+                    #if len(paths) > 1:
+                    #    print("""Multiple paths grouped with single text!
+                    #          Only first will be taken into account. Please review supplied svg file!""")
+
+                #labeled_paths[text] = paths
+        # if more paths (lists) than texts exist it is likely that something is wrong
+        if len(labeled_paths) > len([text for text in texts]):
+            print("""Unlabeled paths found! Please review supplied svg file!""")
+
+        return labeled_paths
+
+    @cached_property
     def paths(self):
         r"""
         Return the paths that are tracing plots in the SVG, i.e., return all
         the `<path>` tags that are not used for other purposes such as pointing
         to axis labels.
         """
-        return {
-            path.getAttribute('id'): self.parse_pathstring(path.getAttribute('d'))
-            for path in self.doc.getElementsByTagName("path")
-            # Only take paths into account which are not in groups since those are
-            # the paths pointing to labels on the axes.
-            if path.parentNode.nodeName != 'g' or
-                # This is complicated by the fact that layers as created by inkscape
-                # are also groups. Such layers have the 'inkscape:groupmode' set.
-                path.parentNode.getAttribute("inkscape:groupmode") == 'layer' or
-                # But this attribute goes away when exporting to plain SVG. In
-                # such case, we recover layers as the groups that contain more
-                # than one path.
-                len(path.parentNode.getElementsByTagName("path")) > 1
-        }
-    
-    
+
+        data_paths = {}
+        for i in self.labeled_paths['curve']:
+            text, paths, regex_match = i
+
+            if not self.sampling_interval:
+                # only consider first path since every curve has a label
+                data_paths[paths[0].getAttribute('id')] = self.parse_pathstring(paths[0].getAttribute('d'))
+            # sample path if interval set
+            elif self.sampling_interval:
+                data_paths[paths[0].getAttribute('id')] = self.sample_path(paths[0].getAttribute('d'))
+
+        return data_paths
+
+
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
         posxy = []
