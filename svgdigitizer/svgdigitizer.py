@@ -4,7 +4,6 @@ from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from pathlib import Path
 from functools import cached_property
 
 import re
