@@ -161,7 +161,8 @@ class SvgData:
         # group with most subgroups is probably the relevant top level
         svg = self.doc.getElementsByTagName('svg')[0]
         group_counts = {}
-        # getElementsByTagName('g') includes 'svg', why?
+
+        for group in svg.getElementsByTagName('g'):
         for group in svg.getElementsByTagName('g'):
             try:
                 group_counts[group.parentNode] += 1
