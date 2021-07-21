@@ -1,6 +1,6 @@
 import unittest
 import re
-from svgdigitizer.svgdigitizer import ref_point_regex_str, scale_bar_regex_str, scaling_factor_regex_str
+from svgdigitizer.svgdigitizer import label_patterns
 
 
 class RegexTest(unittest.TestCase):
@@ -19,7 +19,7 @@ class RegexTest(unittest.TestCase):
             },
         ]  
         for test_case in test_cases:
-            match = re.match(ref_point_regex_str, test_case['test_string'])
+            match = re.match(label_patterns['ref_point'], test_case['test_string'])
             self.assertEqual(match.group('point'), test_case['point group'])
             self.assertEqual(match.group('value'), test_case['value group'])
             self.assertEqual(match.group('unit'), test_case['unit group'])
@@ -36,7 +36,7 @@ class RegexTest(unittest.TestCase):
             },
         ]  
         for test_case in test_cases:
-            match = re.match(scale_bar_regex_str, test_case['test_string'])
+            match = re.match(label_patterns['scale_bar'], test_case['test_string'])
             self.assertEqual(match.group('value'), test_case['value group'])
             self.assertEqual(match.group('unit'), test_case['unit group'])
 
@@ -50,9 +50,21 @@ class RegexTest(unittest.TestCase):
             },
         ]  
         for test_case in test_cases:
-            match = re.match(scaling_factor_regex_str, test_case['test_string'])
+            match = re.match(label_patterns['scaling_factor'], test_case['test_string'])
             self.assertEqual(match.group('value'), test_case['value group'])
-
+    
+    def testCurveRegex(self):
+        test_cases = [
+            {'test_string': 'curve: the big one',
+            'curve_id_group': 'the big one',
+            },
+            {'test_string': 'curve: black',
+            'curve_id_group': 'black',
+            },
+        ]
+        for test_case in test_cases:
+            match = re.match(label_patterns['curve'], test_case['test_string'])
+            self.assertEqual(match.group('curve_id'), test_case['curve_id_group'])
 
 if __name__ == "__main__": 
     unittest.main()
