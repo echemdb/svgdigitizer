@@ -4,16 +4,18 @@ import click
 def cli(): pass
 
 @click.command()
+@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
 @click.argument('svg')
-def plot(svg):
+def plot(svg, sampling_interval):
     from svgdigitizer.svgdigitizer import SvgData
-    SvgData(svg).plot()
+    SvgData(svg, sampling_interval=sampling_interval).plot()
 
 @click.command()
+@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
 @click.argument('basename')
-def digitize(basename):
+def digitize(basename, sampling_interval):
     from svgdigitizer.svgdigitizer import SvgData
-    SvgData(basename).create_csv()
+    SvgData(basename, sampling_interval=sampling_interval).create_csv()
 
 @click.command()
 @click.option('--onlypng', is_flag=True, help='Only produce png files')

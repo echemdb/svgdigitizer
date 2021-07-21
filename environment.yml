@@ -14,3 +14,4 @@ dependencies:
   - pillow
   - pdf2image
   - svgwrite
+  - svgpathtools
