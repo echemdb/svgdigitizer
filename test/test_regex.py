@@ -1,6 +1,6 @@
 import unittest
 import re
-from svgdigitizer.svgdigitizer import label_patterns
+from svgdigitizer.svgplot import label_patterns
 
 
 class RegexTest(unittest.TestCase):
