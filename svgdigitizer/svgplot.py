@@ -4,6 +4,7 @@ from xml.dom import minidom
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from pathlib import Path as Pathlib
 from functools import cached_property
 
 import re
@@ -15,7 +16,7 @@ label_patterns = {
 'curve': r'^curve: ?(?P<curve_id>.+)',
 }
 
-class SvgData:
+class SVGPlot:
     def __init__(self, filename, xlabel=None, ylabel=None, sampling_interval=None):
         '''filename: should be a valid svg file created according to the documentation'''
         self.filename = filename
@@ -281,9 +282,15 @@ class SvgData:
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
         self.dfs = [pd.DataFrame(data[idx],columns=[self.xlabel,self.ylabel]) for idx, i in enumerate(data)]
 
-        #for df in self.dfs:
-        #    df['t'] = self.create_time_axis(df)
-            #df = df[['t','U','I']].copy() #reorder columns does not work
+    def create_csv(self, csvfilename=None):
+        r"""
+        Creates only a csv file from the first dataframe.
+        """
+        if csvfilename:
+            self.csvfile = Pathlib(csvfilename).with_suffix('.csv')
+        else:
+            self.csvfile = Pathlib(self.filename).with_suffix('.csv')
+        self.dfs[0].to_csv(self.csvfile, index=False)
     
     def plot(self):
         '''curve function'''

@@ -2,10 +2,10 @@ import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
-from svgdigitizer.svgdigitizer import SvgData
+from svgdigitizer.svgplot import SVGPlot
 
-class CreateCVdata(SvgData):
-    def __init__(self, filename, create_csv=False, sampling_interval=None):
+class CV(SVGPlot):
+    def __init__(self, filename, sampling_interval=None):
         self.svgfile = filename + '.svg' # Minidom parse does not accept a Path?
         self.yamlfile = Path(filename).with_suffix('.yaml')
         self.csvfile = Path(filename).with_suffix('.csv')
@@ -16,7 +16,7 @@ class CreateCVdata(SvgData):
         with open(self.yamlfile) as f:
             self.metadata = yaml.load(f, Loader=yaml.FullLoader)
         
-        SvgData.__init__(self, filename=self.svgfile, xlabel=self.xlabel, ylabel=self.ylabel, sampling_interval=sampling_interval) # in principle we only want the dataframe
+        SVGPlot.__init__(self, filename=self.svgfile, xlabel=self.xlabel, ylabel=self.ylabel, sampling_interval=sampling_interval) # in principle we only want the dataframe
         self.df_raw = self.dfs[0] # from SvgData
         
         self.description = self.metadata['figure description']
@@ -34,10 +34,6 @@ class CreateCVdata(SvgData):
         self.get_rate()
         
         self.modify_df()
-        
-        # here should be the export function
-        if create_csv:
-            self.create_csv()
     
     def get_rate(self):
         '''get rate based on the x coordinate units
