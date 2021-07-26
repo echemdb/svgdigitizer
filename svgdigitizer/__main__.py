@@ -13,7 +13,7 @@ def plot(svg, sampling_interval):
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
 @click.argument('svg', type=click.Path(exists=True))
-def digitize(basename, sampling_interval):
+def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     plot = SVGPlot(open(svg, 'rb'), sampling_interval=sampling_interval)
     plot.dfs[0].to_csv(Pathlib(svg).with_suffix('.csv'), index=False)
