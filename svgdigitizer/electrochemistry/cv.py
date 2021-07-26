@@ -11,7 +11,7 @@ class CV():
         self.metadata = metadata
         self.svgplot.create_df()
         
-        # These labels should either be extracted from the svg or yaml file
+        # TODO: These labels should either be extracted from the svg or yaml file
         self.xlabel = 'U'
         self.ylabel = 'I' # should be j if both current and normalized to are given in the yaml file
         
