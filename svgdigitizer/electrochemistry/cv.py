@@ -36,7 +36,7 @@ class CV():
         '''get rate based on the x coordinate units
         At the moment we simply use the value.
         '''
-        self.rate = self.description['scan rate']['value']        
+        self.rate = self.description['scan rate']['value']
         return self.rate
         
     def modify_df(self):
