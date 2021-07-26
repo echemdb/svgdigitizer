@@ -5,17 +5,18 @@ def cli(): pass
 
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
-@click.argument('svg')
+@click.argument('svg', type=click.File('rb'))
 def plot(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     SVGPlot(svg, sampling_interval=sampling_interval).plot()
 
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
-@click.argument('basename')
+@click.argument('svg', type=click.Path(exists=True))
 def digitize(basename, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
-    SVGPlot(basename, sampling_interval=sampling_interval).create_csv()
+    plot = SVGPlot(open(svg, 'rb'), sampling_interval=sampling_interval)
+    plot.dfs[0].to_csv(Pathlib(svg).with_suffix('.csv'), index=False)
 
 @click.command()
 @click.option('--onlypng', is_flag=True, help='Only produce png files')

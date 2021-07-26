@@ -17,14 +17,13 @@ label_patterns = {
 }
 
 class SVGPlot:
-    def __init__(self, filename, xlabel=None, ylabel=None, sampling_interval=None):
+    def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None):
         '''filename: should be a valid svg file created according to the documentation'''
-        self.filename = filename
 
         self.xlabel = xlabel or 'x'
         self.ylabel = ylabel or 'y'
 
-        self.doc = minidom.parse(self.filename)
+        self.doc = minidom.parse(svg)
         self.labeled_paths
         self.ref_points, self.real_points = self.get_points()
         
@@ -282,16 +281,6 @@ class SVGPlot:
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
         self.dfs = [pd.DataFrame(data[idx],columns=[self.xlabel,self.ylabel]) for idx, i in enumerate(data)]
 
-    def create_csv(self, csvfilename=None):
-        r"""
-        Creates only a csv file from the first dataframe.
-        """
-        if csvfilename:
-            self.csvfile = Pathlib(csvfilename).with_suffix('.csv')
-        else:
-            self.csvfile = Pathlib(self.filename).with_suffix('.csv')
-        self.dfs[0].to_csv(self.csvfile, index=False)
-    
     def plot(self):
         '''curve function'''
         #resdict = self.allresults
