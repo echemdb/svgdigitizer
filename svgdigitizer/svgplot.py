@@ -307,4 +307,3 @@ class SVGPlot:
         plt.ylabel(self.ylabel)
         plt.tight_layout()
         plt.show()
-    
