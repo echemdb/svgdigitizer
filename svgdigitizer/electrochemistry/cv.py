@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 class CV():
-    def __init__(self, metadata, SVGPlot):
+    def __init__(self, metadata, svgplot):
         """
         metadata: dict
         """
-        self.svgplot = SVGPlot
+        self.svgplot = svgplot
         self.metadata = metadata
         self.svgplot.create_df()
         
