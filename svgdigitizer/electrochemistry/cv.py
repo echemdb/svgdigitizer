@@ -1,24 +1,21 @@
-import yaml
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
-from svgdigitizer.svgplot import SVGPlot
 
-class CV(SVGPlot):
-    def __init__(self, filename, sampling_interval=None):
-        self.svgfile = filename + '.svg' # Minidom parse does not accept a Path?
-        self.yamlfile = Path(filename).with_suffix('.yaml')
-        self.csvfile = Path(filename).with_suffix('.csv')
+class CV():
+    def __init__(self, metadata, SVGPlot):
+        """
+        metadata: dict
+        """
+        self.svgplot = SVGPlot
+        self.metadata = metadata
+        self.svgplot.create_df()
         
+        # TODO: These labels should either be extracted from the svg or yaml file
         self.xlabel = 'U'
         self.ylabel = 'I' # should be j if both current and normalized to are given in the yaml file
-
-        with open(self.yamlfile) as f:
-            self.metadata = yaml.load(f, Loader=yaml.FullLoader)
         
-        SVGPlot.__init__(self, filename=self.svgfile, xlabel=self.xlabel, ylabel=self.ylabel, sampling_interval=sampling_interval) # in principle we only want the dataframe
-        self.df_raw = self.dfs[0] # from SvgData
-        
+        # TODO: All the rest in the init is presumably not necessary
         self.description = self.metadata['figure description']
 
         self.xunit = self.description['potential scale']['unit']
@@ -35,7 +32,7 @@ class CV(SVGPlot):
         
         self.modify_df()
     
-    def get_rate(self):
+    def get_rate(self): #probably not required
         '''get rate based on the x coordinate units
         At the moment we simply use the value.
         '''
@@ -43,23 +40,20 @@ class CV(SVGPlot):
         return self.rate
         
     def modify_df(self):
-        #self.df = pd.DataFrame()
-        #df = self.df.copy()
-        
         # Create potential columns
-        self.df = self.create_df_U_axis(self.df_raw)
+        self.df = self.create_df_U_axis(self.svgplot.dfs[0])
         # Create current columns
         #self.df['I'] = self.df_raw['I']
-        self.df = pd.concat([self.df, self.creat_df_I_axis(self.df_raw)], axis=1)
+        self.df = pd.concat([self.df, self.creat_df_I_axis(self.svgplot.dfs[0])], axis=1)
         
         #create time axis
-        self.df['t'] = self.create_df_time_axis(self.df_raw)
+        self.df['t'] = self.create_df_time_axis(self.svgplot.dfs[0])
         
     def create_df_U_axis(self, df):
         '''create voltage axis in the dataframe based on the units given in the figure description '''
         
         df_ = df.copy()
-        
+        # Call a dict and remove the if functions
         if self.xunit == 'V':
             df_['U_V'] = df['U']
             
@@ -96,10 +90,11 @@ class CV(SVGPlot):
         df_['t'] = df_['cumdeltaU']/self.get_rate()
         return df_['t']
     
-    def plot_CV(self):
+    def plot_cv(self):
         self.df.plot(x='U_V', y='I_uA')
         plt.xlabel(f'{self.xlabel} / {self.xunit}')
         plt.ylabel(f'{self.ylabel} / {self.yunit}')
         
-    def create_csv(self):
-        self.df.to_csv(self.csvfile, index=False)
+    def create_csv(self, filename):
+        csvfile = Path(filename).with_suffix('.csv')
+        self.df.to_csv(csvfile, index=False)
