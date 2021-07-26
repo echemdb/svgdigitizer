@@ -15,7 +15,7 @@ class CV():
         self.xlabel = 'U'
         self.ylabel = 'I' # should be j if both current and normalized to are given in the yaml file
         
-        # All the rest in the init is presumably not necessary
+        # TODO: All the rest in the init is presumably not necessary
         self.description = self.metadata['figure description']
 
         self.xunit = self.description['potential scale']['unit']
