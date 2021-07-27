@@ -22,7 +22,7 @@ class SVGPlot:
     A plot as a Scalable Vector Graphics (SVG) which can be converted to (x, y)
     coordinate pairs.
 
-    Typically, the SVG input has been created a tracing a measurement plot from
+    Typically, the SVG input has been created by tracing a measurement plot from
     a publication with a `<path>` in an SVG editor such as Inkscape. Such a
     path can then be analyzed by this class to produce the coordinates
     corrsponding to the original measured values.
