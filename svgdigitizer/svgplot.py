@@ -52,8 +52,8 @@ class SVGPlot:
             ref_point_id = regex_match.group("point")
             real_points[ref_point_id] = float(regex_match.group("value"))
 
-            x_text = float(text.firstChild.getAttribute('x'))
-            y_text = float(text.firstChild.getAttribute('y'))
+            x_text = float(text.getAttribute('x'))
+            y_text = float(text.getAttribute('y'))
 
             parsed_path = parse_path(paths[0].getAttribute('d'))
 
@@ -80,8 +80,8 @@ class SVGPlot:
             text, paths, regex_match = i
 
 
-            x_text = float(text.firstChild.getAttribute('x'))
-            y_text = float(text.firstChild.getAttribute('y'))
+            x_text = float(text.getAttribute('x'))
+            y_text = float(text.getAttribute('y'))
 
             end_points = []
             for path in paths:
@@ -112,8 +112,7 @@ class SVGPlot:
         for text in self.doc.getElementsByTagName('text'):
 
             # parse text content
-            text_content = text.firstChild.firstChild.data
-            regex_match = re.match(label_patterns['scale_bar'], text_content)
+            regex_match = re.match(label_patterns['scale_bar'], SVGPlot._text_value(text))
 
             if regex_match:
                 scaling_factors[regex_match.group("axis")] = float(regex_match.group("value"))
@@ -143,6 +142,30 @@ class SVGPlot:
         xnorm = self.trafo['x'](xpathdata[:, 0])
         ynorm = self.trafo['y'](xpathdata[:, 1])
         return np.array([xnorm, ynorm])
+
+    @classmethod
+    def _text_value(cls, node):
+        r"""
+        Return the text content of a node such as a `<text>` node.
+
+        EXAMPLES::
+
+        >>> svg = minidom.parseString('<text> text </text>')
+        >>> SVGPlot._text_value(svg)
+        'text'
+
+        >>> svg = minidom.parseString('<text> te<!-- comment -->xt </text>')
+        >>> SVGPlot._text_value(svg)
+        'text'
+
+        >>> svg = minidom.parseString('<text><tspan>te</tspan><tspan>xt</tspan></text>')
+        >>> SVGPlot._text_value(svg)
+        'text'
+
+        """
+        if node.nodeType == Node.TEXT_NODE:
+            return node.data.strip()
+        return "".join(SVGPlot._text_value(child) for child in node.childNodes)
 
     @cached_property
     def labeled_paths(self):
