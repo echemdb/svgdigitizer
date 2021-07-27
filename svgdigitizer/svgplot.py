@@ -193,7 +193,7 @@ class SVGPlot:
     @classmethod
     def _text_value(cls, node):
         r"""
-        Return the text content of a node such as a `<text>` node.
+        Return the text content of a node (including the text of its children) such as a `<text>` node.
 
         EXAMPLES::
 
