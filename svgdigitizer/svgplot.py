@@ -23,7 +23,6 @@ class SVGPlot:
         self.ylabel = ylabel or 'y'
 
         self.doc = minidom.parse(svg)
-        self.labeled_paths
         self.ref_points, self.real_points = self.get_points()
         
         self.trafo = {}
@@ -130,8 +129,6 @@ class SVGPlot:
 
     def get_trafo(self, axis):
         # we assume a rectangular plot
-        # value = mref * (path - refpath0 ) + refvalue0
-        #print('refpath ', refpath, 'refvalues ', refvalues)
         p_real = self.real_points
         p_ref = self.ref_points
         try:
