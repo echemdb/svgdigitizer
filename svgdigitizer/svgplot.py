@@ -1,12 +1,12 @@
 from svg.path import parse_path
 from svgpathtools import Path, Line
-from xml.dom import minidom
+from xml.dom import minidom, Node
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from functools import cached_property
-
 import re
+import logging
 
 label_patterns = {
 'ref_point': r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
@@ -15,7 +15,54 @@ label_patterns = {
 'curve': r'^curve: ?(?P<curve_id>.+)',
 }
 
+logger = logging.getLogger('svgplot')
+
 class SVGPlot:
+    r"""
+    A plot as a Scalable Vector Graphics (SVG) which can be converted to (x, y)
+    coordinate pairs.
+
+    Typically, the SVG input has been created a tracing a measurement plot from
+    a publication with a `<path>` in an SVG editor such as Inkscape. Such a
+    path can then be analyzed by this class to produce the coordinates
+    corrsponding to the original measured values.
+
+    EXAMPLES:
+
+    An instance of this class can be created from a specially prepared SVG
+    file. There must at least be a `<path>` with a corresponding label::
+
+    >>> from io import StringIO
+    >>> svg = StringIO(r'''
+    ... <svg>
+    ...   <g>
+    ...     <path d="M 0 0 L 100 100" />
+    ...     <text>curve: 0</text>
+    ...   </g>
+    ...   <g>
+    ...     <path d="M 0 0 L 100 0" />
+    ...     <text x="0" y="0">x1: 0</text>
+    ...   </g>
+    ...   <g>
+    ...     <path d="M 0 0 L 100 0" />
+    ...     <text x="100" y="0">x2: 1</text>
+    ...   </g>
+    ...   <g>
+    ...     <path d="M 0 0 L 0 100" />
+    ...     <text x="0" y="0">y1: 0</text>
+    ...   </g>
+    ...   <g>
+    ...     <path d="M 0 0 L 0 100" />
+    ...     <text x="0" y="100">y2: 1</text>
+    ...   </g>
+    ... </svg>''')
+    >>> plot = SVGPlot(svg)
+    >>> plot.dfs
+    [     x    y
+    0  1.0  1.0
+    1  1.0  1.0]
+
+    """
     def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None):
         '''filename: should be a valid svg file created according to the documentation'''
 
@@ -170,58 +217,59 @@ class SVGPlot:
     @cached_property
     def labeled_paths(self):
         r"""
-        Return all paths which are grouped/label with text elements. Warn if
-        unlabeled or ambiguous paths exist.
+        All paths with their corresponding label.
+
+        We only consider paths which are grouped with a label, i.e., a `<text>`
+        element. These text elements then tell us about the meaning of that
+        path, e.g., the path that is labeled as `curve` is the actual graph we
+        are going to extract the (x, y) coordinate pairs from.
         """
+        labeled_paths = {key: [] for key in label_patterns}
 
-        labeled_paths = {}
+        groups = set(path.parentNode for path in self.doc.getElementsByTagName('path'))
 
-        # determine top level group (layer or svg) by counting groups
-        # group with most subgroups is probably the relevant top level
-        svg = self.doc.getElementsByTagName('svg')[0]
-        group_counts = {}
+        for group in groups:
+            if group.nodeType != Node.ELEMENT_NODE or group.tagName != 'g':
+                logger.warning("Parent of <path> is not a <g>. Ignoring this path and its siblings.")
+                continue
 
-        for group in svg.getElementsByTagName('g'):
-            try:
-                group_counts[group.parentNode] += 1
-            except KeyError:
-                group_counts[group.parentNode] = 1
+            # Determine all the <path>s in this <g>.
+            paths = [path for path in group.childNodes if path.nodeType == Node.ELEMENT_NODE and path.tagName == 'path']
+            assert paths
 
-        sorted_counts = sorted(group_counts.items(), key=lambda item: item[1],reverse=True)
-        top_level = sorted_counts[0][0]
+            # Determine the label associated to these <path>s
+            label = None
+            for child in group.childNodes:
+                if child.nodeType == Node.COMMENT_NODE:
+                    continue
+                elif child.nodeType == Node.TEXT_NODE:
+                    if SVGPlot._text_value(child):
+                        logger.warning(f'Ignoring unexpected text node "{SVGPlot._text_value(child)}" grouped with <path>.')
+                elif child.nodeType == Node.ELEMENT_NODE:
+                    if child.tagName == 'path':
+                        continue
+                    if child.tagName != "text":
+                        logger.warning(f"Unexpected <{child.tagName}> grouped with <path>. Ignoring unexpected <{child.tagName}>.")
+                        continue
 
-        texts = top_level.getElementsByTagName('text')
-        for text in texts:
-            # group is group for grouped text otherwise it's a layer
-            parent = text.parentNode
-            paths = parent.getElementsByTagName('path')
-            # exclude non-grouped text e.g. scaling_factor
-            # and text without grouped paths
-            if parent != top_level and len(paths) >= 1:
-                match = False
-                for key, val in label_patterns.items():
-                    regex_match = re.match(val, text.firstChild.firstChild.data)
-                    if isinstance(regex_match, re.Match):
-                        match = True
+                    if label is not None:
+                        logger.warning(f'More than one <text> label associated to this <path>. Ignoring all but the first one, i.e., ignoring "{SVGPlot._text_value(child)}".')
+                        continue
 
-                        try:
-                            labeled_paths[key].append((text, paths, regex_match))
-                        except KeyError:
-                            labeled_paths[key] = [(text, paths, regex_match)]
+                    label = child
 
-                if not match:
-                    print(f"Label not obeying known patterns: \"{text.firstChild.firstChild.data}\"")
+            if not label:
+                logger.warning(f"Ignoring unlabeled <path> and its siblings.")
+                continue
 
-                    # warn for ambiguous paths
-                    # gives false positive for scale bars
-                    #if len(paths) > 1:
-                    #    print("""Multiple paths grouped with single text!
-                    #          Only first will be taken into account. Please review supplied svg file!""")
-
-                #labeled_paths[text] = paths
-        # if more paths (lists) than texts exist it is likely that something is wrong
-        if len(labeled_paths) > len([text for text in texts]):
-            print("""Unlabeled paths found! Please review supplied svg file!""")
+            # Parse the label
+            for kind in label_patterns:
+                match = re.match(label_patterns[kind], SVGPlot._text_value(label))
+                if match:
+                    labeled_paths[kind].append((label, paths, match))
+                    break
+            else:
+                logger.warning(f'Ignoring <path> with unsupported label "{label}".')
 
         return labeled_paths
 

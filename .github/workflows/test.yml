@@ -23,6 +23,10 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -e .
+      - name: doctest
+        shell: bash -l {0}
+        run: |
+          pytest --doctest-modules svgdigitizer
       - name: cli-test
         shell: bash -l {0}
         run: |
