@@ -71,7 +71,7 @@ class SVGPlot:
 
         self.doc = minidom.parse(svg)
         self.ref_points, self.real_points = self.get_points()
-        
+
         self.trafo = {}
         for axis in ['x','y']:
             self.trafo[axis] = self.get_trafo(axis)
@@ -80,12 +80,12 @@ class SVGPlot:
 
         self.get_parsed()
         self.create_df()
-    
+
     @cached_property
     def transformed_sampling_interval(self):
         factor = 1/((self.trafo['x'](self.sampling_interval)-self.trafo['x'](0))/(self.sampling_interval/1000))
         return factor
-    
+
     def get_points(self):
         '''Creates:
         ref_points: relative values of the spheres/ellipses in the svg file.
@@ -137,13 +137,13 @@ class SVGPlot:
                 path_points = []
                 path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
                 path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
-                if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 > 
+                if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 >
                 ((path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2)**0.5):
                     point = 0
                 else:
                     point = 1
                 end_points.append(path_points[point])
-            
+
             scale_bars[regex_match.group("axis")] = {}
             if regex_match.group("axis") == 'x':
                 scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0] )
@@ -171,7 +171,7 @@ class SVGPlot:
         self.allresults = {}
         for pathid, pvals in self.paths.items():
             self.allresults[pathid] = self.get_real_values(pvals)
-    
+
 
     def get_trafo(self, axis):
         # we assume a rectangular plot
@@ -184,7 +184,7 @@ class SVGPlot:
             mref = -1/self.scale_bars[axis]['ref'] * self.scale_bars[axis]['real']  / self.scaling_factors[axis] # unclear why we need negative sign: now I know, position of origin !!
             trafo = lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
         return trafo
-    
+
     def get_real_values(self, xpathdata):
         xnorm = self.trafo['x'](xpathdata[:, 0])
         ynorm = self.trafo['y'](xpathdata[:, 1])
@@ -327,22 +327,22 @@ class SVGPlot:
                     # which leads to two intersections
                     for i in range(len(intersects)):
                         point = intersects[i][0][1].point(intersects[i][0][0])
-                        segment_points[i].append((point.real, point.imag))   
+                        segment_points[i].append((point.real, point.imag))
 
-            # second intersection is appended in reverse order!! 
-            if len(segment_points[1]) > 0:    
-                segment_points[0].extend(segment_points[1][::-1]) 
-            # sometimes segments are shorter than sampling interval   
-            if len(segment_points[0]) > 0:    
-                first_segment_point = (segment.point(0).real, segment.point(0).imag)    
+            # second intersection is appended in reverse order!!
+            if len(segment_points[1]) > 0:
+                segment_points[0].extend(segment_points[1][::-1])
+            # sometimes segments are shorter than sampling interval
+            if len(segment_points[0]) > 0:
+                first_segment_point = (segment.point(0).real, segment.point(0).imag)
 
-                if (((segment_points[0][-1][0]-first_segment_point[0])**2+(segment_points[0][-1][1]-first_segment_point[1])**2)**0.5 >    
-                    ((segment_points[0][0][0]-first_segment_point[0])**2+(segment_points[0][0][1]-first_segment_point[1])**2)**0.5):    
-                    points.extend(segment_points[0])    
-                else:     
-                    points.extend(segment_points[0][::-1]) 
+                if (((segment_points[0][-1][0]-first_segment_point[0])**2+(segment_points[0][-1][1]-first_segment_point[1])**2)**0.5 >
+                    ((segment_points[0][0][0]-first_segment_point[0])**2+(segment_points[0][0][1]-first_segment_point[1])**2)**0.5):
+                    points.extend(segment_points[0])
+                else:
+                    points.extend(segment_points[0][::-1])
 
-        return np.array(points)  
+        return np.array(points)
 
     def create_df(self):
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
@@ -353,10 +353,10 @@ class SVGPlot:
         #resdict = self.allresults
         #for i, v in resdict.items():
         #    plt.plot(v[0], v[1], label=i)
-            
+
         fig, ax = plt.subplots(1,1)
         for i, df in enumerate(self.dfs):
-            df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}') 
+            df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}')
         # do we want the path in the legend as it was in the previous version?
         #plt.legend()
         plt.xlabel(self.xlabel)
