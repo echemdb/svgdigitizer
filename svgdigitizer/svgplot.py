@@ -87,9 +87,6 @@ class SVGPlot:
         return factor
 
     def get_points(self):
-        '''Creates:
-        ref_points: relative values of the spheres/ellipses in the svg file.
-        real_points: real values of the points given in the title text of the svg file.'''
         ref_points = {}
         real_points = {}
 
