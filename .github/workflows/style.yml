@@ -19,4 +19,4 @@ jobs:
       - name: pycodestyle
         shell: bash -l {0}
         run: |
-          pycodestyle svgdigitizer
+          pycodestyle svgdigitizer --max-line-length=256
