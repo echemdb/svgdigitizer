@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 class CV():
-    def __init__(self, metadata, SVGPlot):
+    def __init__(self, metadata, svgplot):
         """
         metadata: dict
         """
-        self.svgplot = SVGPlot
+        self.svgplot = svgplot
         self.metadata = metadata
         self.svgplot.create_df()
         
@@ -44,7 +44,7 @@ class CV():
         self.df = self.create_df_U_axis(self.svgplot.dfs[0])
         # Create current columns
         #self.df['I'] = self.df_raw['I']
-        self.df = pd.concat([self.df, self.creat_df_I_axis(self.svgplot.dfs[0])], axis=1)
+        self.df = pd.concat([self.df, self.create_df_I_axis(self.svgplot.dfs[0])], axis=1)
         
         #create time axis
         self.df['t'] = self.create_df_time_axis(self.svgplot.dfs[0])
@@ -64,7 +64,7 @@ class CV():
         
         return df_[['U_V', 'U_mV']]
     
-    def creat_df_I_axis(self, df):
+    def create_df_I_axis(self, df):
         '''create current or current density axis in the dataframe based on the units given in the figure description'''
         df_ = df.copy()
         if self.yunit == 'A':
