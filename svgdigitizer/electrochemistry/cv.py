@@ -12,12 +12,10 @@ class CV():
         self.metadata = metadata
         self.svgplot.create_df()
 
-        # TODO: These labels should either be extracted from the svg or yaml
-        # file
+        # TODO: These labels should either be extracted from the svg or yaml file
         self.xlabel = 'U'
 
-        # TODO: should be j if both current and normalized to are given in the
-        # yaml file
+        # TODO: should be j if both current and normalized to are given in the yaml file
         self.ylabel = 'I'
 
         # TODO: All the rest in the init is presumably not necessary
@@ -44,7 +42,6 @@ class CV():
         # Create potential columns
         self.df = self.create_df_U_axis(self.svgplot.dfs[0])
         # Create current columns
-        # self.df['I'] = self.df_raw['I']
         self.df = pd.concat(
             [self.df, self.create_df_I_axis(self.svgplot.dfs[0])],
             axis=1)

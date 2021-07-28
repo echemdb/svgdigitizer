@@ -340,13 +340,9 @@ class SVGPlot:
 
     def plot(self):
         '''curve function'''
-        # resdict = self.allresults
-
         fig, ax = plt.subplots(1, 1)
         for i, df in enumerate(self.dfs):
             df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}')
-        # do we want the path in the legend as it was in the previous version?
-        # plt.legend()
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.tight_layout()
