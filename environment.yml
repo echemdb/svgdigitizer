@@ -16,3 +16,4 @@ dependencies:
   - svgwrite
   - svgpathtools
   - pycodestyle
+  - pytest
