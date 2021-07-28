@@ -43,6 +43,11 @@ jobs:
         run: |
           svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval 1
           diff test/data/sampling_many_points.csv test/data/sampling_many_points.csv.expected
+      - name: no-layer-test
+        shell: bash -l {0}
+        run: |
+          svgdigitizer digitize test/data/svg_without_layer.svg
+          diff test/data/svg_without_layer.csv test/data/svg_without_layer.csv.expected
       - name: unit-test
         shell: bash -l {0}
         run: |
