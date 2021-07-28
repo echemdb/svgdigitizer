@@ -9,13 +9,14 @@ import re
 import logging
 
 label_patterns = {
-'ref_point': r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
-'scale_bar': r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
-'scaling_factor': r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)',
-'curve': r'^curve: ?(?P<curve_id>.+)',
+    'ref_point': r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
+    'scale_bar': r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
+    'scaling_factor': r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)',
+    'curve': r'^curve: ?(?P<curve_id>.+)',
 }
 
 logger = logging.getLogger('svgplot')
+
 
 class SVGPlot:
     r"""
@@ -73,7 +74,7 @@ class SVGPlot:
         self.ref_points, self.real_points = self.get_points()
 
         self.trafo = {}
-        for axis in ['x','y']:
+        for axis in ['x', 'y']:
             self.trafo[axis] = self.get_trafo(axis)
 
         self.sampling_interval = sampling_interval
@@ -105,8 +106,7 @@ class SVGPlot:
             path_points = []
             path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
             path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
-            if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 >
-            ((path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2)**0.5):
+            if (path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2 > (path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2:
                 point = 0
             else:
                 point = 1
@@ -119,10 +119,8 @@ class SVGPlot:
     def scale_bars(self):
         scale_bars = {}
 
-
         for i in self.labeled_paths['scale_bar']:
             text, paths, regex_match = i
-
 
             x_text = float(text.getAttribute('x'))
             y_text = float(text.getAttribute('y'))
@@ -130,12 +128,11 @@ class SVGPlot:
             end_points = []
             for path in paths:
                 parsed_path = parse_path(path.getAttribute('d'))
-            # always take the point of the path which is further away from text origin
+                # always take the point of the path which is further away from text origin
                 path_points = []
                 path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
                 path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
-                if (((path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2)**0.5 >
-                ((path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2)**0.5):
+                if (path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2 > (path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2:
                     point = 0
                 else:
                     point = 1
@@ -143,7 +140,7 @@ class SVGPlot:
 
             scale_bars[regex_match.group("axis")] = {}
             if regex_match.group("axis") == 'x':
-                scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0] )
+                scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0])
             elif regex_match.group("axis") == 'y':
                 scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][1] - end_points[0][1])
             scale_bars[regex_match.group("axis")]['real'] = float(regex_match.group("value"))
@@ -169,18 +166,17 @@ class SVGPlot:
         for pathid, pvals in self.paths.items():
             self.allresults[pathid] = self.get_real_values(pvals)
 
-
     def get_trafo(self, axis):
         # we assume a rectangular plot
         p_real = self.real_points
         p_ref = self.ref_points
         try:
             mref = (p_real[f'{axis}2'] - p_real[f'{axis}1']) / (p_ref[f'{axis}2'][axis] - p_ref[f'{axis}1'][axis]) / self.scaling_factors[axis]
-            trafo = lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
+            return lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
         except KeyError:
-            mref = -1/self.scale_bars[axis]['ref'] * self.scale_bars[axis]['real']  / self.scaling_factors[axis] # unclear why we need negative sign: now I know, position of origin !!
-            trafo = lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
-        return trafo
+            # We need a -1 here because the coordinate system in SVG is negative.
+            mref = -1/self.scale_bars[axis]['ref'] * self.scale_bars[axis]['real'] / self.scaling_factors[axis]
+            return lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
 
     def get_real_values(self, xpathdata):
         xnorm = self.trafo['x'](xpathdata[:, 0])
@@ -291,7 +287,6 @@ class SVGPlot:
 
         return data_paths
 
-
     def parse_pathstring(self, path_string):
         path = parse_path(path_string)
         posxy = []
@@ -304,7 +299,6 @@ class SVGPlot:
 
         return np.array(posxy)
 
-
     def sample_path(self, path_string):
         '''samples a path with equidistant x segment by segment'''
         path = Path(path_string)
@@ -314,12 +308,12 @@ class SVGPlot:
         for segment in path:
             segment_path = Path(segment)
             xmin_segment, xmax_segment, _, _ = segment.bbox()
-            segment_points = [[],[]]
+            segment_points = [[], []]
 
             for x in x_samples:
                 # only sample the x within the segment
                 if x >= xmin_segment and x <= xmax_segment:
-                    intersects = Path(Line(complex(x,ymin),complex(x,ymax))).intersect(segment_path)
+                    intersects = Path(Line(complex(x, ymin), complex(x, ymax))).intersect(segment_path)
                     # it is possible that a segment includes both scan directions
                     # which leads to two intersections
                     for i in range(len(intersects)):
@@ -333,8 +327,7 @@ class SVGPlot:
             if len(segment_points[0]) > 0:
                 first_segment_point = (segment.point(0).real, segment.point(0).imag)
 
-                if (((segment_points[0][-1][0]-first_segment_point[0])**2+(segment_points[0][-1][1]-first_segment_point[1])**2)**0.5 >
-                    ((segment_points[0][0][0]-first_segment_point[0])**2+(segment_points[0][0][1]-first_segment_point[1])**2)**0.5):
+                if (segment_points[0][-1][0]-first_segment_point[0])**2+(segment_points[0][-1][1]-first_segment_point[1])**2 > (segment_points[0][0][0]-first_segment_point[0])**2+(segment_points[0][0][1]-first_segment_point[1])**2:
                     points.extend(segment_points[0])
                 else:
                     points.extend(segment_points[0][::-1])
@@ -343,19 +336,13 @@ class SVGPlot:
 
     def create_df(self):
         data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
-        self.dfs = [pd.DataFrame(data[idx],columns=[self.xlabel,self.ylabel]) for idx, i in enumerate(data)]
+        self.dfs = [pd.DataFrame(data[idx], columns=[self.xlabel, self.ylabel]) for idx, i in enumerate(data)]
 
     def plot(self):
         '''curve function'''
-        #resdict = self.allresults
-        #for i, v in resdict.items():
-        #    plt.plot(v[0], v[1], label=i)
-
-        fig, ax = plt.subplots(1,1)
+        fig, ax = plt.subplots(1, 1)
         for i, df in enumerate(self.dfs):
             df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}')
-        # do we want the path in the legend as it was in the previous version?
-        #plt.legend()
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.tight_layout()
