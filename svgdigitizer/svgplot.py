@@ -115,20 +115,49 @@ class SVGPlot:
 
         return ref_points, real_points
 
-    def get_axis_unit_strings(self):
-        '''Creates a dict with:
-        x: unit of the x axis values
-        y: unit of the y axis values'''
+    @property
+    def units(self):
+        r"""
+        Return x and y axis units.
 
-        axis_unit_strings = {'x': 1, 'y': 1}
+        EXAMPLES::
 
-        for i in self.labeled_paths['ref_point']:
-            #text, paths, regex_match = i[2]
-            regex_match = i[2]
-            for axis in axis_unit_strings:
-                if axis in regex_match.group("point"):
-                    axis_unit_strings[axis] = regex_match.group("unit")
-        return axis_unit_strings
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text>curve: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0 mV</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0 A / cm2</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> plot = SVGPlot(svg)
+        >>> plot.units
+        {'x': 'mV', 'y': 'A / cm2'}
+
+        """
+        def unit(label):
+            for _, __, match in self.labeled_paths['ref_point']:
+                if f'{label}1' == match.group("point"):
+                    return match.group("unit")
+            raise ValueError(f'No label {label} in svg axis notation.')
+
+        return {label: unit(label) for label in [self.xlabel, self.ylabel]}
 
     @cached_property
     def scale_bars(self):
