@@ -65,12 +65,10 @@ class SVGPlot:
 
     """
     def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None):
-        '''filename: should be a valid svg file created according to the documentation'''
-
         self.xlabel = xlabel or 'x'
         self.ylabel = ylabel or 'y'
 
-        self.doc = minidom.parse(svg)
+        self.svg = minidom.parse(svg)
         self.ref_points, self.real_points = self.get_points()
 
         self.trafo = {}
@@ -150,7 +148,7 @@ class SVGPlot:
     @cached_property
     def scaling_factors(self):
         scaling_factors = {'x': 1, 'y': 1}
-        for text in self.doc.getElementsByTagName('text'):
+        for text in self.svg.getElementsByTagName('text'):
 
             # parse text content
             regex_match = re.match(label_patterns['scale_bar'], SVGPlot._text_value(text))
@@ -219,7 +217,7 @@ class SVGPlot:
         """
         labeled_paths = {key: [] for key in label_patterns}
 
-        groups = set(path.parentNode for path in self.doc.getElementsByTagName('path'))
+        groups = set(path.parentNode for path in self.svg.getElementsByTagName('path'))
 
         for group in groups:
             if group.nodeType != Node.ELEMENT_NODE or group.tagName != 'g':
