@@ -28,6 +28,16 @@ class SVGPlot:
     path can then be analyzed by this class to produce the coordinates
     corrsponding to the original measured values.
 
+    INPUT:
+
+    - ``algorithm`` -- mapping from the SVG coordinate system to the plot
+      coordinate system. The default, `"axis-aligned"` assumes that the plot
+      axes are perfectly aligned with the SVG coordinate system. Alternatively,
+      `"mark-aligned"` assumes the end points of the axis markers are aligned,
+      i.e., `x1` and `x2` have the exact same y coordinate in the plot
+      coordinate system to also handle coordinate systems that are rotated or
+      skewed in the SVG.
+
     EXAMPLES:
 
     An instance of this class can be created from a specially prepared SVG
@@ -67,7 +77,7 @@ class SVGPlot:
     1  1.0  1.0
 
     """
-    def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None, curve=None):
+    def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None, curve=None, algorithm='axis-aligned'):
         self.svg = minidom.parse(svg)
 
         self.xlabel = xlabel or 'x'
@@ -76,6 +86,8 @@ class SVGPlot:
         self.sampling_interval = sampling_interval
 
         self._curve = curve
+
+        self._algorithm = algorithm
 
     @property
     @cache
@@ -343,7 +355,7 @@ class SVGPlot:
         ...     <text x="0" y="0">y2: 1</text>
         ...   </g>
         ... </svg>''')
-        >>> plot = SVGPlot(svg)
+        >>> plot = SVGPlot(svg, algorithm='mark-aligned')
         >>> plot.from_svg(0, 100)
         (0.0, 0.0)
         >>> plot.from_svg(100, 100)
@@ -455,7 +467,7 @@ class SVGPlot:
         ...     <text x="0" y="0">y2: 1</text>
         ...   </g>
         ... </svg>''')
-        >>> SVGPlot(svg).transformation
+        >>> SVGPlot(svg, algorithm='mark-aligned').transformation
         array([[ 0.01,  0.01, -1.  ],
                [ 0.  , -0.01,  1.  ],
                [ 0.  ,  0.  ,  1.  ]])
@@ -468,10 +480,14 @@ class SVGPlot:
         # * y1: a point whose y-coordinate we know
         # * x2: a point whose x-coordinate we know
         # * y2: a point whose y-coordinate we know
-        # We additionally assume that x1 and x2 have the same y coordinate in
-        # the plot coordinate system. And that y1 and y2 have the same x
-        # coordinate in the plot coordinate system.
-        # This gives six relations for the six unknowns of an affine transformation.
+        # For the axis-aligned implementation, we further assume that only
+        # changing the x coordinate in the SVG does not change the y coordinate
+        # in the plot and conversely.
+        # For the mark-aligned algorithm, we assume that x1 and x2 have the
+        # same y coordinate in the plot coordinate system. And that y1 and y2
+        # have the same x coordinate in the plot coordinate system.
+        # In any case, this gives six relations for the six unknowns of an
+        # affine transformation.
         x1 = self.marked_points[f"{self.xlabel}1"]
         x2 = self.marked_points[f"{self.xlabel}2"]
         y1 = self.marked_points[f"{self.ylabel}1"]
@@ -491,11 +507,24 @@ class SVGPlot:
             ([x2[0][0], x2[0][1], 1, 0, 0, 0], x2[1][0]),
             # y2 maps to something with the correct y coordinate
             ([0, 0, 0, y2[0][0], y2[0][1], 1], y2[1][1]),
-            # x1 and x2 map to the same y coordinate
-            ([0, 0, 0, x1[0][0] - x2[0][0], x1[0][1] - x2[0][1], 0], 0),
-            # y1 and y2 map to the same x coordinate
-            ([y1[0][0] - y2[0][0], y1[0][1] - y2[0][1], 0, 0, 0, 0], 0),
         ]
+
+        if self._algorithm == 'axis-aligned':
+            conditions.extend([
+                # Moving along the SVG x axis does not change the y coordinate
+                ([0, 0, 0, 1, 0, 0], 0),
+                # Moving along the SVG y axis does not change the x coordinate
+                ([0, 1, 0, 0, 0, 0], 0),
+            ])
+        elif self._algorithm == 'mark-aligned':
+            conditions.extend([
+                # x1 and x2 map to the same y coordinate
+                ([0, 0, 0, x1[0][0] - x2[0][0], x1[0][1] - x2[0][1], 0], 0),
+                # y1 and y2 map to the same x coordinate
+                ([y1[0][0] - y2[0][0], y1[0][1] - y2[0][1], 0, 0, 0, 0], 0),
+            ])
+        else:
+            raise NotImplementedError(f"Unknown algorithm {self._algorithm}.")
 
         from numpy.linalg import solve
         A = solve([c[0] for c in conditions], [c[1] for c in conditions])
