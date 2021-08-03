@@ -184,9 +184,11 @@ class SVGPlot:
             # the coordinate system in the SVG, i.e., x coordinates grow to the
             # right, y coordinates grow to the bottom.
             if label == self.xlabel:
-                if scalebar.real < 0: scalebar = -scalebar
+                if scalebar.real < 0:
+                    scalebar = -scalebar
             else:
-                if scalebar.image > 0: scalebar = -scalebar
+                if scalebar.imag > 0:
+                    scalebar = -scalebar
 
             # Construct the second marked point from the first marked point + scalebar.
             p1 = points[label + "1"]
@@ -198,7 +200,6 @@ class SVGPlot:
                 p2 = (p2[0], (None, p1[1][1] + value))
 
             points[label + "2"] = p2
-
 
         if xlabels[1] not in points:
             raise Exception(f"Label {xlabels[1]} not found in SVG.")
@@ -480,20 +481,20 @@ class SVGPlot:
         # [A[0] A[1] A[2]]
         # [A[3] A[4] A[5]]
         # [   0    0    1]
-        # By solving for the linear conditions defined above:
+        # By solving for the linear conditions indicated above:
         conditions = [
             # x1 maps to something with the correct x coordinate
-            ([             x1[0][0],           x1[0][1], 1,                   0,                   0, 0], x1[1][0]),
+            ([x1[0][0], x1[0][1], 1, 0, 0, 0], x1[1][0]),
             # y1 maps to something with the correct y coordinate
-            ([                    0,                  0, 0,            y1[0][0],            y1[0][1], 1], y1[1][1]),
+            ([0, 0, 0, y1[0][0], y1[0][1], 1], y1[1][1]),
             # x2 maps to something with the correct x coordinate
-            ([             x2[0][0],           x2[0][1], 1,                   0,                   0, 0], x2[1][0]),
+            ([x2[0][0], x2[0][1], 1, 0, 0, 0], x2[1][0]),
             # y2 maps to something with the correct y coordinate
-            ([                    0,                  0, 0,            y2[0][0],            y2[0][1], 1], y2[1][1]),
+            ([0, 0, 0, y2[0][0], y2[0][1], 1], y2[1][1]),
             # x1 and x2 map to the same y coordinate
-            ([                    0,                  0, 0, x1[0][0] - x2[0][0], x1[0][1] - x2[0][1], 0],        0),
+            ([0, 0, 0, x1[0][0] - x2[0][0], x1[0][1] - x2[0][1], 0], 0),
             # y1 and y2 map to the same x coordinate
-            ([ y1[0][0] - y2[0][0], y1[0][1] - y2[0][1], 0,                   0,                   0, 0],        0),
+            ([y1[0][0] - y2[0][0], y1[0][1] - y2[0][1], 0, 0, 0, 0], 0),
         ]
 
         from numpy.linalg import solve
@@ -503,15 +504,15 @@ class SVGPlot:
         A = [
             [A[0], A[1], A[2]],
             [A[3], A[4], A[5]],
-            [   0,    0,    1],
+            [0, 0, 1],
         ]
 
         # Apply scaling factors, as a diagonal matrix.
         from numpy import dot
         A = dot(A, [
-            [1/self.scaling_factors[self.xlabel],                                   0, 0],
-            [                                  0, 1/self.scaling_factors[self.ylabel], 0],
-            [                                  0,                                   0, 1],
+            [1/self.scaling_factors[self.xlabel], 0, 0],
+            [0, 1/self.scaling_factors[self.ylabel], 0],
+            [0, 0, 1],
         ])
 
         return A
