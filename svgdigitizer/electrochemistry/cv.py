@@ -3,10 +3,14 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from astropy import units as u
 
-# The unit strings are identical to those obtained by using str() on an astropy unit of a quantity, i.e., 
+# The keys in this dict are unit strings that are identical to those 
+# obtained by using str() on an astropy unit of a quantity, i.e., 
+# >>> from astropy import units as u
 # >>> q = 10 * u.A / u.cm**2
 # >>> str(q.unit)
 # 'A / cm2'
+# These string can directly be converted to a unit
+# >>> u.Unit('uA / cm2')
 units = {'uA / cm2': ['uA / cm2',
                       'uA / cm²',
                       'µA / cm²',
@@ -91,7 +95,7 @@ class CV():
         self.df = self.create_df_U_axis(self.svgplot.dfs[0][['x']])
 
         # Create current or current density column
-        # self.df = pd.concat([self.df, self.create_df_I_axis(self.svgplot.dfs[0][['y']])], axis=1)
+        self.df = pd.concat([self.df, self.create_df_I_axis(self.svgplot.dfs[0][['y']])], axis=1)
 
         # create time axis
         self.df['t'] = self.create_df_time_axis(self.df)
@@ -122,25 +126,34 @@ class CV():
         Create current or current density axis in the dataframe based on the
         units given in the figure description.
         '''
-        pass 
-        # Implement unit conversino
-        # q = 1 * self.axis_units['y']
-        # conversion_factor = q.to(u.A / u.m**2)
 
         df_ = df.copy()
-        if self.yunit == 'A':
-            df_['I_A'] = df['I']
+        q = 1 * self.axis_units['y']
+        
+        # Verify if the y data is current or current density
+        if 'm2' in str(q.unit):
+            conversion_factor = q.to(u.A / u.m**2)
+            column_name = 'j'
+        else:
+            conversion_factor = q.to(u.A)
+            column_name = 'i'
+        
+        df_[column_name] = df_['y'] * conversion_factor
 
-        if self.yunit == 'mA':
-            df_['I_A'] = df['I']/1E3
+        #if self.yunit == 'A':
+        #    df_['I_A'] = df['I']
 
-        if self.yunit == 'uA':
-            df_['I_A'] = df['I']/1E6
+        #if self.yunit == 'mA':
+        #    df_['I_A'] = df['I']/1E3
 
-        df_['I_mA'] = df_['I_A']*1E3
-        df_['I_uA'] = df_['I_A']*1E6
+        #if self.yunit == 'uA':
+        #    df_['I_A'] = df['I']/1E6
 
-        return df_[['I_A', 'I_mA', 'I_uA']]
+        #df_['I_mA'] = df_['I_A']*1E3
+        # df_['I_uA'] = df_['I_A']*1E6
+
+        #return df_[['I_A', 'I_mA', 'I_uA']]
+        return df_[[column_name]]
 
     def create_df_time_axis(self, df):
         r'''
