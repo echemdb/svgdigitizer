@@ -285,17 +285,19 @@ class SVGPlot:
 
         return data_paths
 
-    def parse_pathstring(self, path_string):
-        path = parse_path(path_string)
-        posxy = []
-        for e in path:
-            x0 = e.start.real
-            y0 = e.start.imag
-            x1 = e.end.real
-            y1 = e.end.imag
-            posxy.append([x0, y0])
+    @classmethod
+    def _parse_shape(self, shape):
+        r"""
+        Return the points on the `shape` which comse from the `d` attribute of
+        a `<path>`.
 
-        return np.array(posxy)
+        EXAMPLES::
+
+        >>> SVGPlot._parse_shape('M 0 0 L 1 0 L 1 1 L 0 1 L 0 0')
+        [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0), (0.0, 0.0)]
+
+        """
+        return [(command.end.real, command.end.imag) for command in parse_path(shape)]
 
     def sample_path(self, path_string):
         '''samples a path with equidistant x segment by segment'''
