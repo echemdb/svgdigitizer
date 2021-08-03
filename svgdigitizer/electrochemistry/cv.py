@@ -11,31 +11,37 @@ from astropy import units as u
 # 'A / cm2'
 # These string can directly be converted to a unit
 # >>> u.Unit('uA / cm2')
-units = {'uA / cm2': ['uA / cm2',
-                      'uA / cm²',
-                      'µA / cm²',
-                      'µA cm⁻²',
-                      'uA cm-2',
-                      'uA / cm2'],
-        'A / cm2': ['A / cm2',
-                    'A cm⁻²',
-                    'A cm-2',
-                    'A / cm2'],
-        'A': ['A',
-                'ampere',
-                'amps',
-                'amp'],
-        'mV': ['milliV',
-                'millivolt',
-                'milivolt',
-                'miliv',
-                'mV'],
-        'V': ['V',
-              'v',
-              'Volt',
-              'volt'], 
-        'V / s': ['V s-1',
-                  'V / s']}
+units = {'uA / cm2': 
+            ['uA / cm2',
+            'uA / cm²',
+            'µA / cm²',
+            'µA cm⁻²',
+            'uA cm-2',
+            'uA / cm2'],
+        'A / cm2': 
+            ['A / cm2',
+            'A cm⁻²',
+            'A cm-2',
+            'A / cm2'],
+        'A': 
+            ['A',
+            'ampere',
+            'amps',
+            'amp'],
+        'mV': 
+            ['milliV',
+            'millivolt',
+            'milivolt',
+            'miliv',
+            'mV'],
+        'V': 
+            ['V',
+            'v',
+            'Volt',
+            'volt'], 
+        'V / s': 
+            ['V s-1',
+            'V / s']}
 
 class CV():
     def __init__(self, metadata, svgplot):
@@ -47,10 +53,10 @@ class CV():
         self.svgplot.create_df()
 
         self.axis_properties = {'x': {
-                                'label': 'U',
+                                'dimension': 'U',
                                 'unit': 'V'},
                                 'y': {
-                                'label': None, # can be I or j
+                                'dimension': None, # can be I or j
                                 'unit': None}} # can be 'A' or 'A / m2'
 
         # TODO: All the rest in the init is presumably not necessary
@@ -116,14 +122,14 @@ class CV():
         # Verify if the y data is current ('A') or current density ('A / cm2')
         if 'm2' in str(q.unit):
             conversion_factor = q.to(u.A / u.m**2)
-            self.axis_properties['y']['label'] = 'j'
+            self.axis_properties['y']['dimension'] = 'j'
         else:
             conversion_factor = q.to(u.A)
-            self.axis_properties['y']['label'] = 'I'
+            self.axis_properties['y']['dimension'] = 'I'
         
-        df_[self.axis_properties['y']['label']] = df_['y'] * conversion_factor
+        df_[self.axis_properties['y']['dimension']] = df_['y'] * conversion_factor
 
-        return df_[[self.axis_properties['y']['label']]]
+        return df_[[self.axis_properties['y']['dimension']]]
 
     def create_df_time_axis(self, df):
         r'''
@@ -137,11 +143,10 @@ class CV():
         return df_[['t']]
 
     def plot_cv(self):
-        xlabel = self.axis_properties['x']['label']
-        self.df.plot(x=self.axis_properties['x']['label'], y=self.axis_properties['y']['label'])
+        self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
-        plt.xlabel(self.axis_properties['x']['label'] +  ' / ' + str(self.axis_properties['x']['unit']))
-        plt.ylabel(self.axis_properties['y']['label'] + ' / ' + str(self.axis_properties['y']['unit']))
+        plt.xlabel(self.axis_properties['x']['dimension'] +  ' / ' + str(self.axis_properties['x']['unit']))
+        plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
 
     def create_csv(self, filename):
         csvfile = Path(filename).with_suffix('.csv')
