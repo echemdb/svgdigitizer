@@ -99,26 +99,16 @@ class CV():
 
         # create time axis
         self.df['t'] = self.create_df_time_axis(self.df)
-        #self.df['t'] = self.create_df_time_axis(self.svgplot.dfs[0])
 
     def create_df_U_axis(self, df):
         r'''
         Create voltage axis in the dataframe based on the units given in the
         figure description.
         '''
-        # df_ = df.copy()
-        # Call a dict and remove the if functions
         q = 1 * self.axis_units['x']
         conversion_factor = q.to(u.V).value
         df['U'] = df['x'] * conversion_factor
-        #self.axis_unit_strings['x']
-        #if self.xunit == 'V':
-        #    df_['U_V'] = df['U']
 
-        #if self.xunit == 'mV':
-        #    df_['U_V'] = df['U']/1E3
-
-        #df_['U_mV'] = df_['U_V']*1E3
         return df[['U']]
 
     def create_df_I_axis(self, df):
@@ -130,7 +120,7 @@ class CV():
         df_ = df.copy()
         q = 1 * self.axis_units['y']
         
-        # Verify if the y data is current or current density
+        # Verify if the y data is current ('A') or current density ('A / cm2')
         if 'm2' in str(q.unit):
             conversion_factor = q.to(u.A / u.m**2)
             column_name = 'j'
@@ -140,19 +130,6 @@ class CV():
         
         df_[column_name] = df_['y'] * conversion_factor
 
-        #if self.yunit == 'A':
-        #    df_['I_A'] = df['I']
-
-        #if self.yunit == 'mA':
-        #    df_['I_A'] = df['I']/1E3
-
-        #if self.yunit == 'uA':
-        #    df_['I_A'] = df['I']/1E6
-
-        #df_['I_mA'] = df_['I_A']*1E3
-        # df_['I_uA'] = df_['I_A']*1E6
-
-        #return df_[['I_A', 'I_mA', 'I_uA']]
         return df_[[column_name]]
 
     def create_df_time_axis(self, df):
