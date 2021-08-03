@@ -20,7 +20,7 @@ def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     plot = SVGPlot(open(svg, 'rb'), sampling_interval=sampling_interval)
     from pathlib import Path
-    plot.dfs[0].to_csv(Path(svg).with_suffix('.csv'), index=False)
+    plot.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
 
 
 @click.command()
