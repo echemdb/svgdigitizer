@@ -66,8 +66,6 @@ class CV():
 
         #self.modify_df()
 
-        
-
     def get_axis_units(self):
         '''replaces the units derived from the svg file into strings that can be used with astropy'''
         
@@ -126,7 +124,7 @@ class CV():
             column_name = 'j'
         else:
             conversion_factor = q.to(u.A)
-            column_name = 'i'
+            column_name = 'I'
         
         df_[column_name] = df_['y'] * conversion_factor
 
@@ -144,9 +142,12 @@ class CV():
         return df_[['t']]
 
     def plot_cv(self):
-        self.df.plot(x='U_V', y='I_uA')
-        plt.xlabel(f'{self.xlabel} / {self.xunit}')
-        plt.ylabel(f'{self.ylabel} / {self.yunit}')
+        for ylabel in ['I', 'j']:
+            if ylabel in self.df.columns:
+                self.df.plot(x='U', y=ylabel)
+                plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
+                plt.xlabel(f'U / V')
+                plt.ylabel(f'{ylabel} / undefined')
 
     def create_csv(self, filename):
         csvfile = Path(filename).with_suffix('.csv')
