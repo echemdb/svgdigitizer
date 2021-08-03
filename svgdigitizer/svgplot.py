@@ -115,6 +115,21 @@ class SVGPlot:
 
         return ref_points, real_points
 
+    def get_axis_unit_strings(self):
+        '''Creates a dict with:
+        x: unit of the x axis values
+        y: unit of the y axis values'''
+
+        axis_unit_strings = {'x': 1, 'y': 1}
+
+        for i in self.labeled_paths['ref_point']:
+            #text, paths, regex_match = i[2]
+            regex_match = i[2]
+            for axis in axis_unit_strings:
+                if axis in regex_match.group("point"):
+                    axis_unit_strings[axis] = regex_match.group("unit")
+        return axis_unit_strings
+
     @cached_property
     def scale_bars(self):
         scale_bars = {}
