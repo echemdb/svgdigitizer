@@ -4,7 +4,7 @@ from xml.dom import minidom, Node
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from functools import cached_property
+from functools import cache
 import re
 import logging
 
@@ -28,160 +28,514 @@ class SVGPlot:
     path can then be analyzed by this class to produce the coordinates
     corrsponding to the original measured values.
 
+    INPUT:
+
+    - ``algorithm`` -- mapping from the SVG coordinate system to the plot
+      coordinate system. The default, `"axis-aligned"` assumes that the plot
+      axes are perfectly aligned with the SVG coordinate system. Alternatively,
+      `"mark-aligned"` assumes the end points of the axis markers are aligned,
+      i.e., `x1` and `x2` have the exact same y coordinate in the plot
+      coordinate system to also handle coordinate systems that are rotated or
+      skewed in the SVG.
+
     EXAMPLES:
 
     An instance of this class can be created from a specially prepared SVG
-    file. There must at least be a `<path>` with a corresponding label::
+    file. There must at least be a `<path>` with a corresponding label. Here, a
+    segment goes from `(0, 100)` to `(100, 0)` in the (negative) SVG coordinate
+    system which corresponds to a segment from `(0, 0)` to `(1, 1)` in the plot
+    coordinate system::
 
     >>> from io import StringIO
     >>> svg = StringIO(r'''
     ... <svg>
     ...   <g>
-    ...     <path d="M 0 0 L 100 100" />
+    ...     <path d="M 0 100 L 100 0" />
     ...     <text>curve: 0</text>
     ...   </g>
     ...   <g>
-    ...     <path d="M 0 0 L 100 0" />
-    ...     <text x="0" y="0">x1: 0</text>
+    ...     <path d="M 0 200 L 0 100" />
+    ...     <text x="0" y="200">x1: 0</text>
     ...   </g>
     ...   <g>
-    ...     <path d="M 0 0 L 100 0" />
-    ...     <text x="100" y="0">x2: 1</text>
+    ...     <path d="M 100 200 L 100 100" />
+    ...     <text x="100" y="200">x2: 1</text>
     ...   </g>
     ...   <g>
-    ...     <path d="M 0 0 L 0 100" />
-    ...     <text x="0" y="0">y1: 0</text>
+    ...     <path d="M -100 100 L 0 100" />
+    ...     <text x="-100" y="100">y1: 0</text>
     ...   </g>
     ...   <g>
-    ...     <path d="M 0 0 L 0 100" />
-    ...     <text x="0" y="100">y2: 1</text>
+    ...     <path d="M -100 0 L 0 0" />
+    ...     <text x="-100" y="0">y2: 1</text>
     ...   </g>
     ... </svg>''')
     >>> plot = SVGPlot(svg)
-    >>> plot.dfs
-    [     x    y
-    0  1.0  1.0
-    1  1.0  1.0]
+    >>> plot.df
+         x    y
+    0  0.0  0.0
+    1  1.0  1.0
 
     """
-    def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None):
-        '''filename: should be a valid svg file created according to the documentation'''
+    def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None, curve=None, algorithm='axis-aligned'):
+        self.svg = minidom.parse(svg)
 
         self.xlabel = xlabel or 'x'
         self.ylabel = ylabel or 'y'
 
-        self.doc = minidom.parse(svg)
-        self.ref_points, self.real_points = self.get_points()
-
-        self.trafo = {}
-        for axis in ['x', 'y']:
-            self.trafo[axis] = self.get_trafo(axis)
-
         self.sampling_interval = sampling_interval
 
-        self.get_parsed()
-        self.create_df()
+        self._curve = curve
 
-    @cached_property
+        self._algorithm = algorithm
+
+    @property
+    @cache
     def transformed_sampling_interval(self):
-        factor = 1/((self.trafo['x'](self.sampling_interval)-self.trafo['x'](0))/(self.sampling_interval/1000))
-        return factor
+        if not self.sampling_interval:
+            return None
+        if self._algorithm == 'axis-aligned':
+            x1 = (0, 0)
+            x2 = (self.sampling_interval, 0)
+        elif self._algorithm == 'mark-aligned':
+            x1 = self.marked_points[f"{self.xlabel}1"]
+            x2 = self.marked_points[f"{self.xlabel}2"]
+            unit = complex(x2[0] - x1[0], x2[1] - x1[1])
+            unit /= abs(unit)
+            unit *= self.sampling_interval
+            x2 = (x1[0] + unit.real, x1[1] + unit.imag)
+        else:
+            raise NotImplementedError(f"sampling-interval not supported for {self._algorithm}")
 
-    def get_points(self):
-        ref_points = {}
-        real_points = {}
+        return self.sampling_interval / 1000 / (self.from_svg(*x2)[0] - self.from_svg(*x1)[0])
 
-        for i in self.labeled_paths['ref_point']:
-            text, paths, regex_match = i
+    @property
+    @cache
+    def marked_points(self):
+        r"""
+        Return the points that have been marked on the axes of the plot.
 
-            ref_point_id = regex_match.group("point")
-            real_points[ref_point_id] = float(regex_match.group("value"))
+        For each point, a tuple is returned relating the point's coordinates in
+        the SVG coordinate system to the points coordinates in the plot
+        coordinate system, or `None` if that points coordinate is not known.
 
-            x_text = float(text.getAttribute('x'))
-            y_text = float(text.getAttribute('y'))
+        EXAMPLES:
 
-            parsed_path = parse_path(paths[0].getAttribute('d'))
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text>curve: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> plot = SVGPlot(svg)
+        >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None)), 'x1': ((0.0, 100.0), (0.0, None)), 'y2': ((0.0, 0.0), (None, 1.0)), 'y1': ((0.0, 100.0), (None, 0.0))}
+        True
 
-            # always take the point of the path which is further away from text origin
-            path_points = []
-            path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
-            path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
-            if (path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2 > (path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2:
-                point = 0
+        """
+        points = {}
+
+        xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
+        ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
+
+        # Process explicitly marked point on the axes.
+        for (text, paths, match) in self.labeled_paths['ref_point']:
+            label = match.group("point")
+
+            if label in xlabels:
+                plot = (float(match.group("value")), None)
+            elif label in ylabels:
+                plot = (None, float(match.group("value")))
             else:
-                point = 1
+                raise NotImplementedError(f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}.")
 
-            ref_points[ref_point_id] = {'x': path_points[point][0], 'y': path_points[point][1]}
+            if label in points:
+                raise Exception(f"Found axis label {label} more than once.")
 
-        return ref_points, real_points
+            if len(paths) != 1:
+                raise NotImplementedError(f"Expected exactly one path to be grouped with the marked point {label} but found {len(paths)}.")
 
-    @cached_property
-    def scale_bars(self):
-        scale_bars = {}
+            path = parse_path(paths[0].getAttribute('d'))
 
-        for i in self.labeled_paths['scale_bar']:
-            text, paths, regex_match = i
+            # We need to decide which endpoint of the path is actually the marked point on the axis.
+            # We always take the one that is further from the label origin.
+            text = complex(float(text.getAttribute('x')), float(text.getAttribute('y')))
+            svg = max([path.point(0), path.point(1)], key=lambda p: abs(p - text))
 
-            x_text = float(text.getAttribute('x'))
-            y_text = float(text.getAttribute('y'))
+            points[label] = ((svg.real, svg.imag), plot)
 
-            end_points = []
-            for path in paths:
-                parsed_path = parse_path(path.getAttribute('d'))
-                # always take the point of the path which is further away from text origin
-                path_points = []
-                path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
-                path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
-                if (path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2 > (path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2:
-                    point = 0
-                else:
-                    point = 1
-                end_points.append(path_points[point])
+        if xlabels[0] not in points:
+            raise Exception(f"Label {xlabels[0]} not found in SVG.")
+        if ylabels[0] not in points:
+            raise Exception(f"Label {ylabels[0]} not found in SVG.")
 
-            scale_bars[regex_match.group("axis")] = {}
-            if regex_match.group("axis") == 'x':
-                scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0])
-            elif regex_match.group("axis") == 'y':
-                scale_bars[regex_match.group("axis")]['ref'] = abs(end_points[1][1] - end_points[0][1])
-            scale_bars[regex_match.group("axis")]['real'] = float(regex_match.group("value"))
+        # Process scale bars.
+        for (text, paths, match) in self.labeled_paths['scale_bar']:
+            label = match.group('axis')
+            value = float(match.group("value"))
 
-        return scale_bars
+            if label not in [self.xlabel, self.ylabel]:
+                raise Exception(f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {label}.")
 
-    @cached_property
+            if label + "2" in points:
+                raise Exception(f"Found more than one axis label {label}2 and scalebar for {label}.")
+
+            if len(paths) != 2:
+                raise NotImplementedError(f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(paths)}.")
+
+            # We need to decide which endpoint of the path is actually the marked point on the scalebar.
+            # We always take the one that is further from the label origin.
+            text = complex(float(text.getAttribute('x')), float(text.getAttribute('y')))
+            paths = [parse_path(path.getAttribute('d')) for path in paths]
+            svg = [max([path.point(0), path.point(1)], key=lambda p: abs(p - text)) for path in paths]
+
+            scalebar = svg[0] - svg[1]
+
+            # The scalebar has an explicit orientation in the SVG but the
+            # author of the scalebar was likely not aware.
+            # We assume here that the scalebar was meant to be oriented like
+            # the coordinate system in the SVG, i.e., x coordinates grow to the
+            # right, y coordinates grow to the bottom.
+            if label == self.xlabel:
+                if scalebar.real < 0:
+                    scalebar = -scalebar
+            else:
+                if scalebar.imag > 0:
+                    scalebar = -scalebar
+
+            # Construct the second marked point from the first marked point + scalebar.
+            p1 = points[label + "1"]
+            p2 = ((p1[0][0] + scalebar.real, p1[0][1] + scalebar.imag), (None, None))
+
+            if label == self.xlabel:
+                p2 = (p2[0], (p1[1][0] + value, None))
+            else:
+                p2 = (p2[0], (None, p1[1][1] + value))
+
+            points[label + "2"] = p2
+
+        if xlabels[1] not in points:
+            raise Exception(f"Label {xlabels[1]} not found in SVG.")
+        if ylabels[1] not in points:
+            raise Exception(f"Label {ylabels[1]} not found in SVG.")
+
+        return points
+
+    @property
+    @cache
     def scaling_factors(self):
-        scaling_factors = {'x': 1, 'y': 1}
-        for text in self.doc.getElementsByTagName('text'):
+        scaling_factors = {self.xlabel: 1, self.ylabel: 1}
+        for text in self.svg.getElementsByTagName('text'):
 
             # parse text content
-            regex_match = re.match(label_patterns['scale_bar'], SVGPlot._text_value(text))
+            match = re.match(label_patterns['scale_bar'], SVGPlot._text_value(text))
 
-            if regex_match:
-                scaling_factors[regex_match.group("axis")] = float(regex_match.group("value"))
+            if match:
+                scaling_factors[match.group("axis")] = float(match.group("value"))
 
         return scaling_factors
 
-    def get_parsed(self):
-        '''cuve function'''
-        self.allresults = {}
-        for pathid, pvals in self.paths.items():
-            self.allresults[pathid] = self.get_real_values(pvals)
+    def from_svg(self, x, y):
+        r"""
+        Map the point (x, y) from the SVG coordinate system to the plot
+        coordinate system.
 
-    def get_trafo(self, axis):
-        # we assume a rectangular plot
-        p_real = self.real_points
-        p_ref = self.ref_points
-        try:
-            mref = (p_real[f'{axis}2'] - p_real[f'{axis}1']) / (p_ref[f'{axis}2'][axis] - p_ref[f'{axis}1'][axis]) / self.scaling_factors[axis]
-            return lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
-        except KeyError:
-            # We need a -1 here because the coordinate system in SVG is negative.
-            mref = -1/self.scale_bars[axis]['ref'] * self.scale_bars[axis]['real'] / self.scaling_factors[axis]
-            return lambda pathdata: mref * (pathdata - p_ref[f'{axis}1'][axis]) + p_real[f'{axis}1']
+        EXAMPLES:
 
-    def get_real_values(self, xpathdata):
-        xnorm = self.trafo['x'](xpathdata[:, 0])
-        ynorm = self.trafo['y'](xpathdata[:, 1])
-        return np.array([xnorm, ynorm])
+        A simple plot. The plot uses a Cartesian (positive) coordinate system
+        which in the SVG becomes a negative coordinate system, i.e., in the
+        plot y grows towards the bottom. Here, the SVG coordinate (0, 100) is
+        mapped to (0, 0) and (100, 0) is mapped to (1, 1)::
+
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> plot = SVGPlot(svg)
+        >>> plot.from_svg(0, 100)
+        (0.0, 0.0)
+        >>> plot.from_svg(100, 0)
+        (1.0, 1.0)
+
+        A typical plot. Like the above but the origin is shifted and the two
+        axes are not scaled equally. Here (1024, 512) is mapped to (0, 0) and
+        (1124, 256) is mapped to (1, 1)::
+
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 1024 612 L 1024 512" />
+        ...     <text x="1024" y="612">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 1124 612 L 1124 512" />
+        ...     <text x="1124" y="612">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 924 512 L 1024 512" />
+        ...     <text x="924" y="512">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 924 256 L 1024 256" />
+        ...     <text x="924" y="256">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> plot = SVGPlot(svg)
+        >>> plot.from_svg(1024, 512)
+        (0.0, 0.0)
+        >>> from numpy import allclose
+        >>> allclose(plot.from_svg(1124, 256), (1, 1))
+        True
+
+        A skewed plot. In this plot the axes are not orthogonal. In real plots
+        the axes might be non-orthogonal but not as much as in this
+        example. Here, one axis goes horizontally from (0, 100) to (100, 100)
+        and the other axis goes at an angle from (0, 100) to (100, 0)::
+
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 0 L 100 0" />
+        ...     <text x="0" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> plot = SVGPlot(svg, algorithm='mark-aligned')
+        >>> plot.from_svg(0, 100)
+        (0.0, 0.0)
+        >>> plot.from_svg(100, 100)
+        (1.0, 0.0)
+        >>> plot.from_svg(100, 0)
+        (0.0, 1.0)
+        >>> plot.from_svg(0, 0)
+        (-1.0, 1.0)
+
+        """
+        from numpy import dot
+        return tuple(dot(self.transformation, [x, y, 1])[:2])
+
+    @property
+    @cache
+    def transformation(self):
+        r"""
+        Return the affine map from the SVG coordinate system to the plot
+        coordinate system as a matrix, see
+        https://en.wikipedia.org/wiki/Affine_group#Matrix_representation
+
+        EXAMPLES:
+
+        A simple plot. The plot uses a Cartesian (positive) coordinate system
+        which in the SVG becomes a negative coordinate system, i.e., in the
+        plot y grows towards the bottom. Here, the SVG coordinate (0, 100) is
+        mapped to (0, 0) and (100, 0) is mapped to (1, 1)::
+
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> SVGPlot(svg).transformation
+        array([[ 0.01,  0.  ,  0.  ],
+               [ 0.  , -0.01,  1.  ],
+               [ 0.  ,  0.  ,  1.  ]])
+
+        A typical plot. Like the above but the origin is shifted and the two
+        axes are not scaled equally. Here (1000, 500) is mapped to (0, 0) and
+        (1100, 300) is mapped to (1, 1)::
+
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 1000 600 L 1000 500" />
+        ...     <text x="1000" y="600">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 1100 600 L 1100 500" />
+        ...     <text x="1100" y="600">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 900 500 L 1000 500" />
+        ...     <text x="900" y="500">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 900 300 L 1000 300" />
+        ...     <text x="900" y="300">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> A = SVGPlot(svg).transformation
+        >>> from numpy import allclose
+        >>> allclose(A, [
+        ...   [ 0.01,  0.000, -10.00],
+        ...   [ 0.00, -0.005,   2.50],
+        ...   [ 0.00,  0.000,   1.00],
+        ... ])
+        True
+
+        A skewed plot. In this plot the axes are not orthogonal. In real plots
+        the axes might be non-orthogonal but not as much as in this
+        example. Here, one axis goes horizontally from (0, 100) to (100, 100)
+        and the other axis goes at an angle from (0, 100) to (100, 0)::
+
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 0 L 100 0" />
+        ...     <text x="0" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> SVGPlot(svg, algorithm='mark-aligned').transformation
+        array([[ 0.01,  0.01, -1.  ],
+               [ 0.  , -0.01,  1.  ],
+               [ 0.  ,  0.  ,  1.  ]])
+
+        """
+        # We construct the basic transformation from the SVG coordinate system
+        # to the plot coordinate system from four points in the SVG about we
+        # know something in the plot coordinate system:
+        # * x1: a point whose x-coordinate we know
+        # * y1: a point whose y-coordinate we know
+        # * x2: a point whose x-coordinate we know
+        # * y2: a point whose y-coordinate we know
+        # For the axis-aligned implementation, we further assume that only
+        # changing the x coordinate in the SVG does not change the y coordinate
+        # in the plot and conversely.
+        # For the mark-aligned algorithm, we assume that x1 and x2 have the
+        # same y coordinate in the plot coordinate system. And that y1 and y2
+        # have the same x coordinate in the plot coordinate system.
+        # In any case, this gives six relations for the six unknowns of an
+        # affine transformation.
+        x1 = self.marked_points[f"{self.xlabel}1"]
+        x2 = self.marked_points[f"{self.xlabel}2"]
+        y1 = self.marked_points[f"{self.ylabel}1"]
+        y2 = self.marked_points[f"{self.ylabel}2"]
+
+        # We find the linear transformation:
+        # [A[0] A[1] A[2]]
+        # [A[3] A[4] A[5]]
+        # [   0    0    1]
+        # By solving for the linear conditions indicated above:
+        conditions = [
+            # x1 maps to something with the correct x coordinate
+            ([x1[0][0], x1[0][1], 1, 0, 0, 0], x1[1][0]),
+            # y1 maps to something with the correct y coordinate
+            ([0, 0, 0, y1[0][0], y1[0][1], 1], y1[1][1]),
+            # x2 maps to something with the correct x coordinate
+            ([x2[0][0], x2[0][1], 1, 0, 0, 0], x2[1][0]),
+            # y2 maps to something with the correct y coordinate
+            ([0, 0, 0, y2[0][0], y2[0][1], 1], y2[1][1]),
+        ]
+
+        if self._algorithm == 'axis-aligned':
+            conditions.extend([
+                # Moving along the SVG x axis does not change the y coordinate
+                ([0, 0, 0, 1, 0, 0], 0),
+                # Moving along the SVG y axis does not change the x coordinate
+                ([0, 1, 0, 0, 0, 0], 0),
+            ])
+        elif self._algorithm == 'mark-aligned':
+            conditions.extend([
+                # x1 and x2 map to the same y coordinate
+                ([0, 0, 0, x1[0][0] - x2[0][0], x1[0][1] - x2[0][1], 0], 0),
+                # y1 and y2 map to the same x coordinate
+                ([y1[0][0] - y2[0][0], y1[0][1] - y2[0][1], 0, 0, 0, 0], 0),
+            ])
+        else:
+            raise NotImplementedError(f"Unknown algorithm {self._algorithm}.")
+
+        from numpy.linalg import solve
+        A = solve([c[0] for c in conditions], [c[1] for c in conditions])
+
+        # Rewrite the solution as a linear transformation matrix.
+        A = [
+            [A[0], A[1], A[2]],
+            [A[3], A[4], A[5]],
+            [0, 0, 1],
+        ]
+
+        # Apply scaling factors, as a diagonal matrix.
+        from numpy import dot
+        A = dot([
+            [1/self.scaling_factors[self.xlabel], 0, 0],
+            [0, 1/self.scaling_factors[self.ylabel], 0],
+            [0, 0, 1],
+        ], A)
+
+        return A
 
     @classmethod
     def _text_value(cls, node):
@@ -207,7 +561,8 @@ class SVGPlot:
             return node.data.strip()
         return "".join(SVGPlot._text_value(child) for child in node.childNodes)
 
-    @cached_property
+    @property
+    @cache
     def labeled_paths(self):
         r"""
         All paths with their corresponding label.
@@ -219,7 +574,7 @@ class SVGPlot:
         """
         labeled_paths = {key: [] for key in label_patterns}
 
-        groups = set(path.parentNode for path in self.doc.getElementsByTagName('path'))
+        groups = set(path.parentNode for path in self.svg.getElementsByTagName('path'))
 
         for group in groups:
             if group.nodeType != Node.ELEMENT_NODE or group.tagName != 'g':
@@ -266,38 +621,80 @@ class SVGPlot:
 
         return labeled_paths
 
-    @cached_property
-    def paths(self):
+    @property
+    @cache
+    def curve(self):
         r"""
-        Return the paths that are tracing plots in the SVG, i.e., return all
-        the `<path>` tags that are not used for other purposes such as pointing
-        to axis labels.
+        Return the path that is tracing the plot in the SVG.
+
+        Return the `<path>` tag that is not used for other purposes such as
+        pointing to axis labels.
+
+        EXAMPLES:
+
+        A plot going from (0, 0) to (1, 1)::
+
+        >>> from io import StringIO
+        >>> svg = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text>curve: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>''')
+        >>> plot = SVGPlot(svg)
+        >>> plot.curve
+        [(0.0, 100.0), (100.0, 0.0)]
+
         """
+        curves = [curve for (text, curve, match) in self.labeled_paths['curve'] if self._curve is None or match.group("curve_id") == self._curve]
 
-        data_paths = {}
-        for i in self.labeled_paths['curve']:
-            text, paths, regex_match = i
+        if len(curves) == 0:
+            raise Exception("No curve {self._curve} found in SVG.")
+        if len(curves) > 1:
+            raise Exception("More than one curve {self._curve} fonud in SVG.")
 
-            if not self.sampling_interval:
-                # only consider first path since every curve has a label
-                data_paths[paths[0].getAttribute('id')] = self.parse_pathstring(paths[0].getAttribute('d'))
-            # sample path if interval set
-            elif self.sampling_interval:
-                data_paths[paths[0].getAttribute('id')] = self.sample_path(paths[0].getAttribute('d'))
+        path = curves[0]
+        if len(path) == 0:
+            raise Exception("Curve has not a single <path>.")
+        if len(path) > 1:
+            raise NotImplementedError("Cannot handle curve with more than one <path>.")
 
-        return data_paths
+        if self.sampling_interval:
+            # sample path if interval is set
+            return self.sample_path(path[0].getAttribute('d'))
+        else:
+            return self._parse_shape(path[0].getAttribute('d'))
 
-    def parse_pathstring(self, path_string):
-        path = parse_path(path_string)
-        posxy = []
-        for e in path:
-            x0 = e.start.real
-            y0 = e.start.imag
-            x1 = e.end.real
-            y1 = e.end.imag
-            posxy.append([x0, y0])
+    @classmethod
+    def _parse_shape(self, shape):
+        r"""
+        Return the points on the `shape` which comse from the `d` attribute of
+        a `<path>`.
 
-        return np.array(posxy)
+        EXAMPLES::
+
+        >>> SVGPlot._parse_shape('M 0 0 L 1 0 L 1 1 L 0 1 L 0 0')
+        [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0), (0.0, 0.0)]
+
+        """
+        return [(command.end.real, command.end.imag) for command in parse_path(shape)]
 
     def sample_path(self, path_string):
         '''samples a path with equidistant x segment by segment'''
@@ -334,15 +731,15 @@ class SVGPlot:
 
         return np.array(points)
 
-    def create_df(self):
-        data = [self.allresults[list(self.allresults)[idx]].transpose() for idx, i in enumerate(self.allresults)]
-        self.dfs = [pd.DataFrame(data[idx], columns=[self.xlabel, self.ylabel]) for idx, i in enumerate(data)]
+    @property
+    @cache
+    def df(self):
+        return pd.DataFrame([self.from_svg(x, y) for (x, y) in self.curve], columns=[self.xlabel, self.ylabel])
 
     def plot(self):
         '''curve function'''
         fig, ax = plt.subplots(1, 1)
-        for i, df in enumerate(self.dfs):
-            df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}')
+        self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}')
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.tight_layout()
