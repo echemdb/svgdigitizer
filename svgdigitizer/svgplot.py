@@ -183,12 +183,16 @@ class SVGPlot:
             if label + "2" in points:
                 raise Exception(f"Found more than one axis label {label}2 and scalebar for {label}.")
 
-            if len(paths) != 1:
-                raise NotImplementedError(f"Expected exactly one path to be grouped with the scalebar label {label} but found {len(paths)}.")
+            if len(paths) != 2:
+                raise NotImplementedError(f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(paths)}.")
 
-            path = parse_path(paths[0].getAttribute('d'))
+            # We need to decide which endpoint of the path is actually the marked point on the scalebar.
+            # We always take the one that is further from the label origin.
+            text = complex(float(text.getAttribute('x')), float(text.getAttribute('y')))
+            paths = [parse_path(path.getAttribute('d')) for path in paths]
+            svg = [max([path.point(0), path.point(1)], key=lambda p: abs(p - text)) for path in paths]
 
-            scalebar = path.point(1) - path.point(0)
+            scalebar = svg[0] - svg[1]
 
             # The scalebar has an explicit orientation in the SVG but the
             # author of the scalebar was likely not aware.
@@ -219,34 +223,6 @@ class SVGPlot:
             raise Exception(f"Label {ylabels[1]} not found in SVG.")
 
         return points
-
-    @property
-    @cache
-    def scale_bars(self):
-        scale_bars = {}
-
-        for (text, path, match) in self.labeled_paths['scale_bar']:
-            end_points = []
-            for path in paths:
-                parsed_path = parse_path(path.getAttribute('d'))
-                # always take the point of the path which is further away from text origin
-                path_points = []
-                path_points.append((parsed_path.point(0).real, parsed_path.point(0).imag))
-                path_points.append((parsed_path.point(1).real, parsed_path.point(1).imag))
-                if (path_points[0][0]-x_text)**2 + (path_points[0][1]-y_text)**2 > (path_points[1][0]-x_text)**2 + (path_points[1][1]-y_text)**2:
-                    point = 0
-                else:
-                    point = 1
-                end_points.append(path_points[point])
-
-            scale_bars[match.group("axis")] = {}
-            if match.group("axis") == 'x':
-                scale_bars[match.group("axis")]['ref'] = abs(end_points[1][0] - end_points[0][0])
-            elif match.group("axis") == 'y':
-                scale_bars[match.group("axis")]['ref'] = abs(end_points[1][1] - end_points[0][1])
-            scale_bars[match.group("axis")]['real'] = float(match.group("value"))
-
-        return scale_bars
 
     @property
     @cache
@@ -538,11 +514,11 @@ class SVGPlot:
 
         # Apply scaling factors, as a diagonal matrix.
         from numpy import dot
-        A = dot(A, [
+        A = dot([
             [1/self.scaling_factors[self.xlabel], 0, 0],
             [0, 1/self.scaling_factors[self.ylabel], 0],
             [0, 0, 1],
-        ])
+        ], A)
 
         return A
 
