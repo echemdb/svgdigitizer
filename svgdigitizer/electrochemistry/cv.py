@@ -12,37 +12,32 @@ from astropy import units as u
 # 'A / cm2'
 # These string can directly be converted to a unit
 # >>> u.Unit('uA / cm2')
-unit_typos = {'uA / cm2':
-            ['uA / cm2',
-            'uA / cm²',
-            'µA / cm²',
-            'µA cm⁻²',
-            'uA cm-2',
-            'uA / cm2'],
-        'A / cm2':
-            ['A / cm2',
-            'A cm⁻²',
-            'A cm-2',
-            'A / cm2'],
-        'A':
-            ['A',
-            'ampere',
-            'amps',
-            'amp'],
-        'mV':
-            ['milliV',
-            'millivolt',
-            'milivolt',
-            'miliv',
-            'mV'],
-        'V':
-            ['V',
-            'v',
-            'Volt',
-            'volt'],
-        'V / s':
-            ['V s-1',
-            'V / s']}
+unit_typos = {'uA / cm2': ['uA / cm2',
+                           'uA / cm²',
+                           'µA / cm²',
+                           'µA cm⁻²',
+                           'uA cm-2',
+                           'uA / cm2'],
+              'A / cm2': ['A / cm2',
+                          'A cm⁻²',
+                          'A cm-2',
+                          'A / cm2'],
+              'A': ['A',
+                    'ampere',
+                    'amps',
+                    'amp'],
+              'mV': ['milliV',
+                     'millivolt',
+                     'milivolt',
+                     'miliv',
+                     'mV'],
+              'V': ['V',
+                    'v',
+                    'Volt',
+                    'volt'],
+              'V / s': ['V s-1',
+                        'V / s']}
+
 
 class CV():
     def __init__(self, metadata, svgplot):
@@ -56,13 +51,10 @@ class CV():
     @property
     @cache
     def axis_properties(self):
-        return {'x': {
-                            'dimension': 'U',
-                            'unit': 'V'
-                            },
-                            'y': {
-                            'dimension': 'I' if 'm2' in str(self.get_axis_unit('y')) else 'j',
-                            'unit': 'A / m2' if 'm2' in str(self.get_axis_unit('y')) else 'A'}}
+        return {'x': {'dimension': 'U',
+                      'unit': 'V'},
+                'y': {'dimension': 'I' if 'm2' in str(self.get_axis_unit('y')) else 'j',
+                      'unit': 'A / m2' if 'm2' in str(self.get_axis_unit('y')) else 'A'}}
 
     def get_axis_unit(self, axis):
         r'''
