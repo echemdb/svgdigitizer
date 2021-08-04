@@ -53,12 +53,6 @@ class CV():
         self.metadata = metadata
         self.svgplot.create_df()
 
-        # TODO: All the rest in the init is presumably not necessary
-
-        self.description = self.metadata['figure description']
-
-        self.get_rate()
-
     @property
     @cache
     def axis_properties(self):
@@ -81,14 +75,18 @@ class CV():
 
         raise ValueError(f'Unknown Unit {unit} on Axis {axis}')
 
-    def get_rate(self):  # TODO: probably not required
+    @property
+    @cache
+    def rate(self):  # TODO: probably not required
         r'''
         Return rate based on the x coordinate units.
 
         At the moment we simply use the value.
         '''
-        self.rate = self.metadata['figure description']['scan rate']['value']
-        return self.rate
+        # To Do:
+        # Check unit of the rate.
+        # Convert unit string to SI astropy unit: V / s
+        return self.metadata['figure description']['scan rate']['value']
 
     @property
     @cache
@@ -143,7 +141,7 @@ class CV():
         df = df.copy()
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
-        df['t'] = df['cumdeltaU']/self.get_rate()
+        df['t'] = df['cumdeltaU']/self.rate
         return df[['t']]
 
     def plot_cv(self):
