@@ -59,8 +59,6 @@ class CV():
 
         self.get_rate()
 
-        self.create_cv_df()
-
     @property
     @cache
     def axis_properties(self):
@@ -74,7 +72,7 @@ class CV():
 
     def get_axis_unit(self, axis):
         r'''
-        replaces the units derived from the svg file into strings that can be used with astropy
+        Replaces the units derived from the svg file into astropy units.
         '''
         unit = self.svgplot.units[axis]
         for correct_unit, typos in unit_typos.items():
@@ -89,18 +87,23 @@ class CV():
 
         At the moment we simply use the value.
         '''
-        self.rate = self.description['scan rate']['value']
+        self.rate = self.metadata['figure description']['scan rate']['value']
         return self.rate
 
-    def create_cv_df(self):
-        # Create potential column
-        self.df = self.create_df_U_axis(self.svgplot.dfs[0][['x']])
+    @property
+    @cache
+    def cv_df(self):
+        # Create potential column.
+        df = self.create_df_U_axis(self.svgplot.dfs[0][['x']])
 
-        # Create current or current density column
-        self.df = pd.concat([self.df, self.create_df_I_axis(self.svgplot.dfs[0][['y']])], axis=1)
+        # Create current or current density column.
+        df = pd.concat([df, self.create_df_I_axis(self.svgplot.dfs[0][['y']])], axis=1)
 
-        # create time axis
-        self.df['t'] = self.create_df_time_axis(self.df)
+        # Create time axis.
+        df['t'] = self.create_df_time_axis(df)
+        # Rearrange columns.
+        df = df[['t', 'U', self.axis_properties['y']['dimension']]]
+        return df
 
     def create_df_U_axis(self, df):
         r'''
@@ -144,11 +147,11 @@ class CV():
         return df[['t']]
 
     def plot_cv(self):
-        self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
+        self.cv_df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
         plt.xlabel(self.axis_properties['x']['dimension'] + ' / ' + str(self.axis_properties['x']['unit']))
         plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
 
     def create_csv(self, filename):
         csvfile = Path(filename).with_suffix('.csv')
-        self.df.to_csv(csvfile, index=False)
+        self.cv_df.to_csv(csvfile, index=False)
