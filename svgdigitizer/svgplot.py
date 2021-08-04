@@ -92,8 +92,22 @@ class SVGPlot:
     @property
     @cache
     def transformed_sampling_interval(self):
-        factor = 1/((self.trafo['x'](self.sampling_interval)-self.trafo['x'](0))/(self.sampling_interval/1000))
-        return factor
+        if not self.sampling_interval:
+            return None
+        if self._algorithm == 'axis-aligned':
+            x1 = (0, 0)
+            x2 = (self.sampling_interval, 0)
+        elif self._algorithm == 'mark-aligned':
+            x1 = self.marked_points[f"{self.xlabel}1"]
+            x2 = self.marked_points[f"{self.xlabel}2"]
+            unit = complex(x2[0] - x1[0], x2[1] - x1[1])
+            unit /= abs(unit)
+            unit *= self.sampling_interval
+            x2 = (x1[0] + unit.real, x1[1] + unit.imag)
+        else:
+            raise NotImplementedError(f"sampling-interval not supported for {self._algorithm}")
+
+        return self.sampling_interval / 1000 / (self.from_svg(*x2)[0] - self.from_svg(*x1)[0])
 
     @property
     @cache
