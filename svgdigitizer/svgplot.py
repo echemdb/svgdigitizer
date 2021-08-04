@@ -303,8 +303,9 @@ class SVGPlot:
         >>> plot = SVGPlot(svg)
         >>> plot.from_svg(1024, 512)
         (0.0, 0.0)
-        >>> plot.from_svg(1124, 256)
-        (1.0, 1.0)
+        >>> from numpy import allclose
+        >>> allclose(plot.from_svg(1124, 256), (1, 1))
+        True
 
         A skewed plot. In this plot the axes are not orthogonal. In real plots
         the axes might be non-orthogonal but not as much as in this
