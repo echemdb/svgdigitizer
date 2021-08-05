@@ -163,6 +163,11 @@ class CV():
         plt.xlabel(self.axis_properties['x']['dimension'] + ' / ' + str(self.axis_properties['x']['unit']))
         plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
 
+    @property
+    def metadata_out(self):
+        # A dict based on `metadata_in` populated with information for the website.
+        raise NotImplementedError
+
     def create_csv(self, filename):
         csvfile = Path(filename).with_suffix('.csv')
         self.cv_df.to_csv(csvfile, index=False)
