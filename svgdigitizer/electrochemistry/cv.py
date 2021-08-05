@@ -67,7 +67,6 @@ class CV():
         """
         self.svgplot = svgplot
         self.metadata = metadata
-        self.svgplot.create_df()
 
     @property
     @cache
@@ -105,10 +104,10 @@ class CV():
     @cache
     def cv_df(self):
         # Create potential column.
-        df = self.create_df_U_axis(self.svgplot.dfs[0][['x']])
+        df = self.create_df_U_axis(self.svgplot.df[['x']])
 
         # Create current or current density column.
-        df = pd.concat([df, self.create_df_I_axis(self.svgplot.dfs[0][['y']])], axis=1)
+        df = pd.concat([df, self.create_df_I_axis(self.svgplot.df[['y']])], axis=1)
 
         # Create time axis.
         df['t'] = self.create_df_time_axis(df)
@@ -122,8 +121,9 @@ class CV():
         figure description.
         '''
         q = 1 * self.get_axis_unit('x')
-        conversion_factor = q.to(u.V).value
-        df['U'] = df['x'] * conversion_factor
+        # Convert the axis unit to SI unit V and use the value
+        # to convert the potential values in the df to V
+        df['U'] = df['x'] * q.to(u.V).value
 
         return df[['U']]
 
