@@ -31,27 +31,27 @@ jobs:
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/xy.svg
-          diff test/data/xy.csv test/data/xy.csv.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy.csv"), pandas.read_csv("test/data/xy.csv.expected"))'
       - name: scalebar-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/scaling_factor.svg
-          diff test/data/scaling_factor.csv test/data/scaling_factor.csv.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/scaling_factor.csv"), pandas.read_csv("test/data/scaling_factor.csv.expected"))'
       - name: sampling-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/sampling.svg --sampling_interval 1
-          diff test/data/sampling.csv test/data/sampling.csv.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling.csv"), pandas.read_csv("test/data/sampling.csv.expected"))'
       - name: sampling-many-points-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval 1
-          diff test/data/sampling_many_points.csv test/data/sampling_many_points.csv.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling_many_points.csv"), pandas.read_csv("test/data/sampling_many_points.csv.expected"))'
       - name: no-layer-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/svg_without_layer.svg
-          diff test/data/svg_without_layer.csv test/data/svg_without_layer.csv.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/svg_without_layer.csv"), pandas.read_csv("test/data/svg_without_layer.csv.expected"))'
       - name: unit-test
         shell: bash -l {0}
         run: |

@@ -1,3 +1,24 @@
+#*********************************************************************
+#  This file is part of svgdigitizer.
+#
+#        Copyright (C) 2021 Albert Engstfeld
+#        Copyright (C) 2021 Johannes Hermann
+#        Copyright (C) 2021 Julian Rüth
+#        Copyright (C) 2021 Nicolas Hörmann
+#
+#  svgdigitizer is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  svgdigitizer is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
+#*********************************************************************
 import click
 
 
@@ -20,7 +41,7 @@ def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     plot = SVGPlot(open(svg, 'rb'), sampling_interval=sampling_interval)
     from pathlib import Path
-    plot.dfs[0].to_csv(Path(svg).with_suffix('.csv'), index=False)
+    plot.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
 
 
 @click.command()
