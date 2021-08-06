@@ -1,4 +1,4 @@
-#*********************************************************************
+# *********************************************************************
 #  This file is part of svgdigitizer.
 #
 #        Copyright (C) 2021 Albert Engstfeld
@@ -18,7 +18,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
-#*********************************************************************
+# *********************************************************************
 from svg.path import parse_path
 from svgpathtools import Path, Line
 from xml.dom import minidom, Node
@@ -129,7 +129,7 @@ class SVGPlot:
             raise NotImplementedError(f"sampling-interval not supported for {self._algorithm}")
 
         return self.sampling_interval / 1000 / (self.from_svg(*x2)[0] - self.from_svg(*x1)[0])
-    
+
     @property
     def units(self):
         r"""
