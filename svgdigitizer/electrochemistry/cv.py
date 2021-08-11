@@ -61,12 +61,12 @@ unit_typos = {'uA / cm2': ['uA / cm2',
 
 
 class CV():
-    def __init__(self, metadata, svgplot):
+    def __init__(self, svgplot, metadata=None):
         """
         metadata: dict
         """
         self.svgplot = svgplot
-        self.metadata = metadata
+        self.metadata = metadata or {}
 
     @property
     @cache

@@ -153,7 +153,7 @@ class SVG:
             assert paths
 
             # Parse the label
-            match = re.match(pattern, SVG._text_value(label))
+            match = re.match(pattern, SVG._text_value(label), re.IGNORECASE)
             if match:
                 labeled_paths.append(SVG.LabeledPaths(label, paths, match))
 
@@ -162,7 +162,7 @@ class SVG:
     def get_labels(self, pattern=""):
         labels = []
         for text in self.svg.getElementsByTagName("text"):
-            match = re.match(pattern, SVG._text_value(text))
+            match = re.match(pattern, SVG._text_value(text), re.IGNORECASE)
             if match:
                 labels.append(SVG.Label(text, match))
 
