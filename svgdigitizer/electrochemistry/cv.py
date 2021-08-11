@@ -1,4 +1,4 @@
-# *********************************************************************
+# ********************************************************************
 #  This file is part of svgdigitizer.
 #
 #        Copyright (C) 2021 Albert Engstfeld
@@ -18,7 +18,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
-# *********************************************************************
+# ********************************************************************
 from functools import cache
 import pandas as pd
 import matplotlib.pyplot as plt

@@ -52,7 +52,3 @@ jobs:
         run: |
           svgdigitizer digitize test/data/svg_without_layer.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/svg_without_layer.csv"), pandas.read_csv("test/data/svg_without_layer.csv.expected"))'
-      - name: unit-test
-        shell: bash -l {0}
-        run: |
-          python -m test.test_regex
