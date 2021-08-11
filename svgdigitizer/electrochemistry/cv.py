@@ -57,7 +57,10 @@ unit_typos = {'uA / cm2': ['uA / cm2',
                     'Volt',
                     'volt'],
               'V / s': ['V s-1',
-                        'V / s']}
+                        'V / s'],
+              'mV / s': ['mV / s',
+                         'mV s-1',
+                         'mV/s']}
 
 
 class CV():
@@ -73,7 +76,7 @@ class CV():
     def axis_properties(self):
         return {'x': {'dimension': 'U',
                       'unit': 'V'},
-                'y': {'dimension': 'I' if 'm2' in str(self.get_axis_unit('y')) else 'j',
+                'y': {'dimension': 'j' if 'm2' in str(self.get_axis_unit('y')) else 'I',
                       'unit': 'A / m2' if 'm2' in str(self.get_axis_unit('y')) else 'A'}}
 
     def get_axis_unit(self, axis):
@@ -81,24 +84,34 @@ class CV():
         Replaces the units derived from the svg file into astropy units.
         '''
         unit = self.svgplot.units[axis]
+
+        return self.get_correct_unit(unit)
+
+    def get_correct_unit(self, unit):
         for correct_unit, typos in unit_typos.items():
             if unit in typos:
                 return u.Unit(correct_unit)
-
+        
         raise ValueError(f'Unknown Unit {unit} on Axis {axis}')
 
     @property
     @cache
-    def rate(self):  # TODO: probably not required
+    def rate(self):
         r'''
-        Return rate based on the x coordinate units.
-
-        At the moment we simply use the value.
+        Return a rate based on a label in the SVG file.
         '''
-        # To Do:
-        # Check unit of the rate.
-        # Convert unit string to SI astropy unit: V / s
-        return self.metadata['figure description']['scan rate']['value']
+        rates = self.svgplot.svg.get_labels('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
+        # To Do
+        # assert that only one label contains the scan rate
+        # asstert that a rate is available at all
+
+        # Convert to astropy unit
+        rates[0].unit = self.get_correct_unit(rates[0].unit)
+        # Convert to SI astropy unit: V / s
+        rate = float(rates[0].value) * rates[0].unit
+        rate = rate.to(u.V / u.s)
+
+        return rate
 
     @property
     @cache
@@ -113,6 +126,7 @@ class CV():
         df['t'] = self.create_df_time_axis(df)
         # Rearrange columns.
         df = df[['t', 'U', self.axis_properties['y']['dimension']]]
+
         return df
 
     def create_df_U_axis(self, df):
@@ -154,7 +168,8 @@ class CV():
         df = df.copy()
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
-        df['t'] = df['cumdeltaU']/self.rate
+        df['t'] = df['cumdeltaU']/float(self.rate.value)
+        
         return df[['t']]
 
     def plot_cv(self):
