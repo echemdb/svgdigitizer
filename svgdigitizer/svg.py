@@ -211,7 +211,7 @@ class SVG:
 
         return labeled_paths
 
-    def get_labels(self, pattern=""):
+    def get_texts(self, pattern=""):
         labels = []
         for text in self.svg.getElementsByTagName("text"):
             match = re.match(pattern, SVG._text_value(text))
