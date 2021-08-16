@@ -89,7 +89,6 @@ class CV():
         rates[0].unit = CV.get_correct_unit(rates[0].unit)
         # Convert to SI astropy unit: V / s
         rate = float(rates[0].value) * rates[0].unit
-        rate = rate.to(u.V / u.s)
 
         return rate
 
@@ -148,7 +147,8 @@ class CV():
         df = df.copy()
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
-        df['t'] = df['cumdeltaU']/float(self.rate.value)
+        df['t'] = df['cumdeltaU']/float(self.rate.to(u.V / u.s).value)
+        
 
         return df[['t']]
 
@@ -159,9 +159,20 @@ class CV():
         plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
 
     @property
-    def metadata_out(self):
-        # A dict based on `metadata_in` populated with information for the website.
-        raise NotImplementedError
+    def metadata_out(self, comment=''):
+        # Add description
+        assert type(comment) == str, 'Comment must be a string'
+
+        if not 'figure description' in self.metadata:
+            self.metadata['figure description'] = {}
+        
+        self.metadata['figure description']['type'] = 'digitized'
+        self.metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit':str(self.rate.unit)}
+        self.metadata['figure description']['potential scale'] = {'unit': str(self.get_axis_unit('x')), 'reference':None}
+        self.metadata['figure description']['current'] = {'unit': str(self.get_axis_unit('y'))}
+        self.metadata['figure description']['comment'] = comment
+
+        return self.metadata
 
     def create_csv(self, filename):
         csvfile = Path(filename).with_suffix('.csv')
