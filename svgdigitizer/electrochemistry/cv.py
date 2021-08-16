@@ -56,8 +56,7 @@ unit_typos = {'uA / cm2': ['uA / cm2',
                     'v',
                     'Volt',
                     'volt'],
-              'V / s': ['V s-1',
-                        'V / s'],
+              'V / s': ['V s-1', 'V / s'],
               'mV / s': ['mV / s',
                          'mV s-1',
                          'mV/s']}
@@ -87,11 +86,12 @@ class CV():
 
         return self.get_correct_unit(unit)
 
-    def get_correct_unit(self, unit):
+    @classmethod
+    def get_correct_unit(cls, unit):
         for correct_unit, typos in unit_typos.items():
             if unit in typos:
                 return u.Unit(correct_unit)
-        
+
         raise ValueError(f'Unknown Unit {unit} on Axis {axis}')
 
     @property
@@ -106,7 +106,7 @@ class CV():
         # asstert that a rate is available at all
 
         # Convert to astropy unit
-        rates[0].unit = self.get_correct_unit(rates[0].unit)
+        rates[0].unit = CV.get_correct_unit(rates[0].unit)
         # Convert to SI astropy unit: V / s
         rate = float(rates[0].value) * rates[0].unit
         rate = rate.to(u.V / u.s)
