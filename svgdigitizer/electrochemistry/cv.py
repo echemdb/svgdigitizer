@@ -148,7 +148,6 @@ class CV():
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
         df['t'] = df['cumdeltaU']/float(self.rate.to(u.V / u.s).value)
-        
 
         return df[['t']]
 
@@ -163,12 +162,12 @@ class CV():
         # Add description
         assert type(comment) == str, 'Comment must be a string'
 
-        if not 'figure description' in self.metadata:
+        if 'figure description' not in self.metadata:
             self.metadata['figure description'] = {}
-        
+
         self.metadata['figure description']['type'] = 'digitized'
-        self.metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit':str(self.rate.unit)}
-        self.metadata['figure description']['potential scale'] = {'unit': str(self.get_axis_unit('x')), 'reference':None}
+        self.metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
+        self.metadata['figure description']['potential scale'] = {'unit': str(self.get_axis_unit('x')), 'reference': None}
         self.metadata['figure description']['current'] = {'unit': str(self.get_axis_unit('y'))}
         self.metadata['figure description']['comment'] = comment
 
