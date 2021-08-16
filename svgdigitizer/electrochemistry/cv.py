@@ -100,7 +100,7 @@ class CV():
         r'''
         Return a rate based on a label in the SVG file.
         '''
-        rates = self.svgplot.svg.get_labels('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
+        rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
         # To Do
         # assert that only one label contains the scan rate
         # asstert that a rate is available at all
@@ -169,7 +169,7 @@ class CV():
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
         df['t'] = df['cumdeltaU']/float(self.rate.value)
-        
+
         return df[['t']]
 
     def plot_cv(self):
