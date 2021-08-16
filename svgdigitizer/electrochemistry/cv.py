@@ -33,33 +33,13 @@ from astropy import units as u
 # 'A / cm2'
 # These string can directly be converted to a unit
 # >>> u.Unit('uA / cm2')
-unit_typos = {'uA / cm2': ['uA / cm2',
-                           'uA / cm²',
-                           'µA / cm²',
-                           'µA cm⁻²',
-                           'uA cm-2',
-                           'uA / cm2'],
-              'A / cm2': ['A / cm2',
-                          'A cm⁻²',
-                          'A cm-2',
-                          'A / cm2'],
-              'A': ['A',
-                    'ampere',
-                    'amps',
-                    'amp'],
-              'mV': ['milliV',
-                     'millivolt',
-                     'milivolt',
-                     'miliv',
-                     'mV'],
-              'V': ['V',
-                    'v',
-                    'Volt',
-                    'volt'],
+unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA / cm2'],
+              'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
+              'A': ['A', 'ampere', 'amps', 'amp'],
+              'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
+              'V': ['V', 'v', 'Volt', 'volt'],
               'V / s': ['V s-1', 'V / s'],
-              'mV / s': ['mV / s',
-                         'mV s-1',
-                         'mV/s']}
+              'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
 
 
 class CV():
