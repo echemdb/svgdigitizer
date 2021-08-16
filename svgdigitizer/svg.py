@@ -74,7 +74,8 @@ class SVG:
             r"""
             Return the end point of this path that is furthest away from the label.
             """
-            text = SVG.coordinates(self._label, float(self._label.getAttribute('x')), float(self._label.getAttribute('y')))
+            # TODO: Transform
+            text = float(self._label.getAttribute('x')), float(self._label.getAttribute('y'))
             endpoints = [self.points[0], self.points[-1]]
             return max(endpoints, key=lambda p: (text[0] - p[0]) ** 2 + (text[1] - p[1]) ** 2)
 
@@ -88,9 +89,60 @@ class SVG:
             points are connected by `M` commands that do not actually draw
             anything, or any kind of visible curve.
             """
-            from svg.path import parse_path
-            shape = parse_path(self._path.getAttribute('d'))
-            return [SVG.coordinates(self._path, command.end.real, command.end.imag) for command in shape]
+            return [(self.path[0].start.real, self.path[0].start.imag)] + [(command.end.real, command.end.imag) for command in self.path]
+
+        @property
+        def path(self):
+            r"""
+            Return the path transformed to the global SVG coordinate system,
+            i.e., with all `transform` attributes resolved.
+
+            Note that we do not resolve CSS `style` transformations yet.
+
+            EXAMPLES::
+
+                >>> from io import StringIO
+                >>> svg = SVG(StringIO(r'''
+                ... <svg>
+                ...   <g>
+                ...     <path d="M 0 100 L 100 0" />
+                ...     <text>curve: 0</text>
+                ...   </g>
+                ... </svg>'''))
+                >>> svg.get_labeled_paths()[0].paths[0].path
+                Path(Line(start=100j, end=(100+0j)))
+
+            TESTS:
+
+            Transformations on the path are resolved::
+
+                >>> from io import StringIO
+                >>> svg = SVG(StringIO(r'''
+                ... <svg>
+                ...   <g>
+                ...     <path d="M 0 100 L 100 0" transform="translate(100 200)" />
+                ...     <text>curve: 0</text>
+                ...   </g>
+                ... </svg>'''))
+                >>> svg.get_labeled_paths()[0].paths[0].path
+                Path(Line(start=(100+300j), end=(200+200j)))
+
+            Transformations on the containing group are resolved::
+
+                >>> from io import StringIO
+                >>> svg = SVG(StringIO(r'''
+                ... <svg>
+                ...   <g transform="translate(-100 -200)">
+                ...     <path d="M 0 100 L 100 0" transform="translate(100 200)" />
+                ...     <text>curve: 0</text>
+                ...   </g>
+                ... </svg>'''))
+                >>> svg.get_labeled_paths()[0].paths[0].path
+                Path(Line(start=100j, end=(100+0j)))
+
+            """
+            from svgpathtools import Path
+            return SVG.transform(self._path)
 
     def get_labeled_paths(self, pattern=""):
         r"""
@@ -159,7 +211,7 @@ class SVG:
 
         return labeled_paths
 
-    def get_labels(self, pattern=""):
+    def get_texts(self, pattern=""):
         labels = []
         for text in self.svg.getElementsByTagName("text"):
             match = re.match(pattern, SVG._text_value(text), re.IGNORECASE)
@@ -169,25 +221,27 @@ class SVG:
         return labels
 
     @classmethod
-    def transform(cls, transform, x, y):
-        translate = re.match(r"^ *translate *\( *(?P<x>[-0-9.]+), *(?P<y>[-0-9.]+)\) *$", transform)
+    def get_transform(cls, element):
+        from svgpathtools.parser import parse_transform
 
-        if translate:
-            x += float(translate.group("x"))
-            y += float(translate.group("y"))
-            return x, y
+        if element is None or element.nodeType == Node.DOCUMENT_NODE:
+            return parse_transform(None)
 
-        raise NotImplementedError(f"Unsupported transformation {transform}")
+        return cls.get_transform(element.parentNode).dot(parse_transform(element.getAttribute('transform')))
 
     @classmethod
-    def coordinates(cls, reference, x, y):
-        if reference.nodeType == Node.DOCUMENT_NODE:
-            return (x, y)
+    def transform(cls, element):
+        transformation = cls.get_transform(element)
 
-        transform = reference.getAttribute("transform")  # e.g. "translate(1, 0)"
-        if transform:
-            x, y = SVG.transform(transform, x, y)
-        return cls.coordinates(reference.parentNode, x, y)
+        if element.getAttribute('d'):
+            # element is like a path
+            from svgpathtools.path import transform
+            from svgpathtools.parser import parse_path
+            element = transform(parse_path(element.getAttribute('d')), transformation)
+        else:
+            raise NotImplementedError(f"Unsupported element {element}.")
+
+        return element
 
     @classmethod
     def _text_value(cls, node):

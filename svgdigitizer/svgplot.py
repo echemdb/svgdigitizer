@@ -402,7 +402,7 @@ class SVGPlot:
         """
         scaling_factors = {self.xlabel: 1, self.ylabel: 1}
 
-        for label in self.svg.get_labels(r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'):
+        for label in self.svg.get_texts(r'^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)'):
             scaling_factors[label.axis] = float(label.value)
 
         return scaling_factors
@@ -769,7 +769,7 @@ class SVGPlot:
 
         if self.sampling_interval:
             # sample path if interval is set
-            return self.sample_path(path)
+            return self.sample_path(path.path)
         else:
             return path.points
 
@@ -798,9 +798,8 @@ class SVGPlot:
 
         return labeled_paths
 
-    def sample_path(self, path_string):
+    def sample_path(self, path):
         '''samples a path with equidistant x segment by segment'''
-        path = Path(path_string)
         xmin, xmax, ymin, ymax = path.bbox()
         x_samples = np.linspace(xmin, xmax, int(abs(xmin - xmax)/self.transformed_sampling_interval))
         points = []
