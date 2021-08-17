@@ -48,24 +48,21 @@ def digitize(svg, sampling_interval):
 
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help='sampling interval (in mV)')
-@click.option('--metadatayaml', type=click.Path(exists=True), default=None, help='specify a yaml file with metadata')
+@click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
 @click.argument('svg', type=click.Path(exists=True))
-def cv(svg, sampling_interval, metadatayaml):
+def cv(svg, sampling_interval, metadata):
     import yaml
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
-    if metadatayaml:
-        with open(metadatayaml) as f:
-            metadata = yaml.load(f, Loader=yaml.FullLoader)
+    if metadata:
+        metadata = yaml.load(metadata, Loader=yaml.FullLoader)
 
-        cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
-
-    else:
-        cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval))
+    cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path
     cv.cv_df.to_csv(Path(svg).with_suffix('.csv'), index=False)
+
     import json
     with open(Path(svg).with_suffix('.json'), "w") as outfile:
         json.dump(cv.metadata_out, outfile)
