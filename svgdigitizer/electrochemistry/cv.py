@@ -25,69 +25,102 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from astropy import units as u
 
-# The keys in this dict are unit strings that are identical to those
-# obtained by using str() on an astropy unit of a quantity, i.e.,
-# >>> from astropy import units as u
-# >>> q = 10 * u.A / u.cm**2
-# >>> str(q.unit)
-# 'A / cm2'
-# These string can directly be converted to a unit
-# >>> u.Unit('uA / cm2')
-unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA / cm2'],
-              'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
-              'A': ['A', 'ampere', 'amps', 'amp'],
-              'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
-              'V': ['V', 'v', 'Volt', 'volt'],
-              'V / s': ['V s-1', 'V / s'],
-              'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
-
-
 class CV():
     def __init__(self, svgplot, metadata=None):
-        """
-        metadata: dict
-        """
         self.svgplot = svgplot
-        self.metadata = metadata or {}
+        self._metadata = metadata or {}
 
     @property
     @cache
     def axis_properties(self):
         return {'x': {'dimension': 'U',
                       'unit': 'V'},
-                'y': {'dimension': 'j' if 'm2' in str(self.get_axis_unit('y')) else 'I',
-                      'unit': 'A / m2' if 'm2' in str(self.get_axis_unit('y')) else 'A'}}
-
-    def get_axis_unit(self, axis):
-        r'''
-        Replaces the units derived from the svg file into astropy units.
-        '''
-        unit = self.svgplot.units[axis]
-
-        return self.get_correct_unit(unit)
+                'y': {'dimension': 'j' if 'm2' in str(CV.get_correct_unit(self.svgplot.units['x'])) else 'I',
+                      'unit': 'A / m2' if 'm2' in str(CV.get_correct_unit(self.svgplot.units['y'])) else 'A'}}
 
     @classmethod
     def get_correct_unit(cls, unit):
+        r"""
+        Convert a string containing a unit into a string that can be used by the astropy.unit module.
+        For example 'uA cm-2' should become 'uA / cm2'
+        
+        EXAMPLES::
+        
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> unit = 'uA cm-2'
+        >>> CV.get_correct_unit(unit)
+        Unit("uA / cm2")
+
+        The Unit can be converte to a string.
+
+        >>> from astropy import units as u
+        >>> q = 10 * u.A / u.cm**2
+        >>> str(q.unit)
+        'A / cm2'
+
+        These string can directly be converted to a unit
+
+        >>> u.Unit('uA / cm2')
+        Unit("uA / cm2")
+        """
+        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA / cm2'],
+              'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
+              'A': ['A', 'ampere', 'amps', 'amp'],
+              'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
+              'V': ['V', 'v', 'Volt', 'volt'],
+              'V / s': ['V s-1', 'V/s', 'V / s'],
+              'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
+
         for correct_unit, typos in unit_typos.items():
             if unit in typos:
                 return u.Unit(correct_unit)
 
-        raise ValueError(f'Unknown Unit {unit} on Axis {axis}')
+        raise ValueError(f'Unknown Unit {unit}')
 
     @property
     @cache
     def rate(self):
-        r'''
-        Return a rate based on a label in the SVG file.
-        '''
+        r"""
+        Return the scan rate of the plot. 
+        
+        The scan rate is read from a `<text>` in the SVG file such as `<text>scan rate: 50 V/s</text>`.
+
+        Examples::
+
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0 cm</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1cm</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1 A</text>
+        ...   </g>
+        ...   <text>scan rate: 50 V/s</text>
+        ... </svg>'''))
+        >>> cv = CV(SVGPlot(svg))
+        >>> cv.rate
+        <Quantity 50. V / s>
+        """
         rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
-        # To Do
-        # assert that only one label contains the scan rate
-        # asstert that a rate is available at all
+        # To Do: assert that only one label contains the scan rate (see issue #X)
+        # To Do: asstert that a rate is available at all (see issue #X)
 
         # Convert to astropy unit
         rates[0].unit = CV.get_correct_unit(rates[0].unit)
-        # Convert to SI astropy unit: V / s
         rate = float(rates[0].value) * rates[0].unit
 
         return rate
@@ -147,7 +180,7 @@ class CV():
         df = df.copy()
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
-        df['t'] = df['cumdeltaU']/float(self.rate.to(u.V / u.s).value)
+        df['t'] = df['cumdeltaU'] / float(self.rate.to(u.V / u.s).value)
 
         return df[['t']]
 

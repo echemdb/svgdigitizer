@@ -55,7 +55,7 @@ jobs:
       - name: cv-test
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/xy_rate.svg --metadatayaml test/data/xy_rate.yaml
+          svgdigitizer cv test/data/xy_rate.svg --metadata test/data/xy_rate.yaml
           diff test/data/xy_rate.json test/data/xy_rate.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate.csv"), pandas.read_csv("test/data/xy_rate.csv.expected"))'
       - name: cv-test-without-metadata
