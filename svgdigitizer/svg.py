@@ -299,7 +299,7 @@ class LabeledPaths:
         ... </svg>'''))
         >>> svg.get_labeled_paths()
         [[Path "curve: 0"]]
-    
+
     """
     def __init__(self, label, paths, match):
         if not paths:
@@ -365,7 +365,7 @@ class Text:
     def __init__(self, label, match):
         self._label = label
         self._value = SVG._text_value(label)
-        
+
         transformed = SVG.transform(label)
         self.x = float(transformed.getAttribute('x'))
         self.y = float(transformed.getAttribute('y'))
