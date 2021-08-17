@@ -63,7 +63,7 @@ def cv(svg, sampling_interval, metadatayaml):
 
     else:
         cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval))
-        
+
     from pathlib import Path
     cv.cv_df.to_csv(Path(svg).with_suffix('.csv'), index=False)
     import json
