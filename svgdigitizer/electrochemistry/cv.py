@@ -161,17 +161,22 @@ class CV():
     def metadata_out(self, comment=''):
         # Add description
         assert type(comment) == str, 'Comment must be a string'
-
+        metadata = self.metadata
         if 'figure description' not in self.metadata:
-            self.metadata['figure description'] = {}
+            metadata['figure description'] = {}
 
-        self.metadata['figure description']['type'] = 'digitized'
-        self.metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
-        self.metadata['figure description']['potential scale'] = {'unit': str(self.get_axis_unit('x')), 'reference': None}
-        self.metadata['figure description']['current'] = {'unit': str(self.get_axis_unit('y'))}
-        self.metadata['figure description']['comment'] = comment
+        metadata['figure description']['type'] = 'digitized'
+        metadata['figure description']['measurement type'] = 'CV'
+        metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
+        if 'potential scale' not in metadata['figure description']:
+            metadata['figure description']['potential scale'] = {}
+        metadata['figure description']['potential scale']['unit'] = str(self.get_axis_unit('x'))
+        # Implement: Get the reference from the text labels of the axis
+        # metadata['figure description']['potential scale']['reference'] = get_from_ax_labels
+        metadata['figure description']['current'] = {'unit': str(self.get_axis_unit('y'))}
+        metadata['figure description']['comment'] = comment
 
-        return self.metadata
+        return metadata
 
     def create_csv(self, filename):
         csvfile = Path(filename).with_suffix('.csv')
