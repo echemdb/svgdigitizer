@@ -38,7 +38,8 @@ setup(
         'pillow',
         'pdf2image',
         'svgwrite',
-        'svgpathtools'
+        'svgpathtools',
+        'scipy',
     ],
     entry_points = {
         'console_scripts': [

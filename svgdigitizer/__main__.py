@@ -36,7 +36,7 @@ def plot(svg, sampling_interval):
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
+@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval on the x-axis')
 @click.argument('svg', type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
