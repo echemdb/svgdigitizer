@@ -27,6 +27,7 @@ from astropy import units as u
 
 
 class CV():
+    # TODO: Add documentation with a usage example. #60
     def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
         self._metadata = metadata or {}
