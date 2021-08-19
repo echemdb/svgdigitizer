@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from astropy import units as u
 
+
 class CV():
     def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
@@ -43,9 +44,9 @@ class CV():
         r"""
         Convert a string containing a unit into a string that can be used by the astropy.unit module.
         For example 'uA cm-2' should become 'uA / cm2'
-        
+
         EXAMPLES::
-        
+
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> unit = 'uA cm-2'
         >>> CV.get_axis_unit(unit)
@@ -62,14 +63,15 @@ class CV():
 
         >>> u.Unit('uA / cm2')
         Unit("uA / cm2")
+
         """
         unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA / cm2'],
-              'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
-              'A': ['A', 'ampere', 'amps', 'amp'],
-              'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
-              'V': ['V', 'v', 'Volt', 'volt'],
-              'V / s': ['V s-1', 'V/s', 'V / s'],
-              'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
+                      'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
+                      'A': ['A', 'ampere', 'amps', 'amp'],
+                      'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
+                      'V': ['V', 'v', 'Volt', 'volt'],
+                      'V / s': ['V s-1', 'V/s', 'V / s'],
+                      'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
 
         for correct_unit, typos in unit_typos.items():
             for typo in typos:
@@ -82,8 +84,8 @@ class CV():
     @cache
     def rate(self):
         r"""
-        Return the scan rate of the plot. 
-        
+        Return the scan rate of the plot.
+
         The scan rate is read from a `<text>` in the SVG file such as `<text>scan rate: 50 V/s</text>`.
 
         Examples::
@@ -115,10 +117,11 @@ class CV():
         >>> cv = CV(SVGPlot(svg))
         >>> cv.rate
         <Quantity 50. V / s>
+
         """
         rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
-        # To Do: assert that only one label contains the scan rate (see issue #X)
-        # To Do: assert that a rate is available at all (see issue #X)
+        # To Do: assert that only one label contains the scan rate (see issue #58)
+        # To Do: assert that a rate is available at all (see issue #58)
 
         # Convert to astropy unit
         rates[0].unit = CV.get_axis_unit(rates[0].unit)
@@ -205,8 +208,8 @@ class CV():
         metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
         metadata['figure description'].setdefault('potential scale', {})
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.svgplot.units['x']))
-        # Implement: Get the reference from the text labels of the axis
-        # metadata['figure description']['potential scale']['reference'] = get_from_ax_labels
+        # TODO: Get the reference from the text labels of the axis #59
+        # such as: metadata['figure description']['potential scale']['reference'] = self.axis_properties['x']['reference']
         metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.units['y']))}
         metadata['figure description']['comment'] = str(comment)
 
