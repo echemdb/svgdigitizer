@@ -184,7 +184,7 @@ class CV():
 
         return df[['t']]
 
-    def plot_cv(self):
+    def plot(self):
         self.cv_df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
         plt.xlabel(self.axis_properties['x']['dimension'] + ' / ' + str(self.axis_properties['x']['unit']))
