@@ -197,17 +197,13 @@ class CV():
         plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
 
     @property
-    def metadata_out(self, comment=''):
-        # Add description
-        metadata = self._metadata
-        if 'figure description' not in self._metadata:
-            metadata['figure description'] = {}
-
+    def metadata(self, comment=''):
+        metadata = self._metadata.copy()
+        metadata.setdefault('figure description', {})
         metadata['figure description']['type'] = 'digitized'
         metadata['figure description']['measurement type'] = 'CV'
         metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
-        if 'potential scale' not in metadata['figure description']:
-            metadata['figure description']['potential scale'] = {}
+        metadata['figure description'].setdefault('potential scale', {})
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.svgplot.units['x']))
         # Implement: Get the reference from the text labels of the axis
         # metadata['figure description']['potential scale']['reference'] = get_from_ax_labels

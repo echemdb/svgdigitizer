@@ -65,7 +65,7 @@ def cv(svg, sampling_interval, metadata):
 
     import json
     with open(Path(svg).with_suffix('.json'), "w") as outfile:
-        json.dump(cv.metadata_out, outfile)
+        json.dump(cv.metadata, outfile)
 
 
 @click.command()
