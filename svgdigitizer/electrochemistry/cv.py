@@ -72,8 +72,9 @@ class CV():
               'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
 
         for correct_unit, typos in unit_typos.items():
-            if unit in typos:
-                return u.Unit(correct_unit)
+            for typo in typos:
+                if unit == typo:
+                    return u.Unit(correct_unit)
 
         raise ValueError(f'Unknown Unit {unit}')
 
@@ -117,7 +118,7 @@ class CV():
         """
         rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
         # To Do: assert that only one label contains the scan rate (see issue #X)
-        # To Do: asstert that a rate is available at all (see issue #X)
+        # To Do: assert that a rate is available at all (see issue #X)
 
         # Convert to astropy unit
         rates[0].unit = CV.get_correct_unit(rates[0].unit)
@@ -127,7 +128,16 @@ class CV():
 
     @property
     @cache
-    def cv_df(self):
+    def df(self):
+        r"""
+        Return a dataframe with axis 't', 'U', and 'I' (or 'j).
+        The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
+
+        The dataframe is constructed from the 'x' and 'y' axis of 'svgplot.df',
+        which are usually not in SI units.
+
+        The time axis can only be created when a (scan) rate is given in the plot, i.e., 50 mV /s.
+        """
         # Create potential column.
         df = self.create_df_U_axis(self.svgplot.df[['x']])
 
@@ -146,7 +156,7 @@ class CV():
         Create voltage axis in the dataframe based on the units given in the
         figure description.
         '''
-        q = 1 * self.get_axis_unit('x')
+        q = 1 * CV.get_correct_unit(self.svgplot.units['x'])
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df['U'] = df['x'] * q.to(u.V).value
@@ -160,7 +170,7 @@ class CV():
         '''
 
         df_ = df.copy()
-        q = 1 * self.get_axis_unit('y')
+        q = 1 * CV.get_correct_unit(self.svgplot.units['y'])
 
         # Verify if the y data is current ('A') or current density ('A / cm2')
         if 'm2' in str(q.unit):
@@ -193,9 +203,8 @@ class CV():
     @property
     def metadata_out(self, comment=''):
         # Add description
-        assert type(comment) == str, 'Comment must be a string'
-        metadata = self.metadata
-        if 'figure description' not in self.metadata:
+        metadata = self._metadata
+        if 'figure description' not in self._metadata:
             metadata['figure description'] = {}
 
         metadata['figure description']['type'] = 'digitized'
@@ -203,11 +212,11 @@ class CV():
         metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
         if 'potential scale' not in metadata['figure description']:
             metadata['figure description']['potential scale'] = {}
-        metadata['figure description']['potential scale']['unit'] = str(self.get_axis_unit('x'))
+        metadata['figure description']['potential scale']['unit'] = str(CV.get_correct_unit(self.svgplot.units['x']))
         # Implement: Get the reference from the text labels of the axis
         # metadata['figure description']['potential scale']['reference'] = get_from_ax_labels
-        metadata['figure description']['current'] = {'unit': str(self.get_axis_unit('y'))}
-        metadata['figure description']['comment'] = comment
+        metadata['figure description']['current'] = {'unit': str(CV.get_correct_unit(self.svgplot.units['y']))}
+        metadata['figure description']['comment'] = str(comment)
 
         return metadata
 
