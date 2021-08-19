@@ -162,7 +162,7 @@ class CV():
         df_ = df.copy()
         q = 1 * self.get_axis_unit('y')
 
-        # Verify if the y data is current ('A') or current density ('A / cm2')
+        # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if 'm2' in str(q.unit):
             conversion_factor = q.to(u.A / u.m**2)
         else:
