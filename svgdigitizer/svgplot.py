@@ -63,7 +63,7 @@ class SVGPlot:
     ... <svg>
     ...   <g>
     ...     <path d="M 0 100 L 100 0" />
-    ...     <text>curve: 0</text>
+    ...     <text x="0" y="0">curve: 0</text>
     ...   </g>
     ...   <g>
     ...     <path d="M 0 200 L 0 100" />
@@ -251,7 +251,7 @@ class SVGPlot:
         ... <svg>
         ...   <g>
         ...     <path d="M 0 100 L 100 0" />
-        ...     <text>curve: 0</text>
+        ...     <text x="0" y="0">curve: 0</text>
         ...   </g>
         ...   <g>
         ...     <path d="M 0 200 L 0 100" />
@@ -392,8 +392,8 @@ class SVGPlot:
         >>> from io import StringIO
         >>> svg = SVG(StringIO(r'''
         ... <svg>
-        ...   <text>y_scaling_factor: 50.6</text>
-        ...   <text>xsf: 50.6</text>
+        ...   <text x="0" y="0">y_scaling_factor: 50.6</text>
+        ...   <text x="0" y="0">xsf: 50.6</text>
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> plot.scaling_factors
@@ -717,7 +717,7 @@ class SVGPlot:
         ... <svg>
         ...   <g>
         ...     <path d="M 0 100 L 100 0" />
-        ...     <text>curve: 0</text>
+        ...     <text x="0" y="0">curve: 0</text>
         ...   </g>
         ...   <g>
         ...     <path d="M 0 200 L 0 100" />
@@ -793,7 +793,7 @@ class SVGPlot:
         labeled_paths = {key: self.svg.get_labeled_paths(pattern) for (key, pattern) in patterns.items()}
 
         for paths in self.svg.get_labeled_paths():
-            if paths.label not in [p.label for pattern in patterns for p in labeled_paths[pattern]]:
+            if paths.label._label not in [p.label._label for pattern in patterns for p in labeled_paths[pattern]]:
                 logger.warning(f"Ignoring <path> with unsupported label {paths.label}.")
 
         return labeled_paths

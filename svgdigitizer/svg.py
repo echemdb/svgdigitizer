@@ -30,119 +30,50 @@ class SVG:
 
     Provides access to the objects in an SVG while hiding details such as
     transformation attributes.
+
+    EXAMPLES:
+
+    An SVG can be created from a string or from a (file) stream::
+
+    >>> svg = SVG(r'''
+    ... <svg>
+    ...     <!-- an empty SVG -->
+    ... </svg>''')
+    >>> svg
+    SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
+
+    ::
+
+    >>> from io import StringIO
+    >>> svg = SVG(StringIO(r'''
+    ... <svg>
+    ...     <!-- an empty SVG -->
+    ... </svg>'''))
+    >>> svg
+    SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
+
     """
     def __init__(self, svg):
-        self.svg = minidom.parse(svg)
+        if isinstance(svg, str):
+            self.svg = minidom.parseString(svg)
+        else:
+            self.svg = minidom.parse(svg)
 
-    class LabeledPaths:
+    def __repr__(self):
         r"""
-        Paths associated to a label.
+        Return a printable representation of this SVG object.
+
+        EXAMPLES::
+
+            >>> svg = SVG(r'''
+            ... <svg>
+            ...     <!-- an empty SVG -->
+            ... </svg>''')
+            >>> svg
+            SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
+
         """
-        def __init__(self, label, paths, match):
-            self.label = SVG.Label(label, match)
-            self.paths = [SVG.LabeledPath(path, label) for path in paths]
-
-        def __repr__(self):
-            return repr(str(self.label))
-
-    class Label:
-        def __init__(self, label, match):
-            self._label = label
-            self._value = SVG._text_value(label)
-            for key, value in match.groupdict().items():
-                setattr(self, key, value)
-
-        def __eq__(self, other):
-            return isinstance(other, SVG.Label) and self._label is other._label
-
-        def __ne__(self, other):
-            return not (self == other)
-
-        def __str__(self):
-            return self._value
-
-    class LabeledPath:
-        r"""
-        Wraps a `<path>` applying all the transformations from parents.
-        """
-        def __init__(self, path, label):
-            self._path = path
-            self._label = label
-
-        @property
-        def far(self):
-            r"""
-            Return the end point of this path that is furthest away from the label.
-            """
-            # TODO: Transform
-            text = float(self._label.getAttribute('x')), float(self._label.getAttribute('y'))
-            endpoints = [self.points[0], self.points[-1]]
-            return max(endpoints, key=lambda p: (text[0] - p[0]) ** 2 + (text[1] - p[1]) ** 2)
-
-        @property
-        def points(self):
-            r"""
-            Return the points defining this path.
-
-            This returns the raw points in the `d` attribute, ignoring the
-            commands that connect these points, i.e., ignoring whether these
-            points are connected by `M` commands that do not actually draw
-            anything, or any kind of visible curve.
-            """
-            return [(self.path[0].start.real, self.path[0].start.imag)] + [(command.end.real, command.end.imag) for command in self.path]
-
-        @property
-        def path(self):
-            r"""
-            Return the path transformed to the global SVG coordinate system,
-            i.e., with all `transform` attributes resolved.
-
-            Note that we do not resolve CSS `style` transformations yet.
-
-            EXAMPLES::
-
-                >>> from io import StringIO
-                >>> svg = SVG(StringIO(r'''
-                ... <svg>
-                ...   <g>
-                ...     <path d="M 0 100 L 100 0" />
-                ...     <text>curve: 0</text>
-                ...   </g>
-                ... </svg>'''))
-                >>> svg.get_labeled_paths()[0].paths[0].path
-                Path(Line(start=100j, end=(100+0j)))
-
-            TESTS:
-
-            Transformations on the path are resolved::
-
-                >>> from io import StringIO
-                >>> svg = SVG(StringIO(r'''
-                ... <svg>
-                ...   <g>
-                ...     <path d="M 0 100 L 100 0" transform="translate(100 200)" />
-                ...     <text>curve: 0</text>
-                ...   </g>
-                ... </svg>'''))
-                >>> svg.get_labeled_paths()[0].paths[0].path
-                Path(Line(start=(100+300j), end=(200+200j)))
-
-            Transformations on the containing group are resolved::
-
-                >>> from io import StringIO
-                >>> svg = SVG(StringIO(r'''
-                ... <svg>
-                ...   <g transform="translate(-100 -200)">
-                ...     <path d="M 0 100 L 100 0" transform="translate(100 200)" />
-                ...     <text>curve: 0</text>
-                ...   </g>
-                ... </svg>'''))
-                >>> svg.get_labeled_paths()[0].paths[0].path
-                Path(Line(start=100j, end=(100+0j)))
-
-            """
-            from svgpathtools import Path
-            return SVG.transform(self._path)
+        return f"SVG({repr(self.svg.toxml())})"
 
     def get_labeled_paths(self, pattern=""):
         r"""
@@ -155,15 +86,15 @@ class SVG:
         ... <svg>
         ...   <g>
         ...     <path d="M 0 100 L 100 0" />
-        ...     <text>curve: 0</text>
+        ...     <text x="0" y="0">curve: 0</text>
         ...   </g>
         ... </svg>'''))
         >>> svg.get_labeled_paths("curve")
-        ['curve: 0']
+        [[Path "curve: 0"]]
         >>> svg.get_labeled_paths("text")
         []
         >>> svg.get_labeled_paths()
-        ['curve: 0']
+        [[Path "curve: 0"]]
 
         """
         labeled_paths = []
@@ -207,37 +138,121 @@ class SVG:
             # Parse the label
             match = re.match(pattern, SVG._text_value(label), re.IGNORECASE)
             if match:
-                labeled_paths.append(SVG.LabeledPaths(label, paths, match))
+                labeled_paths.append(LabeledPaths(label, paths, match))
 
         return labeled_paths
 
     def get_texts(self, pattern=""):
+        r"""
+        Return all `<text>` elements that match `pattern`.
+
+        EXAMPLES::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> svg.get_texts()
+        [<text>curve: 0</text>]
+
+        Named matches are directly available as attributes on the returned
+        texts::
+
+        >>> curves = svg.get_texts("curve: (?P<name>.*)")
+        >>> curves[0].name
+        '0'
+
+        """
         labels = []
         for text in self.svg.getElementsByTagName("text"):
             match = re.match(pattern, SVG._text_value(text), re.IGNORECASE)
             if match:
-                labels.append(SVG.Label(text, match))
+                labels.append(Text(text, match))
 
         return labels
 
     @classmethod
-    def get_transform(cls, element):
+    def _get_transform(cls, element):
+        r"""
+        Return the transformation needed to bring `element` into the root
+        context of the SVG document.
+
+        EXAMPLES::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g transform="translate(10, 10)">
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> SVG._get_transform(svg.svg.getElementsByTagName("text")[0])
+            array([[ 1.,  0., 10.],
+                   [ 0.,  1., 10.],
+                   [ 0.,  0.,  1.]])
+
+        """
         from svgpathtools.parser import parse_transform
 
         if element is None or element.nodeType == Node.DOCUMENT_NODE:
             return parse_transform(None)
 
-        return cls.get_transform(element.parentNode).dot(parse_transform(element.getAttribute('transform')))
+        return cls._get_transform(element.parentNode).dot(parse_transform(element.getAttribute('transform')))
 
     @classmethod
     def transform(cls, element):
-        transformation = cls.get_transform(element)
+        r"""
+        Return a transformed version of `element` with all `transform` attributes applied.
+
+        EXAMPLES:
+
+        Transformations can be applied to text elements::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g transform="translate(100, 10)">
+            ...     <text x="0" y="0" transform="translate(100, 10)">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> transformed = svg.transform(svg.svg.getElementsByTagName("text")[0])
+            >>> transformed.toxml()
+            '<text x="200.0" y="20.0">curve: 0</text>'
+
+        Transformations can be applied to paths::
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g transform="translate(100, 10)">
+            ...     <path d="M 0 0 L 1 1" transform="translate(100, 10)" />
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.transform(svg.svg.getElementsByTagName("path")[0])
+            Path(Line(start=(200+20j), end=(201+21j)))
+
+        """
+        transformation = cls._get_transform(element)
 
         if element.getAttribute('d'):
             # element is like a path
             from svgpathtools.path import transform
             from svgpathtools.parser import parse_path
             element = transform(parse_path(element.getAttribute('d')), transformation)
+        elif element.hasAttribute('x') and element.hasAttribute('y'):
+            # elements with an explicit location such as <text>
+            x = float(element.getAttribute('x'))
+            y = float(element.getAttribute('y'))
+            x, y, _ = transformation.dot([x, y, 1])
+
+            element = element.cloneNode(deep=True)
+            if element.hasAttribute('transform'):
+                element.removeAttribute('transform')
+            element.setAttribute('x', str(x))
+            element.setAttribute('y', str(y))
         else:
             raise NotImplementedError(f"Unsupported element {element}.")
 
@@ -266,3 +281,215 @@ class SVG:
         if node.nodeType == Node.TEXT_NODE:
             return node.data.strip()
         return "".join(SVG._text_value(child) for child in node.childNodes)
+
+
+class LabeledPaths:
+    r"""
+    A collection of paths associated to a single label.
+
+    EXAMPLES::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> svg.get_labeled_paths()
+        [[Path "curve: 0"]]
+
+    """
+    def __init__(self, label, paths, match):
+        if not paths:
+            raise ValueError("LabeledPaths must consist of at least one path.")
+
+        label = Text(label, match)
+        self.paths = [LabeledPath(path, label) for path in paths]
+
+    @property
+    def label(self):
+        r"""
+        Return the label associated to the paths.
+
+        EXAMPLES::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.get_labeled_paths()[0].label
+            <text>curve: 0</text>
+
+        """
+        return self.paths[0]._label
+
+    def __repr__(self):
+        return repr(self.paths)
+
+
+class Text:
+    r"""
+    A `<text>` element in an SVG such as a label for a path.
+
+    EXAMPLES::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <text x="0" y="0">curve: 0</text>
+        ... </svg>'''))
+        >>> svg.get_texts()
+        [<text>curve: 0</text>]
+
+    The coordinates of the text in the SVG coordinate system are exposed as
+    `.x` and `.y`::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <text x="0" y="0" transform="translate(10,100)">curve: 0</text>
+        ... </svg>'''))
+        >>> text = svg.get_texts()[0]
+        >>> text.x
+        10.0
+        >>> text.y
+        100.0
+
+    """
+    def __init__(self, label, match):
+        self._label = label
+        self._value = SVG._text_value(label)
+
+        transformed = SVG.transform(label)
+        self.x = float(transformed.getAttribute('x'))
+        self.y = float(transformed.getAttribute('y'))
+
+        for key, value in match.groupdict().items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return f"<text>{self._value}</text>"
+
+    def __str__(self):
+        return self._value
+
+
+class LabeledPath:
+    r"""
+    A `<path>` element in an SVG such as a trace of a plot with a text label.
+
+    EXAMPLES::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> svg.get_labeled_paths()[0].paths[0]
+        Path "curve: 0"
+
+    """
+    def __init__(self, path, label):
+        self._path = path
+        self._label = label
+
+    @property
+    def far(self):
+        r"""
+        Return the end point of this path that is furthest away from the label.
+
+        EXAMPLES::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="100">curve: 0</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> path = svg.get_labeled_paths()[0].paths[0]
+        >>> path.far
+        (100.0, 0.0)
+
+        """
+        text = self._label.x, self._label.y
+        endpoints = [self.points[0], self.points[-1]]
+        return max(endpoints, key=lambda p: (text[0] - p[0]) ** 2 + (text[1] - p[1]) ** 2)
+
+    @property
+    def points(self):
+        r"""
+        Return the points defining this path.
+
+        This returns the raw points in the `d` attribute, ignoring the
+        commands that connect these points, i.e., ignoring whether these
+        points are connected by `M` commands that do not actually draw
+        anything, or any kind of visible curve.
+        """
+        return [(self.path[0].start.real, self.path[0].start.imag)] + [(command.end.real, command.end.imag) for command in self.path]
+
+    @property
+    def path(self):
+        r"""
+        Return the path transformed to the global SVG coordinate system,
+        i.e., with all `transform` attributes resolved.
+
+        Note that we do not resolve CSS `style` transformations yet.
+
+        EXAMPLES::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.get_labeled_paths()[0].paths[0].path
+            Path(Line(start=100j, end=(100+0j)))
+
+        TESTS:
+
+        Transformations on the path are resolved::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" transform="translate(100 200)" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.get_labeled_paths()[0].paths[0].path
+            Path(Line(start=(100+300j), end=(200+200j)))
+
+        Transformations on the containing group are resolved::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g transform="translate(-100 -200)">
+            ...     <path d="M 0 100 L 100 0" transform="translate(100 200)" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.get_labeled_paths()[0].paths[0].path
+            Path(Line(start=100j, end=(100+0j)))
+
+        """
+        from svgpathtools import Path
+        return SVG.transform(self._path)
+
+    def __repr__(self):
+        return f'Path "{self._label}"'
