@@ -113,7 +113,7 @@ class CV():
         ...     <path d="M -100 0 L 0 0" />
         ...     <text x="-100" y="0">y2: 1 A</text>
         ...   </g>
-        ...   <text>scan rate: 50 V/s</text>
+        ...   <text x="-200" y="330">scan rate: 50 V/s</text>
         ... </svg>'''))
         >>> cv = CV(SVGPlot(svg))
         >>> cv.rate
