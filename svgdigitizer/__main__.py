@@ -1,4 +1,4 @@
-#*********************************************************************
+# ********************************************************************
 #  This file is part of svgdigitizer.
 #
 #        Copyright (C) 2021 Albert Engstfeld
@@ -18,7 +18,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
-#*********************************************************************
+# ********************************************************************
 import click
 
 
@@ -31,7 +31,8 @@ def cli(): pass
 @click.argument('svg', type=click.File('rb'))
 def plot(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
-    SVGPlot(svg, sampling_interval=sampling_interval).plot()
+    from svgdigitizer.svg import SVG
+    SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
 
 
 @click.command()
@@ -39,7 +40,8 @@ def plot(svg, sampling_interval):
 @click.argument('svg', type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
-    plot = SVGPlot(open(svg, 'rb'), sampling_interval=sampling_interval)
+    from svgdigitizer.svg import SVG
+    plot = SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval)
     from pathlib import Path
     plot.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
 
