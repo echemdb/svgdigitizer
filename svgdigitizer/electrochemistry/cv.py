@@ -43,8 +43,9 @@ class CV():
     @classmethod
     def get_axis_unit(cls, unit):
         r"""
-        Convert a string containing a unit into a string that can be used by the astropy.unit module.
-        For example 'uA cm-2' should become 'uA / cm2'
+        Return `unit` as an astropy unit.
+        
+        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
 
         EXAMPLES::
 
