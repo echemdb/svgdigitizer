@@ -44,7 +44,7 @@ class CV():
     def get_axis_unit(cls, unit):
         r"""
         Return `unit` as an astropy unit.
-        
+
         This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
 
         EXAMPLES::
@@ -52,18 +52,6 @@ class CV():
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> unit = 'uA cm-2'
         >>> CV.get_axis_unit(unit)
-        Unit("uA / cm2")
-
-        The Unit can be converte to a string.
-
-        >>> from astropy import units as u
-        >>> q = 10 * u.A / u.cm**2
-        >>> str(q.unit)
-        'A / cm2'
-
-        These string can directly be converted to a unit
-
-        >>> u.Unit('uA / cm2')
         Unit("uA / cm2")
 
         """
@@ -143,10 +131,10 @@ class CV():
 
         The time axis can only be created when a (scan) rate is given in the plot, i.e., 50 mV /s.
         """
-        # Add a potential axis.
-        df = self._add_U_axis(self.svgplot.df)
+        df = self.svgplot.df.copy()
+        df = self._add_U_axis(df)
 
-        df = self._add_I_axis(self.svgplot.df)
+        df = self._add_I_axis(df)
 
         df = self._add_time_axis(df)
 
@@ -155,7 +143,7 @@ class CV():
 
     def _add_U_axis(self, df):
         r'''
-        Add voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
+        Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
         '''
         q = 1 * CV.get_axis_unit(self.svgplot.units['x'])
         # Convert the axis unit to SI unit V and use the value
@@ -166,10 +154,8 @@ class CV():
 
     def _add_I_axis(self, df):
         r'''
-        Add current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit`.
+        Add a current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
         '''
-
-        df_ = df.copy()
         q = 1 * CV.get_axis_unit(self.svgplot.units['y'])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
@@ -178,15 +164,14 @@ class CV():
         else:
             conversion_factor = q.to(u.A)
 
-        df_[self.axis_properties['y']['dimension']] = df_['y'] * conversion_factor
+        df[self.axis_properties['y']['dimension']] = df['y'] * conversion_factor
 
-        return df_
+        return df
 
     def _add_time_axis(self, df):
         r'''
-        Add time column to the dataframe `df`, based on the :meth:`rate`.
+        Add a time column to the dataframe `df`, based on the :meth:`rate`.
         '''
-        df = df.copy()
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
         df['t'] = df['cumdeltaU'] / float(self.rate.to(u.V / u.s).value)
