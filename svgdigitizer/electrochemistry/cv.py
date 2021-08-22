@@ -155,7 +155,7 @@ class CV():
 
     def _add_U_axis(self, df):
         r'''
-        Add voltage column to the dataframe `df`, based on the :meth:`get_axis_unit`.
+        Add voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
         '''
         q = 1 * CV.get_axis_unit(self.svgplot.units['x'])
         # Convert the axis unit to SI unit V and use the value
