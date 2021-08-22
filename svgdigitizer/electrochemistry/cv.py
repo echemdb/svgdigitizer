@@ -151,9 +151,7 @@ class CV():
         df = self._add_time_axis(df)
 
         # Rearrange columns.
-        df = df[['t', 'U', self.axis_properties['y']['dimension']]]
-
-        return df
+        return df[['t', 'U', self.axis_properties['y']['dimension']]]
 
     def _add_U_axis(self, df):
         r'''
