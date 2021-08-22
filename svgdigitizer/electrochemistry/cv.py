@@ -122,8 +122,8 @@ class CV():
 
         """
         rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
-        # To Do: assert that only one label contains the scan rate (see issue #58)
-        # To Do: assert that a rate is available at all (see issue #58)
+        # TODO: assert that only one label contains the scan rate (see issue #58)
+        # TODO: assert that a rate is available at all (see issue #58)
 
         # Convert to astropy unit
         rates[0].unit = CV.get_axis_unit(rates[0].unit)
