@@ -179,7 +179,7 @@ class CV():
         return df
 
     def plot(self):
-        self.cv_df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
+        self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
         plt.xlabel(self.axis_properties['x']['dimension'] + ' / ' + str(self.axis_properties['x']['unit']))
         plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
