@@ -150,7 +150,6 @@ class CV():
         # to convert the potential values in the df to V
         df['U'] = df['x'] * q.to(u.V).value
 
-
     def _add_I_axis(self, df):
         r'''
         Add a current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
@@ -164,7 +163,6 @@ class CV():
             conversion_factor = q.to(u.A)
 
         df[self.axis_properties['y']['dimension']] = df['y'] * conversion_factor
-
 
     def _add_time_axis(self, df):
         r'''
