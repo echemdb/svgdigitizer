@@ -132,11 +132,11 @@ class CV():
         The time axis can only be created when a (scan) rate is given in the plot, i.e., 50 mV /s.
         """
         df = self.svgplot.df.copy()
-        df = self._add_U_axis(df)
+        self._add_U_axis(df)
 
-        df = self._add_I_axis(df)
+        self._add_I_axis(df)
 
-        df = self._add_time_axis(df)
+        self._add_time_axis(df)
 
         # Rearrange columns.
         return df[['t', 'U', self.axis_properties['y']['dimension']]]
@@ -150,7 +150,6 @@ class CV():
         # to convert the potential values in the df to V
         df['U'] = df['x'] * q.to(u.V).value
 
-        return df
 
     def _add_I_axis(self, df):
         r'''
@@ -166,7 +165,6 @@ class CV():
 
         df[self.axis_properties['y']['dimension']] = df['y'] * conversion_factor
 
-        return df
 
     def _add_time_axis(self, df):
         r'''
@@ -175,8 +173,6 @@ class CV():
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
         df['t'] = df['cumdeltaU'] / float(self.rate.to(u.V / u.s).value)
-
-        return df
 
     def plot(self):
         self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
