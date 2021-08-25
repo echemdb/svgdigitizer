@@ -47,6 +47,28 @@ def digitize(svg, sampling_interval):
 
 
 @click.command()
+@click.option('--sampling_interval', type=float, default=None, help='sampling interval (in mV)')
+@click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
+@click.argument('svg', type=click.Path(exists=True))
+def cv(svg, sampling_interval, metadata):
+    import yaml
+    from svgdigitizer.svgplot import SVGPlot
+    from svgdigitizer.svg import SVG
+    from svgdigitizer.electrochemistry.cv import CV
+    if metadata:
+        metadata = yaml.load(metadata, Loader=yaml.FullLoader)
+
+    cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
+
+    from pathlib import Path
+    cv.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
+
+    import json
+    with open(Path(svg).with_suffix('.json'), "w") as outfile:
+        json.dump(cv.metadata, outfile)
+
+
+@click.command()
 @click.option('--onlypng', is_flag=True, help='Only produce png files')
 @click.argument('pdf')
 def paginate(onlypng, pdf):
@@ -68,6 +90,7 @@ def paginate(onlypng, pdf):
 
 cli.add_command(plot)
 cli.add_command(digitize)
+cli.add_command(cv)
 cli.add_command(paginate)
 
 

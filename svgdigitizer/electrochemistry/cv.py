@@ -19,110 +19,177 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+from functools import cache
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
+from astropy import units as u
 
 
 class CV():
-    def __init__(self, metadata, svgplot):
-        """
-        metadata: dict
-        """
+    # TODO: Add documentation with a usage example. #60
+    def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
-        self.metadata = metadata
-        self.svgplot.create_df()
+        self._metadata = metadata or {}
 
-        # TODO: These labels should either be extracted from the svg or yaml file
-        self.xlabel = 'U'
+    @property
+    @cache
+    def axis_properties(self):
+        return {'x': {'dimension': 'U',
+                      'unit': 'V'},
+                'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.units['x'])) else 'I',
+                      'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.units['y'])) else 'A'}}
 
-        # TODO: should be j if both current and normalized to are given in the yaml file
-        self.ylabel = 'I'
+    @classmethod
+    def get_axis_unit(cls, unit):
+        r"""
+        Return `unit` as an astropy unit.
 
-        # TODO: All the rest in the init is presumably not necessary
-        self.description = self.metadata['figure description']
+        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
 
-        self.xunit = self.description['potential scale']['unit']
+        EXAMPLES::
 
-        self.yunit = self.description['current']['unit']
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> unit = 'uA cm-2'
+        >>> CV.get_axis_unit(unit)
+        Unit("uA / cm2")
 
-        self.get_rate()
+        """
+        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA / cm2'],
+                      'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
+                      'A': ['A', 'ampere', 'amps', 'amp'],
+                      'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
+                      'V': ['V', 'v', 'Volt', 'volt'],
+                      'V / s': ['V s-1', 'V/s', 'V / s'],
+                      'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
 
-        self.modify_df()
+        for correct_unit, typos in unit_typos.items():
+            for typo in typos:
+                if unit == typo:
+                    return u.Unit(correct_unit)
 
-    def get_rate(self):  # TODO: probably not required
+        raise ValueError(f'Unknown Unit {unit}')
+
+    @property
+    @cache
+    def rate(self):
+        r"""
+        Return the scan rate of the plot.
+
+        The scan rate is read from a `<text>` in the SVG file such as `<text>scan rate: 50 V/s</text>`.
+
+        Examples::
+
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0 cm</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1cm</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1 A</text>
+        ...   </g>
+        ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+        ... </svg>'''))
+        >>> cv = CV(SVGPlot(svg))
+        >>> cv.rate
+        <Quantity 50. V / s>
+
+        """
+        rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
+        # TODO: assert that only one label contains the scan rate (see issue #58)
+        # TODO: assert that a rate is available at all (see issue #58)
+
+        # Convert to astropy unit
+        rates[0].unit = CV.get_axis_unit(rates[0].unit)
+        rate = float(rates[0].value) * rates[0].unit
+
+        return rate
+
+    @property
+    @cache
+    def df(self):
+        r"""
+        Return a dataframe with axis 't', 'U', and 'I' (or 'j).
+        The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
+
+        The dataframe is constructed from the 'x' and 'y' axis of 'svgplot.df',
+        which are usually not in SI units.
+
+        The time axis can only be created when a (scan) rate is given in the plot, i.e., 50 mV /s.
+        """
+        df = self.svgplot.df.copy()
+        self._add_U_axis(df)
+
+        self._add_I_axis(df)
+
+        self._add_time_axis(df)
+
+        # Rearrange columns.
+        return df[['t', 'U', self.axis_properties['y']['dimension']]]
+
+    def _add_U_axis(self, df):
         r'''
-        Return rate based on the x coordinate units.
-
-        At the moment we simply use the value.
+        Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
         '''
-        self.rate = self.description['scan rate']['value']
-        return self.rate
+        q = 1 * CV.get_axis_unit(self.svgplot.units['x'])
+        # Convert the axis unit to SI unit V and use the value
+        # to convert the potential values in the df to V
+        df['U'] = df['x'] * q.to(u.V).value
 
-    def modify_df(self):
-        # Create potential columns
-        self.df = self.create_df_U_axis(self.svgplot.dfs[0])
-        # Create current columns
-        self.df = pd.concat(
-            [self.df, self.create_df_I_axis(self.svgplot.dfs[0])],
-            axis=1)
-
-        # create time axis
-        self.df['t'] = self.create_df_time_axis(self.svgplot.dfs[0])
-
-    def create_df_U_axis(self, df):
+    def _add_I_axis(self, df):
         r'''
-        Create voltage axis in the dataframe based on the units given in the
-        figure description.
+        Add a current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
         '''
-        df_ = df.copy()
-        # Call a dict and remove the if functions
-        if self.xunit == 'V':
-            df_['U_V'] = df['U']
+        q = 1 * CV.get_axis_unit(self.svgplot.units['y'])
 
-        if self.xunit == 'mV':
-            df_['U_V'] = df['U']/1E3
+        # Distinguish whether the y data is current ('A') or current density ('A / cm2')
+        if 'm2' in str(q.unit):
+            conversion_factor = q.to(u.A / u.m**2)
+        else:
+            conversion_factor = q.to(u.A)
 
-        df_['U_mV'] = df_['U_V']*1E3
+        df[self.axis_properties['y']['dimension']] = df['y'] * conversion_factor
 
-        return df_[['U_V', 'U_mV']]
-
-    def create_df_I_axis(self, df):
+    def _add_time_axis(self, df):
         r'''
-        Create current or current density axis in the dataframe based on the
-        units given in the figure description.
+        Add a time column to the dataframe `df`, based on the :meth:`rate`.
         '''
-        df_ = df.copy()
-        if self.yunit == 'A':
-            df_['I_A'] = df['I']
+        df['deltaU'] = abs(df['U'].diff().fillna(0))
+        df['cumdeltaU'] = df['deltaU'].cumsum()
+        df['t'] = df['cumdeltaU'] / float(self.rate.to(u.V / u.s).value)
 
-        if self.yunit == 'mA':
-            df_['I_A'] = df['I']/1E3
+    def plot(self):
+        self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
+        plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
+        plt.xlabel(self.axis_properties['x']['dimension'] + ' / ' + str(self.axis_properties['x']['unit']))
+        plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
 
-        if self.yunit == 'uA':
-            df_['I_A'] = df['I']/1E6
+    @property
+    def metadata(self, comment=''):
+        metadata = self._metadata.copy()
+        metadata.setdefault('figure description', {})
+        metadata['figure description']['type'] = 'digitized'
+        metadata['figure description']['measurement type'] = 'CV'
+        metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
+        metadata['figure description'].setdefault('potential scale', {})
+        metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.svgplot.units['x']))
+        # TODO: Get the reference from the text labels of the axis #59
+        # such as: metadata['figure description']['potential scale']['reference'] = self.axis_properties['x']['reference']
+        metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.units['y']))}
+        metadata['figure description']['comment'] = str(comment)
 
-        df_['I_mA'] = df_['I_A']*1E3
-        df_['I_uA'] = df_['I_A']*1E6
-
-        return df_[['I_A', 'I_mA', 'I_uA']]
-
-    def create_df_time_axis(self, df):
-        r'''
-        Create a time axis in the dataframe based on the scan rate given in the
-        figure description.
-        '''
-        df_ = df.copy()
-        df_['deltaU'] = abs(df_[self.xlabel].diff())
-        df_['cumdeltaU'] = df_['deltaU'].cumsum()
-        df_['t'] = df_['cumdeltaU']/self.get_rate()
-        return df_['t']
-
-    def plot_cv(self):
-        self.df.plot(x='U_V', y='I_uA')
-        plt.xlabel(f'{self.xlabel} / {self.xunit}')
-        plt.ylabel(f'{self.ylabel} / {self.yunit}')
-
-    def create_csv(self, filename):
-        csvfile = Path(filename).with_suffix('.csv')
-        self.df.to_csv(csvfile, index=False)
+        return metadata
