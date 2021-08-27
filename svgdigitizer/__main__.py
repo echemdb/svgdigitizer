@@ -21,13 +21,14 @@
 # ********************************************************************
 import click
 
+help_sampling = 'sampling interval (in mV)'
 
 @click.group()
 def cli(): pass
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
+@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.argument('svg', type=click.File('rb'))
 def plot(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
@@ -36,7 +37,7 @@ def plot(svg, sampling_interval):
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
+@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.argument('svg', type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
@@ -47,7 +48,7 @@ def digitize(svg, sampling_interval):
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help='sampling interval (in mV)')
+@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
 @click.argument('svg', type=click.Path(exists=True))
 def cv(svg, sampling_interval, metadata):
