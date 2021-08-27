@@ -23,6 +23,7 @@ import click
 
 help_sampling = 'sampling interval (in mV)'
 
+
 @click.group()
 def cli(): pass
 
