@@ -22,6 +22,7 @@ Options:
   --help  Show this message and exit.
 
 Commands:
+  cv
   digitize
   paginate
   plot
@@ -33,6 +34,8 @@ $ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c.svg
 [creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
 $ svgdigitizer paginate <pdf file>
 [paginates the pdf file]
+$ svgdigitizer cv test/data/Ni111_NaOH_Beden1985_Fig2c.svg
+[creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
 ```
 
 ## API
