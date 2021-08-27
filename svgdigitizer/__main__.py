@@ -29,11 +29,11 @@ def cli(): pass
 
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
-@click.argument('svg', type=click.File('rb'))
+@click.argument('svg', type=click.Path(exists=True))
 def plot(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
-    SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
+    SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval).plot()
 
 
 @click.command()
