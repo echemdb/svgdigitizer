@@ -21,22 +21,24 @@
 # ********************************************************************
 import click
 
+help_sampling = 'sampling interval on the x-axis'
+
 
 @click.group()
 def cli(): pass
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval (for now in mV)')
-@click.argument('svg', type=click.File('rb'))
+@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
+@click.argument('svg', type=click.Path(exists=True))
 def plot(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
-    SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
+    SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval).plot()
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help='specify sampling interval on the x-axis')
+@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.argument('svg', type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
@@ -44,6 +46,28 @@ def digitize(svg, sampling_interval):
     plot = SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval)
     from pathlib import Path
     plot.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
+
+
+@click.command()
+@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
+@click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
+@click.argument('svg', type=click.Path(exists=True))
+def cv(svg, sampling_interval, metadata):
+    import yaml
+    from svgdigitizer.svgplot import SVGPlot
+    from svgdigitizer.svg import SVG
+    from svgdigitizer.electrochemistry.cv import CV
+    if metadata:
+        metadata = yaml.load(metadata, Loader=yaml.FullLoader)
+
+    cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
+
+    from pathlib import Path
+    cv.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
+
+    import json
+    with open(Path(svg).with_suffix('.json'), "w") as outfile:
+        json.dump(cv.metadata, outfile)
 
 
 @click.command()
@@ -68,6 +92,7 @@ def paginate(onlypng, pdf):
 
 cli.add_command(plot)
 cli.add_command(digitize)
+cli.add_command(cv)
 cli.add_command(paginate)
 
 

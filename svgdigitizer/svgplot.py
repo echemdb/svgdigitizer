@@ -793,8 +793,8 @@ class SVGPlot:
         are going to extract the (x, y) coordinate pairs from.
         """
         patterns = {
-            'ref_point': r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
-            'scale_bar': r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) ?(?P<unit>.+)?',
+            'ref_point': r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?',
+            'scale_bar': r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?',
             'curve': r'^curve: ?(?P<curve_id>.+)',
         }
 
@@ -1006,7 +1006,7 @@ class SVGPlot:
     def plot(self):
         '''curve function'''
         fig, ax = plt.subplots(1, 1)
-        self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}')
+        self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax)
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.tight_layout()

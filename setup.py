@@ -40,6 +40,7 @@ setup(
         'svgwrite',
         'svgpathtools',
         'scipy',
+        'astropy',
     ],
     entry_points = {
         'console_scripts': [
