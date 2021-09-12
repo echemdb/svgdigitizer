@@ -66,6 +66,7 @@ def cv(svg, sampling_interval, metadata):
     cv.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
 
     import datetime
+
     def defaultconverter(o):
         if isinstance(o, datetime.datetime):
             return o.__str__()
