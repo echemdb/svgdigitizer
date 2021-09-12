@@ -75,7 +75,7 @@ The dataframe can for example be saved as `csv` via:
 
 ```python
 from pathlib import Path
-    cv.df.to_csv(Path(svgfile).with_suffix('.csv'), index=False)
+cv.df.to_csv(Path(svgfile).with_suffix('.csv'), index=False)
 ``` 
 
 `cv.plot` shows a plot of the digitizd data with appropriate axis labels.  
