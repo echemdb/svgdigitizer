@@ -22,17 +22,18 @@ Options:
   --help  Show this message and exit.
 
 Commands:
+  cv
   digitize
   paginate
   plot
 $ svgdigitizer plot test/data/Ni111_NaOH_Beden1985_Fig2c.svg
 [displays a plot]
 $ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c.svg
-[creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
-$ svgdigitizer digitize test/data/Ni111_NaOH_Beden1985_Fig2c.svg
-[creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv]
+[creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv with axes x and y]
 $ svgdigitizer paginate <pdf file>
 [paginates the pdf file]
+$ svgdigitizer cv test/data/Ni111_NaOH_Beden1985_Fig2c.svg
+[creates test/data/Ni111_NaOH_Beden1985_Fig2c.csv with axis t, U and I or j]
 ```
 
 ## API
