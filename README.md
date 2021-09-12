@@ -51,7 +51,7 @@ svgplot = SVGPlot(SVG(open(svgfile, 'rb')))
 ```
 
 `svgplot.df` provides a dataframe of the digitized curve.  
-`svgplot.plot` shows a plot of the digitized curve.
+`svgplot.plot()` shows a plot of the digitized curve.
 
 
 ## Submodule CV
