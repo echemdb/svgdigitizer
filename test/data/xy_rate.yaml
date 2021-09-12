@@ -11,7 +11,7 @@ source:
 curator:
     name: Albert Engstfeld
     orcid: https://orcid.org/0000-0002-9686-3948
-    digitized: 2021.06.01 # YYYY-MM-DD
+    digitized: 2021-06-01 # YYYY-MM-DD
     
 figure description:
     type: digitized # digitized, original, raw
