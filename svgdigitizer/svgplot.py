@@ -208,11 +208,8 @@ class SVGPlot:
         ...   </g>
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
-        >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.units
-        ...    print(logs.output)
+        >>> plot.units
         {'x': 'm', 'y': 'A'}
-        ['WARNING:svgplot:Units on y axis do not match. Will ignore unit mA and use A.']
 
         """
         def unit(axis):
@@ -293,9 +290,7 @@ class SVGPlot:
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> from unittest import TestCase
-        >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.references
-        ...    print(logs.output)
+        >>> plot.references
         {'x': 'REFx', 'y': None}
 
         """
@@ -355,7 +350,7 @@ class SVGPlot:
         ...   </g>
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
-        >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
+        >>> plot.marked_points == {'y2': ((0.0, 0.0), (None, 1.0, None, None)), 'y1': ((0.0, 100.0), (None, 0.0, None, None)), 'x2': ((100.0, 100.0), (1.0, None, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None, None))}
         True
 
         TESTS:
@@ -385,7 +380,7 @@ class SVGPlot:
         ...   </g>
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
-        >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
+        >>> plot.marked_points == {'y1': ((0.0, 100.0), (None, 0.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None, None)), 'x2': ((100.0, 100.0), (1.0, None, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None, None))}
         True
 
         """
@@ -427,7 +422,7 @@ class SVGPlot:
             label = labeled_paths.label.axis
             value = float(labeled_paths.label.value)
             unit = labeled_paths.label.unit or None
-
+            reference = None
             if label not in [self.xlabel, self.ylabel]:
                 raise Exception(f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {label}.")
 
@@ -453,9 +448,9 @@ class SVGPlot:
             p2 = ((p1[0][0] + scalebar[0], p1[0][1] + scalebar[1]), (None, None))
 
             if label == self.xlabel:
-                p2 = (p2[0], (p1[1][0] + value, None, unit))
+                p2 = (p2[0], (p1[1][0] + value, None, unit, reference))
             else:
-                p2 = (p2[0], (None, p1[1][1] + value, unit))
+                p2 = (p2[0], (None, p1[1][1] + value, unit, reference))
 
             points[label + "2"] = p2
 
@@ -869,9 +864,9 @@ class SVGPlot:
         are going to extract the (x, y) coordinate pairs from.
         """
         patterns = {
-            'ref_point': r'^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$',
-            'scale_bar': r'^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?',
-            'curve': r'^curve: ?(?P<curve_id>.+)',
+            'ref_point': r'^(?P<point>(?:x|y)\d)\: *(?P<value>-?\d+\.?\d*) *(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$',
+            'scale_bar': r'^(?P<axis>x|y)(_scale_bar|sb)\: *(?P<value>-?\d+\.?\d*) *(?P<unit>.+?)?',
+            'curve': r'^curve: *(?P<curve_id>.+)',
         }
 
         labeled_paths = {key: self.svg.get_labeled_paths(pattern) for (key, pattern) in patterns.items()}
