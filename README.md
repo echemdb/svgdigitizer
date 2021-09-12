@@ -79,7 +79,7 @@ cv.df.to_csv(Path(svgfile).with_suffix('.csv'), index=False)
 ``` 
 
 `cv.plot()` shows a plot of the digitizd data with appropriate axis labels.  
-`cv.metadadata` provides a dict with metadata of the original plot, i.e., original units of the axis.
+`cv.metadadata` provides a dict with metadata of the original plot, such as original units of the axis.
 
 
 `CV` also accepts a dict with metadata, which is updated with keywords related to the original figure (`figure descripton`), i.e., original axis units.
