@@ -78,7 +78,7 @@ from pathlib import Path
 cv.df.to_csv(Path(svgfile).with_suffix('.csv'), index=False)
 ``` 
 
-`cv.plot` shows a plot of the digitizd data with appropriate axis labels.  
+`cv.plot()` shows a plot of the digitizd data with appropriate axis labels.  
 `cv.metadadata` provides a dict with metadata of the original plot, i.e., original units of the axis.
 
 
