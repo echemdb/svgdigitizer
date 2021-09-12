@@ -217,8 +217,8 @@ class SVGPlot:
         """
         def unit(axis):
             units = [
-                point[1][-1] for point in [self.marked_points[axis + "1"], self.marked_points[axis + "2"]]
-                if point[1][-1] is not None
+                point[1][-2] for point in [self.marked_points[axis + "1"], self.marked_points[axis + "2"]]
+                if point[1][-2] is not None
             ]
 
             if len(units) == 0:
@@ -231,6 +231,90 @@ class SVGPlot:
         return {
             self.xlabel: unit(self.xlabel),
             self.ylabel: unit(self.ylabel),
+        }
+
+    @property
+    @cache
+    def references(self):
+        r"""
+        Return the reference for each axis.
+
+        EXAMPLES::
+
+        >>> from svgdigitizer.svg import SVG
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0 cm vs. REFx</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1cm @ REFx</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1 A vs REFy</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> plot = SVGPlot(svg)
+        >>> plot.references
+        {'x': 'REFx', 'y': 'REFy'}
+
+        TESTS:
+
+        References on the axes must match::
+
+        >>> from svgdigitizer.svg import SVG
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0 cm vs. REFx</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1cm @ REFx</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> plot = SVGPlot(svg)
+        >>> from unittest import TestCase
+        >>> with TestCase.assertLogs(_) as logs:
+        ...    plot.references
+        ...    print(logs.output)
+        {'x': 'REFx', 'y': None}
+
+        """
+        def reference(axis):
+            references = [
+                point[1][-1] for point in [self.marked_points[axis + "1"], self.marked_points[axis + "2"]]
+                if point[1][-1] is not None
+            ]
+
+            if len(references) == 0:
+                return None
+            if len(references) == 2:
+                if references[0] != references[1]:
+                    logger.warning(f"References on {axis} axis do not match. Will ignore reference {references[0]} and use {references[1]}.")
+            return references[-1]
+
+        return {
+            self.xlabel: reference(self.xlabel),
+            self.ylabel: reference(self.ylabel),
         }
 
     @property
@@ -315,11 +399,11 @@ class SVGPlot:
             label = labeled_paths.label.point
             value = float(labeled_paths.label.value)
             unit = labeled_paths.label.unit or None
-
+            reference = labeled_paths.label.reference or None
             if label in xlabels:
-                plot = (value, None, unit)
+                plot = (value, None, unit, reference)
             elif label in ylabels:
-                plot = (None, value, unit)
+                plot = (None, value, unit, reference)
             else:
                 raise NotImplementedError(f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}.")
 

@@ -36,7 +36,8 @@ class CV():
     @cache
     def axis_properties(self):
         return {'x': {'dimension': 'U',
-                      'unit': 'V'},
+                      'unit': 'V',
+                      'reference': self.svgplot.references['x']},
                 'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.units['x'])) else 'I',
                       'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.units['y'])) else 'A'}}
 
@@ -187,8 +188,7 @@ class CV():
         metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
         metadata['figure description'].setdefault('potential scale', {})
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.svgplot.units['x']))
-        # TODO: Get the reference from the text labels of the axis #59
-        # such as: metadata['figure description']['potential scale']['reference'] = self.axis_properties['x']['reference']
+        metadata['figure description']['potential scale']['reference'] = self.axis_properties['x']['reference']
         metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.units['y']))}
         metadata['figure description']['comment'] = str(comment)
 
