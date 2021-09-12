@@ -840,7 +840,7 @@ class SVGPlot:
     def plot(self):
         '''curve function'''
         fig, ax = plt.subplots(1, 1)
-        self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax, label=f'curve {i}')
+        self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax)
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.tight_layout()
