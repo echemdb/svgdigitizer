@@ -39,7 +39,8 @@ setup(
         'pdf2image',
         'svgwrite',
         'svgpathtools',
-        'astropy'
+        'astropy',
+        'datetime'
     ],
     entry_points = {
         'console_scripts': [
