@@ -58,7 +58,7 @@ def cv(svg, sampling_interval, metadata):
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
     if metadata:
-        metadata = yaml.load(metadata, Loader=yaml.FullLoader)
+        metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
