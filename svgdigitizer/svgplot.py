@@ -327,7 +327,7 @@ class SVGPlot:
                 raise Exception(f"Found axis label {label} more than once.")
 
             if len(labeled_paths.paths) != 1:
-                raise NotImplementedError(f"Expected exactly one path to be grouped with the marked point {label} but found {len(paths)}.")
+                raise NotImplementedError(f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}.")
 
             path = labeled_paths.paths[0]
 
@@ -351,7 +351,7 @@ class SVGPlot:
                 raise Exception(f"Found more than one axis label {label}2 and scalebar for {label}.")
 
             if len(labeled_paths.paths) != 2:
-                raise NotImplementedError(f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(paths)}.")
+                raise NotImplementedError(f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(labeled_paths.paths)}.")
 
             endpoints = [path.far for path in labeled_paths.paths]
             scalebar = (endpoints[0][0] - endpoints[1][0], endpoints[0][1] - endpoints[1][1])
