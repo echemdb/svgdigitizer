@@ -147,7 +147,7 @@ class SVGPlot:
         ...   </g>
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
-        >>> plot.units
+        >>> plot.axislabels
         {'x': 'cm', 'y': 'A'}
 
         TESTS:
@@ -178,7 +178,7 @@ class SVGPlot:
         >>> plot = SVGPlot(svg)
         >>> from unittest import TestCase
         >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.units
+        ...    plot.axislabels
         ...    print(logs.output)
         {'x': 'm', 'y': None}
         ['WARNING:svgplot:Axislabels on x axis do not match. Will ignore axislabels cm and use m.']
@@ -209,7 +209,7 @@ class SVGPlot:
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.units
+        ...    plot.axislabels
         ...    print(logs.output)
         {'x': 'm', 'y': 'A'}
         ['WARNING:svgplot:Axislabels on y axis do not match. Will ignore axislabel mA and use A.']
