@@ -181,7 +181,7 @@ class SVGPlot:
         ...    plot.axislabels
         ...    print(logs.output)
         {'x': 'm', 'y': None}
-        ['WARNING:svgplot:Axislabels on x axis do not match. Will ignore axislabels cm and use m.']
+        ['WARNING:svgplot:Axislabels on x axis do not match. Will ignore axislabel cm and use m.']
 
         Labels on the scalebar must match the label on the axes::
 
@@ -212,7 +212,7 @@ class SVGPlot:
         ...    plot.axislabels
         ...    print(logs.output)
         {'x': 'm', 'y': 'A'}
-        ['WARNING:svgplot:Axislabels on y axis do not match. Will ignore axislabels mA and use A.']
+        ['WARNING:svgplot:Axislabels on y axis do not match. Will ignore axislabel mA and use A.']
 
         """
         def axislabel(axis):
