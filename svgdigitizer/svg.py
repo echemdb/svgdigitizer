@@ -23,6 +23,7 @@ from xml.dom import minidom, Node
 import re
 import logging
 
+
 logger = logging.getLogger('svg')
 
 class SVG:

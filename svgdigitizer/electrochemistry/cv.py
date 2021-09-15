@@ -73,7 +73,7 @@ class CV():
 
     @property
     def x_label(self):
-        pattern = '^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
+        pattern = r'^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
         match = re.match(pattern, self.svgplot.axislabels['x'], re.IGNORECASE)
 
         return namedtuple('Label', ['label', 'unit', 'reference'])(match[0], match[1], match[2] or 'unknown')
@@ -153,8 +153,7 @@ class CV():
         r'''
         Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
         '''
-        #q = 1 * CV.get_axis_unit(self.svgplot.units['x']) #################################
-        q = 1 * CV.get_axis_unit(self.x_label.unit) 
+        q = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df['U'] = df['x'] * q.to(u.V).value
