@@ -1,4 +1,3 @@
-# This file can exist with the "source" information only
 # Figure description is adapted based on SVG input
 version: 1
 
@@ -13,17 +12,7 @@ curator:
     orcid: https://orcid.org/0000-0002-9686-3948
     digitized: 2021-06-01 # YYYY-MM-DD
     
-figure description:
-    type: digitized # digitized, original, raw
-    measurement type: CV # CV, SCV, LSV see documentation
-    scan rate: # specific i
-        value: 50
-        unit: mV/s # V/s, mV/s
-    potential scale:
-        unit: V # V, mV
-        reference: RHE # given in the plot and not in the experimental section: MSE-3M, MSE-1M, RHE, AgCl2
-    current:        
-        unit: mA/cm-2 # uA, mA, A, mA/cm-2, uA/cm-2, A/cm-2, A/m-2, ...
+figure description: #This section will be updated by module `CV`
     linked measurements: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
     comment: # Add whatever you think is important to understand the data
 
@@ -74,7 +63,7 @@ electrochemical system:
             value: 298.15 
             unit: K # [K, C, F]
     electrodes:
-        configuration: three # number of electrodes
+        configuration: 3 # number of electrodes
         reference electrode:
             type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-sat, MSE-3M, MSE-1M, RHE, AgCl2
             source:
