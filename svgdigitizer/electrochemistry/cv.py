@@ -20,7 +20,7 @@
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 from functools import cache
-import pandas as pd
+import re
 import matplotlib.pyplot as plt
 from pathlib import Path
 from astropy import units as u
@@ -36,9 +36,10 @@ class CV():
     @cache
     def axis_properties(self):
         return {'x': {'dimension': 'U',
-                      'unit': 'V'},
-                'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.units['x'])) else 'I',
-                      'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.units['y'])) else 'A'}}
+                      'unit': 'V',
+                      'reference': self.unit_reference['reference']},
+                'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.axislabels['y'])) else 'I',
+                      'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.axislabels['y'])) else 'A'}}
 
     @classmethod
     def get_axis_unit(cls, unit):
@@ -69,6 +70,13 @@ class CV():
                     return u.Unit(correct_unit)
 
         raise ValueError(f'Unknown Unit {unit}')
+
+    @property
+    def unit_reference(self):
+        pattern = '^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
+        match = re.match(pattern, self.svgplot.axislabels['x'], re.IGNORECASE)
+
+        return {'unit': match[1], 'reference': match[2] if match[2] else 'unknown'}
 
     @property
     @cache
@@ -145,7 +153,8 @@ class CV():
         r'''
         Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
         '''
-        q = 1 * CV.get_axis_unit(self.svgplot.units['x'])
+        #q = 1 * CV.get_axis_unit(self.svgplot.units['x']) #################################
+        q = 1 * CV.get_axis_unit(self.unit_reference['unit']) 
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df['U'] = df['x'] * q.to(u.V).value
@@ -154,7 +163,7 @@ class CV():
         r'''
         Add a current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
         '''
-        q = 1 * CV.get_axis_unit(self.svgplot.units['y'])
+        q = 1 * CV.get_axis_unit(self.svgplot.axislabels['y'])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if 'm2' in str(q.unit):
@@ -175,8 +184,8 @@ class CV():
     def plot(self):
         self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
-        plt.xlabel(self.axis_properties['x']['dimension'] + ' / ' + str(self.axis_properties['x']['unit']))
-        plt.ylabel(self.axis_properties['y']['dimension'] + ' / ' + str(self.axis_properties['y']['unit']))
+        plt.xlabel(self.axis_properties['x']['dimension'] + ' [' + str(self.axis_properties['x']['unit']) + ' vs. ' + str(self.axis_properties['x']['reference']) + ']')
+        plt.ylabel(self.axis_properties['y']['dimension'] + ' [' + str(self.axis_properties['y']['unit']) + ']')
 
     @property
     def metadata(self, comment=''):
@@ -186,10 +195,9 @@ class CV():
         metadata['figure description']['measurement type'] = 'CV'
         metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
         metadata['figure description'].setdefault('potential scale', {})
-        metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.svgplot.units['x']))
-        # TODO: Get the reference from the text labels of the axis #59
-        # such as: metadata['figure description']['potential scale']['reference'] = self.axis_properties['x']['reference']
-        metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.units['y']))}
+        metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.svgplot.axislabels['x']))
+        metadata['figure description']['potential scale']['reference'] = self.axis_properties['x']['reference']
+        metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axislabels['y']))}
         metadata['figure description']['comment'] = str(comment)
 
         return metadata

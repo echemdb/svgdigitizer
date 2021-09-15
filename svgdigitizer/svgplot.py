@@ -119,9 +119,9 @@ class SVGPlot:
 
     @property
     @cache
-    def units(self):
+    def axislabels(self):
         r"""
-        Return the unit for each axis.
+        Return the label for each axis.
 
         EXAMPLES::
 
@@ -152,7 +152,7 @@ class SVGPlot:
 
         TESTS:
 
-        Units on the axes must match::
+        Axislabels on the axes must match::
 
         >>> from svgdigitizer.svg import SVG
         >>> from io import StringIO
@@ -181,9 +181,9 @@ class SVGPlot:
         ...    plot.units
         ...    print(logs.output)
         {'x': 'm', 'y': None}
-        ['WARNING:svgplot:Units on x axis do not match. Will ignore unit cm and use m.']
+        ['WARNING:svgplot:Axislabels on x axis do not match. Will ignore axislabels cm and use m.']
 
-        Units on the scalebar must match the unit on the axes::
+        Labels on the scalebar must match the label on the axes::
 
         >>> from svgdigitizer.svg import SVG
         >>> from io import StringIO
@@ -212,25 +212,25 @@ class SVGPlot:
         ...    plot.units
         ...    print(logs.output)
         {'x': 'm', 'y': 'A'}
-        ['WARNING:svgplot:Units on y axis do not match. Will ignore unit mA and use A.']
+        ['WARNING:svgplot:Axislabels on y axis do not match. Will ignore axislabel mA and use A.']
 
         """
-        def unit(axis):
-            units = [
+        def axislabel(axis):
+            axislabels = [
                 point[1][-1] for point in [self.marked_points[axis + "1"], self.marked_points[axis + "2"]]
                 if point[1][-1] is not None
             ]
 
-            if len(units) == 0:
+            if len(axislabels) == 0:
                 return None
-            if len(units) == 2:
-                if units[0] != units[1]:
-                    logger.warning(f"Units on {axis} axis do not match. Will ignore unit {units[0]} and use {units[1]}.")
-            return units[-1]
+            if len(axislabels) == 2:
+                if axislabels[0] != axislabels[1]:
+                    logger.warning(f"Axislabels on {axis} axis do not match. Will ignore axislabel {axislabels[0]} and use {axislabels[1]}.")
+            return axislabels[-1]
 
         return {
-            self.xlabel: unit(self.xlabel),
-            self.ylabel: unit(self.ylabel),
+            self.xlabel: axislabel(self.xlabel),
+            self.ylabel: axislabel(self.ylabel),
         }
 
     @property
