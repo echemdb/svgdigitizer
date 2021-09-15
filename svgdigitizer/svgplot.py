@@ -212,7 +212,7 @@ class SVGPlot:
         ...    plot.axislabels
         ...    print(logs.output)
         {'x': 'm', 'y': 'A'}
-        ['WARNING:svgplot:Axislabels on y axis do not match. Will ignore axislabel mA and use A.']
+        ['WARNING:svgplot:Axislabels on y axis do not match. Will ignore axislabels mA and use A.']
 
         """
         def axislabel(axis):
