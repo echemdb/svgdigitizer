@@ -38,8 +38,8 @@ class CV():
     def axis_properties(self):
         return {'x': {'dimension': 'U',
                       'unit': 'V'},
-                'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.axislabels['y'])) else 'I',
-                      'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.axislabels['y'])) else 'A'}}
+                'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.axis_labels['y'])) else 'I',
+                      'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.axis_labels['y'])) else 'A'}}
 
     @classmethod
     def get_axis_unit(cls, unit):
@@ -74,7 +74,7 @@ class CV():
     @property
     def x_label(self):
         pattern = r'^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
-        match = re.match(pattern, self.svgplot.axislabels['x'], re.IGNORECASE)
+        match = re.match(pattern, self.svgplot.axis_labels['x'], re.IGNORECASE)
 
         return namedtuple('Label', ['label', 'unit', 'reference'])(match[0], match[1], match[2] or 'unknown')
 
@@ -162,7 +162,7 @@ class CV():
         r'''
         Add a current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
         '''
-        q = 1 * CV.get_axis_unit(self.svgplot.axislabels['y'])
+        q = 1 * CV.get_axis_unit(self.svgplot.axis_labels['y'])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if 'm2' in str(q.unit):
@@ -196,7 +196,7 @@ class CV():
         metadata['figure description'].setdefault('potential scale', {})
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.x_label.unit))
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference
-        metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axislabels['y']))}
+        metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axis_labels['y']))}
         metadata['figure description']['comment'] = str(comment)
 
         return metadata

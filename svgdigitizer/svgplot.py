@@ -119,7 +119,7 @@ class SVGPlot:
 
     @property
     @cache
-    def axislabels(self):
+    def axis_labels(self):
         r"""
         Return the label for each axis.
 
@@ -147,12 +147,12 @@ class SVGPlot:
         ...   </g>
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
-        >>> plot.axislabels
+        >>> plot.axis_labels
         {'x': 'cm', 'y': 'A'}
 
         TESTS:
 
-        Axislabels on the axes must match::
+        Labels on the axes must match::
 
         >>> from svgdigitizer.svg import SVG
         >>> from io import StringIO
@@ -178,12 +178,12 @@ class SVGPlot:
         >>> plot = SVGPlot(svg)
         >>> from unittest import TestCase
         >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.axislabels
+        ...    plot.axis_labels
         ...    print(logs.output)
         {'x': 'm', 'y': None}
-        ['WARNING:svgplot:Axislabels on x axis do not match. Will ignore axislabel cm and use m.']
+        ['WARNING:svgplot:Labels on x axis do not match. Will ignore label cm and use m.']
 
-        Labels on the scalebar must match the label on the axes::
+        Labels on the scalebar must match the labels on the axes::
 
         >>> from svgdigitizer.svg import SVG
         >>> from io import StringIO
@@ -209,28 +209,28 @@ class SVGPlot:
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.axislabels
+        ...    plot.axis_labels
         ...    print(logs.output)
         {'x': 'm', 'y': 'A'}
-        ['WARNING:svgplot:Axislabels on y axis do not match. Will ignore axislabel mA and use A.']
+        ['WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.']
 
         """
-        def axislabel(axis):
-            axislabels = [
+        def axis_label(axis):
+            labels = [
                 point[1][-1] for point in [self.marked_points[axis + "1"], self.marked_points[axis + "2"]]
                 if point[1][-1] is not None
             ]
 
-            if len(axislabels) == 0:
+            if len(labels) == 0:
                 return None
-            if len(axislabels) == 2:
-                if axislabels[0] != axislabels[1]:
-                    logger.warning(f"Axislabels on {axis} axis do not match. Will ignore axislabel {axislabels[0]} and use {axislabels[1]}.")
-            return axislabels[-1]
+            if len(labels) == 2:
+                if labels[0] != labels[1]:
+                    logger.warning(f"Labels on {axis} axis do not match. Will ignore label {labels[0]} and use {labels[1]}.")
+            return labels[-1]
 
         return {
-            self.xlabel: axislabel(self.xlabel),
-            self.ylabel: axislabel(self.ylabel),
+            self.xlabel: axis_label(self.xlabel),
+            self.ylabel: axis_label(self.ylabel),
         }
 
     @property
