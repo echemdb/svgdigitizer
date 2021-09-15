@@ -1,0 +1,103 @@
+# This file can exist with the "source" information only
+# 'Figure description' is adapted based on SVG input
+version: 1
+
+source: 
+    doi: https://doi.org/10.1016/0039-6028(85)90985-9
+    bib: Beden_1985_Voltammetric_833 # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
+    figure: 2b # depending on the subfigure labels use 1, 1b, or 1_3
+    curve: First cycle # use a unique short description to identify the curve in the figure
+    
+curator:
+    name: Albert Engstfeld
+    orcid: https://orcid.org/0000-0002-9686-3948
+    digitized: 2021-06-01 # YYYY-MM-DD
+    
+figure description:
+    type: digitized # digitized, original, raw
+    measurement type: CV # CV, SCV, LSV see documentation
+    scan rate: # specific i
+        value: 50
+        unit: mV/s # V/s, mV/s
+    potential scale:
+        unit: V # V, mV
+        reference: RHE # given in the plot and not in the experimental section: MSE-3M, MSE-1M, RHE, AgCl2
+    current:        
+        unit: mA/cm-2 # uA, mA, A, mA/cm-2, uA/cm-2, A/cm-2, A/m-2, ...
+    linked measurements: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
+    comment: # Add whatever you think is important to understand the data
+
+electrochemical system:
+    electrolyte:
+        type: aq # aqueous = aq, non-aqueous=naq
+        components: # create as many components as necessary. A simple electrolyte consists of two components, i.e., H2SO4 and water
+            - name: NaCl # replace name by something generic, i.e., for a complex organic compound
+              sum formula:  NaCl
+              concentration:
+                  value: 0.1
+                  unit: M #[M, mM, µM, g kg-1, ...]
+              type: salt #
+              source:
+                  supplier: null
+                  LOT: 
+            - name: water
+              sum formula: H2O
+              type: solvent
+              proportion:
+                  value: 50
+                  unit: volume percent
+              source:
+                  refinement: Sartorius Arium 611UV
+                  quality: ultrapure water
+                  total organic carbon: 
+                      value: 3
+                      unit: ppb
+            - name: ethanol
+              sum formula: EtOH
+              type: solvent
+              proportion:
+                  value: 50
+                  unit: volume percent
+            - name: sulfuric acid
+              sum formula: H2SO4
+              type: acid
+              source:
+                  supplier: null
+                  LOT: 
+              concentration:
+                  value: 0.1
+                  unit: M #[M, mM, µM, g kg-1, ...] 
+        ph: 
+            value: 13
+            uncertainty: 0.1
+        temperature: # provide the temperature as it is given in the article. Assume room temperature if nothing is provided
+            value: 298.15 
+            unit: K # [K, C, F]
+    electrodes:
+        configuration: three # number of electrodes
+        reference electrode:
+            type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-sat, MSE-3M, MSE-1M, RHE, AgCl2
+            source:
+                supplier: SI Analytics
+        counter electrode:
+            material: Pt
+            crystallographic orientation: poly
+            shape: wire
+        working electrode:
+            material: Ni
+            crystallographic orientation: 111 # hkl, 100, 110, poly
+            source:
+                supplier: null
+                LOT: 
+            shape: # optional
+                type: cylinder # bead/sphere
+                height:
+                    value: 4
+                    unit: mm
+                diameter:
+                    value: 4
+                    unit: mm
+            geometric electrolyte contact area: 
+                value: null
+                unit: cm-2
+            preparation procedure: null # Short description of sample preparation. This can be very useful. :)

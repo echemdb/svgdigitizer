@@ -119,9 +119,9 @@ class SVGPlot:
 
     @property
     @cache
-    def units(self):
+    def axis_labels(self):
         r"""
-        Return the unit for each axis.
+        Return the label for each axis.
 
         EXAMPLES::
 
@@ -147,12 +147,12 @@ class SVGPlot:
         ...   </g>
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
-        >>> plot.units
+        >>> plot.axis_labels
         {'x': 'cm', 'y': 'A'}
 
         TESTS:
 
-        Units on the axes must match::
+        Labels on the axes must match::
 
         >>> from svgdigitizer.svg import SVG
         >>> from io import StringIO
@@ -178,12 +178,12 @@ class SVGPlot:
         >>> plot = SVGPlot(svg)
         >>> from unittest import TestCase
         >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.units
+        ...    plot.axis_labels
         ...    print(logs.output)
         {'x': 'm', 'y': None}
-        ['WARNING:svgplot:Units on x axis do not match. Will ignore unit cm and use m.']
+        ['WARNING:svgplot:Labels on x axis do not match. Will ignore label cm and use m.']
 
-        Units on the scalebar must match the unit on the axes::
+        Labels on the scalebar must match the labels on the axes::
 
         >>> from svgdigitizer.svg import SVG
         >>> from io import StringIO
@@ -209,28 +209,28 @@ class SVGPlot:
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.units
+        ...    plot.axis_labels
         ...    print(logs.output)
         {'x': 'm', 'y': 'A'}
-        ['WARNING:svgplot:Units on y axis do not match. Will ignore unit mA and use A.']
+        ['WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.']
 
         """
-        def unit(axis):
-            units = [
+        def axis_label(axis):
+            labels = [
                 point[1][-1] for point in [self.marked_points[axis + "1"], self.marked_points[axis + "2"]]
                 if point[1][-1] is not None
             ]
 
-            if len(units) == 0:
+            if len(labels) == 0:
                 return None
-            if len(units) == 2:
-                if units[0] != units[1]:
-                    logger.warning(f"Units on {axis} axis do not match. Will ignore unit {units[0]} and use {units[1]}.")
-            return units[-1]
+            if len(labels) == 2:
+                if labels[0] != labels[1]:
+                    logger.warning(f"Labels on {axis} axis do not match. Will ignore label {labels[0]} and use {labels[1]}.")
+            return labels[-1]
 
         return {
-            self.xlabel: unit(self.xlabel),
-            self.ylabel: unit(self.ylabel),
+            self.xlabel: axis_label(self.xlabel),
+            self.ylabel: axis_label(self.ylabel),
         }
 
     @property
@@ -327,7 +327,7 @@ class SVGPlot:
                 raise Exception(f"Found axis label {label} more than once.")
 
             if len(labeled_paths.paths) != 1:
-                raise NotImplementedError(f"Expected exactly one path to be grouped with the marked point {label} but found {len(paths)}.")
+                raise NotImplementedError(f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}.")
 
             path = labeled_paths.paths[0]
 
@@ -351,7 +351,7 @@ class SVGPlot:
                 raise Exception(f"Found more than one axis label {label}2 and scalebar for {label}.")
 
             if len(labeled_paths.paths) != 2:
-                raise NotImplementedError(f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(paths)}.")
+                raise NotImplementedError(f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(labeled_paths.paths)}.")
 
             endpoints = [path.far for path in labeled_paths.paths]
             scalebar = (endpoints[0][0] - endpoints[1][0], endpoints[0][1] - endpoints[1][1])

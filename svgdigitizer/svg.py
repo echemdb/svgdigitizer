@@ -19,9 +19,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
-from functools import cache
 from xml.dom import minidom, Node
 import re
+import logging
+
+logger = logging.getLogger('svg')
 
 
 class SVG:
@@ -113,7 +115,7 @@ class SVG:
                     continue
                 elif child.nodeType == Node.TEXT_NODE:
                     if SVG._text_value(child):
-                        logger.warning(f'Ignoring unexpected text node "{SVGPlot._text_value(child)}" grouped with <path>.')
+                        logger.warning(f'Ignoring unexpected text node "{SVG._text_value(child)}" grouped with <path>.')
                 elif child.nodeType == Node.ELEMENT_NODE:
                     if child.tagName == 'path':
                         continue
@@ -122,7 +124,7 @@ class SVG:
                         continue
 
                     if label is not None:
-                        logger.warning(f'More than one <text> label associated to this <path>. Ignoring all but the first one, i.e., ignoring "{SVGPlot._text_value(child)}".')
+                        logger.warning(f'More than one <text> label associated to this <path>. Ignoring all but the first one, i.e., ignoring "{SVG._text_value(child)}".')
                         continue
 
                     label = child

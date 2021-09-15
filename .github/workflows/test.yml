@@ -64,3 +64,9 @@ jobs:
           svgdigitizer cv test/data/xy_rate_without_metadata.svg
           diff test/data/xy_rate_without_metadata.json test/data/xy_rate_without_metadata.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata.csv"), pandas.read_csv("test/data/xy_rate_without_metadata.csv.expected"))'
+      - name: cv-test-with_reference
+        shell: bash -l {0}
+        run: |
+          svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml
+          diff test/data/xy_rate_reference.json test/data/xy_rate_reference.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference.csv"), pandas.read_csv("test/data/xy_rate_reference.csv.expected"))'
