@@ -41,6 +41,7 @@ setup(
         'svgpathtools',
         'scipy',
         'astropy',
+        'datetime'
     ],
     entry_points = {
         'console_scripts': [

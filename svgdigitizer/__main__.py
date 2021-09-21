@@ -58,16 +58,22 @@ def cv(svg, sampling_interval, metadata):
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
     if metadata:
-        metadata = yaml.load(metadata, Loader=yaml.FullLoader)
+        metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path
     cv.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
 
+    import datetime
+
+    def defaultconverter(o):
+        if isinstance(o, datetime.datetime):
+            return o.__str__()
+
     import json
     with open(Path(svg).with_suffix('.json'), "w") as outfile:
-        json.dump(cv.metadata, outfile)
+        json.dump(cv.metadata, outfile, default=defaultconverter)
 
 
 @click.command()
