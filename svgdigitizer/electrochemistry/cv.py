@@ -73,6 +73,11 @@ class CV():
 
     @property
     def x_label(self):
+        r"""
+        Return the label on the x-axis of the SVG plot.
+        In contrast to the y-label, which only consists of a unit, the x-label consists of a unit and a reference.
+        The unit and the reference are united in a single string, which are separated by x_label.
+        """
         pattern = r'^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
         match = re.match(pattern, self.svgplot.axis_labels['x'], re.IGNORECASE)
 
@@ -183,7 +188,7 @@ class CV():
     def plot(self):
         self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
-        plt.xlabel(self.axis_properties['x']['dimension'] + ' [' + str(self.axis_properties['x']['unit']) + ' vs. ' + self.axis_properties['x']['reference'] + ']')
+        plt.xlabel(self.axis_properties['x']['dimension'] + ' [' + str(self.axis_properties['x']['unit']) + ' vs. ' + self.x_label.reference + ']')
         plt.ylabel(self.axis_properties['y']['dimension'] + ' [' + str(self.axis_properties['y']['unit']) + ']')
 
     @property
@@ -192,7 +197,7 @@ class CV():
         metadata.setdefault('figure description', {})
         metadata['figure description']['type'] = 'digitized'
         metadata['figure description']['measurement type'] = 'CV'
-        metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
+        metadata['figure description']['scan rate'] = {'value': float(self.rate.value), 'unit': str(self.rate.unit)}
         metadata['figure description'].setdefault('potential scale', {})
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.x_label.unit))
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference

@@ -862,12 +862,6 @@ class SVGPlot:
         # The current path length on the x-axis at which we plan to sample (in the range [0, length of the current path segment]):
         X = 0
 
-        # A projection down to the x-axis so that we can measure lengths in
-        # x-axis direction only.
-        from numpy import identity
-        project_x = identity(3)
-        project_x[1][1] = 0
-
         for segment in path:
             sample_at = []
 
