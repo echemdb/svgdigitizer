@@ -196,7 +196,7 @@ class CV():
         metadata.setdefault('figure description', {})
         metadata['figure description']['type'] = 'digitized'
         metadata['figure description']['measurement type'] = 'CV'
-        metadata['figure description']['scan rate'] = {'value': self.rate.value, 'unit': str(self.rate.unit)}
+        metadata['figure description']['scan rate'] = {'value': float(self.rate.value), 'unit': str(self.rate.unit)}
         metadata['figure description'].setdefault('potential scale', {})
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.x_label.unit))
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference
