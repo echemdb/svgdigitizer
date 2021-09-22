@@ -428,6 +428,18 @@ class LabeledPath:
         endpoints = [self.points[0], self.points[-1]]
         return max(endpoints, key=lambda p: (text[0] - p[0]) ** 2 + (text[1] - p[1]) ** 2)
 
+    @classmethod
+    def path_points(cls, path):
+        r"""
+        Return the points defining this path.
+
+        This returns the raw points in the `d` attribute, ignoring the
+        commands that connect these points, i.e., ignoring whether these
+        points are connected by `M` commands that do not actually draw
+        anything, or any kind of visible curve.
+        """
+        return [(path[0].start.real, path[0].start.imag)] + [(command.end.real, command.end.imag) for command in path]
+
     @property
     def points(self):
         r"""
@@ -438,7 +450,7 @@ class LabeledPath:
         points are connected by `M` commands that do not actually draw
         anything, or any kind of visible curve.
         """
-        return [(self.path[0].start.real, self.path[0].start.imag)] + [(command.end.real, command.end.imag) for command in self.path]
+        return LabeledPath.path_points(self.path)
 
     @property
     def path(self):

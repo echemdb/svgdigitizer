@@ -98,34 +98,6 @@ class SVGPlot:
 
     @property
     @cache
-    def transformed_sampling_interval(self):
-        r"""
-        Return the sampling interval in terms of SVG coordinates on the x-axis.
-
-        EXAMPLES::
-
-            # >>> TODO
-
-        """
-        if not self.sampling_interval:
-            return None
-        if self._algorithm == 'axis-aligned':
-            x1 = (0, 0)
-            x2 = (self.sampling_interval, 0)
-        elif self._algorithm == 'mark-aligned':
-            x1 = self.marked_points[f"{self.xlabel}1"]
-            x2 = self.marked_points[f"{self.xlabel}2"]
-            unit = complex(x2[0] - x1[0], x2[1] - x1[1])
-            unit /= abs(unit)
-            unit *= self.sampling_interval
-            x2 = (x1[0] + unit.real, x1[1] + unit.imag)
-        else:
-            raise NotImplementedError(f"sampling-interval not supported for {self._algorithm}")
-
-        return (self.from_svg(*x2)[0] - self.from_svg(*x1)[0])
-
-    @property
-    @cache
     def axis_labels(self):
         r"""
         Return the label for each axis.
@@ -711,8 +683,9 @@ class SVGPlot:
         r"""
         Return the path that is tracing the plot in the SVG.
 
-        Return the `<path>` tag that is not used for other purposes such as
-        pointing to axis labels.
+        This essentially returns the `<path>` tag that is not used for other
+        purposes such as pointing to axis labels. However, the path is written
+        in the plot coordinate system.
 
         EXAMPLES:
 
@@ -745,7 +718,7 @@ class SVGPlot:
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> plot.curve
-        [(0.0, 100.0), (100.0, 0.0)]
+        Path(Line(start=0j, end=(1+1j)))
 
         TESTS:
 
@@ -774,11 +747,8 @@ class SVGPlot:
 
         path = paths[0]
 
-        if self.sampling_interval:
-            # sample path if interval is set
-            return SVGPlot.sample_path(path.path, self.transformed_sampling_interval)
-        else:
-            return path.points
+        from svgpathtools.path import transform
+        return transform(path.path, self.transformation)
 
     @property
     @cache
@@ -988,10 +958,120 @@ class SVGPlot:
     @property
     @cache
     def df(self):
-        return pd.DataFrame([self.from_svg(x, y) for (x, y) in self.curve], columns=[self.xlabel, self.ylabel])
+        r"""
+        Return the plot data as a dataframe of pairs (x, y).
+
+        The returned data lives in the plot coordinate system.
+
+        EXMAMPLES::
+
+        A diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
+        i.e., the function y=x::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  1.0  1.0
+
+        The same plot but now sampled at 0.2 increments on the x-axis::
+
+            >>> plot = SVGPlot(svg, sampling_interval=.2)
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  0.2  0.2
+            2  0.4  0.4
+            3  0.6  0.6
+            4  0.8  0.8
+            5  1.0  1.0
+
+        Again diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
+        i.e., visually the function y=x. However, the coordinate system is
+        skewed, the x-axis is parallel to the plot and so this is actually the
+        function y=0::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 0" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg, algorithm='mark-aligned')
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  1.0  0.0
+
+        The same plot but now sampled at 0.2 increments on the x-axis::
+
+            >>> plot = SVGPlot(svg, sampling_interval=.2, algorithm='mark-aligned')
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  0.2  0.0
+            2  0.4  0.0
+            3  0.6  0.0
+            4  0.8  0.0
+            5  1.0  0.0
+
+        """
+        if self.sampling_interval:
+            points = SVGPlot.sample_path(self.curve, self.sampling_interval)
+        else:
+            from .svg import LabeledPath
+            points = LabeledPath.path_points(self.curve)
+
+        return pd.DataFrame(points, columns=[self.xlabel, self.ylabel])
 
     def plot(self):
-        '''curve function'''
+        r"""
+        Visualize the data in this plot.
+        """
         fig, ax = plt.subplots(1, 1)
         self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax)
         plt.xlabel(self.xlabel)
