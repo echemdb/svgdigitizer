@@ -19,7 +19,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
-from svgpathtools import Path, Line
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -807,7 +806,7 @@ class SVGPlot:
         return labeled_paths
 
     @classmethod
-    def sample_path(self, path, sampling_interval, error=None, endpoints="include"):
+    def sample_path(self, path, sampling_interval, endpoints="include"):
         r"""
         Return points on `path`, sampled at equidistant increments on the
         x-axis.
@@ -819,184 +818,172 @@ class SVGPlot:
         - `sampling_interval` -- the distance between two samples on the SVG
           x-axis.
 
-        - `error` -- see the algorithm section below; can be `None` or a
-          non-negative float.
-
         - `endpoints` -- whether to include the endpoints of each path segment
           `"include"` or not to include them `"exclude"`; see below for details.
 
         ALGORITHM:
 
-        To do this exactly, we would need to parametrize the curve in terms of
-        the x-component of the arc length. While this might actually be
-        possible, it is not implemented in `svgpathtools`. What is implemented is
-        a method `ilength` that returns the time at which the curve has a
-        certain arc length. This essentially gives us a black box for such
-        parameterization. However, this method is too slow for our purposes.
-        Instead, we try to guess what increments in time are needed and then
-        control for the error which is fast.
+        Let us assume that `path` is made up of Bezier curve segments (the
+        other cases work essentially the same but are easier.) We project the
+        curve down to the x-axis. This projection is stil a Bezier curve, i.e.,
+        of the form
 
-        You can select which algorithm to use with the `error` keyword. If
-        `None`, the fast algorithm is used with an heuristically chosen error
-        bound. If set to an explicit value, the fast algorithm is used assuring
-        that the sampling points are at most `error` from the correct sampling
-        point on the x-axis in the SVG coordinate system. If `error` is zero,
-        the slow algorithm is used which uses `ilength` from `svgpathtools`.
+            B(t) = (1-t)^3 P_0 + 3t(1-t)^2 P_1 + 3t^2(1-t) P_2 + t^3 P_3.
+
+        Since all the control points are on the axis, this is just a univariate
+        polynomial of degree 3, in particular we can easily differentiate it,
+        take its absolute value and integrate again. The result is a piecewise
+        function x(t) that is a polynomial of degree three and it encodes the
+        total distance on the x-axis at time t. So given some `X` we can easily
+        solve for
+
+            x(T) = X
+
+        Incrementing `X` by the step size, this gives us all the times `T` that
+        we wanted to sample for.
 
         Sampling at equidistant increments might actually drop features of the
         curve. In the most extreme case, a vertical line segment, such sampling
         returns one (implementation dependent) point on that line segment. When
         `endpoints` is set to `"include"`, we always include the endpoints of
         each path segment even if they are not spaced by the sampling interval.
-        If set to `"exclude"` we strictly sample with the sampling interval.
+        If set to `"exclude"` we strictly sample at the sampling interval.
 
+        EXAMPLES:
+
+        We can sample a pair of line segments::
+
+        >>> from svgpathtools.path import Path
+        >>> path = Path("M 0 0 L 1 1 L 2 0")
+        >>> SVGPlot.sample_path(path, .5)
+        [(0.0, 0.0), (0.5, 0.5), (1.0, 1.0), (1.5, 0.5), (2.0, 0.0)]
+
+        We can sample a pair of Bezier curves, going from (0, 0) to (2, 0) with
+        a sharp peak at (1, 1)::
+
+        >>> from svgpathtools.path import Path
+        >>> path = Path("M0 0 C 1 0, 1 0, 1 1 C 1 0, 1 0, 2 0")
+        >>> SVGPlot.sample_path(path, 1)
+        [(0.0, 0.0), (1.0, 1.0), (2.0, 0.0)]
+        >>> len(SVGPlot.sample_path(path, .5))
+        5
+        >>> len(SVGPlot.sample_path(path, .1))
+        21
+        >>> len(SVGPlot.sample_path(path, .01))
+        201
+
+        We can sample vertical line segments::
+
+        >>> from svgpathtools.path import Path
+        >>> path = Path("M 0 0 L 0 1 M 1 1 L 1 0")
+        >>> SVGPlot.sample_path(path, .0001)
+        [(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]
+        >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial points of the segments
+        [(0.0, 1.0), (1.0, 0.0)]
 
         """
-        if error is None:
-            # We allow the actual sampling points to be 1% from their correct positions.
-            error = sampling_interval / 100
+        import numpy
+        import svgpathtools
 
-        import svgpathtools.path
-        ILENGTH_S_TOL = svgpathtools.path.ILENGTH_S_TOL if error == 0 else error / 8
-        ILENGTH_ERROR = svgpathtools.path.ILENGTH_ERROR if error == 0 else error / 65536
-        LENGTH_ERROR = svgpathtools.path.LENGTH_ERROR if error == 0 else error / 65536
+        EPS = 1e-6
 
-        # The path consists of path segments, each mapping a time t in [0, 1]
-        # to the actual path coordinates. To get equidistant increments on the
-        # x-axis, we need to determine the corresponding (typically
-        # non-equidistant) increments in t. For this, we project the path down
-        # to the x-axis so that arc length at time t is the same as the total
-        # length in x direction at time t.
+        samples = []
+
+        # The current path length on the x-axis at which we plan to sample (in the range [0, length of the current path segment]):
+        X = 0
+
+        # A projection down to the x-axis so that we can measure lengths in
+        # x-axis direction only.
         from numpy import identity
         project_x = identity(3)
         project_x[1][1] = 0
 
-        xpath = svgpathtools.path.transform(path, project_x)
-        xlengths = [p.length() for p in xpath]
+        for segment in path:
+            sample_at = []
 
-        points = []
+            if endpoints == 'include':
+                # Include the initial point of the new path segment.
+                sample_at.append(0)
 
-        # We now sample the curve in euidistant increments along the x-axis.
-        # For this we split the curve into path segments, starting at the first:
-        segment = 0
+                # Continue sampling from the start of the new path segment.
+                assert sampling_interval >= X, "sampling with endpoints should produce more points than sampling without"
+                X = sampling_interval
 
-        # The current path length on the x axis:
-        x = 0
+            x = numpy.poly1d(numpy.real(segment.poly()))
 
-        # The corresponding time on the path segment that gives `x`.
-        t = 0
+            # At the extrema of the projection to the x-axis, the curve changes direction.
+            extrema = list(root.real for root in numpy.polyder(x).roots if abs(root.imag) < EPS and 0 < root.real < 1)
 
-        # The increment of t that approximately gives an increment of
-        # sampling_interval.
-        increments = [0]
+            # Eventually this will contain the total length of this path segment.
+            segment_length = 0
 
-        def guess_increment():
-            if len(increments) >= 2:
-                alg = "constant"
-            else:
-                alg = "constant"
+            # The time at which we sampled last.
+            T = 0
 
-            if alg == "constant":
-                return increments[-1]
-            if alg == "spline":
-                values = increments[-3:]
-                xs = [0]
-                for value in range(len(values) - 1):
-                    xs.append(xs[-1] - sampling_interval)
-                xs.reverse()
-                from scipy.interpolate import CubicSpline
-                S = CubicSpline(xs, values)
-                return float(S(sampling_interval))
+            # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
+            for tmin, tmax in zip([0] + extrema, extrema + [1]):
+                snippet_length = abs(x(tmax) - x(tmin))
+                segment_length += snippet_length
 
-        # For debugging purposes, we keep track of how often the guessed
-        # increment was correct (and produced a speedup.)
-        statistics = [0, 0]
+                sgn = 1 if x(tmax) > x(tmin) else -1
+                f = sgn * (x - x(tmin)) + (segment_length - snippet_length)
 
-        def add_sample(s):
-            r"""
-            Sample the current path segment at time `s` and record the sample.
-            """
-            p = path[segment].point(s)
-            points.append((p.real, p.imag))
+                while X <= segment_length:
+                    if abs(X - segment_length) < EPS:
+                        # We are very close to the end of this segment. In this
+                        # case the root computation below tends to get unstable
+                        # returning roots that are slightly beyond [0, 1] so we
+                        # skip forward to the end of the segment.
+                        sample_at.append(tmax)
+                        X = segment_length
+                        break
 
-        def xlength(s):
-            r"""
-            Return the arc length on the x-axis at time `s`.
-            """
-            return xpath[segment].length(0, s, error=LENGTH_ERROR) 
+                    # The time at which we reach position X is in [tmin, tmax)
+                    # Note that this call is where all the runtime is spent in sampling.
+                    # Since the polynomial is at most of degree 3 we could
+                    # possibly solve symbolically and then plug in all the
+                    # values for X at once which might be much faster:
+                    # https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
+                    roots = (f - X).roots
+                    assert len(roots), f"The polynomial {f} should not be constant and therefore should have some roots."
+                    real_roots = roots.real[abs(roots.imag) < EPS]
+                    assert len(real_roots), f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but we only found complex roots {roots}"
+                    eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
+                    assert eligible_roots, f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but all roots were outside that range: {roots}"
+                    t = min(eligible_roots)
 
-        while True:
-            assert 0 <= t <= 1, f"Cannot sample at time {t}."
+                    sample_at.append(t)
 
-            add_sample(t)
+                    X += sampling_interval
 
-            # Increment to the next desired x.
-            x += sampling_interval
+            # We have left the current path segment.
+            if endpoints == 'include':
+                # Include the final point of this path segment.
+                sample_at.append(1)
 
-            while x > xlengths[segment]:
-                print(f"{int(statistics[0] / (statistics[1] + 1) * 100)}%")
+            assert sample_at == sorted(sample_at), f"Samples are out of order {sample_at}"
 
-                # We have left the current path segment.
+            if endpoints == 'include':
+                # Do not sample points that are just a numerical-error away from the end points.
+                assert sample_at[1] > EPS, f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_t[1]}"
+                if 1 - sample_at[-2] < EPS:
+                    sample_at = sample_at[:-2] + [sample_at[-1]]
 
-                if endpoints == 'include':
-                    # Include the final point of this path segment.
-                    add_sample(1)
+                # Do not sample at the initial point if the path is connected
+                # so we do not get a duplicate with the end point of the
+                # previous segment.
+                if samples and abs(segment.point(0) - samples[-1]) < EPS:
+                    sample_at = sample_at[1:]
 
-                # Go to the next path segment.
-                x -= xlengths[segment]
-                segment += 1
+            # Sample the curve
+            samples.extend(segment.poly()(sample_at))
 
-                if segment >= len(path):
-                    # We have sampled each path segment of the path. The sample
-                    # is complete.
-                    return np.array(points)
+            # Go to the next path segment.
+            X -= segment_length
 
-                if endpoints == 'include':
-                    # Include the initial point of this path segment.
-                    add_sample(0)
+            assert X >= 0, f"Cannot sample at negative x={x}"
 
-                    if points[-1] == points[-2]:
-                        # Drop one of the endpoints when the path is connected.
-                        points.pop()
-
-                    # Continue sampling from the start of the new path segment.
-                    x = sampling_interval
-                    t = 0
-
-            assert x >= 0, f"Cannot sample at negative x={x}"
-
-            # We now calculate the `t` that produces `x` on xpath. We start
-            # with a guess and if that is not good enough, we compute the exact
-            # value (which is very expensive.)
-            increment = guess_increment()
-            if increment < 0:
-                increment = 0
-            if increment > 1 - t:
-                increment = 1 - t
-            increments.append(increment)
-            t += increment
-            statistics[1] += 1
-
-            # Check whether the guessed `t` is a good approximation.
-            if error == 0 or abs(xlength(t) - x) > error:
-                # Compute the correct value of `t`.
-                s = xpath[segment].ilength(x, s_tol=ILENGTH_S_TOL, error=ILENGTH_ERROR)
-
-                assert 0 <= s <= 1, f"svgpathtools produced invalid time {s}"
-                
-                if error != 0 and abs(xlength(s) - x) > error:
-                    # TODO: Warn
-                    print(f"Went from guessed {t} to correct {s} to get to the x path length of {x}. However, this actually got us the x path length of {xlength(s)} which is not good enough for our error bound {error}.")
-
-                # Update our guess for the step size on the time axis.
-                increments[-1] = s - (t - increment)
-                print(f"{increment} was a bad guess. The correct guess would have been {increments[-1]}.")
-                t = s
-            else:
-                statistics[0] += 1
-
-
-            add_sample(t)
+        return [(p.real, p.imag) for p in samples]
 
     @property
     @cache
