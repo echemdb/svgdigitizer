@@ -74,7 +74,9 @@ class CV():
     @property
     def x_label(self):
         r"""
-        In contrast to the y-label, which only consists of a unit, the x-label consitst of a unit and a reference.
+        Return the label on the x-axis of the SVG plot.
+        
+        In contrast to the y-label, which only consists of a unit, the x-label consists of a unit and a reference.
         The unit and the reference are united in a single string, which are separated by x_label.
         """
         pattern = r'^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
