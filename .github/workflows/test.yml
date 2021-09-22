@@ -40,12 +40,12 @@ jobs:
       - name: sampling-test
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sampling.svg --sampling_interval 1
+          svgdigitizer digitize test/data/sampling.svg --sampling_interval .00101
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling.csv"), pandas.read_csv("test/data/sampling.csv.expected"))'
       - name: sampling-many-points-test
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval 1
+          svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval .001508
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling_many_points.csv"), pandas.read_csv("test/data/sampling_many_points.csv.expected"))'
       - name: no-layer-test
         shell: bash -l {0}
