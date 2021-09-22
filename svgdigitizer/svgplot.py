@@ -1071,10 +1071,36 @@ class SVGPlot:
     def plot(self):
         r"""
         Visualize the data in this plot.
+
+        EXMAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.plot()
+
         """
-        fig, ax = plt.subplots(1, 1)
-        self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax)
-        plt.xlabel(self.xlabel)
-        plt.ylabel(self.ylabel)
-        plt.tight_layout()
-        plt.show()
+        self.df.plot(x=self.xlabel, y=self.ylabel, ylabel=self.ylabel, legend=False)
