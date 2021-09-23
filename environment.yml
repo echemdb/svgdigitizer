@@ -17,4 +17,5 @@ dependencies:
   - svgpathtools
   - pycodestyle
   - pytest
+  - scipy
   - astropy

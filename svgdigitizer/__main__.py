@@ -21,7 +21,7 @@
 # ********************************************************************
 import click
 
-help_sampling = 'sampling interval (in mV)'
+help_sampling = 'sampling interval on the x-axis'
 
 
 @click.group()

@@ -19,7 +19,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
-from svgpathtools import Path, Line
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -96,26 +95,6 @@ class SVGPlot:
         self.sampling_interval = sampling_interval
         self._curve = curve
         self._algorithm = algorithm
-
-    @property
-    @cache
-    def transformed_sampling_interval(self):
-        if not self.sampling_interval:
-            return None
-        if self._algorithm == 'axis-aligned':
-            x1 = (0, 0)
-            x2 = (self.sampling_interval, 0)
-        elif self._algorithm == 'mark-aligned':
-            x1 = self.marked_points[f"{self.xlabel}1"]
-            x2 = self.marked_points[f"{self.xlabel}2"]
-            unit = complex(x2[0] - x1[0], x2[1] - x1[1])
-            unit /= abs(unit)
-            unit *= self.sampling_interval
-            x2 = (x1[0] + unit.real, x1[1] + unit.imag)
-        else:
-            raise NotImplementedError(f"sampling-interval not supported for {self._algorithm}")
-
-        return self.sampling_interval / 1000 / (self.from_svg(*x2)[0] - self.from_svg(*x1)[0])
 
     @property
     @cache
@@ -704,8 +683,9 @@ class SVGPlot:
         r"""
         Return the path that is tracing the plot in the SVG.
 
-        Return the `<path>` tag that is not used for other purposes such as
-        pointing to axis labels.
+        This essentially returns the `<path>` tag that is not used for other
+        purposes such as pointing to axis labels. However, the path is written
+        in the plot coordinate system.
 
         EXAMPLES:
 
@@ -738,7 +718,7 @@ class SVGPlot:
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> plot.curve
-        [(0.0, 100.0), (100.0, 0.0)]
+        Path(Line(start=0j, end=(1+1j)))
 
         TESTS:
 
@@ -767,11 +747,8 @@ class SVGPlot:
 
         path = paths[0]
 
-        if self.sampling_interval:
-            # sample path if interval is set
-            return self.sample_path(path.path)
-        else:
-            return path.points
+        from svgpathtools.path import transform
+        return transform(path.path, self.transformation)
 
     @property
     @cache
@@ -798,50 +775,326 @@ class SVGPlot:
 
         return labeled_paths
 
-    def sample_path(self, path):
-        '''samples a path with equidistant x segment by segment'''
-        xmin, xmax, ymin, ymax = path.bbox()
-        x_samples = np.linspace(xmin, xmax, int(abs(xmin - xmax)/self.transformed_sampling_interval))
-        points = []
+    @classmethod
+    def sample_path(self, path, sampling_interval, endpoints="include"):
+        r"""
+        Return points on `path`, sampled at equidistant increments on the
+        x-axis.
+
+        INPUT:
+
+        - `path` -- the SVG path to sample along the SVG x-axis.
+
+        - `sampling_interval` -- the distance between two samples on the SVG
+          x-axis.
+
+        - `endpoints` -- whether to include the endpoints of each path segment
+          `"include"` or not to include them `"exclude"`; see below for details.
+
+        ALGORITHM:
+
+        Let us assume that `path` is made up of Bezier curve segments (the
+        other cases work essentially the same but are easier.) We project the
+        curve down to the x-axis. This projection is stil a Bezier curve, i.e.,
+        of the form
+
+            B(t) = (1-t)^3 P_0 + 3t(1-t)^2 P_1 + 3t^2(1-t) P_2 + t^3 P_3.
+
+        Since all the control points are on the axis, this is just a univariate
+        polynomial of degree 3, in particular we can easily differentiate it,
+        take its absolute value and integrate again. The result is a piecewise
+        function x(t) that is a polynomial of degree three and it encodes the
+        total distance on the x-axis at time t. So given some `X` we can easily
+        solve for
+
+            x(T) = X
+
+        Incrementing `X` by the step size, this gives us all the times `T` that
+        we wanted to sample for.
+
+        Sampling at equidistant increments might actually drop features of the
+        curve. In the most extreme case, a vertical line segment, such sampling
+        returns one (implementation dependent) point on that line segment. When
+        `endpoints` is set to `"include"`, we always include the endpoints of
+        each path segment even if they are not spaced by the sampling interval.
+        If set to `"exclude"` we strictly sample at the sampling interval.
+
+        EXAMPLES:
+
+        We can sample a pair of line segments::
+
+        >>> from svgpathtools.path import Path
+        >>> path = Path("M 0 0 L 1 1 L 2 0")
+        >>> SVGPlot.sample_path(path, .5)
+        [(0.0, 0.0), (0.5, 0.5), (1.0, 1.0), (1.5, 0.5), (2.0, 0.0)]
+
+        We can sample a pair of Bezier curves, going from (0, 0) to (2, 0) with
+        a sharp peak at (1, 1)::
+
+        >>> from svgpathtools.path import Path
+        >>> path = Path("M0 0 C 1 0, 1 0, 1 1 C 1 0, 1 0, 2 0")
+        >>> SVGPlot.sample_path(path, 1)
+        [(0.0, 0.0), (1.0, 1.0), (2.0, 0.0)]
+        >>> len(SVGPlot.sample_path(path, .5))
+        5
+        >>> len(SVGPlot.sample_path(path, .1))
+        21
+        >>> len(SVGPlot.sample_path(path, .01))
+        201
+
+        We can sample vertical line segments::
+
+        >>> from svgpathtools.path import Path
+        >>> path = Path("M 0 0 L 0 1 M 1 1 L 1 0")
+        >>> SVGPlot.sample_path(path, .0001)
+        [(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]
+        >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial points of the segments
+        [(0.0, 1.0), (1.0, 0.0)]
+
+        """
+        import numpy
+        import svgpathtools
+
+        EPS = 1e-6
+
+        samples = []
+
+        # The current path length on the x-axis at which we plan to sample (in the range [0, length of the current path segment]):
+        X = 0
+
         for segment in path:
-            segment_path = Path(segment)
-            xmin_segment, xmax_segment, _, _ = segment.bbox()
-            segment_points = [[], []]
+            sample_at = []
 
-            for x in x_samples:
-                # only sample the x within the segment
-                if x >= xmin_segment and x <= xmax_segment:
-                    intersects = Path(Line(complex(x, ymin), complex(x, ymax))).intersect(segment_path)
-                    # it is possible that a segment includes both scan directions
-                    # which leads to two intersections
-                    for i in range(len(intersects)):
-                        point = intersects[i][0][1].point(intersects[i][0][0])
-                        segment_points[i].append((point.real, point.imag))
+            if endpoints == 'include':
+                # Include the initial point of the new path segment.
+                sample_at.append(0)
 
-            # second intersection is appended in reverse order!!
-            if len(segment_points[1]) > 0:
-                segment_points[0].extend(segment_points[1][::-1])
-            # sometimes segments are shorter than sampling interval
-            if len(segment_points[0]) > 0:
-                first_segment_point = (segment.point(0).real, segment.point(0).imag)
+                # Continue sampling from the start of the new path segment.
+                assert sampling_interval >= X, "sampling with endpoints should produce more points than sampling without"
+                X = sampling_interval
 
-                if (segment_points[0][-1][0]-first_segment_point[0])**2+(segment_points[0][-1][1]-first_segment_point[1])**2 > (segment_points[0][0][0]-first_segment_point[0])**2+(segment_points[0][0][1]-first_segment_point[1])**2:
-                    points.extend(segment_points[0])
-                else:
-                    points.extend(segment_points[0][::-1])
+            x = numpy.poly1d(numpy.real(segment.poly()))
 
-        return np.array(points)
+            # At the extrema of the projection to the x-axis, the curve changes direction.
+            extrema = list(root.real for root in numpy.polyder(x).roots if abs(root.imag) < EPS and 0 < root.real < 1)
+
+            # Eventually this will contain the total length of this path segment.
+            segment_length = 0
+
+            # The time at which we sampled last.
+            T = 0
+
+            # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
+            for tmin, tmax in zip([0] + extrema, extrema + [1]):
+                snippet_length = abs(x(tmax) - x(tmin))
+                segment_length += snippet_length
+
+                sgn = 1 if x(tmax) > x(tmin) else -1
+                f = sgn * (x - x(tmin)) + (segment_length - snippet_length)
+
+                while X <= segment_length:
+                    if abs(X - segment_length) < EPS:
+                        # We are very close to the end of this segment. In this
+                        # case the root computation below tends to get unstable
+                        # returning roots that are slightly beyond [0, 1] so we
+                        # skip forward to the end of the segment.
+                        sample_at.append(tmax)
+                        X = segment_length
+                        break
+
+                    # The time at which we reach position X is in [tmin, tmax)
+                    # Note that this call is where all the runtime is spent in sampling.
+                    # Since the polynomial is at most of degree 3 we could
+                    # possibly solve symbolically and then plug in all the
+                    # values for X at once which might be much faster:
+                    # https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
+                    roots = (f - X).roots
+                    assert len(roots), f"The polynomial {f} should not be constant and therefore should have some roots."
+                    real_roots = roots.real[abs(roots.imag) < EPS]
+                    assert len(real_roots), f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but we only found complex roots {roots}"
+                    eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
+                    assert eligible_roots, f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but all roots were outside that range: {roots}"
+                    t = min(eligible_roots)
+
+                    sample_at.append(t)
+
+                    X += sampling_interval
+
+            # We have left the current path segment.
+            if endpoints == 'include':
+                # Include the final point of this path segment.
+                sample_at.append(1)
+
+            assert sample_at == sorted(sample_at), f"Samples are out of order {sample_at}"
+
+            if endpoints == 'include':
+                # Do not sample points that are just a numerical-error away from the end points.
+                assert sample_at[1] > EPS, f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_t[1]}"
+                if 1 - sample_at[-2] < EPS:
+                    sample_at = sample_at[:-2] + [sample_at[-1]]
+
+                # Do not sample at the initial point if the path is connected
+                # so we do not get a duplicate with the end point of the
+                # previous segment.
+                if samples and abs(segment.point(0) - samples[-1]) < EPS:
+                    sample_at = sample_at[1:]
+
+            # Sample the curve
+            samples.extend(segment.poly()(sample_at))
+
+            # Go to the next path segment.
+            X -= segment_length
+
+            assert X >= 0, f"Cannot sample at negative x={x}"
+
+        return [(p.real, p.imag) for p in samples]
 
     @property
     @cache
     def df(self):
-        return pd.DataFrame([self.from_svg(x, y) for (x, y) in self.curve], columns=[self.xlabel, self.ylabel])
+        r"""
+        Return the plot data as a dataframe of pairs (x, y).
+
+        The returned data lives in the plot coordinate system.
+
+        EXMAMPLES::
+
+        A diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
+        i.e., the function y=x::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  1.0  1.0
+
+        The same plot but now sampled at 0.2 increments on the x-axis::
+
+            >>> plot = SVGPlot(svg, sampling_interval=.2)
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  0.2  0.2
+            2  0.4  0.4
+            3  0.6  0.6
+            4  0.8  0.8
+            5  1.0  1.0
+
+        Again diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
+        i.e., visually the function y=x. However, the coordinate system is
+        skewed, the x-axis is parallel to the plot and so this is actually the
+        function y=0::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 0" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg, algorithm='mark-aligned')
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  1.0  0.0
+
+        The same plot but now sampled at 0.2 increments on the x-axis::
+
+            >>> plot = SVGPlot(svg, sampling_interval=.2, algorithm='mark-aligned')
+            >>> plot.df
+                 x    y
+            0  0.0  0.0
+            1  0.2  0.0
+            2  0.4  0.0
+            3  0.6  0.0
+            4  0.8  0.0
+            5  1.0  0.0
+
+        """
+        if self.sampling_interval:
+            points = SVGPlot.sample_path(self.curve, self.sampling_interval)
+        else:
+            from .svg import LabeledPath
+            points = LabeledPath.path_points(self.curve)
+
+        return pd.DataFrame(points, columns=[self.xlabel, self.ylabel])
 
     def plot(self):
-        '''curve function'''
-        fig, ax = plt.subplots(1, 1)
-        self.df.plot(x=self.xlabel, y=self.ylabel, ax=ax)
-        plt.xlabel(self.xlabel)
-        plt.ylabel(self.ylabel)
-        plt.tight_layout()
-        plt.show()
+        r"""
+        Visualize the data in this plot.
+
+        EXMAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.plot()
+
+        """
+        self.df.plot(x=self.xlabel, y=self.ylabel, ylabel=self.ylabel, legend=False)

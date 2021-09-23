@@ -39,6 +39,7 @@ setup(
         'pdf2image',
         'svgwrite',
         'svgpathtools',
+        'scipy',
         'astropy',
         'datetime'
     ],
