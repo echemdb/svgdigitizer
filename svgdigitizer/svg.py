@@ -37,22 +37,22 @@ class SVG:
 
     An SVG can be created from a string or from a (file) stream::
 
-    >>> svg = SVG(r'''
-    ... <svg>
-    ...     <!-- an empty SVG -->
-    ... </svg>''')
-    >>> svg
-    SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
+        >>> svg = SVG(r'''
+        ... <svg>
+        ...     <!-- an empty SVG -->
+        ... </svg>''')
+        >>> svg
+        SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
 
     ::
 
-    >>> from io import StringIO
-    >>> svg = SVG(StringIO(r'''
-    ... <svg>
-    ...     <!-- an empty SVG -->
-    ... </svg>'''))
-    >>> svg
-    SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...     <!-- an empty SVG -->
+        ... </svg>'''))
+        >>> svg
+        SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
 
     """
     def __init__(self, svg):
@@ -83,20 +83,20 @@ class SVG:
 
         EXAMPLES::
 
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 100 L 100 0" />
-        ...     <text x="0" y="0">curve: 0</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> svg.get_labeled_paths("curve")
-        [[Path "curve: 0"]]
-        >>> svg.get_labeled_paths("text")
-        []
-        >>> svg.get_labeled_paths()
-        [[Path "curve: 0"]]
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.get_labeled_paths("curve")
+            [[Path "curve: 0"]]
+            >>> svg.get_labeled_paths("text")
+            []
+            >>> svg.get_labeled_paths()
+            [[Path "curve: 0"]]
 
         """
         labeled_paths = []
@@ -150,23 +150,23 @@ class SVG:
 
         EXAMPLES::
 
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 100 L 100 0" />
-        ...     <text x="0" y="0">curve: 0</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> svg.get_texts()
-        [<text>curve: 0</text>]
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.get_texts()
+            [<text>curve: 0</text>]
 
         Named matches are directly available as attributes on the returned
         texts::
 
-        >>> curves = svg.get_texts("curve: (?P<name>.*)")
-        >>> curves[0].name
-        '0'
+            >>> curves = svg.get_texts("curve: (?P<name>.*)")
+            >>> curves[0].name
+            '0'
 
         """
         labels = []
@@ -411,17 +411,17 @@ class LabeledPath:
 
         EXAMPLES::
 
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 100 L 100 0" />
-        ...     <text x="0" y="100">curve: 0</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> path = svg.get_labeled_paths()[0].paths[0]
-        >>> path.far
-        (100.0, 0.0)
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="100">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> path = svg.get_labeled_paths()[0].paths[0]
+            >>> path.far
+            (100.0, 0.0)
 
         """
         text = self._label.x, self._label.y
