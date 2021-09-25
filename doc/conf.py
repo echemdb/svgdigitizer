@@ -5,12 +5,16 @@ author = 'the svgdigitizer authors'
 release = '0.0.0'
 
 
-extensions = []
+extensions = ["myst_parser", "sphinx.ext.autodoc", "sphinx.ext.todo"]
+
+source_suffix = [".rst", ".md"]
 
 templates_path = ['_templates']
 
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['generated', 'Thumbs.db', '.DS_Store']
 
-html_theme = 'alabaster'
+todo_include_todos = True
+
+html_theme = 'sphinx_rtd_theme'
 
 html_static_path = []

@@ -20,3 +20,8 @@ dependencies:
   - scipy
   - astropy
   - sphinx
+  - myst-parser
+  - pip
+  - pip:
+    - linkchecker
+    - sphinx_rtd_theme
