@@ -83,7 +83,7 @@ class SVGPlot:
         ... </svg>'''))
         >>> plot = SVGPlot(svg)
         >>> plot.df
-            x    y
+             x    y
         0  0.0  0.0
         1  1.0  1.0
 
@@ -535,8 +535,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> SVGPlot(svg).transformation
             array([[ 0.01,  0.  ,  0.  ],
-                [ 0.  , -0.01,  1.  ],
-                [ 0.  ,  0.  ,  1.  ]])
+                   [ 0.  , -0.01,  1.  ],
+                   [ 0.  ,  0.  ,  1.  ]])
 
         A typical plot. Like the above but the origin is shifted and the two
         axes are not scaled equally. Here (1000, 500) is mapped to (0, 0) and
@@ -600,8 +600,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> SVGPlot(svg, algorithm='mark-aligned').transformation
             array([[ 0.01,  0.01, -1.  ],
-                [ 0.  , -0.01,  1.  ],
-                [ 0.  ,  0.  ,  1.  ]])
+                   [ 0.  , -0.01,  1.  ],
+                   [ 0.  ,  0.  ,  1.  ]])
 
         """
         # We construct the basic transformation from the SVG coordinate system
