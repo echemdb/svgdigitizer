@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>svgdigitizer.svgplot &mdash; svgdigitizer 0.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cyclic Voltamograms" href="cv.html" />
+    <link rel="prev" title="svgdigitizer.svg" href="svg.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> svgdigitizer
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cv.html">Cyclic Voltamograms</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">svgdigitizer</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+      <li><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/svgplot.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="module-svgdigitizer.svgplot">
+<span id="svgdigitizer-svgplot"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code><a class="headerlink" href="#module-svgdigitizer.svgplot" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgplot.</span></span><span class="sig-name descname"><span class="pre">SVGPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'axis-aligned'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot" title="Permalink to this definition"></a></dt>
+<dd><p>A plot as a Scalable Vector Graphics (SVG) which can be converted to (x, y)
+coordinate pairs.</p>
+<p>Typically, the SVG input has been created by tracing a measurement plot from
+a publication with a <cite>&lt;path&gt;</cite> in an SVG editor such as Inkscape. Such a
+path can then be analyzed by this class to produce the coordinates
+corrsponding to the original measured values.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">algorithm</span></code> – mapping from the SVG coordinate system to the plot
+coordinate system. The default, <cite>“axis-aligned”</cite> assumes that the plot
+axes are perfectly aligned with the SVG coordinate system. Alternatively,
+<cite>“mark-aligned”</cite> assumes the end points of the axis markers are aligned,
+i.e., <cite>x1</cite> and <cite>x2</cite> have the exact same y coordinate in the plot
+coordinate system to also handle coordinate systems that are rotated or
+skewed in the SVG.</p></li>
+</ul>
+<p>EXAMPLES:</p>
+<p>An instance of this class can be created from a specially prepared SVG
+file. There must at least be a <cite>&lt;path&gt;</cite> with a corresponding label. Here, a
+segment goes from <cite>(0, 100)</cite> to <cite>(100, 0)</cite> in the (negative) SVG coordinate
+system which corresponds to a segment from <cite>(0, 0)</cite> to <cite>(1, 1)</cite> in the plot
+coordinate system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<span class="go">     x    y</span>
+<span class="go">0  0.0  0.0</span>
+<span class="go">1  1.0  1.0</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.axis_labels">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">axis_labels</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.axis_labels" title="Permalink to this definition"></a></dt>
+<dd><p>Return the label for each axis.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">axis_labels</span>
+<span class="go">{&#39;x&#39;: &#39;cm&#39;, &#39;y&#39;: &#39;A&#39;}</span>
+</pre></div>
+</div>
+<p>TESTS:</p>
+<p>Labels on the axes must match:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1m&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">TestCase</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">as</span> <span class="n">logs</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="n">plot</span><span class="o">.</span><span class="n">axis_labels</span>
+<span class="gp">... </span>   <span class="nb">print</span><span class="p">(</span><span class="n">logs</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+<span class="go">{&#39;x&#39;: &#39;m&#39;, &#39;y&#39;: None}</span>
+<span class="go">[&#39;WARNING:svgplot:Labels on x axis do not match. Will ignore label cm and use m.&#39;]</span>
+</pre></div>
+</div>
+<p>Labels on the scalebar must match the labels on the axes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1m&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0mA&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -300 300 L -200 300&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -300 300 L -200 200&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-300&quot; y=&quot;300&quot;&gt;y_scale_bar: 1A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">TestCase</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">as</span> <span class="n">logs</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="n">plot</span><span class="o">.</span><span class="n">axis_labels</span>
+<span class="gp">... </span>   <span class="nb">print</span><span class="p">(</span><span class="n">logs</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+<span class="go">{&#39;x&#39;: &#39;m&#39;, &#39;y&#39;: &#39;A&#39;}</span>
+<span class="go">[&#39;WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.curve">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">curve</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.curve" title="Permalink to this definition"></a></dt>
+<dd><p>Return the path that is tracing the plot in the SVG.</p>
+<p>This essentially returns the <cite>&lt;path&gt;</cite> tag that is not used for other
+purposes such as pointing to axis labels. However, the path is written
+in the plot coordinate system.</p>
+<p>EXAMPLES:</p>
+<p>A plot going from (0, 0) to (1, 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">curve</span>
+<span class="go">Path(Line(start=0j, end=(1+1j)))</span>
+</pre></div>
+</div>
+<p>TESTS:</p>
+<p>Test that filtering by curve identifier works:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">curve</span><span class="o">=</span><span class="s2">&quot;main curve&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">curve</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">Exception</span>: <span class="n">No curve main curve found in SVG.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.df">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.df" title="Permalink to this definition"></a></dt>
+<dd><p>Return the plot data as a dataframe of pairs (x, y).</p>
+<p>The returned data lives in the plot coordinate system.</p>
+<p>EXMAMPLES:</p>
+<p>A diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
+i.e., the function y=x:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<span class="go">     x    y</span>
+<span class="go">0  0.0  0.0</span>
+<span class="go">1  1.0  1.0</span>
+</pre></div>
+</div>
+<p>The same plot but now sampled at 0.2 increments on the x-axis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<span class="go">     x    y</span>
+<span class="go">0  0.0  0.0</span>
+<span class="go">1  0.2  0.2</span>
+<span class="go">2  0.4  0.4</span>
+<span class="go">3  0.6  0.6</span>
+<span class="go">4  0.8  0.8</span>
+<span class="go">5  1.0  1.0</span>
+</pre></div>
+</div>
+<p>Again diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
+i.e., visually the function y=x. However, the coordinate system is
+skewed, the x-axis is parallel to the plot and so this is actually the
+function y=0:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;mark-aligned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<span class="go">     x    y</span>
+<span class="go">0  0.0  0.0</span>
+<span class="go">1  1.0  0.0</span>
+</pre></div>
+</div>
+<p>The same plot but now sampled at 0.2 increments on the x-axis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">.2</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;mark-aligned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<span class="go">     x    y</span>
+<span class="go">0  0.0  0.0</span>
+<span class="go">1  0.2  0.0</span>
+<span class="go">2  0.4  0.0</span>
+<span class="go">3  0.6  0.0</span>
+<span class="go">4  0.8  0.0</span>
+<span class="go">5  1.0  0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.from_svg">
+<span class="sig-name descname"><span class="pre">from_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.from_svg" title="Permalink to this definition"></a></dt>
+<dd><p>Map the point (x, y) from the SVG coordinate system to the plot
+coordinate system.</p>
+<p>EXAMPLES:</p>
+<p>A simple plot. The plot uses a Cartesian (positive) coordinate system
+which in the SVG becomes a negative coordinate system, i.e., in the
+plot y grows towards the bottom. Here, the SVG coordinate (0, 100) is
+mapped to (0, 0) and (100, 0) is mapped to (1, 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="go">(0.0, 0.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">(1.0, 1.0)</span>
+</pre></div>
+</div>
+<p>A typical plot. Like the above but the origin is shifted and the two
+axes are not scaled equally. Here (1024, 512) is mapped to (0, 0) and
+(1124, 256) is mapped to (1, 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 1024 612 L 1024 512&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;1024&quot; y=&quot;612&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 1124 612 L 1124 512&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;1124&quot; y=&quot;612&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 924 512 L 1024 512&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;924&quot; y=&quot;512&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 924 256 L 1024 256&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;924&quot; y=&quot;256&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+<span class="go">(0.0, 0.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">allclose</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">allclose</span><span class="p">(</span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">1124</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>A skewed plot. In this plot the axes are not orthogonal. In real plots
+the axes might be non-orthogonal but not as much as in this
+example. Here, one axis goes horizontally from (0, 100) to (100, 100)
+and the other axis goes at an angle from (0, 100) to (100, 0):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 0 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;mark-aligned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="go">(0.0, 0.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="go">(1.0, 0.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">(0.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">from_svg</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">(-1.0, 1.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.labeled_paths">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">labeled_paths</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.labeled_paths" title="Permalink to this definition"></a></dt>
+<dd><p>All paths with their corresponding label.</p>
+<p>We only consider paths which are grouped with a label, i.e., a <cite>&lt;text&gt;</cite>
+element. These text elements then tell us about the meaning of that
+path, e.g., the path that is labeled as <cite>curve</cite> is the actual graph we
+are going to extract the (x, y) coordinate pairs from.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.marked_points">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">marked_points</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.marked_points" title="Permalink to this definition"></a></dt>
+<dd><p>Return the points that have been marked on the axes of the plot.</p>
+<p>For each point, a tuple is returned relating the point’s coordinates in
+the SVG coordinate system to the points coordinates in the plot
+coordinate system, or <cite>None</cite> if that points coordinate is not known.</p>
+<p>EXAMPLES:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">marked_points</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;x2&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span> <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span> <span class="s1">&#39;y2&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span> <span class="s1">&#39;y1&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>TESTS:</p>
+<p>Test that scalebars can be parsed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -300 300 L -200 300&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -300 300 L -200 200&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-300&quot; y=&quot;300&quot;&gt;y_scale_bar: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">marked_points</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;x2&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span> <span class="s1">&#39;x1&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span> <span class="s1">&#39;y2&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span> <span class="s1">&#39;y1&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.plot" title="Permalink to this definition"></a></dt>
+<dd><p>Visualize the data in this plot.</p>
+<p>EXMAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.sample_path">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">sample_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'include'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.sample_path" title="Permalink to this definition"></a></dt>
+<dd><p>Return points on <cite>path</cite>, sampled at equidistant increments on the
+x-axis.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><cite>path</cite> – the SVG path to sample along the SVG x-axis.</p></li>
+<li><p><cite>sampling_interval</cite> – the distance between two samples on the SVG
+x-axis.</p></li>
+<li><p><cite>endpoints</cite> – whether to include the endpoints of each path segment
+<cite>“include”</cite> or not to include them <cite>“exclude”</cite>; see below for details.</p></li>
+</ul>
+<p>ALGORITHM:</p>
+<p>Let us assume that <cite>path</cite> is made up of Bezier curve segments (the
+other cases work essentially the same but are easier.) We project the
+curve down to the x-axis. This projection is stil a Bezier curve, i.e.,
+of the form</p>
+<blockquote>
+<div><p>B(t) = (1-t)^3 P_0 + 3t(1-t)^2 P_1 + 3t^2(1-t) P_2 + t^3 P_3.</p>
+</div></blockquote>
+<p>Since all the control points are on the axis, this is just a univariate
+polynomial of degree 3, in particular we can easily differentiate it,
+take its absolute value and integrate again. The result is a piecewise
+function x(t) that is a polynomial of degree three and it encodes the
+total distance on the x-axis at time t. So given some <cite>X</cite> we can easily
+solve for</p>
+<blockquote>
+<div><p>x(T) = X</p>
+</div></blockquote>
+<p>Incrementing <cite>X</cite> by the step size, this gives us all the times <cite>T</cite> that
+we wanted to sample for.</p>
+<p>Sampling at equidistant increments might actually drop features of the
+curve. In the most extreme case, a vertical line segment, such sampling
+returns one (implementation dependent) point on that line segment. When
+<cite>endpoints</cite> is set to <cite>“include”</cite>, we always include the endpoints of
+each path segment even if they are not spaced by the sampling interval.
+If set to <cite>“exclude”</cite> we strictly sample at the sampling interval.</p>
+<p>EXAMPLES:</p>
+<p>We can sample a pair of line segments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgpathtools.path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;M 0 0 L 1 1 L 2 0&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.5</span><span class="p">)</span>
+<span class="go">[(0.0, 0.0), (0.5, 0.5), (1.0, 1.0), (1.5, 0.5), (2.0, 0.0)]</span>
+</pre></div>
+</div>
+<p>We can sample a pair of Bezier curves, going from (0, 0) to (2, 0) with
+a sharp peak at (1, 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgpathtools.path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;M0 0 C 1 0, 1 0, 1 1 C 1 0, 1 0, 2 0&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">[(0.0, 0.0), (1.0, 1.0), (2.0, 0.0)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.5</span><span class="p">))</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.1</span><span class="p">))</span>
+<span class="go">21</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.01</span><span class="p">))</span>
+<span class="go">201</span>
+</pre></div>
+</div>
+<p>We can sample vertical line segments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgpathtools.path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;M 0 0 L 0 1 M 1 1 L 1 0&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.0001</span><span class="p">)</span>
+<span class="go">[(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.0001</span><span class="p">,</span> <span class="n">endpoints</span><span class="o">=</span><span class="s1">&#39;exclude&#39;</span><span class="p">)</span>  <span class="c1"># the implementation chooses the initial points of the segments</span>
+<span class="go">[(0.0, 1.0), (1.0, 0.0)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.scaling_factors">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">scaling_factors</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.scaling_factors" title="Permalink to this definition"></a></dt>
+<dd><p>Return the scaling factors for each axis.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;y_scaling_factor: 50.6&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;xsf: 50.6&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">scaling_factors</span>
+<span class="go">{&#39;x&#39;: 50.6, &#39;y&#39;: 50.6}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.transformation">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">transformation</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.transformation" title="Permalink to this definition"></a></dt>
+<dd><p>Return the affine map from the SVG coordinate system to the plot
+coordinate system as a matrix, see
+<a class="reference external" href="https://en.wikipedia.org/wiki/Affine_group#Matrix_representation">https://en.wikipedia.org/wiki/Affine_group#Matrix_representation</a></p>
+<p>EXAMPLES:</p>
+<p>A simple plot. The plot uses a Cartesian (positive) coordinate system
+which in the SVG becomes a negative coordinate system, i.e., in the
+plot y grows towards the bottom. Here, the SVG coordinate (0, 100) is
+mapped to (0, 0) and (100, 0) is mapped to (1, 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span><span class="o">.</span><span class="n">transformation</span>
+<span class="go">array([[ 0.01,  0.  ,  0.  ],</span>
+<span class="go">       [ 0.  , -0.01,  1.  ],</span>
+<span class="go">       [ 0.  ,  0.  ,  1.  ]])</span>
+</pre></div>
+</div>
+<p>A typical plot. Like the above but the origin is shifted and the two
+axes are not scaled equally. Here (1000, 500) is mapped to (0, 0) and
+(1100, 300) is mapped to (1, 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 1000 600 L 1000 500&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;1000&quot; y=&quot;600&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 1100 600 L 1100 500&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;1100&quot; y=&quot;600&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 900 500 L 1000 500&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;900&quot; y=&quot;500&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 900 300 L 1000 300&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;900&quot; y=&quot;300&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span><span class="o">.</span><span class="n">transformation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">allclose</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">allclose</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="p">[</span>
+<span class="gp">... </span>  <span class="p">[</span> <span class="mf">0.01</span><span class="p">,</span>  <span class="mf">0.000</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.00</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="p">[</span> <span class="mf">0.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.005</span><span class="p">,</span>   <span class="mf">2.50</span><span class="p">],</span>
+<span class="gp">... </span>  <span class="p">[</span> <span class="mf">0.00</span><span class="p">,</span>  <span class="mf">0.000</span><span class="p">,</span>   <span class="mf">1.00</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>A skewed plot. In this plot the axes are not orthogonal. In real plots
+the axes might be non-orthogonal but not as much as in this
+example. Here, one axis goes horizontally from (0, 100) to (100, 100)
+and the other axis goes at an angle from (0, 100) to (100, 0):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 0 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;mark-aligned&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">transformation</span>
+<span class="go">array([[ 0.01,  0.01, -1.  ],</span>
+<span class="go">       [ 0.  , -0.01,  1.  ],</span>
+<span class="go">       [ 0.  ,  0.  ,  1.  ]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="svg.html" class="btn btn-neutral float-left" title="svgdigitizer.svg" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cv.html" class="btn btn-neutral float-right" title="Cyclic Voltamograms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, the svgdigitizer authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

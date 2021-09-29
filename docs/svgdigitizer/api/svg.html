@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>svgdigitizer.svg &mdash; svgdigitizer 0.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="svgdigitizer.svgplot" href="svgplot.html" />
+    <link rel="prev" title="API" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> svgdigitizer
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="svgplot.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cv.html">Cyclic Voltamograms</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">svgdigitizer</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+      <li><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/svg.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="module-svgdigitizer.svg">
+<span id="svgdigitizer-svg"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code><a class="headerlink" href="#module-svgdigitizer.svg" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">LabeledPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath" title="Permalink to this definition"></a></dt>
+<dd><p>A <cite>&lt;path&gt;</cite> element in an SVG such as a trace of a plot with a text label.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">Path &quot;curve: 0&quot;</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.far">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">far</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.far" title="Permalink to this definition"></a></dt>
+<dd><p>Return the end point of this path that is furthest away from the label.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;100&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span><span class="o">.</span><span class="n">far</span>
+<span class="go">(100.0, 0.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.path">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.path" title="Permalink to this definition"></a></dt>
+<dd><p>Return the path transformed to the global SVG coordinate system,
+i.e., with all <cite>transform</cite> attributes resolved.</p>
+<p>Note that we do not resolve CSS <cite>style</cite> transformations yet.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">path</span>
+<span class="go">Path(Line(start=100j, end=(100+0j)))</span>
+</pre></div>
+</div>
+<p>TESTS:</p>
+<p>Transformations on the path are resolved:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; transform=&quot;translate(100 200)&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">path</span>
+<span class="go">Path(Line(start=(100+300j), end=(200+200j)))</span>
+</pre></div>
+</div>
+<p>Transformations on the containing group are resolved:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g transform=&quot;translate(-100 -200)&quot;&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; transform=&quot;translate(100 200)&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">path</span>
+<span class="go">Path(Line(start=100j, end=(100+0j)))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.path_points">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">path_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.path_points" title="Permalink to this definition"></a></dt>
+<dd><p>Return the points defining this path.</p>
+<p>This returns the raw points in the <cite>d</cite> attribute, ignoring the
+commands that connect these points, i.e., ignoring whether these
+points are connected by <cite>M</cite> commands that do not actually draw
+anything, or any kind of visible curve.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.points">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">points</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.points" title="Permalink to this definition"></a></dt>
+<dd><p>Return the points defining this path.</p>
+<p>This returns the raw points in the <cite>d</cite> attribute, ignoring the
+commands that connect these points, i.e., ignoring whether these
+points are connected by <cite>M</cite> commands that do not actually draw
+anything, or any kind of visible curve.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPaths">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">LabeledPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPaths" title="Permalink to this definition"></a></dt>
+<dd><p>A collection of paths associated to a single label.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()</span>
+<span class="go">[[Path &quot;curve: 0&quot;]]</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPaths.label">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPaths.label" title="Permalink to this definition"></a></dt>
+<dd><p>Return the label associated to the paths.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">label</span>
+<span class="go">&lt;text&gt;curve: 0&lt;/text&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="svgdigitizer.svg.SVG">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">SVG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG" title="Permalink to this definition"></a></dt>
+<dd><p>An Scalable Vector Graphics (SVG) document.</p>
+<p>Provides access to the objects in an SVG while hiding details such as
+transformation attributes.</p>
+<p>EXAMPLES:</p>
+<p>An SVG can be created from a string or from a (file) stream:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;!-- an empty SVG --&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span>
+<span class="go">SVG(&#39;&lt;?xml version=&quot;1.0&quot; ?&gt;&lt;svg&gt;\n    &lt;!-- an empty SVG --&gt;\n&lt;/svg&gt;&#39;)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;!-- an empty SVG --&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span>
+<span class="go">SVG(&#39;&lt;?xml version=&quot;1.0&quot; ?&gt;&lt;svg&gt;\n    &lt;!-- an empty SVG --&gt;\n&lt;/svg&gt;&#39;)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svg.SVG.get_labeled_paths">
+<span class="sig-name descname"><span class="pre">get_labeled_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG.get_labeled_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Return all paths with their corresponding <cite>&lt;text&gt;</cite> label if it matches <cite>pattern</cite>.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">(</span><span class="s2">&quot;curve&quot;</span><span class="p">)</span>
+<span class="go">[[Path &quot;curve: 0&quot;]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">()</span>
+<span class="go">[[Path &quot;curve: 0&quot;]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svg.SVG.get_texts">
+<span class="sig-name descname"><span class="pre">get_texts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG.get_texts" title="Permalink to this definition"></a></dt>
+<dd><p>Return all <cite>&lt;text&gt;</cite> elements that match <cite>pattern</cite>.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_texts</span><span class="p">()</span>
+<span class="go">[&lt;text&gt;curve: 0&lt;/text&gt;]</span>
+</pre></div>
+</div>
+<p>Named matches are directly available as attributes on the returned
+texts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curves</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="s2">&quot;curve: (?P&lt;name&gt;.*)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;0&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svg.SVG.transform">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG.transform" title="Permalink to this definition"></a></dt>
+<dd><p>Return a transformed version of <cite>element</cite> with all <cite>transform</cite> attributes applied.</p>
+<p>EXAMPLES:</p>
+<p>Transformations can be applied to text elements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g transform=&quot;translate(100, 10)&quot;&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot; transform=&quot;translate(100, 10)&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">svg</span><span class="o">.</span><span class="n">svg</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed</span><span class="o">.</span><span class="n">toxml</span><span class="p">()</span>
+<span class="go">&#39;&lt;text x=&quot;200.0&quot; y=&quot;20.0&quot;&gt;curve: 0&lt;/text&gt;&#39;</span>
+</pre></div>
+</div>
+<p>Transformations can be applied to paths:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g transform=&quot;translate(100, 10)&quot;&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 0 L 1 1&quot; transform=&quot;translate(100, 10)&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">svg</span><span class="o">.</span><span class="n">svg</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">Path(Line(start=(200+20j), end=(201+21j)))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="svgdigitizer.svg.Text">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.Text" title="Permalink to this definition"></a></dt>
+<dd><p>A <cite>&lt;text&gt;</cite> element in an SVG such as a label for a path.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span><span class="o">.</span><span class="n">get_texts</span><span class="p">()</span>
+<span class="go">[&lt;text&gt;curve: 0&lt;/text&gt;]</span>
+</pre></div>
+</div>
+<p>The coordinates of the text in the SVG coordinate system are exposed as
+<cite>.x</cite> and <cite>.y</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;0&quot; y=&quot;0&quot; transform=&quot;translate(10,100)&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="n">svg</span><span class="o">.</span><span class="n">get_texts</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span><span class="o">.</span><span class="n">x</span>
+<span class="go">10.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span><span class="o">.</span><span class="n">y</span>
+<span class="go">100.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="svgplot.html" class="btn btn-neutral float-right" title="svgdigitizer.svgplot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, the svgdigitizer authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
