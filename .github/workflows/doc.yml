@@ -48,7 +48,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: doc/generated/html/
+          FOLDER: doc/generated/html/svgdigitizer
           TARGET_FOLDER: docs
         if: ${{ github.event_name == 'push' }}
 
