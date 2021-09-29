@@ -56,36 +56,36 @@ class SVGPlot:
     system which corresponds to a segment from `(0, 0)` to `(1, 1)` in the plot
     coordinate system::
 
-    >>> from svgdigitizer.svg import SVG
-    >>> from io import StringIO
-    >>> svg = SVG(StringIO(r'''
-    ... <svg>
-    ...   <g>
-    ...     <path d="M 0 100 L 100 0" />
-    ...     <text x="0" y="0">curve: 0</text>
-    ...   </g>
-    ...   <g>
-    ...     <path d="M 0 200 L 0 100" />
-    ...     <text x="0" y="200">x1: 0</text>
-    ...   </g>
-    ...   <g>
-    ...     <path d="M 100 200 L 100 100" />
-    ...     <text x="100" y="200">x2: 1</text>
-    ...   </g>
-    ...   <g>
-    ...     <path d="M -100 100 L 0 100" />
-    ...     <text x="-100" y="100">y1: 0</text>
-    ...   </g>
-    ...   <g>
-    ...     <path d="M -100 0 L 0 0" />
-    ...     <text x="-100" y="0">y2: 1</text>
-    ...   </g>
-    ... </svg>'''))
-    >>> plot = SVGPlot(svg)
-    >>> plot.df
-         x    y
-    0  0.0  0.0
-    1  1.0  1.0
+        >>> from svgdigitizer.svg import SVG
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> plot = SVGPlot(svg)
+        >>> plot.df
+            x    y
+        0  0.0  0.0
+        1  1.0  1.0
 
     """
     def __init__(self, svg, xlabel=None, ylabel=None, sampling_interval=None, curve=None, algorithm='axis-aligned'):
@@ -104,94 +104,94 @@ class SVGPlot:
 
         EXAMPLES:
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0 cm</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1cm</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1 A</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.axis_labels
-        {'x': 'cm', 'y': 'A'}
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.axis_labels
+            {'x': 'cm', 'y': 'A'}
 
         TESTS:
 
         Labels on the axes must match::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0 cm</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1m</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> from unittest import TestCase
-        >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.axis_labels
-        ...    print(logs.output)
-        {'x': 'm', 'y': None}
-        ['WARNING:svgplot:Labels on x axis do not match. Will ignore label cm and use m.']
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1m</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> from unittest import TestCase
+            >>> with TestCase.assertLogs(_) as logs:
+            ...    plot.axis_labels
+            ...    print(logs.output)
+            {'x': 'm', 'y': None}
+            ['WARNING:svgplot:Labels on x axis do not match. Will ignore label cm and use m.']
 
         Labels on the scalebar must match the labels on the axes::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1m</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0mA</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -300 300 L -200 300" />
-        ...     <path d="M -300 300 L -200 200" />
-        ...     <text x="-300" y="300">y_scale_bar: 1A</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> with TestCase.assertLogs(_) as logs:
-        ...    plot.axis_labels
-        ...    print(logs.output)
-        {'x': 'm', 'y': 'A'}
-        ['WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.']
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1m</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0mA</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <text x="-300" y="300">y_scale_bar: 1A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> with TestCase.assertLogs(_) as logs:
+            ...    plot.axis_labels
+            ...    print(logs.output)
+            {'x': 'm', 'y': 'A'}
+            ['WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.']
 
         """
         def axis_label(axis):
@@ -224,64 +224,64 @@ class SVGPlot:
 
         EXAMPLES:
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 100 L 100 0" />
-        ...     <text x="0" y="0">curve: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
-        True
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
+            True
 
         TESTS:
 
         Test that scalebars can be parsed::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -300 300 L -200 300" />
-        ...     <path d="M -300 300 L -200 200" />
-        ...     <text x="-300" y="300">y_scale_bar: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
-        True
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <text x="-300" y="300">y_scale_bar: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
+            True
 
         """
         points = {}
@@ -367,16 +367,16 @@ class SVGPlot:
         r"""
         Return the scaling factors for each axis.
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <text x="0" y="0">y_scaling_factor: 50.6</text>
-        ...   <text x="0" y="0">xsf: 50.6</text>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.scaling_factors
-        {'x': 50.6, 'y': 50.6}
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <text x="0" y="0">y_scaling_factor: 50.6</text>
+            ...   <text x="0" y="0">xsf: 50.6</text>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.scaling_factors
+            {'x': 50.6, 'y': 50.6}
 
         """
         scaling_factors = {self.xlabel: 1, self.ylabel: 1}
@@ -398,100 +398,100 @@ class SVGPlot:
         plot y grows towards the bottom. Here, the SVG coordinate (0, 100) is
         mapped to (0, 0) and (100, 0) is mapped to (1, 1)::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.from_svg(0, 100)
-        (0.0, 0.0)
-        >>> plot.from_svg(100, 0)
-        (1.0, 1.0)
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.from_svg(0, 100)
+            (0.0, 0.0)
+            >>> plot.from_svg(100, 0)
+            (1.0, 1.0)
 
         A typical plot. Like the above but the origin is shifted and the two
         axes are not scaled equally. Here (1024, 512) is mapped to (0, 0) and
         (1124, 256) is mapped to (1, 1)::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 1024 612 L 1024 512" />
-        ...     <text x="1024" y="612">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 1124 612 L 1124 512" />
-        ...     <text x="1124" y="612">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 924 512 L 1024 512" />
-        ...     <text x="924" y="512">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 924 256 L 1024 256" />
-        ...     <text x="924" y="256">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.from_svg(1024, 512)
-        (0.0, 0.0)
-        >>> from numpy import allclose
-        >>> allclose(plot.from_svg(1124, 256), (1, 1))
-        True
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 1024 612 L 1024 512" />
+            ...     <text x="1024" y="612">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 1124 612 L 1124 512" />
+            ...     <text x="1124" y="612">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 924 512 L 1024 512" />
+            ...     <text x="924" y="512">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 924 256 L 1024 256" />
+            ...     <text x="924" y="256">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.from_svg(1024, 512)
+            (0.0, 0.0)
+            >>> from numpy import allclose
+            >>> allclose(plot.from_svg(1124, 256), (1, 1))
+            True
 
         A skewed plot. In this plot the axes are not orthogonal. In real plots
         the axes might be non-orthogonal but not as much as in this
         example. Here, one axis goes horizontally from (0, 100) to (100, 100)
         and the other axis goes at an angle from (0, 100) to (100, 0)::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 0 0 L 100 0" />
-        ...     <text x="0" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg, algorithm='mark-aligned')
-        >>> plot.from_svg(0, 100)
-        (0.0, 0.0)
-        >>> plot.from_svg(100, 100)
-        (1.0, 0.0)
-        >>> plot.from_svg(100, 0)
-        (0.0, 1.0)
-        >>> plot.from_svg(0, 0)
-        (-1.0, 1.0)
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 0 L 100 0" />
+            ...     <text x="0" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg, algorithm='mark-aligned')
+            >>> plot.from_svg(0, 100)
+            (0.0, 0.0)
+            >>> plot.from_svg(100, 100)
+            (1.0, 0.0)
+            >>> plot.from_svg(100, 0)
+            (0.0, 1.0)
+            >>> plot.from_svg(0, 0)
+            (-1.0, 1.0)
 
         """
         from numpy import dot
@@ -512,96 +512,96 @@ class SVGPlot:
         plot y grows towards the bottom. Here, the SVG coordinate (0, 100) is
         mapped to (0, 0) and (100, 0) is mapped to (1, 1)::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> SVGPlot(svg).transformation
-        array([[ 0.01,  0.  ,  0.  ],
-               [ 0.  , -0.01,  1.  ],
-               [ 0.  ,  0.  ,  1.  ]])
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> SVGPlot(svg).transformation
+            array([[ 0.01,  0.  ,  0.  ],
+                [ 0.  , -0.01,  1.  ],
+                [ 0.  ,  0.  ,  1.  ]])
 
         A typical plot. Like the above but the origin is shifted and the two
         axes are not scaled equally. Here (1000, 500) is mapped to (0, 0) and
         (1100, 300) is mapped to (1, 1)::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 1000 600 L 1000 500" />
-        ...     <text x="1000" y="600">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 1100 600 L 1100 500" />
-        ...     <text x="1100" y="600">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 900 500 L 1000 500" />
-        ...     <text x="900" y="500">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 900 300 L 1000 300" />
-        ...     <text x="900" y="300">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> A = SVGPlot(svg).transformation
-        >>> from numpy import allclose
-        >>> allclose(A, [
-        ...   [ 0.01,  0.000, -10.00],
-        ...   [ 0.00, -0.005,   2.50],
-        ...   [ 0.00,  0.000,   1.00],
-        ... ])
-        True
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 1000 600 L 1000 500" />
+            ...     <text x="1000" y="600">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 1100 600 L 1100 500" />
+            ...     <text x="1100" y="600">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 900 500 L 1000 500" />
+            ...     <text x="900" y="500">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 900 300 L 1000 300" />
+            ...     <text x="900" y="300">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> A = SVGPlot(svg).transformation
+            >>> from numpy import allclose
+            >>> allclose(A, [
+            ...   [ 0.01,  0.000, -10.00],
+            ...   [ 0.00, -0.005,   2.50],
+            ...   [ 0.00,  0.000,   1.00],
+            ... ])
+            True
 
         A skewed plot. In this plot the axes are not orthogonal. In real plots
         the axes might be non-orthogonal but not as much as in this
         example. Here, one axis goes horizontally from (0, 100) to (100, 100)
         and the other axis goes at an angle from (0, 100) to (100, 0)::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 0 0 L 100 0" />
-        ...     <text x="0" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> SVGPlot(svg, algorithm='mark-aligned').transformation
-        array([[ 0.01,  0.01, -1.  ],
-               [ 0.  , -0.01,  1.  ],
-               [ 0.  ,  0.  ,  1.  ]])
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 0 L 100 0" />
+            ...     <text x="0" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> SVGPlot(svg, algorithm='mark-aligned').transformation
+            array([[ 0.01,  0.01, -1.  ],
+                [ 0.  , -0.01,  1.  ],
+                [ 0.  ,  0.  ,  1.  ]])
 
         """
         # We construct the basic transformation from the SVG coordinate system
@@ -691,44 +691,44 @@ class SVGPlot:
 
         A plot going from (0, 0) to (1, 1)::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 100 L 100 0" />
-        ...     <text x="0" y="0">curve: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.curve
-        Path(Line(start=0j, end=(1+1j)))
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.curve
+            Path(Line(start=0j, end=(1+1j)))
 
         TESTS:
 
         Test that filtering by curve identifier works::
 
-        >>> plot = SVGPlot(svg, curve="main curve")
-        >>> plot.curve
-        Traceback (most recent call last):
-        ...
-        Exception: No curve main curve found in SVG.
+            >>> plot = SVGPlot(svg, curve="main curve")
+            >>> plot.curve
+            Traceback (most recent call last):
+            ...
+            Exception: No curve main curve found in SVG.
 
         """
         curves = [curve for curve in self.labeled_paths['curve'] if self._curve is None or curve.label.curve_id == self._curve]
@@ -823,33 +823,33 @@ class SVGPlot:
 
         We can sample a pair of line segments::
 
-        >>> from svgpathtools.path import Path
-        >>> path = Path("M 0 0 L 1 1 L 2 0")
-        >>> SVGPlot.sample_path(path, .5)
-        [(0.0, 0.0), (0.5, 0.5), (1.0, 1.0), (1.5, 0.5), (2.0, 0.0)]
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M 0 0 L 1 1 L 2 0")
+            >>> SVGPlot.sample_path(path, .5)
+            [(0.0, 0.0), (0.5, 0.5), (1.0, 1.0), (1.5, 0.5), (2.0, 0.0)]
 
         We can sample a pair of Bezier curves, going from (0, 0) to (2, 0) with
         a sharp peak at (1, 1)::
 
-        >>> from svgpathtools.path import Path
-        >>> path = Path("M0 0 C 1 0, 1 0, 1 1 C 1 0, 1 0, 2 0")
-        >>> SVGPlot.sample_path(path, 1)
-        [(0.0, 0.0), (1.0, 1.0), (2.0, 0.0)]
-        >>> len(SVGPlot.sample_path(path, .5))
-        5
-        >>> len(SVGPlot.sample_path(path, .1))
-        21
-        >>> len(SVGPlot.sample_path(path, .01))
-        201
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M0 0 C 1 0, 1 0, 1 1 C 1 0, 1 0, 2 0")
+            >>> SVGPlot.sample_path(path, 1)
+            [(0.0, 0.0), (1.0, 1.0), (2.0, 0.0)]
+            >>> len(SVGPlot.sample_path(path, .5))
+            5
+            >>> len(SVGPlot.sample_path(path, .1))
+            21
+            >>> len(SVGPlot.sample_path(path, .01))
+            201
 
         We can sample vertical line segments::
 
-        >>> from svgpathtools.path import Path
-        >>> path = Path("M 0 0 L 0 1 M 1 1 L 1 0")
-        >>> SVGPlot.sample_path(path, .0001)
-        [(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]
-        >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial points of the segments
-        [(0.0, 1.0), (1.0, 0.0)]
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M 0 0 L 0 1 M 1 1 L 1 0")
+            >>> SVGPlot.sample_path(path, .0001)
+            [(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]
+            >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial points of the segments
+            [(0.0, 1.0), (1.0, 0.0)]
 
         """
         import numpy
