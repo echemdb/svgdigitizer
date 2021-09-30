@@ -72,10 +72,10 @@ def cv(svg, sampling_interval, metadata, package):
         p = Package(cv.metadata)
         p.infer(str(csvname))
 
-    import datetime
+    from datetime import datetime, date
 
     def defaultconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, (datetime, date)):
             return o.__str__()
 
     import json
