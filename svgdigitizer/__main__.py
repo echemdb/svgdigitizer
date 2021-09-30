@@ -49,11 +49,11 @@ def digitize(svg, sampling_interval):
 
 
 @click.command()
-@click.option('--package', is_flag=True, help='create a datapacakge containing a csv and json')
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
+@click.option('--package', is_flag=True, help='create a datapacakge containing a csv and json')
 @click.argument('svg', type=click.Path(exists=True))
-def cv(svg, sampling_interval, metadata):
+def cv(svg, sampling_interval, metadata, package):
     import yaml
     from datapackage import Package
     from svgdigitizer.svgplot import SVGPlot
@@ -70,8 +70,6 @@ def cv(svg, sampling_interval, metadata):
 
     p = Package(cv.metadata)
     p.infer(str(csvname))
-    #p.descriptor['resources'][0]['path'], \
-    #p.descriptor['resources'][0]['schema'])
 
     import datetime
 
