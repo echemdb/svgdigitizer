@@ -49,11 +49,13 @@ def digitize(svg, sampling_interval):
 
 
 @click.command()
+@click.option('--package', is_flag=True, help='create a datapacakge containing a csv and json')
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
 @click.argument('svg', type=click.Path(exists=True))
 def cv(svg, sampling_interval, metadata):
     import yaml
+    from datapackage import Package
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
@@ -63,17 +65,27 @@ def cv(svg, sampling_interval, metadata):
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path
-    cv.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
+    csvname = Path(svg).with_suffix('.csv')
+    cv.df.to_csv(csvname, index=False)
+
+    p = Package(cv.metadata)
+    p.infer(str(csvname))
+    #p.descriptor['resources'][0]['path'], \
+    #p.descriptor['resources'][0]['schema'])
 
     import datetime
 
     def defaultconverter(o):
         if isinstance(o, datetime.datetime):
             return o.__str__()
-
+    
     import json
-    with open(Path(svg).with_suffix('.json'), "w") as outfile:
-        json.dump(cv.metadata, outfile, default=defaultconverter)
+    if package:
+        with open(Path(svg).with_suffix('.json'), "w") as outfile:
+            json.dump(p.descriptor, outfile, default=defaultconverter)
+    else:
+        with open(Path(svg).with_suffix('.json'), "w") as outfile:
+            json.dump(cv.metadata, outfile, default=defaultconverter)
 
 
 @click.command()
