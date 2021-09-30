@@ -367,16 +367,18 @@ class SVGPlot:
         r"""
         Return the scaling factors for each axis.
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <text x="0" y="0">y_scaling_factor: 50.6</text>
-        ...   <text x="0" y="0">xsf: 50.6</text>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.scaling_factors
-        {'x': 50.6, 'y': 50.6}
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <text x="0" y="0">y_scaling_factor: 50.6</text>
+            ...   <text x="0" y="0">xsf: 50.6</text>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.scaling_factors
+            {'x': 50.6, 'y': 50.6}
 
         """
         scaling_factors = {self.xlabel: 1, self.ylabel: 1}
@@ -957,7 +959,7 @@ class SVGPlot:
 
         The returned data lives in the plot coordinate system.
 
-        EXMAMPLES:
+        EXAMPLES:
 
         A diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
         i.e., the function y=x::
@@ -1066,7 +1068,7 @@ class SVGPlot:
         r"""
         Visualize the data in this plot.
 
-        EXMAMPLES::
+        EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
             >>> from io import StringIO
@@ -1082,7 +1084,7 @@ class SVGPlot:
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1</text>
+            ...     <text x="100" y="200">x2: 1 s</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
@@ -1090,11 +1092,11 @@ class SVGPlot:
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1</text>
+            ...     <text x="-100" y="0">y2: 1 cm</text>
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.plot()
 
         """
-        self.df.plot(x=self.xlabel, y=self.ylabel, ylabel=self.ylabel, legend=False)
+        self.df.plot(x=self.xlabel, y=self.ylabel, xlabel=f"{self.xlabel} [{self.axis_labels[self.xlabel]}]", ylabel=f"{self.ylabel} [{self.axis_labels[self.ylabel]}]", legend=False)
