@@ -1066,7 +1066,7 @@ class SVGPlot:
         r"""
         Visualize the data in this plot.
 
-        EXAMPLES:
+        EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
             >>> from io import StringIO
