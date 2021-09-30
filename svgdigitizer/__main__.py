@@ -55,7 +55,6 @@ def digitize(svg, sampling_interval):
 @click.argument('svg', type=click.Path(exists=True))
 def cv(svg, sampling_interval, metadata, package):
     import yaml
-    from datapackage import Package
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
