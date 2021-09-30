@@ -51,7 +51,7 @@ def digitize(svg, sampling_interval):
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
-@click.option('--package', is_flag=True, help='create a datapacakge containing a csv and json')
+@click.option('--package', is_flag=True, help='create .json in data package format')
 @click.argument('svg', type=click.Path(exists=True))
 def cv(svg, sampling_interval, metadata, package):
     import yaml
