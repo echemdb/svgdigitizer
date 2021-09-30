@@ -76,7 +76,7 @@ def cv(svg, sampling_interval, metadata, package):
     def defaultconverter(o):
         if isinstance(o, datetime.datetime):
             return o.__str__()
-    
+
     import json
     if package:
         with open(Path(svg).with_suffix('.json'), "w") as outfile:
