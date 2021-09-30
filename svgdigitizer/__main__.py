@@ -79,12 +79,8 @@ def cv(svg, sampling_interval, metadata, package):
             return o.__str__()
 
     import json
-    if package:
-        with open(Path(svg).with_suffix('.json'), "w") as outfile:
-            json.dump(p.descriptor, outfile, default=defaultconverter)
-    else:
-        with open(Path(svg).with_suffix('.json'), "w") as outfile:
-            json.dump(cv.metadata, outfile, default=defaultconverter)
+    with open(Path(svg).with_suffix('.json'), "w") as outfile:
+        json.dump(p.descriptor if package else cv.metadata, outfile, default=defaultconverter)
 
 
 @click.command()
