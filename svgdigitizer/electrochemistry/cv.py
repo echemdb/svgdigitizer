@@ -57,7 +57,7 @@ class CV():
         Unit("uA / cm2")
 
         """
-        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA / cm2'],
+        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA/cm2'],
                       'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
                       'A': ['A', 'ampere', 'amps', 'amp'],
                       'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
@@ -187,6 +187,43 @@ class CV():
         df['t'] = df['cumdeltaU'] / float(self.rate.to(u.V / u.s).value)
 
     def plot(self):
+        r"""
+        Visualize the digitized cyclic voltamogram with values in SI units.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1 mV</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 uA/cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.plot()
+
+        """
         self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
         plt.xlabel(self.axis_properties['x']['dimension'] + ' [' + str(self.axis_properties['x']['unit']) + ' vs. ' + self.x_label.reference + ']')
