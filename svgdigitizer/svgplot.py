@@ -367,6 +367,8 @@ class SVGPlot:
         r"""
         Return the scaling factors for each axis.
 
+        EXAMPLES::
+
             >>> from svgdigitizer.svg import SVG
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
