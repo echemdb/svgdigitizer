@@ -25,3 +25,4 @@ dependencies:
   - pip:
     - linkchecker
     - sphinx_rtd_theme
+    - datapackage

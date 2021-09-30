@@ -51,8 +51,9 @@ def digitize(svg, sampling_interval):
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
+@click.option('--package', is_flag=True, help='create .json in data package format')
 @click.argument('svg', type=click.Path(exists=True))
-def cv(svg, sampling_interval, metadata):
+def cv(svg, sampling_interval, metadata, package):
     import yaml
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
@@ -63,17 +64,23 @@ def cv(svg, sampling_interval, metadata):
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path
-    cv.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
+    csvname = Path(svg).with_suffix('.csv')
+    cv.df.to_csv(csvname, index=False)
 
-    import datetime
+    if package:
+        from datapackage import Package
+        p = Package(cv.metadata)
+        p.infer(str(csvname))
+
+    from datetime import datetime, date
 
     def defaultconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, (datetime, date)):
             return o.__str__()
 
     import json
     with open(Path(svg).with_suffix('.json'), "w") as outfile:
-        json.dump(cv.metadata, outfile, default=defaultconverter)
+        json.dump(p.descriptor if package else cv.metadata, outfile, default=defaultconverter)
 
 
 @click.command()
