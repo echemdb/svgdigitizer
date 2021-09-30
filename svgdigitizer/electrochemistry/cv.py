@@ -223,7 +223,7 @@ class CV():
             >>> cv = CV(SVGPlot(svg))
             >>> cv.plot()
 
-            """
+        """
         self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
         plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
         plt.xlabel(self.axis_properties['x']['dimension'] + ' [' + str(self.axis_properties['x']['unit']) + ' vs. ' + self.x_label.reference + ']')
