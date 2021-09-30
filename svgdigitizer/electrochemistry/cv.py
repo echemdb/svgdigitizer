@@ -30,6 +30,9 @@ from astropy import units as u
 class CV():
     # TODO: Add documentation with a usage example. #60
     # Until documentation is added, this class will not show in the auto-generated documentation.
+    """
+    This is the docu.
+    """
     def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
         self._metadata = metadata or {}
@@ -51,10 +54,10 @@ class CV():
 
         EXAMPLES::
 
-        >>> from svgdigitizer.electrochemistry.cv import CV
-        >>> unit = 'uA cm-2'
-        >>> CV.get_axis_unit(unit)
-        Unit("uA / cm2")
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> unit = 'uA cm-2'
+            >>> CV.get_axis_unit(unit)
+            Unit("uA / cm2")
 
         """
         unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA/cm2'],
@@ -94,33 +97,33 @@ class CV():
 
         Examples::
 
-        >>> from svgdigitizer.svg import SVG
-        >>> from svgdigitizer.svgplot import SVGPlot
-        >>> from svgdigitizer.electrochemistry.cv import CV
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0 cm</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1cm</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1 A</text>
-        ...   </g>
-        ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-        ... </svg>'''))
-        >>> cv = CV(SVGPlot(svg))
-        >>> cv.rate
-        <Quantity 50. V / s>
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.rate
+            <Quantity 50. V / s>
 
         """
         rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
