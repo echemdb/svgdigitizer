@@ -67,8 +67,10 @@ def cv(svg, sampling_interval, metadata, package):
     csvname = Path(svg).with_suffix('.csv')
     cv.df.to_csv(csvname, index=False)
 
-    p = Package(cv.metadata)
-    p.infer(str(csvname))
+    if package:
+        from datapackage import Package
+        p = Package(cv.metadata)
+        p.infer(str(csvname))
 
     import datetime
 
