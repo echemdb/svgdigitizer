@@ -102,7 +102,7 @@ class SVGPlot:
         r"""
         Return the label for each axis.
 
-        EXAMPLES:
+        EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
             >>> from io import StringIO
