@@ -190,7 +190,7 @@ class CV():
         r"""
         Visualize the digitized cyclic voltamogram with values in SI units.
 
-        EXAMPLES:
+        EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
