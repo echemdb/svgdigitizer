@@ -64,7 +64,7 @@ def cv(svg, sampling_interval, metadata, package):
     cv = CV(SVGPlot(SVG(open(svg, 'rb'))))
     xunit = CV.get_axis_unit(cv.x_label.unit)
     if not xunit == u.V:
-        # Deterine correction factor from unit conversion
+        # Determine conversion factor to volts.
         sampling_correction = xunit.to(u.V)
         sampling_interval = sampling_interval / sampling_correction
 
