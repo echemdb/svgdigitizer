@@ -49,15 +49,25 @@ def digitize(svg, sampling_interval):
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
+@click.option('--sampling_interval', type=float, default=None, help='sampling interval on the x-axis in volt (V)')
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
 @click.option('--package', is_flag=True, help='create .json in data package format')
 @click.argument('svg', type=click.Path(exists=True))
 def cv(svg, sampling_interval, metadata, package):
     import yaml
+    from astropy import units as u
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
+
+    # Determine unit of the voltage scale.
+    cv = CV(SVGPlot(SVG(open(svg, 'rb'))))
+    xunit = CV.get_axis_unit(cv.x_label.unit)
+    if not xunit == u.V:
+        # Determine conversion factor to volts.
+        sampling_correction = xunit.to(u.V)
+        sampling_interval = sampling_interval / sampling_correction
+
     if metadata:
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
