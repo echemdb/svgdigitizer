@@ -154,6 +154,44 @@ class CV():
         Return the label on the x-axis of the SVG plot.
         In contrast to the y-label, which only consists of a unit, the x-label consists of a unit and a reference.
         The unit and the reference are united in a single string, which are separated by x_label.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.x_label
+            Label(label='V vs. RHE', unit='V', reference='RHE')
+
+        Label and unit can be obtained by
+
+            >>> cv.x_label.unit
+            'V'
+            >>> cv.x_label.reference
+            'RHE'
+
         """
         pattern = r'^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
         match = re.match(pattern, self.svgplot.axis_labels['x'], re.IGNORECASE)
