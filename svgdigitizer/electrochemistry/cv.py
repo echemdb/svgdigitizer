@@ -326,18 +326,86 @@ class CV():
         return df[['t', 'U', self.axis_properties['y']['dimension']]]
 
     def _add_U_axis(self, df):
-        r'''
+        r"""
         Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
-        '''
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv._add_U_axis(df = cv.svgplot.df.copy())
+
+        """
         q = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df['U'] = df['x'] * q.to(u.V).value
 
     def _add_I_axis(self, df):
-        r'''
+        r"""
         Add a current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
-        '''
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv._add_I_axis(df = cv.svgplot.df.copy())
+
+        """
         q = 1 * CV.get_axis_unit(self.svgplot.axis_labels['y'])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
@@ -349,9 +417,45 @@ class CV():
         df[self.axis_properties['y']['dimension']] = df['y'] * conversion_factor
 
     def _add_time_axis(self, df):
-        r'''
+        r"""
         Add a time column to the dataframe `df`, based on the :meth:`rate`.
-        '''
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> df = cv.svgplot.df.copy()
+            >>> cv._add_U_axis(df)
+            >>> cv._add_time_axis(df)
+
+        """
         df['deltaU'] = abs(df['U'].diff().fillna(0))
         df['cumdeltaU'] = df['deltaU'].cumsum()
         df['t'] = df['cumdeltaU'] / float(self.rate.to(u.V / u.s).value)
