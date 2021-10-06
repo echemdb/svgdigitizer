@@ -185,7 +185,7 @@ class CV():
             >>> cv.x_label
             Label(label='V vs. RHE', unit='V', reference='RHE')
 
-        Label and unit can be obtained by
+        Label and unit can be obtained by::
 
             >>> cv.x_label.unit
             'V'
@@ -250,6 +250,7 @@ class CV():
     @property
     @cache
     def df(self):
+        # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltamogram and which is displayed in the documentation (see issue #73).
         r"""
         Return a dataframe with axis 't', 'U', and 'I' (or 'j).
         The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
@@ -258,6 +259,61 @@ class CV():
         which are usually not in SI units.
 
         The time axis can only be created when a (scan) rate is given in the plot, i.e., 50 mV /s.
+        <path d="M 0 100 L 100 0" />
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.df
+                  t    U     j
+            0   0.0  0.0  0.00
+            1  20.0  1.0  0.01
+
+        The same cv but now sampled at 0.1 V increments on the voltage axis (x-axis)::
+
+            >>> cv = CV(SVGPlot(svg, sampling_interval=.1))
+            >>> cv.df
+                   t    U      j
+            0    0.0  0.0  0.000
+            1    2.0  0.1  0.001
+            2    4.0  0.2  0.002
+            3    6.0  0.3  0.003
+            4    8.0  0.4  0.004
+            5   10.0  0.5  0.005
+            6   12.0  0.6  0.006
+            7   14.0  0.7  0.007
+            8   16.0  0.8  0.008
+            9   18.0  0.9  0.009
+            10  20.0  1.0  0.010
+
         """
         df = self.svgplot.df.copy()
         self._add_U_axis(df)
