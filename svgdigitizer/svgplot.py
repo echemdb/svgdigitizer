@@ -931,7 +931,7 @@ class SVGPlot:
 
             if endpoints == 'include':
                 # Do not sample points that are just a numerical-error away from the end points.
-                assert sample_at[1] > EPS, f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_t[1]}"
+                assert sample_at[1] > EPS, f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_at[1]}"
                 if 1 - sample_at[-2] < EPS:
                     sample_at = sample_at[:-2] + [sample_at[-1]]
 
