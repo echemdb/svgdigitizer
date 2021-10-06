@@ -79,7 +79,7 @@ class CV():
             >>> cv.axis_properties
             {'x': {'dimension': 'U', 'unit': 'V'}, 'y': {'dimension': 'I', 'unit': 'A'}}
 
-        In this second example a current density j is plotted on the y-axis in `uA / cm2`.
+        In this second example a current density j is plotted on the y-axis in `uA / cm2`::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
