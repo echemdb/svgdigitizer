@@ -67,11 +67,11 @@ class CV():
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 A</text>
+            ...     <text x="-100" y="100">y1: 0 mA</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">y2: 1 mA</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
