@@ -130,8 +130,11 @@ class CV():
             Unit("uA / cm2")
 
         """
-        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'µA cm⁻²', 'uA cm-2', 'uA/cm2'],
-                      'A / cm2': ['A / cm2', 'A cm⁻²', 'A cm-2', 'A / cm2'],
+        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'uA/cm2', 'uA/cm²', 'µA/cm²', 'µA cm⁻²', 'uA cm-2'],
+                      'mA / cm2': ['mA / cm2', 'mA / cm²', 'mA cm⁻²', 'mA/cm2', 'mA/cm²', 'mA cm-2'],
+                      'A / cm2': ['A / cm2', 'A/cm2', 'A cm⁻²', 'A cm-2'],
+                      'uA': ['uA', 'µA', 'microampere'],
+                      'mA': ['mA', 'milliampere'],
                       'A': ['A', 'ampere', 'amps', 'amp'],
                       'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
                       'V': ['V', 'v', 'Volt', 'volt'],

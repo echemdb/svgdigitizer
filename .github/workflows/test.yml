@@ -70,3 +70,9 @@ jobs:
           svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml
           diff test/data/xy_rate_reference.json test/data/xy_rate_reference.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference.csv"), pandas.read_csv("test/data/xy_rate_reference.csv.expected"))'
+      - name: cv-package
+        shell: bash -l {0}
+        run: |
+          svgdigitizer cv test/data/package.svg --metadata test/data/package.yaml --package
+          diff test/data/package.json test/data/package.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package.csv"), pandas.read_csv("test/data/package.csv.expected"))'
