@@ -31,7 +31,12 @@ class CV():
     # TODO: Add documentation with a usage example. #60
     # Until documentation is added, this class will not show in the auto-generated documentation.
     """
-    This is the docu.
+    A digitized cyclic voltammogram (CV) derived from an SVG file.
+
+    Provides access to the objects of the CV.
+
+    EXAMPLES:
+
     """
     def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
