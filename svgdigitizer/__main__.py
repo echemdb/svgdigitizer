@@ -32,6 +32,22 @@ def cli(): pass
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.argument('svg', type=click.Path(exists=True))
 def plot(svg, sampling_interval):
+    r"""
+    EXAMPLES::
+
+        >>> from svgdigitizer.__main__ import plot
+        >>> from io import StringIO
+        >>> svgfile = StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> plot.callback('test.svg', sampling_interval=None)
+
+
+    """
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval).plot()
