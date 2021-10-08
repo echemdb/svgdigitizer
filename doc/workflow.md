@@ -109,6 +109,12 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
 4. Roughly trace the blue curve with a spline
 
+   ![inkscape_rough_select](files/images/inkscape_rough_select.png)
+
+   
+
+   
+
    Add a textfield next to the spline and name it `curve: identifier`, which in our case would be `curve: blue`
 
    Group the textfield and the spline
