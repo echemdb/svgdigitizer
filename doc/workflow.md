@@ -141,7 +141,9 @@ The final file should look like this:
 
 Create a yaml file with the same name than the svg file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
 
-Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
+**TODO:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
+
+Adjust all keys in the fle according to the content of the research article.
 
 ## Step 4: Upload to website
 
