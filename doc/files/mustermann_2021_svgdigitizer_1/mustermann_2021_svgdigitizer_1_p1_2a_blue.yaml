@@ -1,0 +1,79 @@
+# This file can exist with the "source" information only, the entry data exists should be marked as "False" 
+# to indcate that neither the metadata nor the actual data were digitized or provided.
+# use "null" to idicate that a value is not available in the literature
+version: 1
+
+source: 
+    doi: https://doi.org/10.1039/C0CP01001D
+    bib: mustermann_2021_svgdigitizer_1 # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
+    figure: 2a # depending on the subfigure labels use 1, 1b, or 1_3
+    curve: blue # use a unique short description to identify the curve in the figure
+    
+curator:
+    name: Albert Engstfeld
+    orcid: https://orcid.org/0000-0002-9686-3948
+    digitized: 2021-10-09 # YYYY-MM-DD
+    
+figure description:
+    linked measurements: DEMS # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
+    comment: data acquisition rate was low. Some features do not appear smooth. # Add whatever you think is important to understand the data
+
+electrochemical system:
+    electrolyte:
+        type: aq # aqueous = aq, non-aqueous=naq
+        components: # create as many components as necessary. A simple electrolyte consists of two components, i.e., H2SO4 and water
+            - name: water
+              sum formula: H2O
+              type: solvent
+              proportion:
+                  value: 100
+                  unit: volume percent
+              source:
+                  refinement: Millipore MilliQ
+                  quality: ultrapure water
+                  total organic carbon: 
+                      value: none
+                      unit: none
+            - name: sulfuric acid
+              sum formula: H2SO4
+              type: acid
+              source:
+                  supplier: Merck Suprapur
+                  LOT: null
+              concentration:
+                  value: 0.5
+                  unit: M #[M, mM, µM, g kg-1, ...] 
+        ph: 
+            value: 0.3
+            uncertainty: none
+        temperature: # provide the temperature as it is given in the article. Assume room temperature if nothing is provided
+            value: 298.15 
+            unit: K # [K, C, F]
+    electrodes:
+        configuration: three # number of electrodes
+        reference electrode:
+            type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-sat, MSE-3M, MSE-1M, RHE, AgCl2
+            source:
+                supplier: homemade
+        counter electrode:
+            material: Au
+            crystallographic orientation: polycrystalline
+            shape: wire
+        working electrode:
+            material: Ru
+            crystallographic orientation: 0001 # hkl, 100, 110, poly
+            source:
+                supplier: Mateck
+                LOT: 
+            shape: # optional
+                type: hat shaped # bead/sphere
+                height:
+                    value: 2
+                    unit: mm
+                diameter:
+                    value: 10
+                    unit: mm
+            geometric electrolyte contact area: 
+                value: 0.65
+                unit: nmm
+            preparation procedure: sputter and flash annealing under UHV conditions # Short description of sample preparation. This can be very useful. :)

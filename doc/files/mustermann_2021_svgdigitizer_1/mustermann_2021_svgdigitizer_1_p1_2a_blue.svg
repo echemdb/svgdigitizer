@@ -35,14 +35,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1027"
+     inkscape:window-height="1017"
      id="namedview8"
      showgrid="false"
      inkscape:zoom="0.57203454"
-     inkscape:cx="3404.6739"
-     inkscape:cy="3477.7887"
+     inkscape:cx="3571.0985"
+     inkscape:cy="3611.801"
      inkscape:window-x="-8"
-     inkscape:window-y="22"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg6" />
   <defs
@@ -119,14 +119,14 @@
        only_selected="false" />
   </defs>
   <image
-     sodipodi:absref="E:\Github\svgdigitizer\doc\files\mustermann_2021_svgdigitizer_1\mustermann_2021_svgdigitizer_1_p1.png"
+     sodipodi:absref="F:\Github\echemdb\svgdigitizer\doc\files\mustermann_2021_svgdigitizer_1\mustermann_2021_svgdigitizer_1_p1.png"
      xlink:href="mustermann_2021_svgdigitizer_1_p1.png"
-     sodipodi:insensitive="true"
-     id="image4"
-     y="0"
-     x="0"
+     height="6601"
      width="5100"
-     height="6601" />
+     x="0"
+     y="0"
+     id="image4"
+     sodipodi:insensitive="true" />
   <g
      id="g4571">
     <text
@@ -211,4 +211,33 @@
        d="m 2730.6043,2464.8861 c 72.2567,82.7456 144.5134,165.4911 216.7702,248.2368"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
+  <g
+     id="g1119">
+    <path
+       sodipodi:nodetypes="ssssssssssssssssssssssssssssssss"
+       inkscape:connector-curvature="0"
+       id="path1110"
+       d="m 3030.2615,3333.7148 c -2.8338,-1.3328 30.3503,-144.0768 60.161,-211.4197 28.0044,-63.2626 52.4214,-132.1333 110.9543,-173.5785 75.383,-53.3761 90.5714,-47.3928 132.338,-60.7791 11.7905,-3.7789 64.9237,-113.1003 109.9302,-153.3734 18.2434,-16.3247 29.3466,-44.9679 53.6714,-42.2069 26.7369,3.0347 47.4762,67.0906 68.2837,102.5226 11.5233,19.6224 28.1384,34.7842 47.4121,46.8817 22.3845,14.0501 47.3997,21.6015 73.8281,21.702 37.1704,0.1414 89.3494,-22.7619 111.4754,-20.0416 19.9177,2.4489 41.6352,16.2505 55.4286,20.0416 11.0392,3.0341 22.4177,-3.434 33.8329,-2.5602 14.5718,1.1155 26.2118,6.3132 40.7258,8.0231 36.4406,4.293 66.2363,-16.6575 102.9221,-15.9518 68.5648,1.319 132.7281,37.6388 201.0368,43.7036 44.2114,3.9253 278.2042,-5.4801 298.3149,-2.0481 16.4586,2.8088 -26.3961,19.0392 -43.0855,19.5296 -61.2739,1.8003 -340.955,-0.877 -426.5477,6.9926 -32.5416,2.992 -66.8227,12.3958 -87.1952,37.9471 -15.5005,19.4407 -28.2602,40.3789 -41.9555,64.0635 -7.4253,12.8412 -20.8365,34.6486 -35.175,30.8485 -17.0672,-4.5233 -68.2296,-70.1059 -114.0355,-86.7892 -46.3464,-16.8803 -94.0779,-34.3911 -143.348,-36.7111 -44.7854,-2.1089 -98.809,-4.7554 -135.9494,20.3597 -37.6668,25.4711 -56.6256,122.4098 -73.0162,119.5981 -11.6677,-2.0016 -23.0684,-13.3041 -30.1245,-32.1908 -10.6066,-28.3902 -25.8442,-68.1088 -55.9406,-71.674 -36.2397,-4.2929 -66.8493,31.3432 -85.6592,62.6151 -30.6562,50.9667 -44.29,149.9088 -50.6962,227.259 -8.4274,101.7543 -14.9037,310.8314 -34.5569,311.8502 -29.6716,1.5383 -64.6131,-411.8508 -82.4719,-406.4531 -29.1464,8.8092 -51.673,176.0183 -60.558,171.8395 z"
+       style="fill:none;stroke:#000000;stroke-width:2.66666675;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text1114"
+       y="2790.0413"
+       x="3770.7512"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         y="2790.0413"
+         x="3770.7512"
+         id="tspan1112"
+         sodipodi:role="line">curve: blue</tspan></text>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="3641.3884"
+     y="3274.2778"
+     id="text1123"><tspan
+       sodipodi:role="line"
+       id="tspan1121"
+       x="3641.3884"
+       y="3274.2778">scan rate: 50 mV / s</tspan></text>
 </svg>

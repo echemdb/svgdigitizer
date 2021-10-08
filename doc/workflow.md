@@ -107,33 +107,53 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
    ![inkscape_all_labels](files/images/inkscape_all_labels.png)
 
-4. Roughly trace the blue curve with a spline
+4. Roughly trace the blue curve with a spline by selecting the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png)and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png).
 
-   ![inkscape_rough_select](files/images/inkscape_rough_select.png)
+   
+
+   ![inkscape_rough_select](./files/images/inkscape_rough_select.png)
+
+   Select the curve, select the tool `Edit paths by node`![inkscape_edit_paths_by_node](./files/images/inkscape_edit_paths_by_node.png), and sleect all nodes by pressing `CTR-a`. Click on the option `make sleected nodes smooth`![inkscape_node_options](./files/images/inkscape_node_options.png).
+
+   Click on individual nodes and adjust the handles, such that the path matches the curve in the plot. Eventually adjust the position of the nodes. Do this for each node until you are satisfied with the result.
+
+   ![inkscape_smoothed_path](files/images/inkscape_smoothed_path.png)
 
    
 
    
 
-   Add a textfield next to the spline and name it `curve: identifier`, which in our case would be `curve: blue`
+5. Add a textfield next to the spline and name it `curve: identifier`, which in our case would be `curve: blue`
 
-   Group the textfield and the spline
+6. Group the textfield and the spline
 
-5. Add a textfield to the plot containing the scan rate, with which the data was acquired. This is not necessarily given in the plot or figure description and might have to extracted from the text fo the manuscript. `scan rate: 50 mV / s` or `rate: 50 mV / s`.
+![inkscape_smoothed_path_curve](files/images/inkscape_smoothed_path_curve.png)
 
+7. Add a textfield to the plot containing the scan rate, with which the data was acquired. This is not necessarily given in the plot or figure description and might have to extracted from the text fo the manuscript. `scan rate: 50 mV / s` or `rate: 50 mV / s`.
 
+The final file should look like this:
+
+![inkscape_final](files/images/inkscape_final.png)
+
+8
 
 ## Step 3: Create a metadata file for each digitized curve
 
-In a next step create a metadata file, which contains information on the publication, the curator (the one who digitizes the plot) and the electrochemical system.
+Create a yaml file with the same name than the svg file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
 
-An example for aqueous systems is found here.
+Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
 
-Modify the content of the file accordingly and 
+## Step 4: Upload to website
 
+Place the folder in website/Literature and create a pull request.
 
+## Notes
 
-`mustermann_2021_svgdigitizer_1.yaml`
+If you want to test if your file is working, use the function 
+
+`svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --package`
+
+This provides a csv with the data of the plot and a json package file.
 
 
 
