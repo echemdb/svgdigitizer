@@ -1,3 +1,21 @@
+r"""
+The SVGDigitizer suite.
+
+EXAMPLES::
+
+    >>> from .test.cli import invoke
+    >>> invoke(cli, "--help") # doctest: +NORMALIZE_WHITESPACE
+    Usage: cli [OPTIONS] COMMAND [ARGS]...
+      The SVGDigitizer suite.
+    Options:
+      --help Show this message and exit.
+    Commands:
+      cv
+      digitize
+      paginate
+      plot      Display a plot of the data traced in an SVG.
+
+"""
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -21,47 +39,21 @@
 # ********************************************************************
 import click
 
-help_sampling = 'sampling interval on the x-axis'
-
-
-@click.group()
+@click.group(help=__doc__.split('EXAMPLES')[0])
 def cli(): pass
 
 
-@click.command()
-@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
+@click.command(help="Display a plot of the data traced in an SVG.")
+@click.option('--sampling_interval', type=float, default=None, help='Sampling interval on the x-axis.')
 @click.argument('svg', type=click.File('rb'))
 def plot(svg, sampling_interval):
     r"""
     EXAMPLES::
 
-        >>> from svgdigitizer.__main__ import plot
-        >>> from io import StringIO
-        >>> svg = StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <path d="M 0 100 L 100 0" />
-        ...     <text x="0" y="0">curve: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>''')
-        >>> plot.callback(svg, sampling_interval=None)
-
+        >>> import os.path
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy.svg") as directory:
+        ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
 
     """
     from svgdigitizer.svgplot import SVGPlot
@@ -70,7 +62,7 @@ def plot(svg, sampling_interval):
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
+@click.option('--sampling_interval', type=float, default=None, help='Sampling interval on the x-axis.')
 @click.argument('svg', type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
