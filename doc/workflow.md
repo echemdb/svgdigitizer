@@ -107,7 +107,13 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
    ![inkscape_all_labels](files/images/inkscape_all_labels.png)
 
-4. xxx
+4. Roughly trace the blue curve with a spline
+
+   Add a textfield next to the spline and name it `curve: identifier`, which in our case would be `curve: blue`
+
+   Group the textfield and the spline
+
+5. Add a textfield to the plot containing the scan rate, with which the data was acquired. This is not necessarily given in the plot or figure description and might have to extracted from the text fo the manuscript. `scan rate: 50 mV / s` or `rate: 50 mV / s`.
 
 
 
