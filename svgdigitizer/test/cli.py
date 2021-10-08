@@ -5,7 +5,7 @@ Click's own CliRunner is quite cumbersome to work with in some simple test
 scenarios so we wrap it in more convenient ways here.
 
 """
-#*********************************************************************
+# *********************************************************************
 #  This file is part of svgdigitizer.
 #
 #        Copyright (C) 2021 Julian Rüth
@@ -22,9 +22,10 @@ scenarios so we wrap it in more convenient ways here.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
-#*********************************************************************
+# *********************************************************************
 
 import click
+
 
 def invoke(command, *args):
     r"""
@@ -46,19 +47,21 @@ def invoke(command, *args):
     from click.testing import CliRunner
     invocation = CliRunner().invoke(command, args, catch_exceptions=False)
     output = invocation.output.strip()
-    if output: print(output)
+    if output:
+        print(output)
+
 
 class TemporaryData:
     r"""
     Provides a temporary directory with test files.
 
     EXAMPLES::
-    
+
         >>> import os
         >>> with TemporaryData("**/xy.*") as directory:
         ...     'xy.svg' in os.listdir(directory)
         True
-        
+
     """
     def __init__(self, *patterns):
         self._patterns = patterns

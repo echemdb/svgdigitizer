@@ -39,6 +39,7 @@ EXAMPLES::
 # ********************************************************************
 import click
 
+
 @click.group(help=__doc__.split('EXAMPLES')[0])
 def cli(): pass
 
@@ -145,7 +146,7 @@ cli.add_command(paginate)
 # Register command docstrings for doctesting.
 # Since commands are not fnuctions anymore due to their decorator, their
 # docstrings would otherwise be ignored.
-__test__ = {name: command.__doc__ for (name, command) in cli.commands.items() if command.__doc__ }
+__test__ = {name: command.__doc__ for (name, command) in cli.commands.items() if command.__doc__}
 
 if __name__ == "__main__":
     cli()
