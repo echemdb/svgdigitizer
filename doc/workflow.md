@@ -109,7 +109,7 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
    Select the curve, select the tool `Edit paths by node`![inkscape_edit_paths_by_node](./files/images/inkscape_edit_paths_by_node.png), and select all nodes by pressing `CTRL-a`. Click on the option `make selected nodes smooth`![inkscape_node_options](./files/images/inkscape_node_options.png).
 
-   Click on individual nodes and adjust the handles, such that the path matches the curve in the plot. Eventually adjust the position of the nodes. Do this for each node until you are satisfied with the result.
+   Click on individual nodes and adjust the handles such that the path matches the curve in the plot. Eventually adjust the position of the nodes. Do this for each node until you are satisfied with the result.
 
    ![inkscape_smoothed_path](files/images/inkscape_smoothed_path.png)
 
