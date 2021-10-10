@@ -139,7 +139,7 @@ Propose a pull request that adds your directory to `website/literature`, e.g., b
 
 ## Notes
 
-If you want to test if your file is working, use the function 
+If you want to test whether your files were prepared correctly for echemdb, run:
 
 `svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --package`
 
