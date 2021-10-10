@@ -38,7 +38,7 @@ Select `Show links to import citatons into BibTeX"
 
 ![./files/images/scholar_options_bibtex.png](files/images/scholar_options_bibtex.png)
 
-An `import into BbTex` link appears below the linked article:
+An `import into BibTeX` link appears below the linked article:
 
 ![./files/images/scholar_options_bibtex_link.png](files/images/scholar_options_bibtex_link.png)
 
