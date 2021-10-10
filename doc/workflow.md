@@ -115,7 +115,7 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
 5. Add a text field next and name it `curve: identifier`, which in our case would be `curve: blue`.
 
-6. Group the textfield and the spline
+6. Group the text field and the curve.
 
 ![inkscape_smoothed_path_curve](files/images/inkscape_smoothed_path_curve.png)
 
