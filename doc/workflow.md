@@ -50,8 +50,6 @@ Open the file and change the key, such that it matches the folder name:
 
 ![./files/images/bibtex_key.png](./files/images/bibtex_key.png)  
 
-
-
 **Finally the folder should now contain the following files:**
 
 `mustermann_2021_svgdigitizer_1.bib`
