@@ -16,7 +16,7 @@ For the example pdf this comes down to
 
 The page number should be the page number in the published pdf. Since the example is not published the page number is `1`. In other cases this could be `1021`.
 
-The pdf should be named according to the same scheme:
+Put the publication pdf in the newly created directory. The pdf should be named according to the same scheme:
 
 `mustermann_2021_svgdigitizer_1.pdf`
 
