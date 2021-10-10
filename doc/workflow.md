@@ -144,8 +144,3 @@ If you want to test whether your files were prepared correctly for echemdb, run:
 `svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --package`
 
 This creates a CSV with the data of the plot and a JSON package file that you can inspect to verify that the data has been correctly extracted.
-
-
-
-
-
