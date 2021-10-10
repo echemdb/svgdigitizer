@@ -1,6 +1,6 @@
 # Digitizing CVs for echemdb
 
-The cyclic voltammogram we trace is provided in Figure 2a in the [publication example](publication_example.pdf):
+The cyclic voltammogram we trace is provided in Figure 2a in the [publication example](files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf):
 
 [<img src="sample_data_2.png" width="450"/>](sample_data_2.png)
 
