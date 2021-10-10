@@ -4,7 +4,7 @@ The cyclic voltammogram we trace is provided in Figure 2a in the [publication ex
 
 [<img src="sample_data_2.png" width="450"/>](sample_data_2.png)
 
-## Step 1: pdf, bib and metadata file preparation
+## Step 1: Prepare pdf, bib and metadata file
 
 **1: Create a folder with the pdf, where the folder name is:**
 
