@@ -24,7 +24,7 @@ Put the publication pdf in the newly created directory. The pdf should be named 
 
 The easiest approach is to search for the article with [Google Scholar](http://scholar.google.com/).
 
-Modify the scholar settings that a bibtex link appears below the citation:
+Modify the scholar settings so that a BibTeX link appears below the citation:
 
 Click on the 3 lines next to the Google Scholar logo
 
