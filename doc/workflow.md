@@ -6,9 +6,9 @@ The cyclic voltammogram we trace is provided in Figure 2a in the [publication ex
 
 ## Step 1: Prepare pdf, bib and metadata file
 
-**1: Create a folder with the pdf, where the folder name is:**
+**1: Create a new directory:**
 
-`FirstAuthorName_Year_FirstTitleWord_FirstPageNr`
+The directory should be named `FirstAuthorName_Year_FirstTitleWord_FirstPageNr`
 
 For the example pdf this comes down to
 
