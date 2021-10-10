@@ -125,8 +125,6 @@ The final file should look like this:
 
 ![inkscape_final](files/images/inkscape_final.png)
 
-8
-
 ## Step 3: Create a metadata file for each digitized curve
 
 Create a yaml file with the same name than the svg file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
