@@ -56,8 +56,6 @@ Open the file and change the key, such that it matches the folder name:
 
 `mustermann_2021_svgdigitizer_1.pdf`
 
-
-
 ## Step 2: Prepare svg and png files from the pdf
 
 Install the `svgdigitizer`.
