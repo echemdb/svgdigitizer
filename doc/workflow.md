@@ -1,4 +1,4 @@
-# Tracing CVs with Inkscape from publication for the echemdb.website
+# Digitizing CVs for echemdb
 
 The cyclic voltammogram we trace is provided in Figure 2a in the [publication example](publication_example.pdf) and looks as follows:
 
