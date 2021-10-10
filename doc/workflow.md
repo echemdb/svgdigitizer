@@ -70,7 +70,7 @@ The filenames are of the form:
 
 **Note:** The page count starts from 0. It does not reflect the original page number in the pdf.
 
-## Step 4: Digitize a plot
+## Step 3: Digitize a plot
 
 **1: Select an svg file with a plot to be digitized**
 
