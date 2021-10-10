@@ -86,7 +86,7 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
    ![inkscape_object_properties_selection](files/images/inkscape_object_properties_selection.png)
 
-3. Select two positions on for each axis (x and y). The first position on the x-axis will be 0.0 V vs RHE. Add a textlabel which contains `x1: 0.0 V vs RHE`. Draw a line from connecting the textlabel and the position on the x-axis. Finally group the line and the textlabel. Repeat this for positions `x2`, `y1` and `y2`.
+3. Mark two positions one for each axis (x and y). The first position on the x-axis will be 0.0 V vs RHE. Add a text label which contains `x1: 0.0 V vs RHE`. Draw a line from connecting the text label and the position on the x-axis. Finally group the line and the text label. Repeat this for positions `x2`, `y1` and `y2`.
 
    ![inkscape_x1_label](files/images/inkscape_x1_label.png)
 
