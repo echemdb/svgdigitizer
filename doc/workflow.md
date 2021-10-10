@@ -133,7 +133,7 @@ Create a yaml file with the same name than the svg file:`mustermann_2021_svgdigi
 
 Adjust all keys in the fle according to the content of the research article.
 
-## Step 4: Upload to website
+## Step 5: Submit to echemdb
 
 Place the folder in website/Literature and create a pull request.
 
