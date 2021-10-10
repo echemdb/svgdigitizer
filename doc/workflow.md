@@ -135,7 +135,7 @@ Adjust all keys in the fle according to the content of the research article.
 
 ## Step 5: Submit to echemdb
 
-Place the folder in website/Literature and create a pull request.
+Propose a pull request that adds your directory to `website/literature`, e.g., by uploading the YAML and SVG files you created at https://github.com/echemdb/website/upload/main/literature/mustermann_2021_svgdigitizer_1
 
 ## Notes
 
