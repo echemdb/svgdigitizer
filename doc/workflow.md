@@ -80,7 +80,7 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
 1. Open the svg file.
 
-2. Click on the image of the pdf page, select `Object properties`, select `Lock` and press `Set`. This prevents the user from moving the image around in the file.
+2. Click on the image of the pdf page, select `Object properties`, select `Lock` and press `Set`. This prevents the user from moving the image.
 
    ![inkscape_object_properties](files/images/inkscape_object_properties.png)
 
