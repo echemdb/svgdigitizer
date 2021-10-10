@@ -4,23 +4,23 @@ The cyclic voltammogram we trace is provided in Figure 2a in the [publication ex
 
 [<img src="sample_data_2.png" width="450"/>](sample_data_2.png)
 
-## Step 1: Prepare pdf, bib and metadata file
+## Step 1: Prepare PDF, BIB and metadata file
 
 **1: Create a new directory:**
 
 The directory should be named `FirstAuthorName_Year_FirstTitleWord_FirstPageNr`
 
-For the example pdf this comes down to
+For the example PDF this comes down to
 
 `mustermann_2021_svgdigitizer_1`
 
 The page number should be the page number in the published pdf. Since the example is not published the page number is `1`. In other cases this could be `1021`.
 
-Put the publication pdf in the newly created directory. The pdf should be named according to the same scheme:
+Put the publication PDF in the newly created directory. The PDF should be named according to the same scheme:
 
 `mustermann_2021_svgdigitizer_1.pdf`
 
-**2: Place a bib file in the folder.**
+**2: Place a BIB file in the folder.**
 
 The easiest approach is to search for the article with [Google Scholar](http://scholar.google.com/).
 
@@ -56,11 +56,11 @@ Open the file and change the key, such that it matches the folder name:
 
 `mustermann_2021_svgdigitizer_1.pdf`
 
-## Step 2: Prepare svg and png files from the pdf
+## Step 2: Prepare SVG and PNG files from the PDF
 
 Install the `svgdigitizer`.
 
-In a shell use `svgdigitizer paginate mustermann_2021_svgdigitizer_1.pdf` to create for each page of the pdf an `svg` and a `png` file in the same folder.
+In a shell use `svgdigitizer paginate mustermann_2021_svgdigitizer_1.pdf` to create for each page of the PDF an `svg` and a `png` file in the same folder.
 
 The filenames are of the form:
 
@@ -68,19 +68,19 @@ The filenames are of the form:
 
 `mustermann_2021_svgdigitizer_1_p0.svg`
 
-**Note:** The page count starts from 0. It does not reflect the original page number in the pdf.
+**Note:** The page count starts from 0. It does not reflect the original page number in the PDF.
 
 ## Step 3: Digitize a plot
 
 **1: Select an svg file with a plot to be digitized**
 
-For this example we use inkscape to digitize some data in plot 2a in the pdf, which is is located on page two of the manuscript (filename containing `_p1`). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single svg file. Therefore, create a copy of the svg file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_p0_2b_blue.svg`, to indicate that this files contains the digitized curve of the blue curve in Figure 2a on page 2. 
+For this example we use inkscape to digitize some data in plot 2a in the PDF, which is is located on page two of the manuscript (filename containing `_p1`). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single svg file. Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_p0_2b_blue.svg`, to indicate that this files contains the digitized curve of the blue curve in Figure 2a on page 2. 
 
  **2: Trace the curve**
 
-1. Open the svg file.
+1. Open the SVG file.
 
-2. Click on the image of the pdf page, select `Object properties`, select `Lock` and press `Set`. This prevents the user from moving the image.
+2. Click on the image of the PDF page, select `Object properties`, select `Lock` and press `Set`. This prevents the user from moving the image.
 
    ![inkscape_object_properties](files/images/inkscape_object_properties.png)
 
@@ -127,11 +127,11 @@ The final file should look like this:
 
 ## Step 4: Create a metadata file for each digitized curve
 
-Create a yaml file with the same name than the svg file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
+Create a YAML file with the same name than the SVG file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
 
 **TODO:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
 
-Adjust all keys in the fle according to the content of the research article.
+Adjust all keys in the file according to the content of the research article.
 
 ## Step 5: Submit to echemdb
 
