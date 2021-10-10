@@ -62,7 +62,7 @@ Install the `svgdigitizer`.
 
 In a shell use `svgdigitizer paginate mustermann_2021_svgdigitizer_1.pdf` to create for each page of the pdf an `svg` and a `png` file in the same folder.
 
-The filenames look as follows:
+The filenames are of the form:
 
 `mustermann_2021_svgdigitizer_1_p0.png`
 
