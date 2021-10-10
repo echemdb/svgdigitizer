@@ -97,8 +97,6 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
    * $^{-2}$ can be written as `-2`
    * The reference on the voltage axis is not always given in the plot. Extract this information from the manuscript text.
 
-   
-
    When all positions are selected the plot looks like the following:
 
    ![inkscape_all_labels](files/images/inkscape_all_labels.png)
