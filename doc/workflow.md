@@ -60,6 +60,8 @@ Open the file and change the key, such that it matches the folder name:
 
 Install the `svgdigitizer`.
 
+**TODO #86:** Add link to installation instructions.
+
 In a shell use `svgdigitizer paginate mustermann_2021_svgdigitizer_1.pdf` to create for each page of the PDF an `svg` and a `png` file in the same folder.
 
 The filenames are of the form:
@@ -91,6 +93,8 @@ For this example we use inkscape to digitize some data in plot 2a in the PDF, wh
    ![inkscape_x1_label](files/images/inkscape_x1_label.png)
 
    **Some notes on labels:**
+
+   **TODO #86:** Add link to possible typos.
 
    * In principle the units have to be provided only on the `x2` and `y2` position. 
    * $\mu$ can be used, but it is more convenient to use `u`instead.
@@ -129,7 +133,7 @@ The final file should look like this:
 
 Create a YAML file with the same name than the SVG file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
 
-**TODO:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
+**TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
 
 Adjust all keys in the file according to the content of the research article.
 
@@ -140,6 +144,8 @@ Propose a pull request that adds your directory to `website/literature`, e.g., b
 ## Notes
 
 If you want to test whether your files were prepared correctly for echemdb, run:
+
+**TODO #86:** Add link to installation instructions.
 
 `svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --package`
 
