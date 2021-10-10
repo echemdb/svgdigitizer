@@ -119,7 +119,7 @@ For this example we use inkscape to digitize some data in plot 2a in the pdf, wh
 
 ![inkscape_smoothed_path_curve](files/images/inkscape_smoothed_path_curve.png)
 
-7. Add a textfield to the plot containing the scan rate, with which the data was acquired. This is not necessarily given in the plot or figure description and might have to extracted from the text fo the manuscript. `scan rate: 50 mV / s` or `rate: 50 mV / s`.
+7. Add a text field to the plot containing the scan rate, with which the data was acquired. This is not necessarily given in the plot or figure description and might have to extracted from the text of the manuscript: `scan rate: 50 mV / s`.
 
 The final file should look like this:
 
