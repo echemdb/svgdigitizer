@@ -68,7 +68,7 @@ The filenames are of the form:
 
 `mustermann_2021_svgdigitizer_1_p0.svg`
 
-**Note:** The page count starts from 0. It also does not reflect the original page number in the pdf.
+**Note:** The page count starts from 0. It does not reflect the original page number in the pdf.
 
 ## Step 4: Digitize a plot
 
