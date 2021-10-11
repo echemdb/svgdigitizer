@@ -1,8 +1,12 @@
 # Digitizing CVs for echemdb
 
-The cyclic voltammogram we trace is provided in Figure 2a in the [publication example](files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf):
+This step by step tutorial explains how to digitize cyclic voltammograms from research papers for the [echemdb/website](https://github.com/echemdb/website) project. An example plot of such a curve is provided in Figure 2a in the [publication example](files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf). 
 
 [<img src="sample_data_2.png" width="450"/>](sample_data_2.png)
+
+To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) (Link to Installation instructions). Furthermore, the manipulation of SVG files is done with [Inkscape](https://inkscape.org/) (tested with V. 0.92).
+
+**TODO #86:** Add link to installation instructions.
 
 ## Step 1: Prepare PDF and BIB file
 
@@ -57,10 +61,6 @@ Open the file and change the key, such that it matches the folder name:
 `mustermann_2021_svgdigitizer_1.pdf`
 
 ## Step 2: Prepare SVG and PNG files from the PDF
-
-Install the `svgdigitizer`.
-
-**TODO #86:** Add link to installation instructions.
 
 In a shell use `svgdigitizer paginate mustermann_2021_svgdigitizer_1.pdf` to create for each page of the PDF an `svg` and a `png` file in the same folder.
 
@@ -138,8 +138,6 @@ Propose a pull request that adds your directory to `website/literature`, e.g., b
 ## Notes
 
 If you want to test whether your files were prepared correctly for echemdb, run:
-
-**TODO #86:** Add link to installation instructions.
 
 `svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --package`
 
