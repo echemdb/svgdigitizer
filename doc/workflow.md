@@ -82,12 +82,6 @@ For this example we use inkscape to digitize some data in plot 2a in the PDF, wh
 
 1. Open the SVG file.
 
-2. Click on the image of the PDF page, select `Object properties`, select `Lock` and press `Set`. This prevents the user from moving the image.
-
-   ![inkscape_object_properties](files/images/inkscape_object_properties.png)
-
-   ![inkscape_object_properties_selection](files/images/inkscape_object_properties_selection.png)
-
 3. Mark two positions one for each axis (x and y). The first position on the x-axis will be 0.0 V vs RHE. Add a text label which contains `x1: 0.0 V vs RHE`. Draw a line from connecting the text label and the position on the x-axis. Finally group the line and the text label. Repeat this for positions `x2`, `y1` and `y2`.
 
    ![inkscape_x1_label](files/images/inkscape_x1_label.png)
