@@ -109,18 +109,14 @@ def paginate(onlypng, pdf):
         if not onlypng:
             image = Image.open(f'{base_image_path}.png')
             width, height = image.size
-            dwg = svgwrite.Drawing(f'{base_image_path}.svg', size=(f'{width}px',
-            f'{height}px'), profile='full')
+            dwg = svgwrite.Drawing(f'{base_image_path}.svg', size=(f'{width}px', f'{height}px'), profile='full')
             Inkscape(dwg)
-            img = dwg.add(svgwrite.image.Image(f'{base_image_path}.png',
-            insert=(0, 0), size=(f'{width}px', f'{height}px')))
+            img = dwg.add(svgwrite.image.Image(f'{base_image_path}.png', insert=(0, 0), size=(f'{width}px', f'{height}px')))
 
             # workaround: add missing locking attribute for image element
+            # https://github.com/mozman/svgwrite/blob/c8cbf6f615910b3818ccf939fce0e407c9c789cb/svgwrite/extensions/inkscape.py#L50
             elements = dwg.validator.elements
-            elements['image'].valid_attributes = \
-            {
-            'sodipodi:insensitive',
-            } | elements['image'].valid_attributes
+            elements['image'].valid_attributes = {'sodipodi:insensitive', } | elements['image'].valid_attributes
             img.attribs['sodipodi:insensitive'] = 'true'
 
             dwg.save(pretty=True)
