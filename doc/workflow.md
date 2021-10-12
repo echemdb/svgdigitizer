@@ -127,6 +127,8 @@ The final file should look like this:
 
 Create a YAML file with the same name than the SVG file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
 
+The general structure of the yaml file for the website is provided [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema/blob/main/examples/Author_YYYY_FirstTitleWord_Page_fignr_identifier.yaml)
+
 **TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
 
 Adjust all keys in the file according to the content of the research article.
