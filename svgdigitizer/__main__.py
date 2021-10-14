@@ -20,7 +20,6 @@
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 import click
-import os.path
 
 help_sampling = 'sampling interval on the x-axis'
 
@@ -40,14 +39,13 @@ def plot(svg, sampling_interval):
 
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
-@click.option('--outdir', type=click.Path(file_okay=False), default=".", help='write output files to this directory')
 @click.argument('svg', type=click.Path(exists=True))
-def digitize(svg, sampling_interval, outdir):
+def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     plot = SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval)
     from pathlib import Path
-    plot.df.to_csv(os.path.join(outdir, Path(svg).with_suffix('.csv').name), index=False)
+    plot.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
 
 
 @click.command()
@@ -82,6 +80,7 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     from pathlib import Path
     csvname = Path(svg).with_suffix('.csv').name
 
+    import os.path
     cv.df.to_csv(os.path.join(outdir, csvname), index=False)
 
     if package:
