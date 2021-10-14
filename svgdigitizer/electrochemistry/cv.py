@@ -43,8 +43,8 @@ class CV():
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
     * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>x2: 1 mV</text>``.  Optionally, this text also contains a reference such as ``<text>x2: 1 mV vs. RHE</text>``.
-    * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
-    * that a rate is provided in a text field such as ``<text">scan rate: 50 V/s</text>`` or ``<text>rate: 50 mV/s</text>`` placed anywhere in the SVG file.
+    * that the label of the point x2 on the y-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
+    * that a rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` or ``<text>rate: 50 mV / s</text>`` placed anywhere in the SVG file.
 
     The data in the CV can be returned as a dataframe with axis 't', 'U', and 'I' (current) or 'j' (current density).
     The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'::
@@ -85,11 +85,11 @@ class CV():
 
     The data of this dataframe can also be visualized in a plot,
     where the axis labels and the data are provided SI units
-    (not in the dimensions of the orginal cyclci voltamogram).::
+    (not in the dimensions of the orginal cyclic voltammogram).::
 
         >>> cv.plot()
 
-    All the properties of the original plot can be returned as a dict::
+    The properties of the original plot can be returned as a dict::
 
         >>> cv.metadata
         {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': ''}}
@@ -107,7 +107,8 @@ class CV():
 
         The x-axis dimension U is given in V.
         The y-axis dimension can either be I (current) or j (current density), given in A or A / m², respectively.
-        The latter parameters are derived from the `<text>` associated with the y-axis labels in the SVG file such as `<text x="-100" y="0">y2: 1 A</text>`.
+        The latter dimension and unit are derived from the `<text>` associated with the y-axis labels in the SVG file such as `<text x="-100" y="0">y2: 1 A</text>`.
+        Labels in `y1` position are ignored.
 
         Examples:
 
@@ -180,7 +181,7 @@ class CV():
     @classmethod
     def get_axis_unit(cls, unit):
         r"""
-        Return `unit` as an astropy unit.
+        Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
 
         This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
 
