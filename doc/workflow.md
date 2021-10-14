@@ -1,12 +1,14 @@
-# Digitizing CVs for echemdb
+# Digitizing plots for echemdb
 
-This step by step tutorial explains how to digitize cyclic voltammograms from research papers for the [echemdb/website](https://github.com/echemdb/website) project. An example plot of such a curve is provided in Figure 2a in the [publication example](files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf). 
+This step by step tutorial explains how to digitize plots commonly found in electrochemical research papers (e.g. cyclic voltammograms) for the [echemdb/website](https://github.com/echemdb/website) project. In this example a cyclic voltammogram is digitized. A plot is provided in Figure 2a in the [publication example](files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf). 
 
 [<img src="sample_data_2.png" width="450"/>](sample_data_2.png)
 
-To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) (Link to Installation instructions). Furthermore, the manipulation of SVG files is done with [Inkscape](https://inkscape.org/) (tested with V. 0.92).
+To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) (Link to Installation instructions). 
 
 **TODO #86:** Add link to installation instructions.
+
+Furthermore, the manipulation of SVG files is done with [Inkscape](https://inkscape.org/) (tested with V. 0.92).
 
 ## Step 1: Prepare PDF and BIB file
 
@@ -127,6 +129,8 @@ The final file should look like this:
 
 Create a YAML file with the same name than the SVG file:`mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml`
 
+The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema/blob/main/examples/Author_YYYY_FirstTitleWord_Page_fignr_identifier.yaml)
+
 **TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
 
 Adjust all keys in the file according to the content of the research article.
@@ -139,6 +143,6 @@ Propose a pull request that adds your directory to `website/literature`, e.g., b
 
 If you want to test whether your files were prepared correctly for echemdb, run:
 
-`svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --package`
+`svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --sampling 0.001 --package`
 
 This creates a CSV with the data of the plot and a JSON package file that you can inspect to verify that the data has been correctly extracted.
