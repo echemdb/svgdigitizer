@@ -52,7 +52,7 @@ def digitize(svg, sampling_interval):
 @click.option('--sampling_interval', type=float, default=None, help='sampling interval on the x-axis in volt (V)')
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
 @click.option('--package', is_flag=True, help='create .json in data package format')
-@click.option('--outdir', type=click.Path(file_okay=False), default=".", help='write output files to this directory')
+@click.option('--outdir', type=click.Path(file_okay=False), default=None, help='write output files to this directory')
 @click.argument('svg', type=click.Path(exists=True))
 def cv(svg, sampling_interval, metadata, package, outdir):
     import yaml
@@ -60,6 +60,10 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
+
+    import os.path
+    if outdir is None:
+        outdir = os.path.dirname(svg)
 
     import os
     os.makedirs(str(outdir), exist_ok=True)
@@ -80,7 +84,6 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     from pathlib import Path
     csvname = Path(svg).with_suffix('.csv').name
 
-    import os.path
     cv.df.to_csv(os.path.join(outdir, csvname), index=False)
 
     if package:
