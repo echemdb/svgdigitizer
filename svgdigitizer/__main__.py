@@ -99,6 +99,7 @@ def cv(svg, sampling_interval, metadata, package):
 def paginate(onlypng, pdf):
     from pdf2image import convert_from_path
     import svgwrite
+    from svgwrite.extensions.inkscape import Inkscape
     from PIL import Image
     basename = pdf.split('.')[0]
     pages = convert_from_path(pdf, dpi=600)
@@ -108,9 +109,17 @@ def paginate(onlypng, pdf):
         if not onlypng:
             image = Image.open(f'{base_image_path}.png')
             width, height = image.size
-            dwg = svgwrite.Drawing(f'{base_image_path}.svg', size=(f'{width}px', f'{height}px'), profile='tiny')
-            dwg.add(svgwrite.image.Image(f'{base_image_path}.png', insert=(0, 0), size=(f'{width}px', f'{height}px')))
-            dwg.save()
+            dwg = svgwrite.Drawing(f'{base_image_path}.svg', size=(f'{width}px', f'{height}px'), profile='full')
+            Inkscape(dwg)
+            img = dwg.add(svgwrite.image.Image(f'{base_image_path}.png', insert=(0, 0), size=(f'{width}px', f'{height}px')))
+
+            # workaround: add missing locking attribute for image element
+            # https://github.com/mozman/svgwrite/blob/c8cbf6f615910b3818ccf939fce0e407c9c789cb/svgwrite/extensions/inkscape.py#L50
+            elements = dwg.validator.elements
+            elements['image'].valid_attributes = {'sodipodi:insensitive', } | elements['image'].valid_attributes
+            img.attribs['sodipodi:insensitive'] = 'true'
+
+            dwg.save(pretty=True)
 
 
 cli.add_command(plot)
