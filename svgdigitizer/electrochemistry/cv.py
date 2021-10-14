@@ -30,10 +30,10 @@ from astropy import units as u
 class CV():
     # TODO: Add documentation with a usage example. #60
     # Until documentation is added, this class will not show in the auto-generated documentation.
-    """
+    r"""
     A digitized cyclic voltammogram (CV) derived from an SVG file, which provides access to the objects of the CV.
 
-    Typically, the SVG input has been created by tracing a published CV from
+    Typically, the SVG input has been created by tracing a CV from
     a publication with a `<path>` in an SVG editor such as Inkscape. Such a
     path can then be analyzed by this class to produce the coordinates
     corrsponding to the original measured values.
@@ -42,57 +42,57 @@ class CV():
 
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
-    * that the label of the point x2 on the x-axis contains a value and a unit such as `<text>x2: 1 mV</text>`.  Optionally, this text also contains a reference such as `<text>x2: 1 mV vs. RHE</text>`.
-    * that the label of the point x2 on the x-axis contains a value and a unit such as `<text>y2: 1 uA / cm2</text>`.
-    * that a rate is provided in a text field such as `<text">scan rate: 50 V/s</text>`or `<text>rate: 50 mV/s</text> placed anywhere in the SVG file.
+    * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>x2: 1 mV</text>``.  Optionally, this text also contains a reference such as ``<text>x2: 1 mV vs. RHE</text>``.
+    * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
+    * that a rate is provided in a text field such as ``<text">scan rate: 50 V/s</text>`` or ``<text>rate: 50 mV/s</text>`` placed anywhere in the SVG file.
 
-    The data in the CV can be returned as a dataframe with axis 't', 'U', and 'I' (current) or 'j (current density).
-    The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'.::
+    The data in the CV can be returned as a dataframe with axis 't', 'U', and 'I' (current) or 'j' (current density).
+    The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 mV vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 mV vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.df
-                     t      U     j
-            0  0.00000  0.000  0.00
-            1  0.00002  0.001  0.01
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0 mV vs. RHE</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1 mV vs. RHE</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1 uA / cm2</text>
+        ...   </g>
+        ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+        ... </svg>'''))
+        >>> cv = CV(SVGPlot(svg))
+        >>> cv.df
+                 t      U     j
+        0  0.00000  0.000  0.00
+        1  0.00002  0.001  0.01
 
-            The data of this dataframe can also be visualized in a plot,
-            where the axis labels and the data are provided SI units
-            (not in the dimensions of the orginal cyclci voltamogram).::
+    The data of this dataframe can also be visualized in a plot,
+    where the axis labels and the data are provided SI units
+    (not in the dimensions of the orginal cyclci voltamogram).::
 
-            >>> cv.plot()
+        >>> cv.plot()
 
-            All the properties of the original plot can be returned as a dict::
+    All the properties of the original plot can be returned as a dict::
 
-            >>> cv.metadata
-            {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': ''}}
+        >>> cv.metadata
+        {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': ''}}
 
     """
     def __init__(self, svgplot, metadata=None):
@@ -109,9 +109,9 @@ class CV():
         The y-axis dimension can either be I (current) or j (current density), given in A or A / m², respectively.
         The latter parameters are derived from the `<text>` associated with the y-axis labels in the SVG file such as `<text x="-100" y="0">y2: 1 A</text>`.
 
-        Examples::
+        Examples:
 
-        In this first example a current I is plotted on the y-axis in `mA`.
+        In this first example a current I is plotted on the y-axis in `mA`.::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
