@@ -20,6 +20,7 @@
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 import click
+import os.path
 
 help_sampling = 'sampling interval on the x-axis'
 
@@ -39,26 +40,31 @@ def plot(svg, sampling_interval):
 
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
+@click.option('--outdir', type=click.Path(file_okay=False), default=".", help='write output files to this directory')
 @click.argument('svg', type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     plot = SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval)
     from pathlib import Path
-    plot.df.to_csv(Path(svg).with_suffix('.csv'), index=False)
+    plot.df.to_csv(os.path.join(outdir, Path(svg).with_suffix('.csv').name), index=False)
 
 
 @click.command()
 @click.option('--sampling_interval', type=float, default=None, help='sampling interval on the x-axis in volt (V)')
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
 @click.option('--package', is_flag=True, help='create .json in data package format')
+@click.option('--outdir', type=click.Path(file_okay=False), default=".", help='write output files to this directory')
 @click.argument('svg', type=click.Path(exists=True))
-def cv(svg, sampling_interval, metadata, package):
+def cv(svg, sampling_interval, metadata, package, outdir):
     import yaml
     from astropy import units as u
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
+
+    import os
+    os.makedirs(str(outdir), exist_ok=True)
 
     # Determine unit of the voltage scale.
     cv = CV(SVGPlot(SVG(open(svg, 'rb'))))
@@ -74,13 +80,14 @@ def cv(svg, sampling_interval, metadata, package):
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path
-    csvname = Path(svg).with_suffix('.csv')
-    cv.df.to_csv(csvname, index=False)
+    csvname = Path(svg).with_suffix('.csv').name
+
+    cv.df.to_csv(os.path.join(outdir, csvname), index=False)
 
     if package:
         from datapackage import Package
-        p = Package(cv.metadata)
-        p.infer(str(csvname))
+        p = Package(cv.metadata, base_path=outdir)
+        p.infer(csvname)
 
     from datetime import datetime, date
 
@@ -89,7 +96,7 @@ def cv(svg, sampling_interval, metadata, package):
             return o.__str__()
 
     import json
-    with open(Path(svg).with_suffix('.json'), "w") as outfile:
+    with open(os.path.join(outdir, Path(svg).with_suffix('.json').name), "w") as outfile:
         json.dump(p.descriptor if package else cv.metadata, outfile, default=defaultconverter)
 
 
