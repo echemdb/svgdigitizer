@@ -42,7 +42,7 @@ def plot(svg, sampling_interval):
 @click.option('--sampling_interval', type=float, default=None, help=help_sampling)
 @click.option('--outdir', type=click.Path(file_okay=False), default=".", help='write output files to this directory')
 @click.argument('svg', type=click.Path(exists=True))
-def digitize(svg, sampling_interval):
+def digitize(svg, sampling_interval, outdir):
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     plot = SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval)
