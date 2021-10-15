@@ -42,7 +42,7 @@ class CV():
 
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
-    
+
     * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>x2: 1 mV</text>``.  Optionally, this text also contains a reference such as ``<text>x2: 1 mV vs. RHE</text>``.
     * that the label of the point x2 on the y-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
     * that a rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` or ``<text>rate: 50 mV / s</text>`` placed anywhere in the SVG file.
