@@ -1,6 +1,6 @@
 # Digitizing plots for echemdb
 
-This step by step tutorial explains how to digitize plots commonly found in electrochemical research papers (e.g. cyclic voltammograms) for the [echemdb/website](https://github.com/echemdb/website) project. In this example a cyclic voltammogram is digitized. A plot is provided in Figure 2a in the [publication example](files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf). 
+This step by step tutorial explains how to digitize plots commonly found in electrochemical research papers (e.g. cyclic voltammograms) for the [echemdb/website](https://github.com/echemdb/website) project. In this example a cyclic voltammogram is digitized. A plot is provided in Figure 2a in the {download}`./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf  <publication example>`. 
 
 [<img src="sample_data_2.png" width="450"/>](sample_data_2.png)
 
