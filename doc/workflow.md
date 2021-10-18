@@ -1,8 +1,8 @@
 # Digitizing plots for echemdb
 
-This step by step tutorial explains how to digitize plots commonly found in electrochemical research papers (e.g. cyclic voltammograms) for the [echemdb/website](https://github.com/echemdb/website) project. In this example a cyclic voltammogram is digitized. A plot is provided in Figure 2a in the [publication example](files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf). 
+This step by step tutorial explains how to digitize plots commonly found in electrochemical research papers, e.g., cyclic voltammograms, for the [echemdb/website](https://github.com/echemdb/website) project. In this example a cyclic voltammogram is digitized. A plot is provided in Figure 2a in the <a href="./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf" download>publication example</a>.
 
-[<img src="sample_data_2.png" width="450"/>](sample_data_2.png)
+![files/sample_data_2.png](files/sample_data_2.png) 
 
 To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) (Link to Installation instructions). 
 
@@ -101,7 +101,7 @@ For this example we use inkscape to digitize some data in plot 2a in the PDF, wh
 
    ![inkscape_all_labels](files/images/inkscape_all_labels.png)
 
-4. Roughly trace the blue curve by selecting the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png)and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png).
+4. Roughly trace the blue curve by selecting the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png).
 
    
 
@@ -131,7 +131,7 @@ Create a YAML file with the same name than the SVG file:`mustermann_2021_svgdigi
 
 The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema/blob/main/examples/Author_YYYY_FirstTitleWord_Page_fignr_identifier.yaml)
 
-**TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located [here](./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml).
+**TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located <a href="./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml" download>here</a>.
 
 Adjust all keys in the file according to the content of the research article.
 
