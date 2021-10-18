@@ -1,3 +1,17 @@
+r"""
+This module contains specific functions to digitize cyclic voltammograms.
+Cyclic voltammograms represent current-voltage curves, where the voltage applied
+at an electrochemical working electrode is modulated by a triangular wave potential 
+(applied vs. a known reference potential). An example is shwon in the following Figure.
+
+
+
+These curves are recorded with a specific scan
+
+
+For the documentation below, the path of a CV is presented simply as line.
+
+"""
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -23,13 +37,10 @@ from collections import namedtuple
 from functools import cache
 import re
 import matplotlib.pyplot as plt
-from pathlib import Path
 from astropy import units as u
 
 
 class CV():
-    # TODO: Add documentation with a usage example. #60
-    # Until documentation is added, this class will not show in the auto-generated documentation.
     r"""
     A digitized cyclic voltammogram (CV) derived from an SVG file, which provides access to the objects of the CV.
 
