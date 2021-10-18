@@ -1,13 +1,26 @@
 r"""
 This module contains specific functions to digitize cyclic voltammograms.
 Cyclic voltammograms represent current-voltage curves, where the voltage applied
-at an electrochemical working electrode is modulated by a triangular wave potential 
-(applied vs. a known reference potential). An example is shwon in the following Figure.
+at an electrochemical working electrode is modulated by a triangular wave potential
+(applied vs. a known reference potential). An example is shwon in the top part of
+the following Figure.
 
+.. image:: ../../doc/files/images/sample_data_2.png
+  :width: 400
+  :alt: Alternative text
 
+These curves are recorded with a specific scan rate given in units of ``V / s``,
+which is usually provided in the scientific publication. With this information the
+the time axis can be reconstructed.
 
-These curves are recorded with a specific scan
+The CV can be digitized by importing the Figure in an svg editor, such as Inkscape,
+where the curve is traced, the axis are labeled and the scan rate is provided.
+This SVG file can then be analyzed by this class to produce the coordinates
+corrsponding to the original measured values.
 
+A more detailed description on preparing the svg files is provieded in the ``CV``
+or ...
+TODO:: Link to workflow.md
 
 For the documentation below, the path of a CV is presented simply as line.
 
