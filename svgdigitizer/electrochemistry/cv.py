@@ -10,7 +10,7 @@ the following Figure.
   :alt: Alternative text
 
 These curves are recorded with a specific scan rate given in units of ``V / s``.
-This quantity is usually provided in the scientific publication. 
+This quantity is usually provided in the scientific publication.
 With this information the time axis can be reconstructed.
 
 The CV can be digitized by importing the plot in an SVG editor, such as Inkscape,
@@ -56,7 +56,7 @@ from astropy import units as u
 
 class CV():
     r"""
-    A digitized cyclic voltammogram (CV) derived from an SVG file, 
+    A digitized cyclic voltammogram (CV) derived from an SVG file,
     which provides access to the objects of the CV.
 
     Typically, the SVG input has been created by tracing a CV from
@@ -244,9 +244,9 @@ class CV():
     def x_label(self):
         r"""
         Return the label on the x-axis of the SVG plot.
-        In contrast to the y-label, which only consists of a unit, 
+        In contrast to the y-label, which only consists of a unit,
         the x-label consists of a unit and a reference.
-        The unit and the reference are united in a single string, 
+        The unit and the reference are united in a single string,
         which are separated by ``x_label``.
 
         EXAMPLES::
