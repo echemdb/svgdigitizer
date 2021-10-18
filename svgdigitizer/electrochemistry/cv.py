@@ -9,18 +9,19 @@ the following Figure.
   :width: 400
   :alt: Alternative text
 
-These curves are recorded with a specific scan rate given in units of ``V / s``,
-which is usually provided in the scientific publication. With this information the
-the time axis can be reconstructed.
+These curves are recorded with a specific scan rate given in units of ``V / s``.
+This quantity is usually provided in the scientific publication. 
+With this information the time axis can be reconstructed.
 
-The CV can be digitized by importing the Figure in an svg editor, such as Inkscape,
+The CV can be digitized by importing the plot in an SVG editor, such as Inkscape,
 where the curve is traced, the axis are labeled and the scan rate is provided.
 This SVG file can then be analyzed by this class to produce the coordinates
 corrsponding to the original measured values.
 
-A more detailed description on preparing the svg files is provieded in the ``CV``
+A more detailed description on preparing the SVG files is provieded in the :class:`CV`
 or ...
-TODO:: Link to workflow.md
+
+TODO:: Link to workflow.md (see issue #73)
 
 For the documentation below, the path of a CV is presented simply as line.
 
@@ -55,12 +56,15 @@ from astropy import units as u
 
 class CV():
     r"""
-    A digitized cyclic voltammogram (CV) derived from an SVG file, which provides access to the objects of the CV.
+    A digitized cyclic voltammogram (CV) derived from an SVG file, 
+    which provides access to the objects of the CV.
 
     Typically, the SVG input has been created by tracing a CV from
     a publication with a `<path>` in an SVG editor such as Inkscape. Such a
     path can then be analyzed by this class to produce the coordinates
     corrsponding to the original measured values.
+
+    TODO:: Link to workflow.md (see issue #73)
 
     EXAMPLES:
 
@@ -130,10 +134,10 @@ class CV():
         r"""
         Return the dimension and the SI units of the x- and y-axis.
 
-        The x-axis dimension U is given in V.
-        The y-axis dimension can either be I (current) or j (current density), given in A or A / m², respectively.
-        The latter dimension and unit are derived from the `<text>` associated with the y-axis labels in the SVG file such as `<text x="-100" y="0">y2: 1 A</text>`.
-        Labels in `y1` position are ignored.
+        * The x-axis dimension 'U' is given in 'V'.
+        * The y-axis dimension can either be 'I' (current) or 'j' (current density), given in 'A' or 'A / m²', respectively.
+        * The latter dimension and unit are derived from the ``<text>`` associated with the y-axis labels in the SVG file such as ``<text x="-100" y="0">y2: 1 A</text>``.
+        * Labels in `y1` position are ignored.
 
         Examples:
 
@@ -167,7 +171,7 @@ class CV():
             >>> cv.axis_properties
             {'x': {'dimension': 'U', 'unit': 'V'}, 'y': {'dimension': 'I', 'unit': 'A'}}
 
-        In this second example a current density j is plotted on the y-axis in `uA / cm2`::
+        In this second example a current density 'j' is plotted on the y-axis in `uA / cm2`::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
@@ -240,8 +244,10 @@ class CV():
     def x_label(self):
         r"""
         Return the label on the x-axis of the SVG plot.
-        In contrast to the y-label, which only consists of a unit, the x-label consists of a unit and a reference.
-        The unit and the reference are united in a single string, which are separated by x_label.
+        In contrast to the y-label, which only consists of a unit, 
+        the x-label consists of a unit and a reference.
+        The unit and the reference are united in a single string, 
+        which are separated by ``x_label``.
 
         EXAMPLES::
 
@@ -292,7 +298,7 @@ class CV():
         r"""
         Return the scan rate of the plot.
 
-        The scan rate is read from a `<text>` in the SVG file such as `<text>scan rate: 50 V/s</text>`.
+        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
 
         Examples::
 
@@ -346,8 +352,7 @@ class CV():
         The dataframe is constructed from the 'x' and 'y' axis of 'svgplot.df',
         which are usually not in SI units.
 
-        The time axis can only be created when a (scan) rate is given in the plot, i.e., 50 mV /s.
-        <path d="M 0 100 L 100 0" />
+        The time axis can only be created when a (scan) rate is given in the plot, i.e., '50 mV /s'.
 
         EXAMPLES::
 
@@ -458,7 +463,7 @@ class CV():
 
     def _add_I_axis(self, df):
         r"""
-        Add a current or current desnity column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
+        Add a current 'I' or current density 'j' column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
 
         EXAMPLES::
 
@@ -593,6 +598,7 @@ class CV():
 
     @property
     def metadata(self, comment=''):
+        # TODO: Metadata is not a property (see issue #85)
         r"""
         Returns a dict with properties of the original figure derived from textlabels in the SVG file.
 
