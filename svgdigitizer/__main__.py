@@ -77,13 +77,21 @@ def digitize(svg, sampling_interval):
 @click.option('--sampling_interval', type=float, default=None, help='sampling interval on the x-axis in volt (V)')
 @click.option('--metadata', type=click.File("rb"), default=None, help='yaml file with metadata')
 @click.option('--package', is_flag=True, help='create .json in data package format')
+@click.option('--outdir', type=click.Path(file_okay=False), default=None, help='write output files to this directory')
 @click.argument('svg', type=click.Path(exists=True))
-def cv(svg, sampling_interval, metadata, package):
+def cv(svg, sampling_interval, metadata, package, outdir):
     import yaml
     from astropy import units as u
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
+
+    import os.path
+    if outdir is None:
+        outdir = os.path.dirname(svg)
+
+    import os
+    os.makedirs(str(outdir), exist_ok=True)
 
     # Determine unit of the voltage scale.
     cv = CV(SVGPlot(SVG(open(svg, 'rb'))))
@@ -99,13 +107,14 @@ def cv(svg, sampling_interval, metadata, package):
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path
-    csvname = Path(svg).with_suffix('.csv')
-    cv.df.to_csv(csvname, index=False)
+    csvname = Path(svg).with_suffix('.csv').name
+
+    cv.df.to_csv(os.path.join(outdir, csvname), index=False)
 
     if package:
         from datapackage import Package
-        p = Package(cv.metadata)
-        p.infer(str(csvname))
+        p = Package(cv.metadata, base_path=outdir)
+        p.infer(csvname)
 
     from datetime import datetime, date
 
@@ -114,7 +123,7 @@ def cv(svg, sampling_interval, metadata, package):
             return o.__str__()
 
     import json
-    with open(Path(svg).with_suffix('.json'), "w") as outfile:
+    with open(os.path.join(outdir, Path(svg).with_suffix('.json').name), "w") as outfile:
         json.dump(p.descriptor if package else cv.metadata, outfile, default=defaultconverter)
 
 
@@ -124,6 +133,7 @@ def cv(svg, sampling_interval, metadata, package):
 def paginate(onlypng, pdf):
     from pdf2image import convert_from_path
     import svgwrite
+    from svgwrite.extensions.inkscape import Inkscape
     from PIL import Image
     basename = pdf.split('.')[0]
     pages = convert_from_path(pdf, dpi=600)
@@ -133,9 +143,17 @@ def paginate(onlypng, pdf):
         if not onlypng:
             image = Image.open(f'{base_image_path}.png')
             width, height = image.size
-            dwg = svgwrite.Drawing(f'{base_image_path}.svg', size=(f'{width}px', f'{height}px'), profile='tiny')
-            dwg.add(svgwrite.image.Image(f'{base_image_path}.png', insert=(0, 0), size=(f'{width}px', f'{height}px')))
-            dwg.save()
+            dwg = svgwrite.Drawing(f'{base_image_path}.svg', size=(f'{width}px', f'{height}px'), profile='full')
+            Inkscape(dwg)
+            img = dwg.add(svgwrite.image.Image(f'{base_image_path}.png', insert=(0, 0), size=(f'{width}px', f'{height}px')))
+
+            # workaround: add missing locking attribute for image element
+            # https://github.com/mozman/svgwrite/blob/c8cbf6f615910b3818ccf939fce0e407c9c789cb/svgwrite/extensions/inkscape.py#L50
+            elements = dwg.validator.elements
+            elements['image'].valid_attributes = {'sodipodi:insensitive', } | elements['image'].valid_attributes
+            img.attribs['sodipodi:insensitive'] = 'true'
+
+            dwg.save(pretty=True)
 
 
 cli.add_command(plot)
