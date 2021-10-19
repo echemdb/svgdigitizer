@@ -139,7 +139,7 @@ class CV():
         * The latter dimension and unit are derived from the ``<text>`` associated with the y-axis labels in the SVG file such as ``<text x="-100" y="0">y2: 1 A</text>``.
         * Labels in `x1` and `y1` position are ignored.
 
-        Examples:
+        EXAMPLES:
 
         In this first example a current I is plotted on the y-axis in `mA`.::
 
