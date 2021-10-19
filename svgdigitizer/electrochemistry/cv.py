@@ -137,7 +137,7 @@ class CV():
         * The x-axis dimension 'U' is given in 'V'.
         * The y-axis dimension can either be 'I' (current) or 'j' (current density), given in 'A' or 'A / m²', respectively.
         * The latter dimension and unit are derived from the ``<text>`` associated with the y-axis labels in the SVG file such as ``<text x="-100" y="0">y2: 1 A</text>``.
-        * Labels in `y1` position are ignored.
+        * Labels in `x1` and `y1` position are ignored.
 
         Examples:
 
