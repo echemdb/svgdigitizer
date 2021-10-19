@@ -344,7 +344,7 @@ class CV():
     @property
     @cache
     def df(self):
-        # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltamogram and which is displayed in the documentation (see issue #73).
+        # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltammogram and which is displayed in the documentation (see issue #73).
         r"""
         Return a dataframe with axis 't', 'U', and 'I' (or 'j).
         The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
