@@ -606,7 +606,9 @@ class CV():
 
         The comment is read from a ``<text>`` in the SVG file such as ``<text>comment: noisy data</text>``.
 
-        EXAMPLES::
+        EXAMPLES:
+
+        The first example contains a comment::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
@@ -637,16 +639,43 @@ class CV():
             >>> cv.comment
             'noisy data'
 
+        The seconmd example does not contain a comment::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.comment
+            ''
+
         """
-        comments = self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)')
-        # TODO: assert that only one label contains the scan rate (see issue #58)
-        # TODO: assert that a rate is available at all (see issue #58)
-
-        # Convert to astropy unit
-        # comments[0].unit = CV.get_axis_unit(rates[0].unit)
-        # rate = float(rates[0].value) * rates[0].unit
-
-        return comments[0].value
+        if not self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)'):
+            return ''
+        else:
+            comments = self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)')
+            return comments[0].value
+        # TODO: assert that only one label contains a comment
 
     @property
     def metadata(self):
