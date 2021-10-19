@@ -9,7 +9,7 @@ the following Figure.
   :width: 400
   :alt: Alternative text
 
-These curves are recorded with a specific scan rate given in units of ``V / s``.
+These curves are recorded with a constant scan rate given in units of ``V / s``.
 This quantity is usually provided in the scientific publication.
 With this information the time axis can be reconstructed.
 
