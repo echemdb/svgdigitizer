@@ -245,7 +245,7 @@ class CV():
         r"""
         Return the label on the x-axis of the SVG plot.
         Usually the label on an axis only consits of a unit.
-        In the case of electrochemical data the x-label 
+        In the case of electrochemical data the x-label
         usually consists of a unit and a reference.
         The unit and the reference are united in a single string,
         which are separated by ``x_label`` providing access to
