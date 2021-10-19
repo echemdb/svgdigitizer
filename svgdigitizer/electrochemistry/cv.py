@@ -114,7 +114,7 @@ class CV():
 
     The data of this dataframe can also be visualized in a plot,
     where the axis labels and the data are provided in SI units
-    (not in the dimensions of the orginal cyclic voltammogram).::
+    (not in the dimensions of the original cyclic voltammogram).::
 
         >>> cv.plot()
 
