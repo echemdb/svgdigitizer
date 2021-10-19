@@ -244,10 +244,12 @@ class CV():
     def x_label(self):
         r"""
         Return the label on the x-axis of the SVG plot.
-        In contrast to the y-label, which only consists of a unit,
-        the x-label consists of a unit and a reference.
+        Usually the label on an axis only consits of a unit.
+        In the case of electrochemical data the x-label 
+        usually consists of a unit and a reference.
         The unit and the reference are united in a single string,
-        which are separated by ``x_label``.
+        which are separated by ``x_label`` providing access to
+        the unit and the reference.
 
         EXAMPLES::
 
@@ -300,7 +302,7 @@ class CV():
 
         The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
 
-        Examples::
+        EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
