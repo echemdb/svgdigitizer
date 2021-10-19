@@ -113,7 +113,7 @@ class CV():
         1  0.00002  0.001  0.01
 
     The data of this dataframe can also be visualized in a plot,
-    where the axis labels and the data are provided SI units
+    where the axis labels and the data are provided in SI units
     (not in the dimensions of the orginal cyclic voltammogram).::
 
         >>> cv.plot()
