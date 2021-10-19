@@ -75,7 +75,7 @@ class CV():
     * that the label of the point x2 on the y-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
     * that a rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` or ``<text>rate: 50 mV / s</text>`` placed anywhere in the SVG file.
 
-    The data in the CV can be returned as a dataframe with axis 't', 'U', and 'I' (current) or 'j' (current density).
+    The data of the CV can be returned as a dataframe with axis 't', 'U', and 'I' (current) or 'j' (current density).
     The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'::
 
         >>> from svgdigitizer.svg import SVG
