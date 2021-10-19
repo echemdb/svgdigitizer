@@ -14,7 +14,7 @@ This quantity is usually provided in the scientific publication.
 With this information the time axis can be reconstructed.
 
 The CV can be digitized by importing the plot in an SVG editor, such as Inkscape,
-where the curve is traced, the axis are labeled and the scan rate is provided.
+where the curve is traced, the axes are labeled and the scan rate is provided.
 This SVG file can then be analyzed by this class to produce the coordinates
 corrsponding to the original measured values.
 
