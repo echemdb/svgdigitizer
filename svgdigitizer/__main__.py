@@ -1,3 +1,21 @@
+r"""
+The SVGDigitizer suite.
+
+EXAMPLES::
+
+    >>> from .test.cli import invoke
+    >>> invoke(cli, "--help") # doctest: +NORMALIZE_WHITESPACE
+    Usage: cli [OPTIONS] COMMAND [ARGS]...
+      The SVGDigitizer suite.
+    Options:
+      --help Show this message and exit.
+    Commands:
+      cv
+      digitize
+      paginate
+      plot      Display a plot of the data traced in an SVG.
+
+"""
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -21,24 +39,31 @@
 # ********************************************************************
 import click
 
-help_sampling = 'sampling interval on the x-axis'
 
-
-@click.group()
+@click.group(help=__doc__.split('EXAMPLES')[0])
 def cli(): pass
 
 
-@click.command()
-@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
-@click.argument('svg', type=click.Path(exists=True))
+@click.command(help="Display a plot of the data traced in an SVG.")
+@click.option('--sampling_interval', type=float, default=None, help='Sampling interval on the x-axis.')
+@click.argument('svg', type=click.File('rb'))
 def plot(svg, sampling_interval):
+    r"""
+    EXAMPLES::
+
+        >>> import os.path
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy.svg") as directory:
+        ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
+
+    """
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
-    SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval).plot()
+    SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
 
 
 @click.command()
-@click.option('--sampling_interval', type=float, default=None, help=help_sampling)
+@click.option('--sampling_interval', type=float, default=None, help='Sampling interval on the x-axis.')
 @click.argument('svg', type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
     from svgdigitizer.svgplot import SVGPlot
@@ -136,6 +161,10 @@ cli.add_command(digitize)
 cli.add_command(cv)
 cli.add_command(paginate)
 
+# Register command docstrings for doctesting.
+# Since commands are not fnuctions anymore due to their decorator, their
+# docstrings would otherwise be ignored.
+__test__ = {name: command.__doc__ for (name, command) in cli.commands.items() if command.__doc__}
 
 if __name__ == "__main__":
     cli()
