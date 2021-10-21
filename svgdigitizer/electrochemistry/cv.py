@@ -52,6 +52,9 @@ from functools import cache
 import re
 import matplotlib.pyplot as plt
 from astropy import units as u
+import logging
+
+logger = logging.getLogger('cv')
 
 
 class CV():
@@ -674,8 +677,9 @@ class CV():
             return ''
         else:
             comments = self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)')
+            if len(comments) > 1:
+                logger.warning(f"More than one comment. Irgnoring all comments except for the first: {comments[0]}.")
             return comments[0].value
-        # TODO: assert that only one label contains a comment
 
     @property
     def metadata(self):
