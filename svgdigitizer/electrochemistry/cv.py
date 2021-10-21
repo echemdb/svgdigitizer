@@ -711,10 +711,11 @@ class CV():
             ...     <text x="-100" y="0">y2: 1 uA / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ...   <text x="-400" y="430">comment: noisy data</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata
-            {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': ''}}
+            {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': 'noisy data'}}
 
         """
         metadata = self._metadata.copy()
@@ -726,6 +727,6 @@ class CV():
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.x_label.unit))
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference
         metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axis_labels['y']))}
-        metadata['figure description']['comment'] = ''
+        metadata['figure description']['comment'] = self.comment
 
         return metadata
