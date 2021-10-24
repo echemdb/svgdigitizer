@@ -671,7 +671,7 @@ class CV():
             ''
 
         """
-        if not self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)'):
+        if not self.svgplot.svg.get_texts('(?:comment): +(?P<value>.*)'):
             return ''
         else:
             comments = self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)')
