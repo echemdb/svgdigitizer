@@ -671,13 +671,12 @@ class CV():
             ''
 
         """
-        if not self.svgplot.svg.get_texts('(?:comment): +(?P<value>.*)'):
+        comments = self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)')
+        if not comments:
             return ''
-        else:
-            comments = self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)')
-            if len(comments) > 1:
-                logger.warning(f"More than one comment. Ignoring all comments except for the first: {comments[0]}.")
-            return comments[0].value
+        elif len(comments) > 1:
+            logger.warning(f"More than one comment. Ignoring all comments except for the first: {comments[0]}.")
+        return comments[0].value
 
     @property
     def metadata(self):
