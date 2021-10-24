@@ -611,7 +611,7 @@ class CV():
 
         EXAMPLES:
 
-        The first example contains a comment::
+        This example contains a comment::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
