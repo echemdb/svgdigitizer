@@ -605,7 +605,7 @@ class CV():
     @cache
     def comment(self):
         r"""
-        Return a comment describing the plot the plot.
+        Return a comment describing the plot.
 
         The comment is read from a ``<text>`` in the SVG file such as ``<text>comment: noisy data</text>``.
 
