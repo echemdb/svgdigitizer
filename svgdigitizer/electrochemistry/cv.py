@@ -645,7 +645,6 @@ class CV():
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
