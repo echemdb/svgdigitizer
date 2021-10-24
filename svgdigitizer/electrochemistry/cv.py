@@ -642,7 +642,7 @@ class CV():
             >>> cv.comment
             'noisy data'
 
-        The seconmd example does not contain a comment::
+        This example does not contain a comment::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
