@@ -14,4 +14,5 @@ installation.md
 cli.md
 api.md
 api/cv.md
+workflow.md
 ```
