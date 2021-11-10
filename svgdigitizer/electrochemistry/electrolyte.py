@@ -86,10 +86,10 @@ class Electrolyte():
         Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
         This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
         EXAMPLES::
-            >>> from website.electrochemistry.cv import Electrolyte
+            >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
             >>> unit = 'µmol l⁻¹'
-            >>> CV.get_axis_unit(unit)
-            Unit("µmol / cm2")
+            >>> Electrolyte.convert_concentration_unit(unit)
+            Unit("umol / l")
         """
         unit_spelling = {'mol / l': ['M', 'mol l⁻¹', 'mol/l', 'mol l^-1'],
                       'mmol / l': ['mM', 'mmol l⁻¹', 'mmol/l', 'mmol l^-1'],

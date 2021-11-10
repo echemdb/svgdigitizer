@@ -730,9 +730,8 @@ class CV():
         metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.x_label.unit))
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference
         metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axis_labels['y']))}
-        metadata['figure description']['comment'] = str(comment)
-        if not isinstance(metadata['electrolyte']['pH']['value'], (float, int)):
-            metadata['electrolyte']['pH'] = {'value': Electrolyte(metadata['electrolyte']).pH, 'comment': 'estimated'}
+        if not isinstance(metadata['electrochemical system']['electrolyte']['pH']['value'], (float, int)):
+            metadata['electrochemical system']['electrolyte']['pH'] = {'value': Electrolyte(metadata['electrochemical system']['electrolyte']).pH, 'comment': 'estimated'}
         metadata['figure description']['comment'] = self.comment
 
 
