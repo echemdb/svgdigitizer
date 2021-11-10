@@ -26,3 +26,4 @@ dependencies:
     - linkchecker
     - sphinx_rtd_theme
     - datapackage
+    - pHcalc

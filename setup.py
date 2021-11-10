@@ -41,7 +41,8 @@ setup(
         'svgpathtools',
         'scipy',
         'astropy',
-        'datetime'
+        'datetime',
+        'pHcalc'
     ],
     entry_points = {
         'console_scripts': [
