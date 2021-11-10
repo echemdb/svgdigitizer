@@ -25,7 +25,7 @@ import re
 import matplotlib.pyplot as plt
 from pathlib import Path
 from astropy import units as u
-
+from .electrolyte import Electrolyte
 
 class CV():
     # TODO: Add documentation with a usage example. #60
@@ -244,5 +244,6 @@ class CV():
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference
         metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axis_labels['y']))}
         metadata['figure description']['comment'] = str(comment)
-
+        if not isinstance(metadata['electrolyte']['pH']['value'], (float, int)):
+            metadata['electrolyte']['pH'] = {'value': Electrolyte(metadata['electrolyte']).pH, 'comment': 'estimated'}
         return metadata
