@@ -52,7 +52,8 @@ from functools import cache
 import re
 import matplotlib.pyplot as plt
 from astropy import units as u
-from .electrolyte import Electrolyte
+from svgdigitizer.helpers import normalize_unit
+
 import logging
 
 logger = logging.getLogger('cv')
@@ -209,41 +210,8 @@ class CV():
         """
         return {'x': {'dimension': 'U',
                       'unit': 'V'},
-                'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.axis_labels['y'])) else 'I',
-                      'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.axis_labels['y'])) else 'A'}}
-
-    @classmethod
-    def get_axis_unit(cls, unit):
-        r"""
-        Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
-
-        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> unit = 'uA cm-2'
-            >>> CV.get_axis_unit(unit)
-            Unit("uA / cm2")
-
-        """
-        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'uA/cm2', 'uA/cm²', 'µA/cm²', 'µA cm⁻²', 'uA cm-2'],
-                      'mA / cm2': ['mA / cm2', 'mA / cm²', 'mA cm⁻²', 'mA/cm2', 'mA/cm²', 'mA cm-2'],
-                      'A / cm2': ['A / cm2', 'A/cm2', 'A cm⁻²', 'A cm-2'],
-                      'uA': ['uA', 'µA', 'microampere'],
-                      'mA': ['mA', 'milliampere'],
-                      'A': ['A', 'ampere', 'amps', 'amp'],
-                      'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
-                      'V': ['V', 'v', 'Volt', 'volt'],
-                      'V / s': ['V s-1', 'V/s', 'V / s'],
-                      'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
-
-        for correct_unit, typos in unit_typos.items():
-            for typo in typos:
-                if unit == typo:
-                    return u.Unit(correct_unit)
-
-        raise ValueError(f'Unknown Unit {unit}')
+                'y': {'dimension': 'j' if 'm2' in str(normalize_unit(self.svgplot.axis_labels['y'])) else 'I',
+                      'unit': 'A / m2' if 'm2' in str(normalize_unit(self.svgplot.axis_labels['y'])) else 'A'}}
 
     @property
     def x_label(self):
@@ -343,7 +311,7 @@ class CV():
         # TODO: assert that a rate is available at all (see issue #58)
 
         # Convert to astropy unit
-        rates[0].unit = CV.get_axis_unit(rates[0].unit)
+        rates[0].unit = normalize_unit(rates[0].unit)
         rate = float(rates[0].value) * rates[0].unit
 
         return rate
@@ -427,7 +395,7 @@ class CV():
 
     def _add_U_axis(self, df):
         r"""
-        Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
+        Add a voltage column to the dataframe `df`, based on the :func:`normalize_unit` of the x axis.
 
         EXAMPLES::
 
@@ -463,14 +431,14 @@ class CV():
             >>> cv._add_U_axis(df = cv.svgplot.df.copy())
 
         """
-        q = 1 * CV.get_axis_unit(self.x_label.unit)
+        q = 1 * normalize_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df['U'] = df['x'] * q.to(u.V).value
 
     def _add_I_axis(self, df):
         r"""
-        Add a current 'I' or current density 'j' column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
+        Add a current 'I' or current density 'j' column to the dataframe `df`, based on the :func:`normalize_unit` of the y axis.
 
         EXAMPLES::
 
@@ -506,7 +474,7 @@ class CV():
             >>> cv._add_I_axis(df = cv.svgplot.df.copy())
 
         """
-        q = 1 * CV.get_axis_unit(self.svgplot.axis_labels['y'])
+        q = 1 * normalize_unit(self.svgplot.axis_labels['y'])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if 'm2' in str(q.unit):
@@ -727,11 +695,9 @@ class CV():
         metadata['figure description']['measurement type'] = 'CV'
         metadata['figure description']['scan rate'] = {'value': float(self.rate.value), 'unit': str(self.rate.unit)}
         metadata['figure description'].setdefault('potential scale', {})
-        metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.x_label.unit))
+        metadata['figure description']['potential scale']['unit'] = str(normalize_unit(self.x_label.unit))
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference
-        metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axis_labels['y']))}
-        if not isinstance(metadata['electrochemical system']['electrolyte']['pH']['value'], (float, int)):
-            metadata['electrochemical system']['electrolyte']['pH'] = {'value': Electrolyte(metadata['electrochemical system']['electrolyte']).pH, 'comment': 'estimated'}
+        metadata['figure description']['current'] = {'unit': str(normalize_unit(self.svgplot.axis_labels['y']))}
         metadata['figure description']['comment'] = self.comment
 
 

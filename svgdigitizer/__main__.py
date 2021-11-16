@@ -85,7 +85,8 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
-
+    from svgdigitizer.electrochemistry.electrolyte import Electrolyte
+    from svgdigitizer.helpers import normalize_unit
     import os.path
     if outdir is None:
         outdir = os.path.dirname(svg)
@@ -95,7 +96,7 @@ def cv(svg, sampling_interval, metadata, package, outdir):
 
     # Determine unit of the voltage scale.
     cv = CV(SVGPlot(SVG(open(svg, 'rb'))))
-    xunit = CV.get_axis_unit(cv.x_label.unit)
+    xunit = normalize_unit(cv.x_label.unit)
     if not xunit == u.V:
         # Determine conversion factor to volts.
         sampling_correction = xunit.to(u.V)
@@ -104,6 +105,10 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     if metadata:
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
+        # enrich metadata with estimated pH from electrolyte composition
+        if 'pH' not in metadata['electrochemical system']['electrolyte'].keys():
+            metadata['electrochemical system']['electrolyte']['pH'] = {'value': Electrolyte(metadata['electrochemical system']['electrolyte']).pH, 'comment': 'estimated'}
+    
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path

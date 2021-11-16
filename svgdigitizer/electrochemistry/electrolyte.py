@@ -22,6 +22,7 @@
 from functools import cache
 from pHcalc.pHcalc import Acid, Neutral, System
 from astropy import units as u
+from svgdigitizer.helpers import normalize_unit, normalize_chemical_name
 
 class Electrolyte():
     r"""
@@ -61,44 +62,22 @@ class Electrolyte():
             "HCl": [Acid(pKa=pKa_dict["HCl"],charge=0)],
             "pyridine": [Acid(pKa=pKa_dict["pyridine"],charge=1)],
             "H2SO4": [Acid(pKa=pKa_dict["H2SO4"],charge=0)],
-            "H3PO4": [Acid(pKa=pKa_dict["H3SO4"],charge=0)],
+            "H3PO4": [Acid(pKa=pKa_dict["H3PO4"],charge=0)],
             "NaOH": [Neutral(charge=1)]            
         }
         if self.electrolyte['type'] != 'aq':
             raise NotImplementedError("pH calculations are only implemented for aqueous solutions!")
         acids_bases = []
         for i in self.electrolyte['components']:
-            temp = acid_base_dict[i['name']]
-            for e in temp:
+            if not i['type'] == 'solvent':
+                temp = acid_base_dict[normalize_chemical_name(i['name'])]
+                for e in temp:
                 
-                q = i['concentration']['value'] * self.convert_concentration_unit(i['concentration']['unit'])
-                e.conc = q.to("mol / l").value
-            acids_bases.extend(temp)
+                    q = i['concentration']['value'] * normalize_unit(i['concentration']['unit'])
+                    e.conc = q.to("mol / l").value
+                acids_bases.extend(temp)
             
         system = System(*acids_bases)
         system.pHsolve()
         
         return system.pH
-   
-    @classmethod
-    def convert_concentration_unit(cls, unit):
-        r"""
-        Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
-        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
-        EXAMPLES::
-            >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
-            >>> unit = 'µmol l⁻¹'
-            >>> Electrolyte.convert_concentration_unit(unit)
-            Unit("umol / l")
-        """
-        unit_spelling = {'mol / l': ['M', 'mol l⁻¹', 'mol/l', 'mol l^-1'],
-                      'mmol / l': ['mM', 'mmol l⁻¹', 'mmol/l', 'mmol l^-1'],
-                      'µmol / l': ['uM', 'umol l⁻¹', 'umol/l', 'umol l^-1','µM', 'µmol l⁻¹', 'µmol/l', 'µmol l^-1'],
-                        }
-
-        for correct_unit, typos in unit_spelling.items():
-            for typo in typos:
-                if unit == typo:
-                    return u.Unit(correct_unit)
-
-        raise ValueError(f'Unknown Unit {unit}')
