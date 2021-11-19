@@ -10,7 +10,7 @@ EXAMPLES::
     Options:
       --help Show this message and exit.
     Commands:
-      cv
+      cv        Create a CSV and YAML metadata file for inclusion in the echemdb.
       digitize
       paginate
       plot      Display a plot of the data traced in an SVG.
@@ -44,11 +44,13 @@ import click
 def cli(): pass
 
 
-@click.command(help="Display a plot of the data traced in an SVG.")
+@click.command()
 @click.option('--sampling_interval', type=float, default=None, help='Sampling interval on the x-axis.')
 @click.argument('svg', type=click.File('rb'))
 def plot(svg, sampling_interval):
     r"""
+    Display a plot of the data traced in an SVG.
+
     EXAMPLES::
 
         >>> import os.path
@@ -80,6 +82,29 @@ def digitize(svg, sampling_interval):
 @click.option('--outdir', type=click.Path(file_okay=False), default=None, help='write output files to this directory')
 @click.argument('svg', type=click.Path(exists=True))
 def cv(svg, sampling_interval, metadata, package, outdir):
+    r"""
+    Create a CSV and YAML metadata file for inclusion in the echemdb.
+
+    EXAMPLES::
+
+        >>> import os.path
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+
+    TESTS:
+
+    The command can be invoked on files in the current directory::
+
+        >>> import os, os.path
+        >>> from .test.cli import invoke, TemporaryData
+        >>> cwd = os.getcwd()
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     os.chdir(directory)
+        ...     invoke(cli, "cv", "xy_rate.svg")
+        >>> os.chdir(cwd)
+
+    """
     import yaml
     from astropy import units as u
     from svgdigitizer.svgplot import SVGPlot
@@ -89,6 +114,8 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     import os.path
     if outdir is None:
         outdir = os.path.dirname(svg)
+    if outdir.strip() == "":
+        outdir = "."
 
     import os
     os.makedirs(str(outdir), exist_ok=True)
