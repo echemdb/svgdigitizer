@@ -853,6 +853,15 @@ class SVGPlot:
             >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial points of the segments
             [(0.0, 1.0), (1.0, 0.0)]
 
+        TESTS:
+
+        A case where numpy's root finding returns the extrema out of order::
+
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M-267 26 C -261 25, -266 24, -264 23")
+            >>> len(SVGPlot.sample_path(path, .001))
+            4159
+
         """
         import numpy
         import svgpathtools
@@ -878,7 +887,7 @@ class SVGPlot:
             x = numpy.poly1d(numpy.real(segment.poly()))
 
             # At the extrema of the projection to the x-axis, the curve changes direction.
-            extrema = list(root.real for root in numpy.polyder(x).roots if abs(root.imag) < EPS and 0 < root.real < 1)
+            extrema = list(sorted(root.real for root in numpy.polyder(x).roots if abs(root.imag) < EPS and 0 < root.real < 1))
 
             # Eventually this will contain the total length of this path segment.
             segment_length = 0
