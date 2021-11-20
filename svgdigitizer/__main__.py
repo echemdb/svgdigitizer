@@ -104,6 +104,19 @@ def cv(svg, sampling_interval, metadata, package, outdir):
         ...     invoke(cli, "cv", "xy_rate.svg")
         >>> os.chdir(cwd)
 
+    The command can be invoked without sampling when data is not given in volts::
+
+        >>> import os.path
+        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).x_label.unit)
+        mV
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+
     """
     import yaml
     from astropy import units as u
@@ -123,7 +136,7 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     # Determine unit of the voltage scale.
     cv = CV(SVGPlot(SVG(open(svg, 'rb'))))
     xunit = CV.get_axis_unit(cv.x_label.unit)
-    if not xunit == u.V:
+    if sampling_interval is not None and xunit != u.V:
         # Determine conversion factor to volts.
         sampling_correction = xunit.to(u.V)
         sampling_interval = sampling_interval / sampling_correction
