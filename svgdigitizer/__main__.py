@@ -101,8 +101,10 @@ def cv(svg, sampling_interval, metadata, package, outdir):
         >>> cwd = os.getcwd()
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     os.chdir(directory)
-        ...     invoke(cli, "cv", "xy_rate.svg")
-        >>> os.chdir(cwd)
+        ...     try:
+        ...         invoke(cli, "cv", "xy_rate.svg")
+        ...     finally:
+        ...         os.chdir(cwd)
 
     The command can be invoked without sampling when data is not given in volts::
 
