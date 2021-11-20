@@ -79,7 +79,7 @@
 <span id="svgdigitizer-svgplot"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code><a class="headerlink" href="#module-svgdigitizer.svgplot" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgplot.</span></span><span class="sig-name descname"><span class="pre">SVGPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'axis-aligned'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgplot.</span></span><span class="sig-name descname"><span class="pre">SVGPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'axis-aligned'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot" title="Permalink to this definition"></a></dt>
 <dd><p>A plot as a Scalable Vector Graphics (SVG) which can be converted to (x, y)
 coordinate pairs.</p>
 <p>Typically, the SVG input has been created by tracing a measurement plot from
@@ -136,7 +136,7 @@ coordinate system:</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.axis_labels">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">axis_labels</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.axis_labels" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axis_labels</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.axis_labels" title="Permalink to this definition"></a></dt>
 <dd><p>Return the label for each axis.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
@@ -232,7 +232,7 @@ coordinate system:</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.curve">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">curve</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.curve" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curve</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.curve" title="Permalink to this definition"></a></dt>
 <dd><p>Return the path that is tracing the plot in the SVG.</p>
 <p>This essentially returns the <cite>&lt;path&gt;</cite> tag that is not used for other
 purposes such as pointing to axis labels. However, the path is written
@@ -282,7 +282,7 @@ in the plot coordinate system.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.df">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.df" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.df" title="Permalink to this definition"></a></dt>
 <dd><p>Return the plot data as a dataframe of pairs (x, y).</p>
 <p>The returned data lives in the plot coordinate system.</p>
 <p>EXAMPLES:</p>
@@ -492,7 +492,7 @@ and the other axis goes at an angle from (0, 100) to (100, 0):</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.labeled_paths">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">labeled_paths</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.labeled_paths" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">labeled_paths</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.labeled_paths" title="Permalink to this definition"></a></dt>
 <dd><p>All paths with their corresponding label.</p>
 <p>We only consider paths which are grouped with a label, i.e., a <cite>&lt;text&gt;</cite>
 element. These text elements then tell us about the meaning of that
@@ -502,7 +502,7 @@ are going to extract the (x, y) coordinate pairs from.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.marked_points">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">marked_points</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.marked_points" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">marked_points</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.marked_points" title="Permalink to this definition"></a></dt>
 <dd><p>Return the points that have been marked on the axes of the plot.</p>
 <p>For each point, a tuple is returned relating the point’s coordinates in
 the SVG coordinate system to the points coordinates in the plot
@@ -607,7 +607,7 @@ coordinate system, or <cite>None</cite> if that points coordinate is not known.<
 
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.sample_path">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">sample_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'include'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.sample_path" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'include'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.sample_path" title="Permalink to this definition"></a></dt>
 <dd><p>Return points on <cite>path</cite>, sampled at equidistant increments on the
 x-axis.</p>
 <p>INPUT:</p>
@@ -674,11 +674,19 @@ a sharp peak at (1, 1):</p>
 <span class="go">[(0.0, 1.0), (1.0, 0.0)]</span>
 </pre></div>
 </div>
+<p>TESTS:</p>
+<p>A case where numpy’s root finding returns the extrema out of order:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgpathtools.path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;M-267 26 C -261 25, -266 24, -264 23&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.001</span><span class="p">))</span>
+<span class="go">4159</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.scaling_factors">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">scaling_factors</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.scaling_factors" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scaling_factors</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.scaling_factors" title="Permalink to this definition"></a></dt>
 <dd><p>Return the scaling factors for each axis.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
@@ -697,7 +705,7 @@ a sharp peak at (1, 1):</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.transformation">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">transformation</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.transformation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transformation</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.transformation" title="Permalink to this definition"></a></dt>
 <dd><p>Return the affine map from the SVG coordinate system to the plot
 coordinate system as a matrix, see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Affine_group#Matrix_representation">https://en.wikipedia.org/wiki/Affine_group#Matrix_representation</a></p>

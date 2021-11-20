@@ -91,7 +91,7 @@ or …</p>
 <p>For the documentation below, the path of a CV is presented simply as line.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.electrochemistry.cv.</span></span><span class="sig-name descname"><span class="pre">CV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.electrochemistry.cv.</span></span><span class="sig-name descname"><span class="pre">CV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV" title="Permalink to this definition"></a></dt>
 <dd><p>A digitized cyclic voltammogram (CV) derived from an SVG file,
 which provides access to the objects of the CV.</p>
 <p>Typically, the SVG input has been created by tracing a CV from
@@ -157,7 +157,7 @@ where the axis labels and the data are provided in SI units
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.axis_properties">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">axis_properties</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.axis_properties" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axis_properties</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.axis_properties" title="Permalink to this definition"></a></dt>
 <dd><p>Return the dimension and the SI units of the x- and y-axis.</p>
 <ul class="simple">
 <li><p>The x-axis dimension ‘U’ is given in ‘V’.</p></li>
@@ -230,7 +230,7 @@ where the axis labels and the data are provided in SI units
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.comment">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.comment" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.comment" title="Permalink to this definition"></a></dt>
 <dd><p>Return a comment describing the plot.</p>
 <p>The comment is read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;comment:</span> <span class="pre">noisy</span> <span class="pre">data&lt;/text&gt;</span></code>.</p>
 <p>EXAMPLES:</p>
@@ -297,7 +297,7 @@ where the axis labels and the data are provided in SI units
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.df">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.df" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.df" title="Permalink to this definition"></a></dt>
 <dd><p>Return a dataframe with axis ‘t’, ‘U’, and ‘I’ (or ‘j).
 The dimensions are in SI units ‘s’, ‘V’ and ‘A’ (or ‘A / m2’).</p>
 <p>The dataframe is constructed from the ‘x’ and ‘y’ axis of ‘svgplot.df’,
@@ -360,7 +360,7 @@ which are usually not in SI units.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.get_axis_unit">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get_axis_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.get_axis_unit" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_axis_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.get_axis_unit" title="Permalink to this definition"></a></dt>
 <dd><p>Return <cite>unit</cite> as an <a class="reference external" href="https://docs.astropy.org/en/stable/units/">astropy</a> unit.</p>
 <p>This method normalizes unit names, e.g., it rewrites ‘uA cm-2’ to ‘uA / cm2’ which astropy understands.</p>
 <p>EXAMPLES:</p>
@@ -374,7 +374,7 @@ which are usually not in SI units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.metadata">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.metadata" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.metadata" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a dict with properties of the original figure derived from textlabels in the SVG file.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
@@ -454,7 +454,7 @@ which are usually not in SI units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.rate">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">rate</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.rate" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rate</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.rate" title="Permalink to this definition"></a></dt>
 <dd><p>Return the scan rate of the plot.</p>
 <p>The scan rate is read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">V/s&lt;/text&gt;</span></code>.</p>
 <p>EXAMPLES:</p>
@@ -491,7 +491,7 @@ which are usually not in SI units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.x_label">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">x_label</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.x_label" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_label</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.x_label" title="Permalink to this definition"></a></dt>
 <dd><p>Return the label on the x-axis of the SVG plot.
 Usually the label on an axis only consits of a unit.
 In the case of electrochemical data the x-label
