@@ -86,7 +86,7 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     from svgdigitizer.svg import SVG
     from svgdigitizer.electrochemistry.cv import CV
     from svgdigitizer.electrochemistry.electrolyte import Electrolyte
-    from svgdigitizer.helpers import normalize_unit
+    from svgdigitizer.electrochemistry.normalization import normalize_unit
     import os.path
     if outdir is None:
         outdir = os.path.dirname(svg)
@@ -97,7 +97,7 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     # Determine unit of the voltage scale.
     cv = CV(SVGPlot(SVG(open(svg, 'rb'))))
     xunit = normalize_unit(cv.x_label.unit)
-    if not xunit == u.V:
+    if sampling_interval is not None and xunit != u.V:
         # Determine conversion factor to volts.
         sampling_correction = xunit.to(u.V)
         sampling_interval = sampling_interval / sampling_correction

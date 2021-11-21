@@ -52,7 +52,7 @@ from functools import cache
 import re
 import matplotlib.pyplot as plt
 from astropy import units as u
-from svgdigitizer.helpers import normalize_unit
+from svgdigitizer.electrochemistry.normalization import normalize_unit
 
 import logging
 

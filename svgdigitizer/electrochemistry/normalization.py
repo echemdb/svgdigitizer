@@ -24,9 +24,7 @@ This module contains helper functions.
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 from astropy import units as u
-import pubchempy as pcp
-from pubchempy import Compound
-from pymatgen.core.composition import Composition
+
 
 def normalize_spelling(string, string_spellings):
     for correct_spelling, spellings in string_spellings.items():
@@ -43,7 +41,7 @@ def normalize_unit(unit):
 
     EXAMPLES::
 
-        >>> from svgdigitizer.helpers import normalize_unit
+        >>> from svgdigitizer.electrochemistry.normalization import normalize_unit
         >>> unit = 'uA cm-2'
         >>> normalize_unit(unit)
         Unit("uA / cm2")

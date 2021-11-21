@@ -42,7 +42,8 @@ setup(
         'scipy',
         'astropy',
         'datetime',
-        'pHcalc'
+        'pHcalc',
+        'pubchempy'
     ],
     entry_points = {
         'console_scripts': [
