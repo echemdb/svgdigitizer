@@ -111,7 +111,6 @@ class Electrolyte():
             1004
 
             CID can be retrieved with InChI::
-            >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
             >>> Electrolyte.lookup_CID_from_InChI(InChI='InChI=1S/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)') # phosphoric acid
             1004
 
