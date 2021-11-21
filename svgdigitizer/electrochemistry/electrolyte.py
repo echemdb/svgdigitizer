@@ -138,7 +138,7 @@ class Electrolyte():
         if len_results > 1:
             raise RuntimeError("Ambiguous chemical name! More than one chemical id return by pubchem. Use another chemical name")
         elif len_results == 0:
-            raise RuntimeError("Chemical name not found! Check spelling.")
+            raise RuntimeError(f"Name of chemical {chemical_name} not found in pubchem! Check spelling.")
         else:
             return pcp.get_properties(("InChIKey", "InChI"), results[0])[0]
 
