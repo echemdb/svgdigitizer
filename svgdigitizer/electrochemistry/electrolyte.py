@@ -75,9 +75,7 @@ class Electrolyte():
 
             CID can be retrieved with InChIKey::
             >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
-            >>> electrolyte_dict = {"type": "aq", "components": 
-                                    [{"name": "H2SO4","type": "acid", "concentration": {"value": 0.1, "unit": "M"}},
-                                    {"name": "Na2SO4","type": "salt", "concentration": {"value": 0.1, "unit": "M"}}]}
+            >>> electrolyte_dict = {"type": "aq", "components": [{"name": "H2SO4","type": "acid", "concentration": {"value": 0.1, "unit": "M"}}, {"name": "Na2SO4","type": "salt", "concentration": {"value": 0.1, "unit": "M"}}]}
             >>> electrolyte = Electrolyte(electrolyte_dict)
             >>> electrolyte.pH
             1.3538681030273414
