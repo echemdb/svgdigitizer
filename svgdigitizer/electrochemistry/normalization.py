@@ -24,6 +24,9 @@ This module contains helper functions.
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 from astropy import units as u
+import pubchempy as pcp
+from pubchempy import Compound
+from pymatgen.core.composition import Composition
 
 def normalize_spelling(string, string_spellings):
     for correct_spelling, spellings in string_spellings.items():
@@ -61,21 +64,3 @@ def normalize_unit(unit):
                     'µmol / l': ['uM', 'umol l⁻¹', 'umol/l', 'umol l^-1','µM', 'µmol l⁻¹', 'µmol/l', 'µmol l^-1'],
                     }
     return u.Unit(normalize_spelling(unit, unit_spellings))
-
-def normalize_chemical_name(chemical_name):
-    r"""
-    Return a normalized chemical name from different possible spellings.
-
-    EXAMPLES::
-
-        >>> from svgdigitizer.helpers import normalize_chemical_name
-        >>> name = 'sulfuric acid'
-        >>> normalize_chemical_name(name)
-        'H2SO4'
-
-    """
-    chemical_name_spellings = {'H2SO4': ['H2SO4', 'sulfuric acid', 'sulphuric acid'],
-                    'HClO4': ['HClO4', 'perchloric acid'],
-                    'NaCl': ['NaCl', 'sodium chloride']
-                    }
-    return normalize_spelling(chemical_name, chemical_name_spellings)
