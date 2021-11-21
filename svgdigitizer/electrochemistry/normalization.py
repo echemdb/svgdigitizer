@@ -33,6 +33,7 @@ def normalize_spelling(string, string_spellings):
                 return correct_spelling
     raise ValueError(f'Unable to normalize string {string}')
 
+
 def normalize_unit(unit):
     r"""
     Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
@@ -47,18 +48,19 @@ def normalize_unit(unit):
         Unit("uA / cm2")
 
     """
-    unit_spellings = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'uA/cm2', 'uA/cm²', 'µA/cm²', 'µA cm⁻²', 'uA cm-2'],
-                    'mA / cm2': ['mA / cm2', 'mA / cm²', 'mA cm⁻²', 'mA/cm2', 'mA/cm²', 'mA cm-2'],
-                    'A / cm2': ['A / cm2', 'A/cm2', 'A cm⁻²', 'A cm-2'],
-                    'uA': ['uA', 'µA', 'microampere'],
-                    'mA': ['mA', 'milliampere'],
-                    'A': ['A', 'ampere', 'amps', 'amp'],
-                    'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
-                    'V': ['V', 'v', 'Volt', 'volt'],
-                    'V / s': ['V s-1', 'V/s', 'V / s'],
-                    'mV / s': ['mV / s', 'mV s-1', 'mV/s'],
-                    'mol / l': ['M', 'mol l⁻¹', 'mol/l', 'mol l^-1'],
-                    'mmol / l': ['mM', 'mmol l⁻¹', 'mmol/l', 'mmol l^-1'],
-                    'µmol / l': ['uM', 'umol l⁻¹', 'umol/l', 'umol l^-1','µM', 'µmol l⁻¹', 'µmol/l', 'µmol l^-1'],
-                    }
+    unit_spellings = {
+        'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'uA/cm2', 'uA/cm²', 'µA/cm²', 'µA cm⁻²', 'uA cm-2'],
+        'mA / cm2': ['mA / cm2', 'mA / cm²', 'mA cm⁻²', 'mA/cm2', 'mA/cm²', 'mA cm-2'],
+        'A / cm2': ['A / cm2', 'A/cm2', 'A cm⁻²', 'A cm-2'],
+        'uA': ['uA', 'µA', 'microampere'],
+        'mA': ['mA', 'milliampere'],
+        'A': ['A', 'ampere', 'amps', 'amp'],
+        'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
+        'V': ['V', 'v', 'Volt', 'volt'],
+        'V / s': ['V s-1', 'V/s', 'V / s'],
+        'mV / s': ['mV / s', 'mV s-1', 'mV/s'],
+        'mol / l': ['M', 'mol l⁻¹', 'mol/l', 'mol l^-1'],
+        'mmol / l': ['mM', 'mmol l⁻¹', 'mmol/l', 'mmol l^-1'],
+        'µmol / l': ['uM', 'umol l⁻¹', 'umol/l', 'umol l^-1', 'µM', 'µmol l⁻¹', 'µmol/l', 'µmol l^-1'],
+        }
     return u.Unit(normalize_spelling(unit, unit_spellings))

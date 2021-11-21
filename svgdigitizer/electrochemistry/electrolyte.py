@@ -31,22 +31,22 @@ import re
 
 
 acid_base_dict = {
-    'VLTRZXGMWDSKGL-UHFFFAOYSA-N': {'name': 'HClO4', 'components': [Acid(pKa=[-1.6],charge=0)]}, # CRC handbook of chemistry and physics 2017
-    'QAOWNCQODCNURD-UHFFFAOYSA-N': {'name': 'H2SO4', 'components': [Acid(pKa=[-3, 1.9],charge=0)]}, # http://www.chem.wisc.edu/areas/reich/pkatable/pKa_compilation-1-Williams.pdf
-    'NBIIXXVUZAFLBC-UHFFFAOYSA-N': {'name': 'H3PO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32],charge=0)]}, # CRC handbook of chemistry and physics 2017
-    'BDAGIHXWWSANSR-UHFFFAOYSA-N': {'name': 'HCOOH', 'components': [Acid(pKa=[3.75],charge=0)]}, # CRC handbook of chemistry and physics 2017
-    'QTBSBXVTEAMEQO-UHFFFAOYSA-N': {'name': 'acetic acid', 'components': [Acid(pKa=[4.78],charge=0)]},
-    'VEXZGXHMUGYJMC-UHFFFAOYSA-N': {'name': 'HCl', 'components': [Acid(pKa=[-6.2],charge=0)]}, # Analytical Chemistry, 43(7), 1971, S. 969–970.
-    'JUJWROOIHBZHMG-UHFFFAOYSA-N': {'name': 'pyridine', 'components': [Acid(pKa=[5.23],charge=1)]}, # CRC handbook of chemistry and physics 2017
-    'QGZKDVFQNNGYKY-UHFFFAOYSA-N': {'name': 'NH3', 'components': [Acid(pKa=[9.25],charge=1)]}, # CRC handbook of chemistry and physics 2017
-    'BVKZGUZCCUSVTD-UHFFFAOYSA-N': {'name': 'H2CO3', 'components': [Acid(pKa=[6.35, 10.33],charge=0)]}, # CRC handbook of chemistry and physics 2017
+    'VLTRZXGMWDSKGL-UHFFFAOYSA-N': {'name': 'HClO4', 'components': [Acid(pKa=[-1.6], charge=0)]},  # CRC handbook of chemistry and physics 2017
+    'QAOWNCQODCNURD-UHFFFAOYSA-N': {'name': 'H2SO4', 'components': [Acid(pKa=[-3, 1.9], charge=0)]},  # http://www.chem.wisc.edu/areas/reich/pkatable/pKa_compilation-1-Williams.pdf
+    'NBIIXXVUZAFLBC-UHFFFAOYSA-N': {'name': 'H3PO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32], charge=0)]},  # CRC handbook of chemistry and physics 2017
+    'BDAGIHXWWSANSR-UHFFFAOYSA-N': {'name': 'HCOOH', 'components': [Acid(pKa=[3.75], charge=0)]},  # CRC handbook of chemistry and physics 2017
+    'QTBSBXVTEAMEQO-UHFFFAOYSA-N': {'name': 'acetic acid', 'components': [Acid(pKa=[4.78], charge=0)]},
+    'VEXZGXHMUGYJMC-UHFFFAOYSA-N': {'name': 'HCl', 'components': [Acid(pKa=[-6.2], charge=0)]},  # Analytical Chemistry, 43(7), 1971, S. 969–970.
+    'JUJWROOIHBZHMG-UHFFFAOYSA-N': {'name': 'pyridine', 'components': [Acid(pKa=[5.23], charge=1)]},  # CRC handbook of chemistry and physics 2017
+    'QGZKDVFQNNGYKY-UHFFFAOYSA-N': {'name': 'NH3', 'components': [Acid(pKa=[9.25], charge=1)]},  # CRC handbook of chemistry and physics 2017
+    'BVKZGUZCCUSVTD-UHFFFAOYSA-N': {'name': 'H2CO3', 'components': [Acid(pKa=[6.35, 10.33], charge=0)]},  # CRC handbook of chemistry and physics 2017
     'HEMHJVSKTPXQMS-UHFFFAOYSA-M': {'name': 'NaOH', 'components': [Neutral(charge=1)]},
-    'FAPWRFPIFSIZLT-UHFFFAOYSA-M': {'name': 'NaCl', 'components': [Acid(pKa=[-6.2],charge=0), Neutral(charge=1)]},
-    'PMZURENOXWZQFD-UHFFFAOYSA-L': {'name': 'Na2SO4', 'components': [Acid(pKa=[-3, 1.9],charge=0), Neutral(charge=2)]},
-    'RYFMWSXOAZQYPI-UHFFFAOYSA-K': {'name': 'Na3PO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32],charge=0), Neutral(charge=3)]},
-    'BNIILDVGGAEEIG-UHFFFAOYSA-L': {'name': 'Na2HPO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32],charge=0), Neutral(charge=2)]},
-    'AJPJDKMHJJGVTQ-UHFFFAOYSA-M': {'name': 'NaH2PO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32],charge=0), Neutral(charge=1)]},
-}
+    'FAPWRFPIFSIZLT-UHFFFAOYSA-M': {'name': 'NaCl', 'components': [Acid(pKa=[-6.2], charge=0), Neutral(charge=1)]},
+    'PMZURENOXWZQFD-UHFFFAOYSA-L': {'name': 'Na2SO4', 'components': [Acid(pKa=[-3, 1.9], charge=0), Neutral(charge=2)]},
+    'RYFMWSXOAZQYPI-UHFFFAOYSA-K': {'name': 'Na3PO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32], charge=0), Neutral(charge=3)]},
+    'BNIILDVGGAEEIG-UHFFFAOYSA-L': {'name': 'Na2HPO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32], charge=0), Neutral(charge=2)]},
+    'AJPJDKMHJJGVTQ-UHFFFAOYSA-M': {'name': 'NaH2PO4', 'components': [Acid(pKa=[2.16, 7.21, 12.32], charge=0), Neutral(charge=1)]},
+    }
 
 
 class Electrolyte():
@@ -64,13 +64,13 @@ class Electrolyte():
         """
         try:
             return self.electrolyte['pH']
-        except KeyError:           
+        except KeyError:
             return self.estimate_pH()
 
     def estimate_pH(self):
         r"""
         Estimates the pH of aquoues electrolytes.
-        
+
         EXAMPLES::
 
             CID can be retrieved with InChIKey::
@@ -88,14 +88,14 @@ class Electrolyte():
             if not i['type'] == 'solvent':
                 InChIKey = self.lookup_chemical_ids_from_name(i['name'])["InChIKey"]
                 temp = self.get_pKa(InChIKey)
-                for e in temp:                
+                for e in temp:
                     q = i['concentration']['value'] * normalize_unit(i['concentration']['unit'])
                     e.conc = q.to("mol / l").value
                 acids_bases.extend(temp)
-            
+
         system = System(*acids_bases)
         system.pHsolve()
-        
+
         return system.pH
 
     @classmethod
@@ -115,7 +115,7 @@ class Electrolyte():
             >>> Electrolyte.lookup_CID_from_InChI(InChI='InChI=1S/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)') # phosphoric acid
             1004
 
-        """        
+        """
         if InChIKey:
             return pcp.get_cids(InChIKey, 'inchikey')[0]
         elif InChI:
@@ -125,7 +125,7 @@ class Electrolyte():
     def lookup_chemical_ids_from_name(cls, chemical_name):
         r"""
         Lookup CID, InChI, and InChIKey from chemical name.
-        
+
         EXAMPLES::
 
             CID can be retrieved with InChIKey::
@@ -141,7 +141,7 @@ class Electrolyte():
         elif len_results == 0:
             raise RuntimeError("Chemical name not found! Check spelling.")
         else:
-            return pcp.get_properties(("InChIKey","InChI"), results[0])[0]
+            return pcp.get_properties(("InChIKey", "InChI"), results[0])[0]
 
     def get_pKa(self, InChIKey):
         r"""
@@ -152,12 +152,11 @@ class Electrolyte():
         pattern = re.compile(r'.*(?P<pKa>\d+\.\d*).*')
         try:
             return acid_base_dict[InChIKey]['components']
-        except:
+        except KeyError:
             cid = self.lookup_CID_from_InChI(InChIKey=InChIKey)
-            pattern = re.compile('.*(?P<pKa>\d+\.\d*).*')
             pKa_result = self.lookup_pKa(cid)['pKa']
             # TODO support salts etc.
-            return [Acid(pKa=[pattern.match(i).group('pKa') for i in pKa_result.split(';')],charge=0)]
+            return [Acid(pKa=[pattern.match(i).group('pKa') for i in pKa_result.split(';')], charge=0)]
 
     def lookup_pKa(self, cid):
         r"""
@@ -177,7 +176,7 @@ class Electrolyte():
             # print(r.text)
             # Use python XML to parse the return result
             tree = ET.fromstring(r.text)
-        
+
             # Get the XML tree of <Information> only
             info_node = tree.find('.//*{http://pubchem.ncbi.nlm.nih.gov/pug_view}Information')
 
@@ -191,7 +190,7 @@ class Electrolyte():
                 'pKa': pka_result,
                 'reference': original_source,
             }
-        
+
             return result
 
         else:

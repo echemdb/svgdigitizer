@@ -59,7 +59,6 @@ import logging
 logger = logging.getLogger('cv')
 
 
-
 class CV():
     r"""
     A digitized cyclic voltammogram (CV) derived from an SVG file,
@@ -699,6 +698,5 @@ class CV():
         metadata['figure description']['potential scale']['reference'] = self.x_label.reference
         metadata['figure description']['current'] = {'unit': str(normalize_unit(self.svgplot.axis_labels['y']))}
         metadata['figure description']['comment'] = self.comment
-
 
         return metadata

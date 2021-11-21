@@ -146,9 +146,9 @@ def cv(svg, sampling_interval, metadata, package, outdir):
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
         # enrich metadata with estimated pH from electrolyte composition
-        if 'pH' not in metadata['electrochemical system']['electrolyte'].keys():
+        if 'ph' not in metadata['electrochemical system']['electrolyte'].keys():
             metadata['electrochemical system']['electrolyte']['pH'] = {'value': Electrolyte(metadata['electrochemical system']['electrolyte']).pH, 'comment': 'estimated'}
-    
+
     cv = CV(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=sampling_interval), metadata=metadata)
 
     from pathlib import Path
