@@ -26,8 +26,6 @@ TODO:: Link to workflow.md (see issue #73)
 For the documentation below, the path of a CV is presented simply as line.
 
 """
-import logging
-import re
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
