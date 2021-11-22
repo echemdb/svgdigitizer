@@ -27,4 +27,4 @@ jobs:
       - name: isort
         shell: bash -l {0}
         run: |
-          isort svgdigitizer
+          isort --check --diff svgdigitizer
