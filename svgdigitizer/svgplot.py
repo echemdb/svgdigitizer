@@ -453,9 +453,9 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.from_svg(1024, 512)
-            (0.0, 0.0)
             >>> from numpy import allclose
+            >>> allclose(plot.from_svg(1024, 512), (0, 0))
+            True
             >>> allclose(plot.from_svg(1124, 256), (1, 1))
             True
 
