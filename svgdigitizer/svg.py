@@ -23,7 +23,7 @@ from xml.dom import minidom, Node
 import re
 import logging
 
-logger = logging.getLogger('svg')
+logger = logging.getLogger("svg")
 
 
 class SVG:
@@ -55,6 +55,7 @@ class SVG:
         SVG('<?xml version="1.0" ?><svg>\n    <!-- an empty SVG -->\n</svg>')
 
     """
+
     def __init__(self, svg):
         if isinstance(svg, str):
             self.svg = minidom.parseString(svg)
@@ -101,11 +102,13 @@ class SVG:
         """
         labeled_paths = []
 
-        groups = set(path.parentNode for path in self.svg.getElementsByTagName('path'))
+        groups = set(path.parentNode for path in self.svg.getElementsByTagName("path"))
 
         for group in groups:
-            if group.nodeType != Node.ELEMENT_NODE or group.tagName != 'g':
-                logger.warning("Parent of <path> is not a <g>. Ignoring this path and its siblings.")
+            if group.nodeType != Node.ELEMENT_NODE or group.tagName != "g":
+                logger.warning(
+                    "Parent of <path> is not a <g>. Ignoring this path and its siblings."
+                )
                 continue
 
             # Determine the label associated to these <path>s
@@ -115,16 +118,22 @@ class SVG:
                     continue
                 elif child.nodeType == Node.TEXT_NODE:
                     if SVG._text_value(child):
-                        logger.warning(f'Ignoring unexpected text node "{SVG._text_value(child)}" grouped with <path>.')
+                        logger.warning(
+                            f'Ignoring unexpected text node "{SVG._text_value(child)}" grouped with <path>.'
+                        )
                 elif child.nodeType == Node.ELEMENT_NODE:
-                    if child.tagName == 'path':
+                    if child.tagName == "path":
                         continue
                     if child.tagName != "text":
-                        logger.warning(f"Unexpected <{child.tagName}> grouped with <path>. Ignoring unexpected <{child.tagName}>.")
+                        logger.warning(
+                            f"Unexpected <{child.tagName}> grouped with <path>. Ignoring unexpected <{child.tagName}>."
+                        )
                         continue
 
                     if label is not None:
-                        logger.warning(f'More than one <text> label associated to this <path>. Ignoring all but the first one, i.e., ignoring "{SVG._text_value(child)}".')
+                        logger.warning(
+                            f'More than one <text> label associated to this <path>. Ignoring all but the first one, i.e., ignoring "{SVG._text_value(child)}".'
+                        )
                         continue
 
                     label = child
@@ -134,7 +143,11 @@ class SVG:
                 continue
 
             # Determine all the <path>s in this <g>.
-            paths = [path for path in group.childNodes if path.nodeType == Node.ELEMENT_NODE and path.tagName == 'path']
+            paths = [
+                path
+                for path in group.childNodes
+                if path.nodeType == Node.ELEMENT_NODE and path.tagName == "path"
+            ]
             assert paths
 
             # Parse the label
@@ -203,7 +216,9 @@ class SVG:
         if element is None or element.nodeType == Node.DOCUMENT_NODE:
             return parse_transform(None)
 
-        return cls._get_transform(element.parentNode).dot(parse_transform(element.getAttribute('transform')))
+        return cls._get_transform(element.parentNode).dot(
+            parse_transform(element.getAttribute("transform"))
+        )
 
     @classmethod
     def transform(cls, element):
@@ -239,22 +254,23 @@ class SVG:
         """
         transformation = cls._get_transform(element)
 
-        if element.getAttribute('d'):
+        if element.getAttribute("d"):
             # element is like a path
             from svgpathtools.path import transform
             from svgpathtools.parser import parse_path
-            element = transform(parse_path(element.getAttribute('d')), transformation)
-        elif element.hasAttribute('x') and element.hasAttribute('y'):
+
+            element = transform(parse_path(element.getAttribute("d")), transformation)
+        elif element.hasAttribute("x") and element.hasAttribute("y"):
             # elements with an explicit location such as <text>
-            x = float(element.getAttribute('x'))
-            y = float(element.getAttribute('y'))
+            x = float(element.getAttribute("x"))
+            y = float(element.getAttribute("y"))
             x, y, _ = transformation.dot([x, y, 1])
 
             element = element.cloneNode(deep=True)
-            if element.hasAttribute('transform'):
-                element.removeAttribute('transform')
-            element.setAttribute('x', str(x))
-            element.setAttribute('y', str(y))
+            if element.hasAttribute("transform"):
+                element.removeAttribute("transform")
+            element.setAttribute("x", str(x))
+            element.setAttribute("y", str(y))
         else:
             raise NotImplementedError(f"Unsupported element {element}.")
 
@@ -303,6 +319,7 @@ class LabeledPaths:
         [[Path "curve: 0"]]
 
     """
+
     def __init__(self, label, paths, match):
         if not paths:
             raise ValueError("LabeledPaths must consist of at least one path.")
@@ -364,13 +381,14 @@ class Text:
         100.0
 
     """
+
     def __init__(self, label, match):
         self._label = label
         self._value = SVG._text_value(label)
 
         transformed = SVG.transform(label)
-        self.x = float(transformed.getAttribute('x'))
-        self.y = float(transformed.getAttribute('y'))
+        self.x = float(transformed.getAttribute("x"))
+        self.y = float(transformed.getAttribute("y"))
 
         for key, value in match.groupdict().items():
             setattr(self, key, value)
@@ -400,6 +418,7 @@ class LabeledPath:
         Path "curve: 0"
 
     """
+
     def __init__(self, path, label):
         self._path = path
         self._label = label
@@ -426,7 +445,9 @@ class LabeledPath:
         """
         text = self._label.x, self._label.y
         endpoints = [self.points[0], self.points[-1]]
-        return max(endpoints, key=lambda p: (text[0] - p[0]) ** 2 + (text[1] - p[1]) ** 2)
+        return max(
+            endpoints, key=lambda p: (text[0] - p[0]) ** 2 + (text[1] - p[1]) ** 2
+        )
 
     @classmethod
     def path_points(cls, path):
@@ -438,7 +459,9 @@ class LabeledPath:
         points are connected by `M` commands that do not actually draw
         anything, or any kind of visible curve.
         """
-        return [(path[0].start.real, path[0].start.imag)] + [(command.end.real, command.end.imag) for command in path]
+        return [(path[0].start.real, path[0].start.imag)] + [
+            (command.end.real, command.end.imag) for command in path
+        ]
 
     @property
     def points(self):
@@ -503,6 +526,7 @@ class LabeledPath:
 
         """
         from svgpathtools import Path
+
         return SVG.transform(self._path)
 
     def __repr__(self):

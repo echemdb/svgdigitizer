@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pycodestyle:
+  python-linter:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +20,5 @@ jobs:
         run: |
           mamba env update --quiet -n test -f environment.yml
           conda list
-      - name: pycodestyle
-        shell: bash -l {0}
-        run: |
-          pycodestyle svgdigitizer --max-line-length=256
+      - name: lint
+        uses: sunnysid3up/python-linter@master

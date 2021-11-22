@@ -54,10 +54,10 @@ import matplotlib.pyplot as plt
 from astropy import units as u
 import logging
 
-logger = logging.getLogger('cv')
+logger = logging.getLogger("cv")
 
 
-class CV():
+class CV:
     r"""
     A digitized cyclic voltammogram (CV) derived from an SVG file,
     which provides access to the objects of the CV.
@@ -127,6 +127,7 @@ class CV():
         {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': ''}}
 
     """
+
     def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
         self._metadata = metadata or {}
@@ -205,10 +206,17 @@ class CV():
             {'x': {'dimension': 'U', 'unit': 'V'}, 'y': {'dimension': 'j', 'unit': 'A / m2'}}
 
         """
-        return {'x': {'dimension': 'U',
-                      'unit': 'V'},
-                'y': {'dimension': 'j' if 'm2' in str(CV.get_axis_unit(self.svgplot.axis_labels['y'])) else 'I',
-                      'unit': 'A / m2' if 'm2' in str(CV.get_axis_unit(self.svgplot.axis_labels['y'])) else 'A'}}
+        return {
+            "x": {"dimension": "U", "unit": "V"},
+            "y": {
+                "dimension": "j"
+                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels["y"]))
+                else "I",
+                "unit": "A / m2"
+                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels["y"]))
+                else "A",
+            },
+        }
 
     @classmethod
     def get_axis_unit(cls, unit):
@@ -225,23 +233,41 @@ class CV():
             Unit("uA / cm2")
 
         """
-        unit_typos = {'uA / cm2': ['uA / cm2', 'uA / cm²', 'µA / cm²', 'uA/cm2', 'uA/cm²', 'µA/cm²', 'µA cm⁻²', 'uA cm-2'],
-                      'mA / cm2': ['mA / cm2', 'mA / cm²', 'mA cm⁻²', 'mA/cm2', 'mA/cm²', 'mA cm-2'],
-                      'A / cm2': ['A / cm2', 'A/cm2', 'A cm⁻²', 'A cm-2'],
-                      'uA': ['uA', 'µA', 'microampere'],
-                      'mA': ['mA', 'milliampere'],
-                      'A': ['A', 'ampere', 'amps', 'amp'],
-                      'mV': ['milliV', 'millivolt', 'milivolt', 'miliv', 'mV'],
-                      'V': ['V', 'v', 'Volt', 'volt'],
-                      'V / s': ['V s-1', 'V/s', 'V / s'],
-                      'mV / s': ['mV / s', 'mV s-1', 'mV/s']}
+        unit_typos = {
+            "uA / cm2": [
+                "uA / cm2",
+                "uA / cm²",
+                "µA / cm²",
+                "uA/cm2",
+                "uA/cm²",
+                "µA/cm²",
+                "µA cm⁻²",
+                "uA cm-2",
+            ],
+            "mA / cm2": [
+                "mA / cm2",
+                "mA / cm²",
+                "mA cm⁻²",
+                "mA/cm2",
+                "mA/cm²",
+                "mA cm-2",
+            ],
+            "A / cm2": ["A / cm2", "A/cm2", "A cm⁻²", "A cm-2"],
+            "uA": ["uA", "µA", "microampere"],
+            "mA": ["mA", "milliampere"],
+            "A": ["A", "ampere", "amps", "amp"],
+            "mV": ["milliV", "millivolt", "milivolt", "miliv", "mV"],
+            "V": ["V", "v", "Volt", "volt"],
+            "V / s": ["V s-1", "V/s", "V / s"],
+            "mV / s": ["mV / s", "mV s-1", "mV/s"],
+        }
 
         for correct_unit, typos in unit_typos.items():
             for typo in typos:
                 if unit == typo:
                     return u.Unit(correct_unit)
 
-        raise ValueError(f'Unknown Unit {unit}')
+        raise ValueError(f"Unknown Unit {unit}")
 
     @property
     def x_label(self):
@@ -292,10 +318,12 @@ class CV():
             'RHE'
 
         """
-        pattern = r'^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$'
-        match = re.match(pattern, self.svgplot.axis_labels['x'], re.IGNORECASE)
+        pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
+        match = re.match(pattern, self.svgplot.axis_labels["x"], re.IGNORECASE)
 
-        return namedtuple('Label', ['label', 'unit', 'reference'])(match[0], match[1], match[2] or 'unknown')
+        return namedtuple("Label", ["label", "unit", "reference"])(
+            match[0], match[1], match[2] or "unknown"
+        )
 
     @property
     @cache
@@ -336,7 +364,9 @@ class CV():
             <Quantity 50. V / s>
 
         """
-        rates = self.svgplot.svg.get_texts('(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)')
+        rates = self.svgplot.svg.get_texts(
+            "(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
+        )
         # TODO: assert that only one label contains the scan rate (see issue #58)
         # TODO: assert that a rate is available at all (see issue #58)
 
@@ -421,7 +451,7 @@ class CV():
         self._add_time_axis(df)
 
         # Rearrange columns.
-        return df[['t', 'U', self.axis_properties['y']['dimension']]]
+        return df[["t", "U", self.axis_properties["y"]["dimension"]]]
 
     def _add_U_axis(self, df):
         r"""
@@ -464,7 +494,7 @@ class CV():
         q = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df['U'] = df['x'] * q.to(u.V).value
+        df["U"] = df["x"] * q.to(u.V).value
 
     def _add_I_axis(self, df):
         r"""
@@ -504,15 +534,15 @@ class CV():
             >>> cv._add_I_axis(df = cv.svgplot.df.copy())
 
         """
-        q = 1 * CV.get_axis_unit(self.svgplot.axis_labels['y'])
+        q = 1 * CV.get_axis_unit(self.svgplot.axis_labels["y"])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
-        if 'm2' in str(q.unit):
-            conversion_factor = q.to(u.A / u.m**2)
+        if "m2" in str(q.unit):
+            conversion_factor = q.to(u.A / u.m ** 2)
         else:
             conversion_factor = q.to(u.A)
 
-        df[self.axis_properties['y']['dimension']] = df['y'] * conversion_factor
+        df[self.axis_properties["y"]["dimension"]] = df["y"] * conversion_factor
 
     def _add_time_axis(self, df):
         r"""
@@ -554,9 +584,9 @@ class CV():
             >>> cv._add_time_axis(df)
 
         """
-        df['deltaU'] = abs(df['U'].diff().fillna(0))
-        df['cumdeltaU'] = df['deltaU'].cumsum()
-        df['t'] = df['cumdeltaU'] / float(self.rate.to(u.V / u.s).value)
+        df["deltaU"] = abs(df["U"].diff().fillna(0))
+        df["cumdeltaU"] = df["deltaU"].cumsum()
+        df["t"] = df["cumdeltaU"] / float(self.rate.to(u.V / u.s).value)
 
     def plot(self):
         r"""
@@ -596,10 +626,25 @@ class CV():
             >>> cv.plot()
 
         """
-        self.df.plot(x=self.axis_properties['x']['dimension'], y=self.axis_properties['y']['dimension'])
-        plt.axhline(linewidth=1, linestyle=':', alpha=0.5)
-        plt.xlabel(self.axis_properties['x']['dimension'] + ' [' + str(self.axis_properties['x']['unit']) + ' vs. ' + self.x_label.reference + ']')
-        plt.ylabel(self.axis_properties['y']['dimension'] + ' [' + str(self.axis_properties['y']['unit']) + ']')
+        self.df.plot(
+            x=self.axis_properties["x"]["dimension"],
+            y=self.axis_properties["y"]["dimension"],
+        )
+        plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
+        plt.xlabel(
+            self.axis_properties["x"]["dimension"]
+            + " ["
+            + str(self.axis_properties["x"]["unit"])
+            + " vs. "
+            + self.x_label.reference
+            + "]"
+        )
+        plt.ylabel(
+            self.axis_properties["y"]["dimension"]
+            + " ["
+            + str(self.axis_properties["y"]["unit"])
+            + "]"
+        )
 
     @property
     @cache
@@ -671,11 +716,13 @@ class CV():
             ''
 
         """
-        comments = self.svgplot.svg.get_texts('(?:comment): (?P<value>.*)')
+        comments = self.svgplot.svg.get_texts("(?:comment): (?P<value>.*)")
         if not comments:
-            return ''
+            return ""
         elif len(comments) > 1:
-            logger.warning(f"More than one comment. Ignoring all comments except for the first: {comments[0]}.")
+            logger.warning(
+                f"More than one comment. Ignoring all comments except for the first: {comments[0]}."
+            )
         return comments[0].value
 
     @property
@@ -720,14 +767,23 @@ class CV():
 
         """
         metadata = self._metadata.copy()
-        metadata.setdefault('figure description', {})
-        metadata['figure description']['type'] = 'digitized'
-        metadata['figure description']['measurement type'] = 'CV'
-        metadata['figure description']['scan rate'] = {'value': float(self.rate.value), 'unit': str(self.rate.unit)}
-        metadata['figure description'].setdefault('potential scale', {})
-        metadata['figure description']['potential scale']['unit'] = str(CV.get_axis_unit(self.x_label.unit))
-        metadata['figure description']['potential scale']['reference'] = self.x_label.reference
-        metadata['figure description']['current'] = {'unit': str(CV.get_axis_unit(self.svgplot.axis_labels['y']))}
-        metadata['figure description']['comment'] = self.comment
+        metadata.setdefault("figure description", {})
+        metadata["figure description"]["type"] = "digitized"
+        metadata["figure description"]["measurement type"] = "CV"
+        metadata["figure description"]["scan rate"] = {
+            "value": float(self.rate.value),
+            "unit": str(self.rate.unit),
+        }
+        metadata["figure description"].setdefault("potential scale", {})
+        metadata["figure description"]["potential scale"]["unit"] = str(
+            CV.get_axis_unit(self.x_label.unit)
+        )
+        metadata["figure description"]["potential scale"][
+            "reference"
+        ] = self.x_label.reference
+        metadata["figure description"]["current"] = {
+            "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"]))
+        }
+        metadata["figure description"]["comment"] = self.comment
 
         return metadata

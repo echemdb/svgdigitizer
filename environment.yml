@@ -15,7 +15,6 @@ dependencies:
   - pdf2image
   - svgwrite
   - svgpathtools
-  - pycodestyle
   - pytest
   - scipy
   - astropy
