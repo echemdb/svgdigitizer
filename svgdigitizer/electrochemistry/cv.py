@@ -47,12 +47,13 @@ For the documentation below, the path of a CV is presented simply as line.
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import logging
+import re
 from collections import namedtuple
 from functools import cache
-import re
+
 import matplotlib.pyplot as plt
 from astropy import units as u
-import logging
 
 logger = logging.getLogger("cv")
 

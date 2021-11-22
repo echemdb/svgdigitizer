@@ -65,8 +65,8 @@ def plot(svg, sampling_interval):
         ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
 
     """
-    from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
+    from svgdigitizer.svgplot import SVGPlot
 
     SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
 
@@ -80,8 +80,8 @@ def plot(svg, sampling_interval):
 )
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
-    from svgdigitizer.svgplot import SVGPlot
     from svgdigitizer.svg import SVG
+    from svgdigitizer.svgplot import SVGPlot
 
     plot = SVGPlot(SVG(open(svg, "rb")), sampling_interval=sampling_interval)
     from pathlib import Path
@@ -146,13 +146,14 @@ def cv(svg, sampling_interval, metadata, package, outdir):
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
 
     """
+    import os.path
+
     import yaml
     from astropy import units as u
-    from svgdigitizer.svgplot import SVGPlot
-    from svgdigitizer.svg import SVG
-    from svgdigitizer.electrochemistry.cv import CV
 
-    import os.path
+    from svgdigitizer.electrochemistry.cv import CV
+    from svgdigitizer.svg import SVG
+    from svgdigitizer.svgplot import SVGPlot
 
     if outdir is None:
         outdir = os.path.dirname(svg)
@@ -191,7 +192,7 @@ def cv(svg, sampling_interval, metadata, package, outdir):
         p = Package(cv.metadata, base_path=outdir)
         p.infer(csvname)
 
-    from datetime import datetime, date
+    from datetime import date, datetime
 
     def defaultconverter(o):
         if isinstance(o, (datetime, date)):
@@ -211,10 +212,10 @@ def cv(svg, sampling_interval, metadata, package, outdir):
 @click.option("--onlypng", is_flag=True, help="Only produce png files")
 @click.argument("pdf")
 def paginate(onlypng, pdf):
-    from pdf2image import convert_from_path
     import svgwrite
-    from svgwrite.extensions.inkscape import Inkscape
+    from pdf2image import convert_from_path
     from PIL import Image
+    from svgwrite.extensions.inkscape import Inkscape
 
     basename = pdf.split(".")[0]
     pages = convert_from_path(pdf, dpi=600)

@@ -19,9 +19,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
-from xml.dom import minidom, Node
-import re
 import logging
+import re
+from xml.dom import Node, minidom
 
 logger = logging.getLogger("svg")
 
@@ -256,8 +256,8 @@ class SVG:
 
         if element.getAttribute("d"):
             # element is like a path
-            from svgpathtools.path import transform
             from svgpathtools.parser import parse_path
+            from svgpathtools.path import transform
 
             element = transform(parse_path(element.getAttribute("d")), transformation)
         elif element.hasAttribute("x") and element.hasAttribute("y"):

@@ -20,6 +20,9 @@ dependencies:
   - astropy
   - sphinx
   - myst-parser
+  - pylint
+  - black
+  - isort
   - pip
   - pip:
     - linkchecker

@@ -74,10 +74,11 @@ class TemporaryData:
         self._tmpdir = tempfile.TemporaryDirectory()
 
         try:
+            import glob
             import os
             import os.path
-            import glob
             import shutil
+
             import svgdigitizer
 
             cwd = os.getcwd()

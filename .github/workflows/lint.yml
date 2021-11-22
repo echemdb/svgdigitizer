@@ -20,5 +20,11 @@ jobs:
         run: |
           mamba env update --quiet -n test -f environment.yml
           conda list
-      - name: lint
-        uses: sunnysid3up/python-linter@master
+      - name: black
+        shell: bash -l {0}
+        run: |
+          black --check --diff svgdigitizer
+      - name: isort
+        shell: bash -l {0}
+        run: |
+          isort svgdigitizer

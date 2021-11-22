@@ -19,11 +19,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import logging
+from functools import cache
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from functools import cache
-import logging
 
 logger = logging.getLogger("svgplot")
 
