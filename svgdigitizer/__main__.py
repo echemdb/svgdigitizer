@@ -174,6 +174,8 @@ def cv(svg, sampling_interval, metadata, package, outdir):
 
     if metadata:
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
+        # remove all empty keys
+        metadata = {key: value for key, value in metadata.items() if value}
 
     cv = CV(
         SVGPlot(SVG(open(svg, "rb")), sampling_interval=sampling_interval),
