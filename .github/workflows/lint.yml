@@ -20,6 +20,11 @@ jobs:
         run: |
           mamba env update --quiet -n test -f environment.yml
           conda list
+      - name: pylint
+        shell: bash -l {0}
+        run: |
+          # Currently, we ignore the verdict of the linter, we need to fix the lint first, see #83.
+          pylint svgdigitizer || true
       - name: black
         shell: bash -l {0}
         run: |
