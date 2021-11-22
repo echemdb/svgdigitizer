@@ -15,12 +15,14 @@ dependencies:
   - pdf2image
   - svgwrite
   - svgpathtools
-  - pycodestyle
   - pytest
   - scipy
   - astropy
   - sphinx
   - myst-parser
+  - pylint
+  - black
+  - isort
   - pip
   - pip:
     - linkchecker
