@@ -45,6 +45,7 @@ def invoke(command, *args):
 
     """
     from click.testing import CliRunner
+
     invocation = CliRunner().invoke(command, args, catch_exceptions=False)
     output = invocation.output.strip()
     if output:
@@ -63,18 +64,21 @@ class TemporaryData:
         True
 
     """
+
     def __init__(self, *patterns):
         self._patterns = patterns
 
     def __enter__(self):
         import tempfile
+
         self._tmpdir = tempfile.TemporaryDirectory()
 
         try:
+            import glob
             import os
             import os.path
-            import glob
             import shutil
+
             import svgdigitizer
 
             cwd = os.getcwd()
