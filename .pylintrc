@@ -1,2 +1,6 @@
 [FORMAT]
 max-line-length=256
+max-module-lines=65536
+
+[MESSAGES CONTROL]
+disable=import-outside-toplevel
