@@ -9,7 +9,7 @@ and (1, 1). In the SVG coordinate system, such a line segment is
 given as the path connecting the points (0, 100) and (100, 0); note that the
 SVG coordinate system is negative, i.e., the y-axis grows towards the bottom::
 
->>> curve = '<path d="M 0 100 L 100 0" />'
+    >>> curve = '<path d="M 0 100 L 100 0" />'
 
 We need to attach a label to this path, so :class:`SVGPlot` understands that
 this is the actual curve that contains data we want to digitize. We do so by
@@ -18,19 +18,19 @@ label has no importance but is required. The identifier itself does also not
 matter in this example.  It is only relevant when there are multiple curves in
 the same SVG::
 
->>> curve = f'''
-...     <g>
-...       { curve }
-...       <text x="0" y="0">curve: 0</text>
-...     </g>
-... '''
+    >>> curve = f'''
+    ...     <g>
+    ...       { curve }
+    ...       <text x="0" y="0">curve: 0</text>
+    ...     </g>
+    ... '''
 
 Additionally, we need to establish a plot coordinate system. We do so by
 creating ticks for two reference ticks for both the x-axis and the y-axis.
 To start, we want to define that the y=100 in the SVG coordinate system
 corresponds to y=0 in the plot coordinate system::
 
->>> y1 = '<text x="-100" y="100">y1: 0</text>'
+    >>> y1 = '<text x="-100" y="100">y1: 0</text>'
 
 The location of this reference label does not matter much, we just put it
 somewhere where it looks nice. Now we need to pinpoint the place on the y-axis
@@ -38,76 +38,76 @@ that corresponds to y=0. We do so by drawing a path from close to the base
 point of the reference label to that point on the y-axis and group it with the
 label::
 
->>> y1 = f'''
-...     <g>
-...       <path d="M -100 100 L 0 100" />
-...       { y1 }
-...     </g>
-... '''
+    >>> y1 = f'''
+    ...     <g>
+    ...       <path d="M -100 100 L 0 100" />
+    ...       { y1 }
+    ...     </g>
+    ... '''
 
 We repeat the same process for the other reference labels, i.e., `y2`, `x1`,
 `x2` and obtain our input SVG that :class:`SVGPlot` can make sense of. Note
 that we added some units, so the x-axis is the time in seconds, and the y-axis
 is a voltage in volts.
 
->>> svg = f'''
-...     <svg>
-...       { curve }
-...       <g>
-...         <path d="M 0 200 L 0 100" />
-...         <text x="0" y="200">x1: 0</text>
-...       </g>
-...       <g>
-...         <path d="M 100 200 L 100 100" />
-...         <text x="100" y="200">x2: 1s</text>
-...       </g>
-...       { y1 }
-...       <g>
-...         <path d="M -100 0 L 0 0" />
-...         <text x="-100" y="0">y2: 1V</text>
-...       </g>
-...     </svg>
-... '''
+    >>> svg = f'''
+    ...     <svg>
+    ...       { curve }
+    ...       <g>
+    ...         <path d="M 0 200 L 0 100" />
+    ...         <text x="0" y="200">x1: 0</text>
+    ...       </g>
+    ...       <g>
+    ...         <path d="M 100 200 L 100 100" />
+    ...         <text x="100" y="200">x2: 1s</text>
+    ...       </g>
+    ...       { y1 }
+    ...       <g>
+    ...         <path d="M -100 0 L 0 0" />
+    ...         <text x="-100" y="0">y2: 1V</text>
+    ...       </g>
+    ...     </svg>
+    ... '''
 
 We wrap this string into an :class:`svg.SVG` object and create an actual
 :class:`SVGPlot` from it::
 
->>> from svgdigitizer.svg import SVG
->>> from io import StringIO
->>> svg = SVG(StringIO(svg))
->>> plot = SVGPlot(svg)
+    >>> from svgdigitizer.svg import SVG
+    >>> from io import StringIO
+    >>> svg = SVG(StringIO(svg))
+    >>> plot = SVGPlot(svg)
 
 Now we can query the plot for things such as the units used on the axes::
 
->>> plot.axis_labels
-{'x': 's', 'y': 'V'}
+    >>> plot.axis_labels
+    {'x': 's', 'y': 'V'}
 
 We can get a pandas data frame with actual plot data in the plot coordinate
 system::
 
->>> plot.df
-     x    y
-0  0.0  0.0
-1  1.0  1.0
+    >>> plot.df
+         x    y
+    0  0.0  0.0
+    1  1.0  1.0
 
 This data frame is built from the end points of the paths that make up the
 curve. We can also interpolate at equidistant points on the x-axis by
 specifying a `sampling_interval`::
 
->>> plot = SVGPlot(svg, sampling_interval=.1)
->>> plot.df
-      x    y
-0   0.0  0.0
-1   0.1  0.1
-2   0.2  0.2
-3   0.3  0.3
-4   0.4  0.4
-5   0.5  0.5
-6   0.6  0.6
-7   0.7  0.7
-8   0.8  0.8
-9   0.9  0.9
-10  1.0  1.0
+    >>> plot = SVGPlot(svg, sampling_interval=.1)
+    >>> plot.df
+          x    y
+    0   0.0  0.0
+    1   0.1  0.1
+    2   0.2  0.2
+    3   0.3  0.3
+    4   0.4  0.4
+    5   0.5  0.5
+    6   0.6  0.6
+    7   0.7  0.7
+    8   0.8  0.8
+    9   0.9  0.9
+    10  1.0  1.0
 
 """
 # ********************************************************************
