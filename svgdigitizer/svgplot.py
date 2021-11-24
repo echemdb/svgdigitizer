@@ -892,9 +892,14 @@ class SVGPlot:
             Exception: No curve main curve found in SVG.
 
         """
+        curves = self.labeled_paths["curve"]
+
+        if len(curves) == 0:
+            raise Exception(f"No curve found in SVG.")
+
         curves = [
             curve
-            for curve in self.labeled_paths["curve"]
+            for curve in curves
             if self._curve is None or curve.label.curve_id == self._curve
         ]
 
