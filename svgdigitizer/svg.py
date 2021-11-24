@@ -116,7 +116,8 @@ class SVG:
             for child in group.childNodes:
                 if child.nodeType == Node.COMMENT_NODE:
                     continue
-                elif child.nodeType == Node.TEXT_NODE:
+
+                if child.nodeType == Node.TEXT_NODE:
                     if SVG._text_value(child):
                         logger.warning(
                             f'Ignoring unexpected text node "{SVG._text_value(child)}" grouped with <path>.'
