@@ -835,7 +835,7 @@ class SVGPlot:
         return labeled_paths
 
     @classmethod
-    def sample_path(self, path, sampling_interval, endpoints="include"):
+    def sample_path(cls, path, sampling_interval, endpoints="include"):
         r"""
         Return points on `path`, sampled at equidistant increments on the
         x-axis.
