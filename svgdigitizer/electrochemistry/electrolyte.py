@@ -30,61 +30,64 @@ from pHcalc.pHcalc import Acid, Neutral, System
 
 from svgdigitizer.electrochemistry.normalization import normalize_unit
 
-acid_base_dict = {
-    "VLTRZXGMWDSKGL-UHFFFAOYSA-N": {
+acid_base = {
+    "InChI=1S/ClHO4/c2-1(3,4)5/h(H,2,3,4,5)": {
         "name": "HClO4",
         "components": [Acid(pKa=[-1.6], charge=0)],
     },  # CRC handbook of chemistry and physics 2017
-    "QAOWNCQODCNURD-UHFFFAOYSA-N": {
+    "InChI=1S/H2O4S/c1-5(2,3)4/h(H2,1,2,3,4)": {
         "name": "H2SO4",
         "components": [Acid(pKa=[-3, 1.9], charge=0)],
     },  # http://www.chem.wisc.edu/areas/reich/pkatable/pKa_compilation-1-Williams.pdf
-    "NBIIXXVUZAFLBC-UHFFFAOYSA-N": {
+    "InChI=1S/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)": {
         "name": "H3PO4",
         "components": [Acid(pKa=[2.16, 7.21, 12.32], charge=0)],
     },  # CRC handbook of chemistry and physics 2017
-    "BDAGIHXWWSANSR-UHFFFAOYSA-N": {
+    "InChI=1S/CH2O2/c2-1-3/h1H,(H,2,3)": {
         "name": "HCOOH",
         "components": [Acid(pKa=[3.75], charge=0)],
     },  # CRC handbook of chemistry and physics 2017
-    "QTBSBXVTEAMEQO-UHFFFAOYSA-N": {
+    "InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)": {
         "name": "acetic acid",
         "components": [Acid(pKa=[4.78], charge=0)],
     },
-    "VEXZGXHMUGYJMC-UHFFFAOYSA-N": {
+    "InChI=1S/ClH/h1H": {
         "name": "HCl",
         "components": [Acid(pKa=[-6.2], charge=0)],
     },  # Analytical Chemistry, 43(7), 1971, S. 969–970.
-    "JUJWROOIHBZHMG-UHFFFAOYSA-N": {
+    "InChI=1S/C5H5N/c1-2-4-6-5-3-1/h1-5H": {
         "name": "pyridine",
         "components": [Acid(pKa=[5.23], charge=1)],
     },  # CRC handbook of chemistry and physics 2017
-    "QGZKDVFQNNGYKY-UHFFFAOYSA-N": {
+    "InChI=1S/H3N/h1H3": {
         "name": "NH3",
         "components": [Acid(pKa=[9.25], charge=1)],
     },  # CRC handbook of chemistry and physics 2017
-    "BVKZGUZCCUSVTD-UHFFFAOYSA-N": {
+    "InChI=1S/CH2O3/c2-1(3)4/h(H2,2,3,4)": {
         "name": "H2CO3",
         "components": [Acid(pKa=[6.35, 10.33], charge=0)],
     },  # CRC handbook of chemistry and physics 2017
-    "HEMHJVSKTPXQMS-UHFFFAOYSA-M": {"name": "NaOH", "components": [Neutral(charge=1)]},
-    "FAPWRFPIFSIZLT-UHFFFAOYSA-M": {
+    "InChI=1S/Na.H2O/h;1H2/q+1;/p-1": {
+        "name": "NaOH",
+        "components": [Neutral(charge=1)],
+        },
+    "InChI=1S/ClH.Na/h1H;/q;+1/p-1": {
         "name": "NaCl",
         "components": [Acid(pKa=[-6.2], charge=0), Neutral(charge=1)],
     },
-    "PMZURENOXWZQFD-UHFFFAOYSA-L": {
+    "InChI=1S/2Na.H2O4S/c;;1-5(2,3)4/h;;(H2,1,2,3,4)/q2*+1;/p-2": {
         "name": "Na2SO4",
         "components": [Acid(pKa=[-3, 1.9], charge=0), Neutral(charge=2)],
     },
-    "RYFMWSXOAZQYPI-UHFFFAOYSA-K": {
+    "InChI=1S/3Na.H3O4P/c;;;1-5(2,3)4/h;;;(H3,1,2,3,4)/q3*+1;/p-3": {
         "name": "Na3PO4",
         "components": [Acid(pKa=[2.16, 7.21, 12.32], charge=0), Neutral(charge=3)],
     },
-    "BNIILDVGGAEEIG-UHFFFAOYSA-L": {
+    "InChI=1S/2Na.H3O4P/c;;1-5(2,3)4/h;;(H3,1,2,3,4)/q2*+1;/p-2": {
         "name": "Na2HPO4",
         "components": [Acid(pKa=[2.16, 7.21, 12.32], charge=0), Neutral(charge=2)],
     },
-    "AJPJDKMHJJGVTQ-UHFFFAOYSA-M": {
+    "InChI=1S/Na.H3O4P/c;1-5(2,3)4/h;(H3,1,2,3,4)/q+1;/p-1": {
         "name": "NaH2PO4",
         "components": [Acid(pKa=[2.16, 7.21, 12.32], charge=0), Neutral(charge=1)],
     },
@@ -131,8 +134,8 @@ class Electrolyte:
         acids_bases = []
         for i in self.electrolyte["components"]:
             if not i["type"] == "solvent":
-                InChIKey = self.lookup_chemical_ids_from_name(i["name"])["InChIKey"]
-                temp = self.get_pKa(InChIKey)
+                InChI = self.lookup_chemical_ids_from_name(i["name"])["InChI"]
+                temp = self.get_pKa(InChI)
                 for e in temp:
                     q = i["concentration"]["value"] * normalize_unit(
                         i["concentration"]["unit"]
@@ -146,26 +149,18 @@ class Electrolyte:
         return system.pH
 
     @classmethod
-    def lookup_CID_from_InChI(cls, InChIKey=None, InChI=None):
+    def lookup_CID_from_InChI(cls, InChI):
         r"""
-        Lookup Pubchem CID from InChI or InChiKey.
+        Lookup Pubchem CID from InChI.
 
         EXAMPLES::
-
-            CID can be retrieved with InChIKey::
-            >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
-            >>> Electrolyte.lookup_CID_from_InChI(InChIKey='NBIIXXVUZAFLBC-UHFFFAOYSA-N') # phosphoric acid
-            1004
 
             CID can be retrieved with InChI::
             >>> Electrolyte.lookup_CID_from_InChI(InChI='InChI=1S/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)') # phosphoric acid
             1004
 
         """
-        if InChIKey:
-            return pcp.get_cids(InChIKey, "inchikey")[0]
-        elif InChI:
-            return pcp.get_cids(InChI, "inchi")[0]
+        return pcp.get_cids(InChI, "inchi")[0]
 
     @classmethod
     def lookup_chemical_ids_from_name(cls, chemical_name):
@@ -191,9 +186,9 @@ class Electrolyte:
                 f"Name of chemical {chemical_name} not found in pubchem! Check spelling."
             )
         else:
-            return pcp.get_properties(("InChIKey", "InChI"), results[0])[0]
+            return pcp.get_properties(("InChI", "InChIKey"), results[0])[0]
 
-    def get_pKa(self, InChIKey):
+    def get_pKa(self, InChI):
         r"""
         Get pKa
         Pubchem lookup only works for neutral acids!
@@ -201,9 +196,9 @@ class Electrolyte:
         """
         pattern = re.compile(r".*(?P<pKa>\d+\.\d*).*")
         try:
-            return acid_base_dict[InChIKey]["components"]
+            return acid_base[InChI]["components"]
         except KeyError:
-            cid = self.lookup_CID_from_InChI(InChIKey=InChIKey)
+            cid = self.lookup_CID_from_InChI(InChI=InChI)
             pKa_result = self.lookup_pKa(cid)["pKa"]
             # TODO support salts etc.
             return [
