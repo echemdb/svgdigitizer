@@ -12,13 +12,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: ["3.8", "3.9"]
+        python: ["3.9", "3.10"]
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
     steps:
       - uses: actions/checkout@v2
         with: { submodules: recursive }
       - uses: conda-incubator/setup-miniconda@v2
-        with: { mamba-version: "*", channels: "conda-forge", channel-priority: true }
+        with: { mamba-version: "*", channels: "conda-forge", channel-priority: true, python-version: "${{ matrix.python }}" }
       - name: install dependencies
         shell: bash -l {0}
         run: |
