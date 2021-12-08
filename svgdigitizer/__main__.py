@@ -90,7 +90,7 @@ def digitize(svg, sampling_interval):
     svg_plot.df.to_csv(Path(svg).with_suffix(".csv"), index=False)
 
 
-@click.command()
+@click.command(name="cv")
 @click.option(
     "--sampling_interval",
     type=float,
@@ -108,9 +108,10 @@ def digitize(svg, sampling_interval):
     help="write output files to this directory",
 )
 @click.argument("svg", type=click.Path(exists=True))
-def cv(svg, sampling_interval, metadata, package, outdir):
+def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     r"""
-    Create a CSV and YAML metadata file for inclusion in the echemdb.
+    Create a CSV and YAML metadata file for a cylic voltammogram for inclusion
+    in the echemdb.
 
     EXAMPLES::
 
@@ -193,14 +194,14 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     if package:
         from datapackage import Package
 
-        p = Package(cv.metadata, base_path=outdir)
-        p.infer(csvname)
+        package = Package(cv.metadata, base_path=outdir)
+        package.infer(csvname)
 
     from datetime import date, datetime
 
-    def defaultconverter(o):
-        if isinstance(o, (datetime, date)):
-            return o.__str__()
+    def defaultconverter(item):
+        if isinstance(item, (datetime, date)):
+            return item.__str__()
 
     import json
 
@@ -208,7 +209,7 @@ def cv(svg, sampling_interval, metadata, package, outdir):
         os.path.join(outdir, Path(svg).with_suffix(".json").name), "w"
     ) as outfile:
         json.dump(
-            p.descriptor if package else cv.metadata, outfile, default=defaultconverter
+            package.descriptor if package else cv.metadata, outfile, default=defaultconverter
         )
 
 
@@ -256,7 +257,7 @@ def paginate(onlypng, pdf):
 
 cli.add_command(plot)
 cli.add_command(digitize)
-cli.add_command(cv)
+cli.add_command(digitize_cv)
 cli.add_command(paginate)
 
 # Register command docstrings for doctesting.
