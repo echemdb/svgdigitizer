@@ -445,16 +445,16 @@ class CV:
 
         """
         df = self.svgplot.df.copy()
-        self._add_U_axis(df)
+        self._add_voltage_axis(df)
 
-        self._add_I_axis(df)
+        self._add_current_axis(df)
 
         self._add_time_axis(df)
 
         # Rearrange columns.
         return df[["t", "U", self.axis_properties["y"]["dimension"]]]
 
-    def _add_U_axis(self, df):
+    def _add_voltage_axis(self, df):
         r"""
         Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
 
@@ -492,12 +492,12 @@ class CV:
             >>> cv._add_U_axis(df = cv.svgplot.df.copy())
 
         """
-        q = 1 * CV.get_axis_unit(self.x_label.unit)
+        voltage = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df["U"] = df["x"] * q.to(u.V).value
+        df["U"] = df["x"] * voltage.to(u.V).value
 
-    def _add_I_axis(self, df):
+    def _add_current_axis(self, df):
         r"""
         Add a current 'I' or current density 'j' column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
 
@@ -535,13 +535,13 @@ class CV:
             >>> cv._add_I_axis(df = cv.svgplot.df.copy())
 
         """
-        q = 1 * CV.get_axis_unit(self.svgplot.axis_labels["y"])
+        current = 1 * CV.get_axis_unit(self.svgplot.axis_labels["y"])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
-        if "m2" in str(q.unit):
-            conversion_factor = q.to(u.A / u.m ** 2)
+        if "m2" in str(current.unit):
+            conversion_factor = current.to(u.A / u.m ** 2)
         else:
-            conversion_factor = q.to(u.A)
+            conversion_factor = current.to(u.A)
 
         df[self.axis_properties["y"]["dimension"]] = df["y"] * conversion_factor
 
