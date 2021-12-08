@@ -489,7 +489,7 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv._add_U_axis(df = cv.svgplot.df.copy())
+            >>> cv._add_voltage_axis(df = cv.svgplot.df.copy())
 
         """
         voltage = 1 * CV.get_axis_unit(self.x_label.unit)
@@ -532,7 +532,7 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv._add_I_axis(df = cv.svgplot.df.copy())
+            >>> cv._add_current_axis(df = cv.svgplot.df.copy())
 
         """
         current = 1 * CV.get_axis_unit(self.svgplot.axis_labels["y"])
@@ -581,7 +581,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> df = cv.svgplot.df.copy()
-            >>> cv._add_U_axis(df)
+            >>> cv._add_voltage_axis(df)
             >>> cv._add_time_axis(df)
 
         """

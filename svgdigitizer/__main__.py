@@ -8,9 +8,9 @@ EXAMPLES::
     Usage: cli [OPTIONS] COMMAND [ARGS]...
       The SVGDigitizer suite.
     Options:
-      --help Show this message and exit.
+      --help  Show this message and exit.
     Commands:
-      cv        Create a CSV and YAML metadata file for inclusion in the echemdb.
+      cv        Digitize a cylic voltammogram.
       digitize
       paginate
       plot      Display a plot of the data traced in an SVG.
@@ -110,8 +110,9 @@ def digitize(svg, sampling_interval):
 @click.argument("svg", type=click.Path(exists=True))
 def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     r"""
-    Create a CSV and YAML metadata file for a cylic voltammogram for inclusion
-    in the echemdb.
+    Digitize a cylic voltammogram.
+
+    For inclusion in the echemdb.
 
     EXAMPLES::
 
