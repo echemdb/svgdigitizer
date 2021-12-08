@@ -340,14 +340,115 @@ class SVGPlot:
         }
 
     @property
+    def _marked_points_from_axis_markers(self):
+        r"""
+        Return the points that have been explicitly marked on the axes of the plot.
+
+        For each point, a tuple is returned relating the point's coordinates in
+        the SVG coordinate system to the point's coordinates in the plot
+        coordinate system, or `None` if that point's coordinate is not known.
+        """
+        points = {}
+
+        xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
+        ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
+
+        # Process explicitly marked point on the axes.
+        for labeled_paths in self.labeled_paths["ref_point"]:
+            label = labeled_paths.label.point
+            value = float(labeled_paths.label.value)
+            unit = labeled_paths.label.unit or None
+
+            if label in xlabels:
+                plot = (value, None, unit)
+            elif label in ylabels:
+                plot = (None, value, unit)
+            else:
+                raise NotImplementedError(
+                    f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}."
+                )
+
+            if label in points:
+                raise Exception(f"Found axis label {label} more than once.")
+
+            if len(labeled_paths.paths) != 1:
+                raise NotImplementedError(
+                    f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}."
+                )
+
+            path = labeled_paths.paths[0]
+
+            points[label] = (path.far, plot)
+
+        return points
+
+    def _marked_points_from_scalebars(self, base_points):
+        r"""
+        Return the points that have been specified through a scalebar in the plot.
+
+        For each point, a tuple is returned relating the point's coordinates in
+        the SVG coordinate system to the point's coordinates in the plot
+        coordinate system, or `None` if that point's coordinate is not known.
+        """
+        points = {}
+
+        # Process scale bars.
+        for labeled_paths in self.labeled_paths["scale_bar"]:
+            label = labeled_paths.label.axis
+            value = float(labeled_paths.label.value)
+            unit = labeled_paths.label.unit or None
+
+            if label not in [self.xlabel, self.ylabel]:
+                raise Exception(
+                    f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {label}."
+                )
+
+            if len(labeled_paths.paths) != 2:
+                raise NotImplementedError(
+                    f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(labeled_paths.paths)}."
+                )
+
+            endpoints = [path.far for path in labeled_paths.paths]
+            scalebar = (
+                endpoints[0][0] - endpoints[1][0],
+                endpoints[0][1] - endpoints[1][1],
+            )
+
+            # The scalebar has an explicit orientation in the SVG but the
+            # author of the scalebar was likely not aware.
+            # We assume here that the scalebar was meant to be oriented like
+            # the coordinate system in the SVG, i.e., x coordinates grow to the
+            # right, y coordinates grow to the bottom.
+            if (
+                label == self.xlabel
+                and scalebar[0] < 0
+                or label == self.ylabel
+                and scalebar[1] > 0
+            ):
+                scalebar = (-scalebar[0], -scalebar[1])
+
+            # Construct the second marked point from the first marked point + scalebar.
+            base_point = base_points[label + "1"]
+            point = ((base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]), (None, None))
+
+            if label == self.xlabel:
+                point = (point[0], (base_point[1][0] + value, None, unit))
+            else:
+                point = (point[0], (None, base_point[1][1] + value, unit))
+
+            points[label + "2"] = point
+
+        return points
+
+    @property
     @cache
     def marked_points(self):
         r"""
         Return the points that have been marked on the axes of the plot.
 
         For each point, a tuple is returned relating the point's coordinates in
-        the SVG coordinate system to the points coordinates in the plot
-        coordinate system, or `None` if that points coordinate is not known.
+        the SVG coordinate system to the point's coordinates in the plot
+        coordinate system, or `None` if that point's coordinate is not known.
 
         EXAMPLES:
 
@@ -411,93 +512,23 @@ class SVGPlot:
             True
 
         """
-        points = {}
-
         xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
         ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
 
-        # Process explicitly marked point on the axes.
-        for labeled_paths in self.labeled_paths["ref_point"]:
-            label = labeled_paths.label.point
-            value = float(labeled_paths.label.value)
-            unit = labeled_paths.label.unit or None
-
-            if label in xlabels:
-                plot = (value, None, unit)
-            elif label in ylabels:
-                plot = (None, value, unit)
-            else:
-                raise NotImplementedError(
-                    f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}."
-                )
-
-            if label in points:
-                raise Exception(f"Found axis label {label} more than once.")
-
-            if len(labeled_paths.paths) != 1:
-                raise NotImplementedError(
-                    f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}."
-                )
-
-            path = labeled_paths.paths[0]
-
-            points[label] = (path.far, plot)
+        points = self._marked_points_from_axis_markers
 
         if xlabels[0] not in points:
             raise Exception(f"Label {xlabels[0]} not found in SVG.")
         if ylabels[0] not in points:
             raise Exception(f"Label {ylabels[0]} not found in SVG.")
 
-        # Process scale bars.
-        for labeled_paths in self.labeled_paths["scale_bar"]:
-            label = labeled_paths.label.axis
-            value = float(labeled_paths.label.value)
-            unit = labeled_paths.label.unit or None
-
-            if label not in [self.xlabel, self.ylabel]:
+        for label, point in self._marked_points_from_scalebars(points).items():
+            if label in points:
                 raise Exception(
-                    f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {label}."
+                    f"Found an axis label and scale bar for {label}."
                 )
 
-            if label + "2" in points:
-                raise Exception(
-                    f"Found more than one axis label {label}2 and scalebar for {label}."
-                )
-
-            if len(labeled_paths.paths) != 2:
-                raise NotImplementedError(
-                    f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(labeled_paths.paths)}."
-                )
-
-            endpoints = [path.far for path in labeled_paths.paths]
-            scalebar = (
-                endpoints[0][0] - endpoints[1][0],
-                endpoints[0][1] - endpoints[1][1],
-            )
-
-            # The scalebar has an explicit orientation in the SVG but the
-            # author of the scalebar was likely not aware.
-            # We assume here that the scalebar was meant to be oriented like
-            # the coordinate system in the SVG, i.e., x coordinates grow to the
-            # right, y coordinates grow to the bottom.
-            if (
-                label == self.xlabel
-                and scalebar[0] < 0
-                or label == self.ylabel
-                and scalebar[1] > 0
-            ):
-                scalebar = (-scalebar[0], -scalebar[1])
-
-            # Construct the second marked point from the first marked point + scalebar.
-            p1 = points[label + "1"]
-            p2 = ((p1[0][0] + scalebar[0], p1[0][1] + scalebar[1]), (None, None))
-
-            if label == self.xlabel:
-                p2 = (p2[0], (p1[1][0] + value, None, unit))
-            else:
-                p2 = (p2[0], (None, p1[1][1] + value, unit))
-
-            points[label + "2"] = p2
+            points[label] = point
 
         if xlabels[1] not in points:
             raise Exception(f"Label {xlabels[1]} not found in SVG.")
