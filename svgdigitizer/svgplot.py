@@ -788,10 +788,10 @@ class SVGPlot:
         # We construct the basic transformation from the SVG coordinate system
         # to the plot coordinate system from four points in the SVG about we
         # know something in the plot coordinate system:
-        # * x1: a point whose x-coordinate we know
-        # * y1: a point whose y-coordinate we know
-        # * x2: a point whose x-coordinate we know
-        # * y2: a point whose y-coordinate we know
+        # * x_1: a point whose x-coordinate we know
+        # * y_1: a point whose y-coordinate we know
+        # * x_2: a point whose x-coordinate we know
+        # * y_2: a point whose y-coordinate we know
         # For the axis-aligned implementation, we further assume that only
         # changing the x coordinate in the SVG does not change the y coordinate
         # in the plot and conversely.
@@ -800,25 +800,25 @@ class SVGPlot:
         # have the same x coordinate in the plot coordinate system.
         # In any case, this gives six relations for the six unknowns of an
         # affine transformation.
-        x1 = self.marked_points[f"{self.xlabel}1"]
-        x2 = self.marked_points[f"{self.xlabel}2"]
-        y1 = self.marked_points[f"{self.ylabel}1"]
-        y2 = self.marked_points[f"{self.ylabel}2"]
+        x_1 = self.marked_points[f"{self.xlabel}1"]
+        x_2 = self.marked_points[f"{self.xlabel}2"]
+        y_1 = self.marked_points[f"{self.ylabel}1"]
+        y_2 = self.marked_points[f"{self.ylabel}2"]
 
         # We find the linear transformation:
-        # [A[0] A[1] A[2]]
-        # [A[3] A[4] A[5]]
+        # [transformation[0] transformation[1] transformation[2]]
+        # [transformation[3] transformation[4] transformation[5]]
         # [   0    0    1]
         # By solving for the linear conditions indicated above:
         conditions = [
             # x1 maps to something with the correct x coordinate
-            ([x1[0][0], x1[0][1], 1, 0, 0, 0], x1[1][0]),
+            ([x_1[0][0], x_1[0][1], 1, 0, 0, 0], x_1[1][0]),
             # y1 maps to something with the correct y coordinate
-            ([0, 0, 0, y1[0][0], y1[0][1], 1], y1[1][1]),
+            ([0, 0, 0, y_1[0][0], y_1[0][1], 1], y_1[1][1]),
             # x2 maps to something with the correct x coordinate
-            ([x2[0][0], x2[0][1], 1, 0, 0, 0], x2[1][0]),
+            ([x_2[0][0], x_2[0][1], 1, 0, 0, 0], x_2[1][0]),
             # y2 maps to something with the correct y coordinate
-            ([0, 0, 0, y2[0][0], y2[0][1], 1], y2[1][1]),
+            ([0, 0, 0, y_2[0][0], y_2[0][1], 1], y_2[1][1]),
         ]
 
         if self._algorithm == "axis-aligned":
@@ -834,9 +834,9 @@ class SVGPlot:
             conditions.extend(
                 [
                     # x1 and x2 map to the same y coordinate
-                    ([0, 0, 0, x1[0][0] - x2[0][0], x1[0][1] - x2[0][1], 0], 0),
+                    ([0, 0, 0, x_1[0][0] - x_2[0][0], x_1[0][1] - x_2[0][1], 0], 0),
                     # y1 and y2 map to the same x coordinate
-                    ([y1[0][0] - y2[0][0], y1[0][1] - y2[0][1], 0, 0, 0, 0], 0),
+                    ([y_1[0][0] - y_2[0][0], y_1[0][1] - y_2[0][1], 0, 0, 0, 0], 0),
                 ]
             )
         else:
@@ -1068,12 +1068,12 @@ class SVGPlot:
         """
         import numpy
 
-        EPS = 1e-6
+        epsilon = 1e-6
 
         samples = []
 
         # The current path length on the x-axis at which we plan to sample (in the range [0, length of the current path segment]):
-        X = 0
+        x_length_target = 0
 
         for segment in path:
             sample_at = []
@@ -1084,9 +1084,9 @@ class SVGPlot:
 
                 # Continue sampling from the start of the new path segment.
                 assert (
-                    sampling_interval >= X
+                    sampling_interval >= x_length_target
                 ), "sampling with endpoints should produce more points than sampling without"
-                X = sampling_interval
+                x_length_target = sampling_interval
 
             x = numpy.poly1d(numpy.real(segment.poly()))
 
@@ -1095,11 +1095,11 @@ class SVGPlot:
                 sorted(
                     root.real
                     for root in numpy.polyder(x).roots
-                    if abs(root.imag) < EPS and 0 < root.real < 1
+                    if abs(root.imag) < epsilon and 0 < root.real < 1
                 )
             )
 
-            # Eventually this will contain the total length of this path segment.
+            # Eventually this will equal the total length of this path segment.
             segment_length = 0
 
             # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
@@ -1108,41 +1108,41 @@ class SVGPlot:
                 segment_length += snippet_length
 
                 sgn = 1 if x(tmax) > x(tmin) else -1
-                f = sgn * (x - x(tmin)) + (segment_length - snippet_length)
+                x_length = sgn * (x - x(tmin)) + (segment_length - snippet_length)
 
-                while X <= segment_length:
-                    if abs(X - segment_length) < EPS:
+                while x_length_target <= segment_length:
+                    if abs(x_length_target - segment_length) < epsilon:
                         # We are very close to the end of this segment. In this
                         # case the root computation below tends to get unstable
                         # returning roots that are slightly beyond [0, 1] so we
                         # skip forward to the end of the segment.
                         sample_at.append(tmax)
-                        X = segment_length
+                        x_length_target = segment_length
                         break
 
                     # The time at which we reach position X is in [tmin, tmax)
                     # Note that this call is where all the runtime is spent in sampling.
                     # Since the polynomial is at most of degree 3 we could
                     # possibly solve symbolically and then plug in all the
-                    # values for X at once which might be much faster:
+                    # values for x_pos at once which might be much faster:
                     # https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
-                    roots = (f - X).roots
+                    roots = (x_length - x_length_target).roots
                     assert len(
                         roots
-                    ), f"The polynomial {f} should not be constant and therefore should have some roots."
-                    real_roots = roots.real[abs(roots.imag) < EPS]
+                    ), f"The polynomial {x_length} should not be constant and therefore should have some roots."
+                    real_roots = roots.real[abs(roots.imag) < epsilon]
                     assert len(
                         real_roots
-                    ), f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but we only found complex roots {roots}"
+                    ), f"The polynomial {x_length} should have a real root in [{tmin}, {tmax}] but we only found complex roots {roots}"
                     eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
                     assert (
                         eligible_roots
-                    ), f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but all roots were outside that range: {roots}"
+                    ), f"The polynomial {x_length} should have a real root in [{tmin}, {tmax}] but all roots were outside that range: {roots}"
                     t = min(eligible_roots)
 
                     sample_at.append(t)
 
-                    X += sampling_interval
+                    x_length_target += sampling_interval
 
             # We have left the current path segment.
             if endpoints == "include":
@@ -1156,24 +1156,24 @@ class SVGPlot:
             if endpoints == "include":
                 # Do not sample points that are just a numerical-error away from the end points.
                 assert (
-                    sample_at[1] > EPS
+                    sample_at[1] > epsilon
                 ), f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_at[1]}"
-                if 1 - sample_at[-2] < EPS:
+                if 1 - sample_at[-2] < epsilon:
                     sample_at = sample_at[:-2] + [sample_at[-1]]
 
                 # Do not sample at the initial point if the path is connected
                 # so we do not get a duplicate with the end point of the
                 # previous segment.
-                if samples and abs(segment.point(0) - samples[-1]) < EPS:
+                if samples and abs(segment.point(0) - samples[-1]) < epsilon:
                     sample_at = sample_at[1:]
 
             # Sample the curve
             samples.extend(segment.poly()(sample_at))
 
             # Go to the next path segment.
-            X -= segment_length
+            x_length_target -= segment_length
 
-            assert X >= 0, f"Cannot sample at negative x={x}"
+            assert x_length_target >= 0, f"Cannot sample at negative x={x}"
 
         return [(p.real, p.imag) for p in samples]
 
