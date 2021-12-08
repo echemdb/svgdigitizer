@@ -4,4 +4,4 @@ max-module-lines=65536
 good-names=x,y,z,A,t,df
 
 [MESSAGES CONTROL]
-disable=import-outside-toplevel,too-many-arguments,logging-fstring-interpolation
+disable=import-outside-toplevel,too-many-arguments,logging-fstring-interpolation,use-maxsplit-arg
