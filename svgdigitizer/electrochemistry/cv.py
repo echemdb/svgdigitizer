@@ -495,7 +495,7 @@ class CV:
         voltage = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df["U"] = df["x"] * voltage.to(u.V).value
+        df["U"] = df["x"] * voltage.to(u.V).value  # pylint: disable=E1101
 
     def _add_current_axis(self, df):
         r"""
