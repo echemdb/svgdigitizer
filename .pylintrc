@@ -1,7 +1,7 @@
 [FORMAT]
 max-line-length=256
 max-module-lines=65536
-good-names=x,y,z,A,t,df
+good-names=x,y,z,A,t,df,cv
 
 [MESSAGES CONTROL]
 disable=import-outside-toplevel,too-many-arguments,logging-fstring-interpolation,use-maxsplit-arg
