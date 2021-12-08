@@ -140,7 +140,7 @@ class SVG:
                     label = child
 
             if not label:
-                logger.warning(f"Ignoring unlabeled <path> and its siblings.")
+                logger.warning("Ignoring unlabeled <path> and its siblings.")
                 continue
 
             # Determine all the <path>s in this <g>.
@@ -526,8 +526,6 @@ class LabeledPath:
             Path(Line(start=100j, end=(100+0j)))
 
         """
-        from svgpathtools import Path
-
         return SVG.transform(self._path)
 
     def __repr__(self):
