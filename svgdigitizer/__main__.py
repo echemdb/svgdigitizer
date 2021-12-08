@@ -207,7 +207,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     import json
 
     with open(
-        os.path.join(outdir, Path(svg).with_suffix(".json").name), "w"
+        os.path.join(outdir, Path(svg).with_suffix(".json").name), "w", encooding='utf-8',
     ) as outfile:
         json.dump(
             package.descriptor if package else cv.metadata, outfile, default=defaultconverter
