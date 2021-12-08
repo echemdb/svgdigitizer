@@ -202,6 +202,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     def defaultconverter(item):
         if isinstance(item, (datetime, date)):
             return item.__str__()
+        return None
 
     import json
 
