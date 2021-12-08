@@ -134,8 +134,6 @@ specifying a `sampling_interval`::
 import logging
 from functools import cache
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 logger = logging.getLogger("svgplot")
@@ -895,7 +893,7 @@ class SVGPlot:
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
-            raise Exception(f"No curve found in SVG.")
+            raise Exception("No curve found in SVG.")
 
         curves = [
             curve
@@ -1038,7 +1036,6 @@ class SVGPlot:
 
         """
         import numpy
-        import svgpathtools
 
         EPS = 1e-6
 
@@ -1073,9 +1070,6 @@ class SVGPlot:
 
             # Eventually this will contain the total length of this path segment.
             segment_length = 0
-
-            # The time at which we sampled last.
-            T = 0
 
             # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
             for tmin, tmax in zip([0] + extrema, extrema + [1]):
