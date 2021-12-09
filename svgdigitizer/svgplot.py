@@ -960,6 +960,41 @@ class SVGPlot:
         element. These text elements then tell us about the meaning of that
         path, e.g., the path that is labeled as `curve` is the actual graph we
         are going to extract the (x, y) coordinate pairs from.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.labeled_paths
+            {'ref_point': [], 'scale_bar': [], 'curve': [[Path "curve: 0"]]}
+
+        TESTS::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">kurve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> from unittest import TestCase
+            >>> with TestCase.assertLogs(_) as warnings:
+            ...     plot.labeled_paths
+            ...     print(warnings.output)
+            {'ref_point': [], 'scale_bar': [], 'curve': []}
+            ['WARNING:svgplot:Ignoring <path> with unsupported label kurve: 0.']
+
         """
         patterns = {
             "ref_point": r"^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
@@ -967,14 +1002,16 @@ class SVGPlot:
             "curve": r"^curve: ?(?P<curve_id>.+)",
         }
 
+        # Collect labeled paths with supported patterns.
         labeled_paths = {
             key: self.svg.get_labeled_paths(pattern)
             for (key, pattern) in patterns.items()
         }
 
+        # Collect all labeled paths and warn if there is a label that we do not recognize.
         for paths in self.svg.get_labeled_paths():
-            if paths.label._label not in [
-                p.label._label for pattern in patterns for p in labeled_paths[pattern]
+            if str(paths.label) not in [
+                str(path.label) for pattern in patterns for path in labeled_paths[pattern]
             ]:
                 logger.warning(f"Ignoring <path> with unsupported label {paths.label}.")
 
