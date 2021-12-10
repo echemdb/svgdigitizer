@@ -199,6 +199,7 @@ class SVGPlot:
         1  1.0  1.0
 
     """
+    _EPSILON = 1e-6
 
     def __init__(
         self,
@@ -1103,116 +1104,194 @@ class SVGPlot:
             4159
 
         """
-        import numpy
-
-        epsilon = 1e-6
-
         samples = []
 
-        # The current path length on the x-axis at which we plan to sample (in the range [0, length of the current path segment]):
-        x_length_target = 0
+        # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
+        sample_from_x = 0
 
         for segment in path:
-            sample_at = []
+            sample_at, sample_from_x = cls._sample_segment(segment=segment, sampling_interval=sampling_interval, sample_from_x_length=sample_from_x, endpoints=endpoints)
 
-            if endpoints == "include":
-                # Include the initial point of the new path segment.
-                sample_at.append(0)
+            # Do not sample at the initial point if the path is connected
+            # so we do not get a duplicate with the end point of the
+            # previous segment.
+            if samples and abs(segment.point(0) - samples[-1]) < cls._EPSILON:
+                sample_at = sample_at[1:]
 
-                # Continue sampling from the start of the new path segment.
-                assert (
-                    sampling_interval >= x_length_target
-                ), "sampling with endpoints should produce more points than sampling without"
-                x_length_target = sampling_interval
-
-            x = numpy.poly1d(numpy.real(segment.poly()))
-
-            # At the extrema of the projection to the x-axis, the curve changes direction.
-            extrema = list(
-                sorted(
-                    root.real
-                    for root in numpy.polyder(x).roots
-                    if abs(root.imag) < epsilon and 0 < root.real < 1
-                )
-            )
-
-            # Eventually this will equal the total length of this path segment.
-            segment_length = 0
-
-            # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
-            for tmin, tmax in zip([0] + extrema, extrema + [1]):
-                snippet_length = abs(x(tmax) - x(tmin))
-                segment_length += snippet_length
-
-                sgn = 1 if x(tmax) > x(tmin) else -1
-                x_length = sgn * (x - x(tmin)) + (segment_length - snippet_length)
-
-                while x_length_target <= segment_length:
-                    if abs(x_length_target - segment_length) < epsilon:
-                        # We are very close to the end of this segment. In this
-                        # case the root computation below tends to get unstable
-                        # returning roots that are slightly beyond [0, 1] so we
-                        # skip forward to the end of the segment.
-                        sample_at.append(tmax)
-                        x_length_target = segment_length
-                        break
-
-                    # The time at which we reach position X is in [tmin, tmax)
-                    # Note that this call is where all the runtime is spent in sampling.
-                    # Since the polynomial is at most of degree 3 we could
-                    # possibly solve symbolically and then plug in all the
-                    # values for x_pos at once which might be much faster:
-                    # https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
-                    roots = (x_length - x_length_target).roots
-                    assert len(
-                        roots
-                    ), f"The polynomial {x_length} should not be constant and therefore should have some roots."
-                    real_roots = roots.real[abs(roots.imag) < epsilon]
-                    assert len(
-                        real_roots
-                    ), f"The polynomial {x_length} should have a real root in [{tmin}, {tmax}] but we only found complex roots {roots}"
-                    eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
-                    assert (
-                        eligible_roots
-                    ), f"The polynomial {x_length} should have a real root in [{tmin}, {tmax}] but all roots were outside that range: {roots}"
-                    t = min(eligible_roots)
-
-                    sample_at.append(t)
-
-                    x_length_target += sampling_interval
-
-            # We have left the current path segment.
-            if endpoints == "include":
-                # Include the final point of this path segment.
-                sample_at.append(1)
-
-            assert sample_at == sorted(
-                sample_at
-            ), f"Samples are out of order {sample_at}"
-
-            if endpoints == "include":
-                # Do not sample points that are just a numerical-error away from the end points.
-                assert (
-                    sample_at[1] > epsilon
-                ), f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_at[1]}"
-                if 1 - sample_at[-2] < epsilon:
-                    sample_at = sample_at[:-2] + [sample_at[-1]]
-
-                # Do not sample at the initial point if the path is connected
-                # so we do not get a duplicate with the end point of the
-                # previous segment.
-                if samples and abs(segment.point(0) - samples[-1]) < epsilon:
-                    sample_at = sample_at[1:]
-
-            # Sample the curve
             samples.extend(segment.poly()(sample_at))
 
-            # Go to the next path segment.
-            x_length_target -= segment_length
-
-            assert x_length_target >= 0, f"Cannot sample at negative x={x}"
-
         return [(p.real, p.imag) for p in samples]
+
+    @classmethod
+    def _sample_segment(cls, segment, sampling_interval, sample_from_x_length=0, endpoints="include"):
+        r"""
+        Sample the `segment` at equidistant points spaced by
+        `sampling_interval` on the x-axis starting at `starting_from_x_length`.
+
+        Returns the times at which to sample, and the place at which to sample
+        in the next segment written as a length on the x-axis.
+
+        This is a helper method for `sample_path`.
+
+        EXAMPLES::
+
+            TODO
+
+        """
+        if sample_from_x_length < 0:
+            raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
+
+        sample_at = []
+
+        # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
+        x_length_target = sample_from_x_length
+
+        if endpoints == "include":
+            # Include the initial point of the new path segment.
+            sample_at.append(0)
+
+            # Continue sampling from the start of the new path segment.
+            assert (
+                sampling_interval >= x_length_target
+            ), "sampling with endpoints should produce more points than sampling without"
+            x_length_target = sampling_interval
+
+        import numpy
+        x = numpy.poly1d(numpy.real(segment.poly()))
+
+        # At the extrema of the projection to the x-axis, the curve changes direction.
+        extrema = list(
+            sorted(
+                root.real
+                for root in numpy.polyder(x).roots
+                if abs(root.imag) < cls._EPSILON and 0 < root.real < 1
+            )
+        )
+
+        # Eventually this will equal the total length of this path segment.
+        segment_length = 0
+
+        # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
+        for tmin, tmax in zip([0] + extrema, extrema + [1]):
+            snippet_length = abs(x(tmax) - x(tmin))
+
+            sample_snippet_at, x_length_target = cls._sample_snippet(segment=segment, t_range=(tmin, tmax), sampling_interval=sampling_interval, sample_from_x_length=x_length_target, x_length_range=(segment_length, segment_length + snippet_length))
+            sample_at.extend(sample_snippet_at)
+
+            segment_length += snippet_length
+
+        # We have left the path segment.
+        if endpoints == "include":
+            # Include the final point of this path segment.
+            sample_at.append(1)
+
+        assert sample_at == sorted(
+            sample_at
+        ), f"Samples are out of order {sample_at}"
+
+        if endpoints == "include":
+            # Do not sample points that are just a numerical-error away from the end points.
+            assert (
+                sample_at[1] > cls._EPSILON
+            ), f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_at[1]}"
+            if 1 - sample_at[-2] < cls._EPSILON:
+                sample_at = sample_at[:-2] + [sample_at[-1]]
+
+        # Go to the next path segment.
+        x_length_target -= segment_length
+
+        # Sample the curve
+        return sample_at, x_length_target
+
+    @classmethod
+    def _sample_snippet(cls, segment, sampling_interval, sample_from_x_length, t_range, x_length_range):
+        r"""
+        Sample the path segment `segment` at times in the range `[t_range[0],
+        t_range[1]]` at equidistant steps spaced by `sampling_interval` on the
+        length of the segment projected to the x-axis, starting from
+        `sample_from_x_length`.
+
+        Returns the times at which to sample and the place at which to sample
+        in the next snippet written as a segment length on the x-axis.
+
+        For performance reasons, the length of the segment after projection to
+        the x-axis at the times `t_range` must be provided as a pair
+        `x_length_range`.
+
+        This is a helper method for `sample_path`.
+
+        EXAMPLES::
+
+            TODO
+
+        """
+        if sample_from_x_length < 0:
+            raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
+
+        if t_range[1] < t_range[0]:
+            raise ValueError("Sampling must not go backwards in time.")
+
+        if x_length_range[1] < x_length_range[0]:
+            raise ValueError("Sampling must not go backwards on the segment.")
+
+        import numpy
+        x = numpy.poly1d(numpy.real(segment.poly()))
+
+        sample_at = []
+
+        # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
+        x_length_target = sample_from_x_length
+
+        sgn = 1 if x(t_range[1]) > x(t_range[0]) else -1
+        x_length = sgn * (x - x(t_range[0])) + x_length_range[0]
+
+        while x_length_target <= x_length_range[1]:
+            if abs(x_length_target - x_length_range[1]) < cls._EPSILON:
+                # We are very close to the end of this segment. In this
+                # case the root computation below tends to get unstable
+                # returning roots that are slightly beyond [0, 1] so we
+                # skip forward to the end of the segment.
+                sample_at.append(t_range[1])
+                x_length_target = x_length_range[1]
+                break
+
+            # The time at which we reach position X is in [t_range[0], t_range[1])
+            # Note that this call is where all the runtime is spent in sampling.
+            # Since the polynomial is at most of degree 3 we could
+            # possibly solve symbolically and then plug in all the
+            # values for x_pos at once which might be much faster:
+            # https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
+            t = cls._min_real_root(x_length - x_length_target, t_range[0], t_range[1])
+            sample_at.append(t)
+
+            x_length_target += sampling_interval
+
+        return sample_at, x_length_target
+
+    @classmethod
+    def _min_real_root(cls, polynomial, tmin, tmax):
+        r"""
+        Return the smallest real root of `polynomial` in the range [tmin, tmax].
+
+        EXAMPLES::
+
+            TODO
+
+        """
+        roots = polynomial.roots
+
+        if len(roots) == 0:
+            raise ValueError(f"The polynomial {polynomial} must not be constant.")
+
+        real_roots = roots.real[abs(roots.imag) < cls._EPSILON]
+        if len(real_roots) == 0:
+            raise ValueError(f"The polynomials {polynomial} must have real roots. But all roots where complex: {roots}")
+
+        eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
+        if len(eligible_roots) == 0:
+            raise ValueError("The polynomial {polynomial} must have roots in [{tmin}, {tmax}]. But all roots where outside that range: {roots}")
+
+        return min(eligible_roots)
 
     @property
     @cache
