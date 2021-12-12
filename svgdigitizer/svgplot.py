@@ -359,7 +359,9 @@ class SVGPlot:
             assert len(labeled_paths) != 0
 
             if len(labeled_paths) != 1:
-                raise ValueError(f"Expected exactly one path to be grouped with {labeled_paths.label}")
+                raise ValueError(
+                    f"Expected exactly one path to be grouped with {labeled_paths.label}"
+                )
 
             path = labeled_paths[0]
 
@@ -437,7 +439,10 @@ class SVGPlot:
 
             # Construct the second marked point from the first marked point + scalebar.
             base_point = base_points[axis + "1"]
-            point = ((base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]), (None, None))
+            point = (
+                (base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]),
+                (None, None),
+            )
 
             if axis == self.xlabel:
                 point = (point[0], (base_point[1][0] + value, None, unit))
@@ -532,9 +537,7 @@ class SVGPlot:
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
-                raise Exception(
-                    f"Found an axis label and scale bar for {label}."
-                )
+                raise Exception(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
 
@@ -1019,7 +1022,9 @@ class SVGPlot:
         # Collect all labeled paths and warn if there is a label that we do not recognize.
         for paths in self.svg.get_labeled_paths():
             if str(paths.label) not in [
-                str(recognized_paths.label) for pattern in patterns for recognized_paths in labeled_paths[pattern]
+                str(recognized_paths.label)
+                for pattern in patterns
+                for recognized_paths in labeled_paths[pattern]
             ]:
                 logger.warning(f"Ignoring <path> with unsupported label {paths.label}.")
 
@@ -1117,7 +1122,12 @@ class SVGPlot:
         sample_from_x = 0
 
         for segment in path:
-            sample_at, sample_from_x = cls._sample_segment(segment=segment, sampling_interval=sampling_interval, sample_from_x_length=sample_from_x, endpoints=endpoints)
+            sample_at, sample_from_x = cls._sample_segment(
+                segment=segment,
+                sampling_interval=sampling_interval,
+                sample_from_x_length=sample_from_x,
+                endpoints=endpoints,
+            )
 
             # Do not sample at the initial point if the path is connected
             # so we do not get a duplicate with the end point of the
@@ -1130,7 +1140,9 @@ class SVGPlot:
         return [(p.real, p.imag) for p in samples]
 
     @classmethod
-    def _sample_segment(cls, segment, sampling_interval, sample_from_x_length=0, endpoints="include"):
+    def _sample_segment(
+        cls, segment, sampling_interval, sample_from_x_length=0, endpoints="include"
+    ):
         r"""
         Sample the `segment` at equidistant points spaced by
         `sampling_interval` on the x-axis starting at `starting_from_x_length`.
@@ -1191,6 +1203,7 @@ class SVGPlot:
             x_length_target = sampling_interval
 
         import numpy
+
         x = numpy.poly1d(numpy.real(segment.poly()))
 
         # At the extrema of the projection to the x-axis, the curve changes direction.
@@ -1209,7 +1222,13 @@ class SVGPlot:
         for tmin, tmax in zip([0] + extrema, extrema + [1]):
             snippet_length = abs(x(tmax) - x(tmin))
 
-            sample_snippet_at, x_length_target = cls._sample_snippet(segment=segment, t_range=(tmin, tmax), sampling_interval=sampling_interval, sample_from_x_length=x_length_target, x_length_range=(segment_length, segment_length + snippet_length))
+            sample_snippet_at, x_length_target = cls._sample_snippet(
+                segment=segment,
+                t_range=(tmin, tmax),
+                sampling_interval=sampling_interval,
+                sample_from_x_length=x_length_target,
+                x_length_range=(segment_length, segment_length + snippet_length),
+            )
             sample_at.extend(sample_snippet_at)
 
             segment_length += snippet_length
@@ -1219,9 +1238,7 @@ class SVGPlot:
             # Include the final point of this path segment.
             sample_at.append(1)
 
-        assert sample_at == sorted(
-            sample_at
-        ), f"Samples are out of order {sample_at}"
+        assert sample_at == sorted(sample_at), f"Samples are out of order {sample_at}"
 
         if endpoints == "include":
             # Do not sample points that are just a numerical-error away from the end points.
@@ -1240,7 +1257,9 @@ class SVGPlot:
         return sample_at, x_length_target
 
     @classmethod
-    def _sample_snippet(cls, segment, sampling_interval, sample_from_x_length, t_range, x_length_range):
+    def _sample_snippet(
+        cls, segment, sampling_interval, sample_from_x_length, t_range, x_length_range
+    ):
         r"""
         Sample the path segment `segment` at times in the range `[t_range[0],
         t_range[1]]` at equidistant steps spaced by `sampling_interval` on the
@@ -1279,6 +1298,7 @@ class SVGPlot:
             raise ValueError("Sampling must not go backwards on the segment.")
 
         import numpy
+
         x = numpy.poly1d(numpy.real(segment.poly()))
 
         sample_at = []
@@ -1343,11 +1363,15 @@ class SVGPlot:
 
         real_roots = roots.real[abs(roots.imag) < cls._EPSILON]
         if len(real_roots) == 0:
-            raise ValueError(f"The polynomials {polynomial} must have real roots. But all roots where complex: {roots}")
+            raise ValueError(
+                f"The polynomials {polynomial} must have real roots. But all roots where complex: {roots}"
+            )
 
         eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
         if len(eligible_roots) == 0:
-            raise ValueError(f"The polynomial {polynomial} must have roots in [{tmin}, {tmax}]. But all roots where outside that range: {roots}")
+            raise ValueError(
+                f"The polynomial {polynomial} must have roots in [{tmin}, {tmax}]. But all roots where outside that range: {roots}"
+            )
 
         return min(eligible_roots)
 

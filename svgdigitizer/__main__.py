@@ -104,6 +104,7 @@ def digitize(svg, sampling_interval):
         svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval)
 
     from pathlib import Path
+
     svg_plot.df.to_csv(Path(svg).with_suffix(".csv"), index=False)
 
 
@@ -219,10 +220,14 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     import json
 
     with open(
-        os.path.join(outdir, Path(svg).with_suffix(".json").name), "w", encoding='utf-8',
+        os.path.join(outdir, Path(svg).with_suffix(".json").name),
+        "w",
+        encoding="utf-8",
     ) as outfile:
         json.dump(
-            package.descriptor if package else cv.metadata, outfile, default=defaultconverter
+            package.descriptor if package else cv.metadata,
+            outfile,
+            default=defaultconverter,
         )
 
 
@@ -243,6 +248,7 @@ def paginate(onlypng, pdf):
 
     """
     from pdf2image import convert_from_path
+
     pages = convert_from_path(pdf, dpi=600)
 
     for idx, page in enumerate(pages):
@@ -250,9 +256,11 @@ def paginate(onlypng, pdf):
         page.save(png, "PNG")
         if not onlypng:
             from PIL import Image
+
             width, height = Image.open(png).size
 
             import svgwrite
+
             dwg = svgwrite.Drawing(
                 f"{os.path.basename(png)}.svg",
                 size=(f"{width}px", f"{height}px"),
@@ -260,6 +268,7 @@ def paginate(onlypng, pdf):
             )
 
             from svgwrite.extensions.inkscape import Inkscape
+
             Inkscape(dwg)
 
             img = dwg.add(
