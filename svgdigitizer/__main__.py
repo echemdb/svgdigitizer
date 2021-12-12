@@ -1,18 +1,18 @@
 r"""
-The SVGDigitizer suite.
+The svgdigitizer suite.
 
 EXAMPLES::
 
     >>> from .test.cli import invoke
     >>> invoke(cli, "--help") # doctest: +NORMALIZE_WHITESPACE
     Usage: cli [OPTIONS] COMMAND [ARGS]...
-      The SVGDigitizer suite.
+      The svgdigitizer suite.
     Options:
       --help  Show this message and exit.
     Commands:
       cv        Digitize a cylic voltammogram.
-      digitize
-      paginate
+      digitize  Digitize a plot.
+      paginate  Render PDF pages as individual PNGs.
       plot      Display a plot of the data traced in an SVG.
 
 """
@@ -42,7 +42,11 @@ import click
 
 @click.group(help=__doc__.split("EXAMPLES")[0])
 def cli():
-    pass
+    r"""
+    Entry point of the command line interface.
+
+    This redirects to the individual commands listed below.
+    """
 
 
 @click.command()
@@ -80,6 +84,19 @@ def plot(svg, sampling_interval):
 )
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
+    r"""
+    Digitize a plot.
+
+    Produces a CSV from the curve traced in the SVG.
+
+    EXAMPLES::
+
+        >>> import os.path
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
+
+    """
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
 
@@ -219,6 +236,19 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 @click.option("--onlypng", is_flag=True, help="Only produce png files")
 @click.argument("pdf")
 def paginate(onlypng, pdf):
+    r"""
+    Render PDF pages as individual PNGs.
+
+    The PNGs are written to the PDFs directory as 0.png, 1.png, ….
+
+    EXAMPLES::
+
+        >>> import os.path
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
+        ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
+
+    """
     import svgwrite
     from pdf2image import convert_from_path
     from PIL import Image
