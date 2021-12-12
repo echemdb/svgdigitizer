@@ -1128,14 +1128,44 @@ class SVGPlot:
         Sample the `segment` at equidistant points spaced by
         `sampling_interval` on the x-axis starting at `starting_from_x_length`.
 
-        Returns the times at which to sample, and the place at which to sample
-        in the next segment written as a length on the x-axis.
+        Returns the times at which to sample, and also the single place at
+        which to sample in the next segment written as a length on the x-axis.
 
         This is a helper method for `sample_path`.
 
-        EXAMPLES::
+        EXAMPLES:
 
-            TODO
+        A single line segment::
+
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M 0 0 L 1 1")
+            >>> segment = next(iter(path))
+            >>> SVGPlot._sample_segment(segment, .25)
+            ([0, 0.25, 0.5, 0.75, 1], 0.0)
+
+        The first point to sample can be shifted with `sample_from_x_length`;
+        this also shitfs the next point at which to sample next in the
+        following segment::
+
+            >>> SVGPlot._sample_segment(segment, .25, sample_from_x_length=.125, endpoints='exclude')
+            ([0.125, 0.375, 0.625, 0.875], 0.125)
+
+        When `sample_from_x_length` exceeds the length of the segment, no
+        sampling might be performed::
+
+            >>> SVGPlot._sample_segment(segment, .25, sample_from_x_length=2, endpoints='exclude')
+            ([], 1.0)
+
+        When including the endpoints, `sample_from_x_length` has no effect since
+        we always start and end sampling at the end points of the segment::
+
+            >>> SVGPlot._sample_segment(segment, .25, sample_from_x_length=2)
+            ([0, 0.25, 0.5, 0.75, 1], 0.0)
+
+        ::
+
+            >>> SVGPlot._sample_segment(segment, .75, sample_from_x_length=2)
+            ([0, 0.75, 1], 0.0)
 
         """
         if sample_from_x_length < 0:
@@ -1147,13 +1177,10 @@ class SVGPlot:
         x_length_target = sample_from_x_length
 
         if endpoints == "include":
-            # Include the initial point of the new path segment.
+            # Include the initial point of the path segment.
             sample_at.append(0)
 
-            # Continue sampling from the start of the new path segment.
-            assert (
-                sampling_interval >= x_length_target
-            ), "sampling with endpoints should produce more points than sampling without"
+            # Continue sampling from the start of the path segment.
             x_length_target = sampling_interval
 
         import numpy
@@ -1196,6 +1223,8 @@ class SVGPlot:
             ), f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_at[1]}"
             if 1 - sample_at[-2] < cls._EPSILON:
                 sample_at = sample_at[:-2] + [sample_at[-1]]
+
+            x_length_target = segment_length
 
         # Go to the next path segment.
         x_length_target -= segment_length
