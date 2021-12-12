@@ -12,7 +12,7 @@ EXAMPLES::
     Commands:
       cv        Digitize a cylic voltammogram.
       digitize  Digitize a plot.
-      paginate  Render PDF pages as individual PNGs.
+      paginate  Render PDF pages as individual SVG files with linked PNG images.
       plot      Display a plot of the data traced in an SVG.
 
 """
@@ -37,6 +37,8 @@ EXAMPLES::
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import os
+
 import click
 
 
@@ -63,7 +65,6 @@ def plot(svg, sampling_interval):
 
     EXAMPLES::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
@@ -91,7 +92,6 @@ def digitize(svg, sampling_interval):
 
     EXAMPLES::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
@@ -133,7 +133,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 
     EXAMPLES::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
@@ -142,7 +141,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 
     The command can be invoked on files in the current directory::
 
-        >>> import os, os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> cwd = os.getcwd()
         >>> with TemporaryData("**/xy_rate.svg") as directory:
@@ -154,7 +152,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 
     The command can be invoked without sampling when data is not given in volts::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
         >>> from svgdigitizer.svgplot import SVGPlot
@@ -166,7 +163,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
 
     """
-    import os.path
 
     import yaml
     from astropy import units as u
@@ -179,8 +175,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
         outdir = os.path.dirname(svg)
     if outdir.strip() == "":
         outdir = "."
-
-    import os
 
     os.makedirs(str(outdir), exist_ok=True)
 
@@ -237,40 +231,40 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 @click.argument("pdf")
 def paginate(onlypng, pdf):
     r"""
-    Render PDF pages as individual PNGs.
+    Render PDF pages as individual SVG files with linked PNG images.
 
-    The PNGs are written to the PDFs directory as 0.png, 1.png, ….
+    The SVG and PNG files are written to the PDF's directory.
 
     EXAMPLES::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
     """
-    import svgwrite
     from pdf2image import convert_from_path
-    from PIL import Image
-    from svgwrite.extensions.inkscape import Inkscape
-
-    basename = pdf.split(".")[0]
     pages = convert_from_path(pdf, dpi=600)
+
     for idx, page in enumerate(pages):
-        base_image_path = f"{basename}_p{idx}"
-        page.save(f"{base_image_path}.png", "PNG")
+        png = f"{os.path.basename(pdf)}_p{idx}.png"
+        page.save(png, "PNG")
         if not onlypng:
-            image = Image.open(f"{base_image_path}.png")
-            width, height = image.size
+            from PIL import Image
+            width, height = Image.open(png).size
+
+            import svgwrite
             dwg = svgwrite.Drawing(
-                f"{base_image_path}.svg",
+                f"{os.path.basename(png)}.svg",
                 size=(f"{width}px", f"{height}px"),
                 profile="full",
             )
+
+            from svgwrite.extensions.inkscape import Inkscape
             Inkscape(dwg)
+
             img = dwg.add(
                 svgwrite.image.Image(
-                    f"{base_image_path}.png",
+                    png,
                     insert=(0, 0),
                     size=(f"{width}px", f"{height}px"),
                 )
