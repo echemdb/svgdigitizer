@@ -356,30 +356,36 @@ class SVGPlot:
 
         # Process explicitly marked point on the axes.
         for labeled_paths in self.labeled_paths["ref_point"]:
-            label = labeled_paths.label.point
-            value = float(labeled_paths.label.value)
-            unit = labeled_paths.label.unit or None
+            assert len(labeled_paths) != 0
 
-            if label in xlabels:
+            if len(labeled_paths) != 1:
+                raise ValueError(f"Expected exactly one path to be grouped with {labeled_paths.label}")
+
+            path = labeled_paths[0]
+
+            label = labeled_paths.label
+            point = label.point
+            value = float(label.value)
+            unit = label.unit or None
+
+            if point in xlabels:
                 plot = (value, None, unit)
-            elif label in ylabels:
+            elif point in ylabels:
                 plot = (None, value, unit)
             else:
                 raise NotImplementedError(
                     f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}."
                 )
 
-            if label in points:
+            if point in points:
                 raise Exception(f"Found axis label {label} more than once.")
 
-            if len(labeled_paths.paths) != 1:
+            if len(labeled_paths) != 1:
                 raise NotImplementedError(
                     f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}."
                 )
 
-            path = labeled_paths.paths[0]
-
-            points[label] = (path.far, plot)
+            points[point] = (path.far, plot)
 
         return points
 
@@ -395,21 +401,22 @@ class SVGPlot:
 
         # Process scale bars.
         for labeled_paths in self.labeled_paths["scale_bar"]:
-            label = labeled_paths.label.axis
-            value = float(labeled_paths.label.value)
-            unit = labeled_paths.label.unit or None
-
-            if label not in [self.xlabel, self.ylabel]:
-                raise Exception(
-                    f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {label}."
-                )
-
-            if len(labeled_paths.paths) != 2:
+            if len(labeled_paths) != 2:
                 raise NotImplementedError(
-                    f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(labeled_paths.paths)}."
+                    f"Expected exactly two paths to be grouped with the scalebar label {labeled_paths.label} but found {len(labeled_paths)}."
                 )
 
-            endpoints = [path.far for path in labeled_paths.paths]
+            label = labeled_paths.label
+            axis = label.axis
+            value = float(label.value)
+            unit = label.unit or None
+
+            if axis not in [self.xlabel, self.ylabel]:
+                raise Exception(
+                    f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {axis}."
+                )
+
+            endpoints = [path.far for path in labeled_paths]
             scalebar = (
                 endpoints[0][0] - endpoints[1][0],
                 endpoints[0][1] - endpoints[1][1],
@@ -421,23 +428,23 @@ class SVGPlot:
             # the coordinate system in the SVG, i.e., x coordinates grow to the
             # right, y coordinates grow to the bottom.
             if (
-                label == self.xlabel
+                axis == self.xlabel
                 and scalebar[0] < 0
-                or label == self.ylabel
+                or axis == self.ylabel
                 and scalebar[1] > 0
             ):
                 scalebar = (-scalebar[0], -scalebar[1])
 
             # Construct the second marked point from the first marked point + scalebar.
-            base_point = base_points[label + "1"]
+            base_point = base_points[axis + "1"]
             point = ((base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]), (None, None))
 
-            if label == self.xlabel:
+            if axis == self.xlabel:
                 point = (point[0], (base_point[1][0] + value, None, unit))
             else:
                 point = (point[0], (None, base_point[1][1] + value, unit))
 
-            points[label + "2"] = point
+            points[axis + "2"] = point
 
         return points
 
@@ -938,7 +945,7 @@ class SVGPlot:
         if len(curves) > 1:
             raise Exception(f"More than one curve {self._curve} fonud in SVG.")
 
-        paths = curves[0].paths
+        paths = curves[0]
 
         if len(paths) == 0:
             raise Exception("Curve has not a single <path>.")
@@ -1012,7 +1019,7 @@ class SVGPlot:
         # Collect all labeled paths and warn if there is a label that we do not recognize.
         for paths in self.svg.get_labeled_paths():
             if str(paths.label) not in [
-                str(path.label) for pattern in patterns for path in labeled_paths[pattern]
+                str(recognized_paths.label) for pattern in patterns for recognized_paths in labeled_paths[pattern]
             ]:
                 logger.warning(f"Ignoring <path> with unsupported label {paths.label}.")
 
