@@ -1091,8 +1091,8 @@ class SVGPlot:
             >>> path = Path("M 0 0 L 0 1 M 1 1 L 1 0")
             >>> SVGPlot.sample_path(path, .0001)
             [(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]
-            >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial points of the segments
-            [(0.0, 1.0), (1.0, 0.0)]
+            >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial point of the first segment
+            [(0.0, 1.0)]
 
         TESTS:
 
@@ -1249,9 +1249,17 @@ class SVGPlot:
 
         This is a helper method for `sample_path`.
 
-        EXAMPLES::
+        EXAMPLES:
 
-            TODO
+        We sample a piece of a line segment::
+
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M 0 0 L 1 1")
+            >>> segment = next(iter(path))
+            >>> SVGPlot._sample_snippet(segment, sampling_interval=.25, sample_from_x_length=.25, t_range=[.25, .75], x_length_range=[.25, .75])
+            ([0.25, 0.5, 0.75], 1.0)
+            >>> SVGPlot._sample_snippet(segment, sampling_interval=1, sample_from_x_length=.5, t_range=[.5, 1.], x_length_range=[.5, 1.])
+            ([0.5], 1.5)
 
         """
         if sample_from_x_length < 0:
@@ -1281,7 +1289,7 @@ class SVGPlot:
                 # returning roots that are slightly beyond [0, 1] so we
                 # skip forward to the end of the segment.
                 sample_at.append(t_range[1])
-                x_length_target = x_length_range[1]
+                x_length_target = x_length_range[1] + sampling_interval
                 break
 
             # The time at which we reach position X is in [t_range[0], t_range[1])
@@ -1302,9 +1310,23 @@ class SVGPlot:
         r"""
         Return the smallest real root of `polynomial` in the range [tmin, tmax].
 
-        EXAMPLES::
+        EXAMPLES:
 
-            TODO
+        A cubic polynomial with roots at 0, 1, 2::
+
+            >>> import numpy
+            >>> p = numpy.poly1d([1, -3, 2, 0])
+            >>> SVGPlot._min_real_root(p, 0, 10)
+            0.0
+            >>> SVGPlot._min_real_root(p, 1, 10)
+            1.0
+            >>> SVGPlot._min_real_root(p, 2, 10)
+            2.0
+            >>> SVGPlot._min_real_root(p, 3, 10)
+            Traceback (most recent call last):
+            ...
+            ValueError: ...
+
 
         """
         roots = polynomial.roots
@@ -1318,7 +1340,7 @@ class SVGPlot:
 
         eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
         if len(eligible_roots) == 0:
-            raise ValueError("The polynomial {polynomial} must have roots in [{tmin}, {tmax}]. But all roots where outside that range: {roots}")
+            raise ValueError(f"The polynomial {polynomial} must have roots in [{tmin}, {tmax}]. But all roots where outside that range: {roots}")
 
         return min(eligible_roots)
 
