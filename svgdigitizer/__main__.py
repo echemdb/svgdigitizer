@@ -242,7 +242,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
         from datapackage import Package
 
         package = Package(cv.metadata, base_path=outdir)
-        package.infer(csvname)
+        package.infer(os.path.basename(csvname))
 
     from datetime import date, datetime
 
