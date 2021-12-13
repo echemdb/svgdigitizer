@@ -1,18 +1,18 @@
 r"""
-The SVGDigitizer suite.
+The svgdigitizer suite.
 
 EXAMPLES::
 
     >>> from .test.cli import invoke
     >>> invoke(cli, "--help") # doctest: +NORMALIZE_WHITESPACE
     Usage: cli [OPTIONS] COMMAND [ARGS]...
-      The SVGDigitizer suite.
+      The svgdigitizer suite.
     Options:
-      --help Show this message and exit.
+      --help  Show this message and exit.
     Commands:
-      cv        Create a CSV and YAML metadata file for inclusion in the echemdb.
-      digitize
-      paginate
+      cv        Digitize a cylic voltammogram.
+      digitize  Digitize a plot.
+      paginate  Render PDF pages as individual SVG files with linked PNG images.
       plot      Display a plot of the data traced in an SVG.
 
 """
@@ -37,12 +37,18 @@ EXAMPLES::
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import os
+
 import click
 
 
 @click.group(help=__doc__.split("EXAMPLES")[0])
 def cli():
-    pass
+    r"""
+    Entry point of the command line interface.
+
+    This redirects to the individual commands listed below.
+    """
 
 
 @click.command()
@@ -59,7 +65,6 @@ def plot(svg, sampling_interval):
 
     EXAMPLES::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
@@ -80,16 +85,30 @@ def plot(svg, sampling_interval):
 )
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval):
+    r"""
+    Digitize a plot.
+
+    Produces a CSV from the curve traced in the SVG.
+
+    EXAMPLES::
+
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
+
+    """
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
 
-    plot = SVGPlot(SVG(open(svg, "rb")), sampling_interval=sampling_interval)
+    with open(svg, "rb") as infile:
+        svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval)
+
     from pathlib import Path
 
-    plot.df.to_csv(Path(svg).with_suffix(".csv"), index=False)
+    svg_plot.df.to_csv(Path(svg).with_suffix(".csv"), index=False)
 
 
-@click.command()
+@click.command(name="cv")
 @click.option(
     "--sampling_interval",
     type=float,
@@ -107,13 +126,14 @@ def digitize(svg, sampling_interval):
     help="write output files to this directory",
 )
 @click.argument("svg", type=click.Path(exists=True))
-def cv(svg, sampling_interval, metadata, package, outdir):
+def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     r"""
-    Create a CSV and YAML metadata file for inclusion in the echemdb.
+    Digitize a cylic voltammogram.
+
+    For inclusion in the echemdb.
 
     EXAMPLES::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
@@ -122,7 +142,6 @@ def cv(svg, sampling_interval, metadata, package, outdir):
 
     The command can be invoked on files in the current directory::
 
-        >>> import os, os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> cwd = os.getcwd()
         >>> with TemporaryData("**/xy_rate.svg") as directory:
@@ -134,7 +153,6 @@ def cv(svg, sampling_interval, metadata, package, outdir):
 
     The command can be invoked without sampling when data is not given in volts::
 
-        >>> import os.path
         >>> from .test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
         >>> from svgdigitizer.svgplot import SVGPlot
@@ -146,7 +164,6 @@ def cv(svg, sampling_interval, metadata, package, outdir):
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
 
     """
-    import os.path
 
     import yaml
     from astropy import units as u
@@ -160,13 +177,13 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     if outdir.strip() == "":
         outdir = "."
 
-    import os
-
     os.makedirs(str(outdir), exist_ok=True)
 
     # Determine unit of the voltage scale.
-    cv = CV(SVGPlot(SVG(open(svg, "rb"))))
-    xunit = CV.get_axis_unit(cv.x_label.unit)
+    with open(svg, "rb") as infile:
+        cv = CV(SVGPlot(SVG(infile)))
+        xunit = CV.get_axis_unit(cv.x_label.unit)
+
     if sampling_interval is not None and xunit != u.V:
         # Determine conversion factor to volts.
         sampling_correction = xunit.to(u.V)
@@ -175,10 +192,11 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     if metadata:
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
-    cv = CV(
-        SVGPlot(SVG(open(svg, "rb")), sampling_interval=sampling_interval),
-        metadata=metadata,
-    )
+    with open(svg, "rb") as infile:
+        cv = CV(
+            SVGPlot(SVG(infile), sampling_interval=sampling_interval),
+            metadata=metadata,
+        )
 
     from pathlib import Path
 
@@ -189,22 +207,27 @@ def cv(svg, sampling_interval, metadata, package, outdir):
     if package:
         from datapackage import Package
 
-        p = Package(cv.metadata, base_path=outdir)
-        p.infer(csvname)
+        package = Package(cv.metadata, base_path=outdir)
+        package.infer(csvname)
 
     from datetime import date, datetime
 
-    def defaultconverter(o):
-        if isinstance(o, (datetime, date)):
-            return o.__str__()
+    def defaultconverter(item):
+        if isinstance(item, (datetime, date)):
+            return item.__str__()
+        return None
 
     import json
 
     with open(
-        os.path.join(outdir, Path(svg).with_suffix(".json").name), "w"
+        os.path.join(outdir, Path(svg).with_suffix(".json").name),
+        "w",
+        encoding="utf-8",
     ) as outfile:
         json.dump(
-            p.descriptor if package else cv.metadata, outfile, default=defaultconverter
+            package.descriptor if package else cv.metadata,
+            outfile,
+            default=defaultconverter,
         )
 
 
@@ -212,28 +235,45 @@ def cv(svg, sampling_interval, metadata, package, outdir):
 @click.option("--onlypng", is_flag=True, help="Only produce png files")
 @click.argument("pdf")
 def paginate(onlypng, pdf):
-    import svgwrite
-    from pdf2image import convert_from_path
-    from PIL import Image
-    from svgwrite.extensions.inkscape import Inkscape
+    r"""
+    Render PDF pages as individual SVG files with linked PNG images.
 
-    basename = pdf.split(".")[0]
+    The SVG and PNG files are written to the PDF's directory.
+
+    EXAMPLES::
+
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
+        ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
+
+    """
+    from pdf2image import convert_from_path
+
     pages = convert_from_path(pdf, dpi=600)
+
     for idx, page in enumerate(pages):
-        base_image_path = f"{basename}_p{idx}"
-        page.save(f"{base_image_path}.png", "PNG")
+        png = f"{os.path.basename(pdf)}_p{idx}.png"
+        page.save(png, "PNG")
         if not onlypng:
-            image = Image.open(f"{base_image_path}.png")
-            width, height = image.size
+            from PIL import Image
+
+            width, height = Image.open(png).size
+
+            import svgwrite
+
             dwg = svgwrite.Drawing(
-                f"{base_image_path}.svg",
+                f"{os.path.basename(png)}.svg",
                 size=(f"{width}px", f"{height}px"),
                 profile="full",
             )
+
+            from svgwrite.extensions.inkscape import Inkscape
+
             Inkscape(dwg)
+
             img = dwg.add(
                 svgwrite.image.Image(
-                    f"{base_image_path}.png",
+                    png,
                     insert=(0, 0),
                     size=(f"{width}px", f"{height}px"),
                 )
@@ -252,7 +292,7 @@ def paginate(onlypng, pdf):
 
 cli.add_command(plot)
 cli.add_command(digitize)
-cli.add_command(cv)
+cli.add_command(digitize_cv)
 cli.add_command(paginate)
 
 # Register command docstrings for doctesting.
