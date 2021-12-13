@@ -51,6 +51,45 @@ def cli():
     """
 
 
+def _outfile(template, suffix=None, outdir=None):
+    r"""
+    Return a file name for writing.
+
+    The file is named like `template` but with the suffix changed to `suffix`
+    if specified. The file is created in `outdir`, if specified, otherwise in
+    the directory of `template`.
+
+    EXAMPLES::
+
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy.svg") as directory:
+        ...     outname = _outfile(os.path.join(directory, "xy.svg"), suffix=".csv")
+        ...     with open(outname, mode="wb") as csv:
+        ...         _ = csv.write(b"...")
+        ...     os.path.exists(os.path.join(directory, "xy.csv"))
+        True
+
+    ::
+
+        >>> with TemporaryData("**/xy.svg") as directory:
+        ...     outname = _outfile(os.path.join(directory, "xy.svg"), suffix=".csv", outdir=os.path.join(directory, "subdirectory"))
+        ...     with open(outname, mode="wb") as csv:
+        ...         _ = csv.write(b"...")
+        ...     os.path.exists(os.path.join(directory, "subdirectory", "xy.csv"))
+        True
+
+    """
+    if suffix is not None:
+        template = f"{os.path.splitext(template)[0]}{suffix}"
+
+    if outdir is not None:
+        template = os.path.join(outdir, os.path.basename(template))
+
+    os.makedirs(os.path.dirname(template) or ".", exist_ok=True)
+
+    return template
+
+
 @click.command()
 @click.option(
     "--sampling_interval",
@@ -83,8 +122,14 @@ def plot(svg, sampling_interval):
     default=None,
     help="Sampling interval on the x-axis.",
 )
+@click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="write output files to this directory",
+)
 @click.argument("svg", type=click.Path(exists=True))
-def digitize(svg, sampling_interval):
+def digitize(svg, sampling_interval, outdir):
     r"""
     Digitize a plot.
 
@@ -103,9 +148,7 @@ def digitize(svg, sampling_interval):
     with open(svg, "rb") as infile:
         svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval)
 
-    from pathlib import Path
-
-    svg_plot.df.to_csv(Path(svg).with_suffix(".csv"), index=False)
+    svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
 
 @click.command(name="cv")
@@ -166,19 +209,12 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     """
 
     import yaml
-    from astropy import units as u
 
     from svgdigitizer.electrochemistry.cv import CV
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
 
-    if outdir is None:
-        outdir = os.path.dirname(svg)
-    if outdir.strip() == "":
-        outdir = "."
-
-    os.makedirs(str(outdir), exist_ok=True)
-
+    from astropy import units as u
     # Determine unit of the voltage scale.
     with open(svg, "rb") as infile:
         cv = CV(SVGPlot(SVG(infile)))
@@ -198,11 +234,8 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
             metadata=metadata,
         )
 
-    from pathlib import Path
-
-    csvname = Path(svg).with_suffix(".csv").name
-
-    cv.df.to_csv(os.path.join(outdir, csvname), index=False)
+    csvname = _outfile(svg, suffix=".csv", outdir=outdir)
+    cv.df.to_csv(csvname, index=False)
 
     if package:
         from datapackage import Package
@@ -220,21 +253,68 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     import json
 
     with open(
-        os.path.join(outdir, Path(svg).with_suffix(".json").name),
-        "w",
+        _outfile(svg, suffix=".json", outdir=outdir),
+        mode="w",
         encoding="utf-8",
-    ) as outfile:
+    ) as out:
         json.dump(
             package.descriptor if package else cv.metadata,
-            outfile,
+            out,
             default=defaultconverter,
         )
 
 
+def _create_linked_svg(svg, png):
+    r"""
+    Write an SVG to `svg` that shows `png` as a linked image.
+
+    This is a helper method for :meth:`paginate`.
+    """
+    from PIL import Image
+
+    width, height = Image.open(png).size
+
+    import svgwrite
+
+    drawing = svgwrite.Drawing(
+        svg,
+        size=(f"{width}px", f"{height}px"),
+        profile="full",
+    )
+
+    from svgwrite.extensions.inkscape import Inkscape
+
+    Inkscape(drawing)
+
+    img = drawing.add(
+        svgwrite.image.Image(
+            png,
+            insert=(0, 0),
+            size=(f"{width}px", f"{height}px"),
+        )
+    )
+
+    # workaround: add missing locking attribute for image element
+    # https://github.com/mozman/svgwrite/blob/c8cbf6f615910b3818ccf939fce0e407c9c789cb/svgwrite/extensions/inkscape.py#L50
+    elements = drawing.validator.elements
+    elements["image"].valid_attributes = {
+        "sodipodi:insensitive",
+    } | elements["image"].valid_attributes
+    img.attribs["sodipodi:insensitive"] = "true"
+
+    drawing.save(pretty=True)
+
+
 @click.command()
 @click.option("--onlypng", is_flag=True, help="Only produce png files")
+@click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="write output files to this directory",
+)
 @click.argument("pdf")
-def paginate(onlypng, pdf):
+def paginate(onlypng, pdf, outdir):
     r"""
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -250,44 +330,13 @@ def paginate(onlypng, pdf):
     from pdf2image import convert_from_path
 
     pages = convert_from_path(pdf, dpi=600)
+    pngs = [_outfile(pdf, suffix=f"_p{page}.png", outdir=outdir) for page in range(len(pages))]
 
-    for idx, page in enumerate(pages):
-        png = f"{os.path.basename(pdf)}_p{idx}.png"
+    for page, png in zip(pages, pngs):
         page.save(png, "PNG")
+
         if not onlypng:
-            from PIL import Image
-
-            width, height = Image.open(png).size
-
-            import svgwrite
-
-            dwg = svgwrite.Drawing(
-                f"{os.path.basename(png)}.svg",
-                size=(f"{width}px", f"{height}px"),
-                profile="full",
-            )
-
-            from svgwrite.extensions.inkscape import Inkscape
-
-            Inkscape(dwg)
-
-            img = dwg.add(
-                svgwrite.image.Image(
-                    png,
-                    insert=(0, 0),
-                    size=(f"{width}px", f"{height}px"),
-                )
-            )
-
-            # workaround: add missing locking attribute for image element
-            # https://github.com/mozman/svgwrite/blob/c8cbf6f615910b3818ccf939fce0e407c9c789cb/svgwrite/extensions/inkscape.py#L50
-            elements = dwg.validator.elements
-            elements["image"].valid_attributes = {
-                "sodipodi:insensitive",
-            } | elements["image"].valid_attributes
-            img.attribs["sodipodi:insensitive"] = "true"
-
-            dwg.save(pretty=True)
+            _create_linked_svg(_outfile(png, suffix=".svg", outdir=outdir), png)
 
 
 cli.add_command(plot)
