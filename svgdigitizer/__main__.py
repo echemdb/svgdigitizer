@@ -209,12 +209,11 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     """
 
     import yaml
+    from astropy import units as u
 
     from svgdigitizer.electrochemistry.cv import CV
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
-
-    from astropy import units as u
 
     # Determine unit of the voltage scale.
     with open(svg, "rb") as infile:
