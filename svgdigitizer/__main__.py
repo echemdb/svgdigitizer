@@ -215,6 +215,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     from svgdigitizer.svgplot import SVGPlot
 
     from astropy import units as u
+
     # Determine unit of the voltage scale.
     with open(svg, "rb") as infile:
         cv = CV(SVGPlot(SVG(infile)))
@@ -330,7 +331,10 @@ def paginate(onlypng, pdf, outdir):
     from pdf2image import convert_from_path
 
     pages = convert_from_path(pdf, dpi=600)
-    pngs = [_outfile(pdf, suffix=f"_p{page}.png", outdir=outdir) for page in range(len(pages))]
+    pngs = [
+        _outfile(pdf, suffix=f"_p{page}.png", outdir=outdir)
+        for page in range(len(pages))
+    ]
 
     for page, png in zip(pages, pngs):
         page.save(png, "PNG")
