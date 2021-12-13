@@ -77,6 +77,114 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="module-svgdigitizer.svgplot">
 <span id="svgdigitizer-svgplot"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code><a class="headerlink" href="#module-svgdigitizer.svgplot" title="Permalink to this headline"></a></h1>
+<p>Scientific plots in SVG format.</p>
+<p>A <a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot" title="svgdigitizer.svgplot.SVGPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVGPlot</span></code></a> wraps a plot in SVG format consisting of a curve, axis
+labels and (optionally) additional metadata provided as text fields in the SVG.</p>
+<p>As an example, consider the graph given by the line segment connecting (0, 0)
+and (1, 1). In the SVG coordinate system, such a line segment is
+given as the path connecting the points (0, 100) and (100, 0); note that the
+SVG coordinate system is negative, i.e., the y-axis grows towards the bottom:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curve</span> <span class="o">=</span> <span class="s1">&#39;&lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;&#39;</span>
+</pre></div>
+</div>
+<p>We need to attach a label to this path, so <a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot" title="svgdigitizer.svgplot.SVGPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVGPlot</span></code></a> understands that
+this is the actual curve that contains data we want to digitize. We do so by
+grouping this path with a label, that says “curve: …”. The position of that
+label has no importance but is required. The identifier itself does also not
+matter in this example.  It is only relevant when there are multiple curves in
+the same SVG:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curve</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">    &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">curve</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">      &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Additionally, we need to establish a plot coordinate system. We do so by
+creating ticks for two reference ticks for both the x-axis and the y-axis.
+To start, we want to define that the y=100 in the SVG coordinate system
+corresponds to y=0 in the plot coordinate system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="s1">&#39;&lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;&#39;</span>
+</pre></div>
+</div>
+<p>The location of this reference label does not matter much, we just put it
+somewhere where it looks nice. Now we need to pinpoint the place on the y-axis
+that corresponds to y=0. We do so by drawing a path from close to the base
+point of the reference label to that point on the y-axis and group it with the
+label:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">    &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">      &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">y1</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">    &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<p>We repeat the same process for the other reference labels, i.e., <cite>y2</cite>, <cite>x1</cite>,
+<cite>x2</cite> and obtain our input SVG that <a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot" title="svgdigitizer.svgplot.SVGPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVGPlot</span></code></a> can make sense of. Note
+that we added some units, so the x-axis is the time in seconds, and the y-axis
+is a voltage in volts.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">    &lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">curve</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">      &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">        &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">        &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">      &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">      &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">        &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">        &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">      &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">y1</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">      &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">        &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">        &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1V&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">      &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;/svg&gt;</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<p>We wrap this string into an <code class="xref py py-class docutils literal notranslate"><span class="pre">svg.SVG</span></code> object and create an actual
+<a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot" title="svgdigitizer.svgplot.SVGPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVGPlot</span></code></a> from it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can query the plot for things such as the units used on the axes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">axis_labels</span>
+<span class="go">{&#39;x&#39;: &#39;s&#39;, &#39;y&#39;: &#39;V&#39;}</span>
+</pre></div>
+</div>
+<p>We can get a pandas data frame with actual plot data in the plot coordinate
+system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<span class="go">     x    y</span>
+<span class="go">0  0.0  0.0</span>
+<span class="go">1  1.0  1.0</span>
+</pre></div>
+</div>
+<p>This data frame is built from the end points of the paths that make up the
+curve. We can also interpolate at equidistant points on the x-axis by
+specifying a <cite>sampling_interval</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<span class="go">      x    y</span>
+<span class="go">0   0.0  0.0</span>
+<span class="go">1   0.1  0.1</span>
+<span class="go">2   0.2  0.2</span>
+<span class="go">3   0.3  0.3</span>
+<span class="go">4   0.4  0.4</span>
+<span class="go">5   0.5  0.5</span>
+<span class="go">6   0.6  0.6</span>
+<span class="go">7   0.7  0.7</span>
+<span class="go">8   0.8  0.8</span>
+<span class="go">9   0.9  0.9</span>
+<span class="go">10  1.0  1.0</span>
+</pre></div>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgplot.</span></span><span class="sig-name descname"><span class="pre">SVGPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'axis-aligned'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot" title="Permalink to this definition"></a></dt>
@@ -498,6 +606,40 @@ and the other axis goes at an angle from (0, 100) to (100, 0):</p>
 element. These text elements then tell us about the meaning of that
 path, e.g., the path that is labeled as <cite>curve</cite> is the actual graph we
 are going to extract the (x, y) coordinate pairs from.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">labeled_paths</span>
+<span class="go">{&#39;ref_point&#39;: [], &#39;scale_bar&#39;: [], &#39;curve&#39;: [[Path &quot;curve: 0&quot;]]}</span>
+</pre></div>
+</div>
+<p>TESTS:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;kurve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">TestCase</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="k">as</span> <span class="n">warnings</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">plot</span><span class="o">.</span><span class="n">labeled_paths</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">warnings</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+<span class="go">{&#39;ref_point&#39;: [], &#39;scale_bar&#39;: [], &#39;curve&#39;: []}</span>
+<span class="go">[&#39;WARNING:svgplot:Ignoring &lt;path&gt; with unsupported label kurve: 0.&#39;]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py property">
@@ -505,8 +647,8 @@ are going to extract the (x, y) coordinate pairs from.</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">marked_points</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.marked_points" title="Permalink to this definition"></a></dt>
 <dd><p>Return the points that have been marked on the axes of the plot.</p>
 <p>For each point, a tuple is returned relating the point’s coordinates in
-the SVG coordinate system to the points coordinates in the plot
-coordinate system, or <cite>None</cite> if that points coordinate is not known.</p>
+the SVG coordinate system to the point’s coordinates in the plot
+coordinate system, or <cite>None</cite> if that point’s coordinate is not known.</p>
 <p>EXAMPLES:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
@@ -670,8 +812,8 @@ a sharp peak at (1, 1):</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;M 0 0 L 0 1 M 1 1 L 1 0&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.0001</span><span class="p">)</span>
 <span class="go">[(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.0001</span><span class="p">,</span> <span class="n">endpoints</span><span class="o">=</span><span class="s1">&#39;exclude&#39;</span><span class="p">)</span>  <span class="c1"># the implementation chooses the initial points of the segments</span>
-<span class="go">[(0.0, 1.0), (1.0, 0.0)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="o">.</span><span class="n">sample_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="mf">.0001</span><span class="p">,</span> <span class="n">endpoints</span><span class="o">=</span><span class="s1">&#39;exclude&#39;</span><span class="p">)</span>  <span class="c1"># the implementation chooses the initial point of the first segment</span>
+<span class="go">[(0.0, 1.0)]</span>
 </pre></div>
 </div>
 <p>TESTS:</p>
