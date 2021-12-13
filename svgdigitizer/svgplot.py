@@ -1,3 +1,115 @@
+r"""
+Scientific plots in SVG format.
+
+A :class:`SVGPlot` wraps a plot in SVG format consisting of a curve, axis
+labels and (optionally) additional metadata provided as text fields in the SVG.
+
+As an example, consider the graph given by the line segment connecting (0, 0)
+and (1, 1). In the SVG coordinate system, such a line segment is
+given as the path connecting the points (0, 100) and (100, 0); note that the
+SVG coordinate system is negative, i.e., the y-axis grows towards the bottom::
+
+    >>> curve = '<path d="M 0 100 L 100 0" />'
+
+We need to attach a label to this path, so :class:`SVGPlot` understands that
+this is the actual curve that contains data we want to digitize. We do so by
+grouping this path with a label, that says "curve: …". The position of that
+label has no importance but is required. The identifier itself does also not
+matter in this example.  It is only relevant when there are multiple curves in
+the same SVG::
+
+    >>> curve = f'''
+    ...     <g>
+    ...       { curve }
+    ...       <text x="0" y="0">curve: 0</text>
+    ...     </g>
+    ... '''
+
+Additionally, we need to establish a plot coordinate system. We do so by
+creating ticks for two reference ticks for both the x-axis and the y-axis.
+To start, we want to define that the y=100 in the SVG coordinate system
+corresponds to y=0 in the plot coordinate system::
+
+    >>> y1 = '<text x="-100" y="100">y1: 0</text>'
+
+The location of this reference label does not matter much, we just put it
+somewhere where it looks nice. Now we need to pinpoint the place on the y-axis
+that corresponds to y=0. We do so by drawing a path from close to the base
+point of the reference label to that point on the y-axis and group it with the
+label::
+
+    >>> y1 = f'''
+    ...     <g>
+    ...       <path d="M -100 100 L 0 100" />
+    ...       { y1 }
+    ...     </g>
+    ... '''
+
+We repeat the same process for the other reference labels, i.e., `y2`, `x1`,
+`x2` and obtain our input SVG that :class:`SVGPlot` can make sense of. Note
+that we added some units, so the x-axis is the time in seconds, and the y-axis
+is a voltage in volts.
+
+    >>> svg = f'''
+    ...     <svg>
+    ...       { curve }
+    ...       <g>
+    ...         <path d="M 0 200 L 0 100" />
+    ...         <text x="0" y="200">x1: 0</text>
+    ...       </g>
+    ...       <g>
+    ...         <path d="M 100 200 L 100 100" />
+    ...         <text x="100" y="200">x2: 1s</text>
+    ...       </g>
+    ...       { y1 }
+    ...       <g>
+    ...         <path d="M -100 0 L 0 0" />
+    ...         <text x="-100" y="0">y2: 1V</text>
+    ...       </g>
+    ...     </svg>
+    ... '''
+
+We wrap this string into an :class:`svg.SVG` object and create an actual
+:class:`SVGPlot` from it::
+
+    >>> from svgdigitizer.svg import SVG
+    >>> from io import StringIO
+    >>> svg = SVG(StringIO(svg))
+    >>> plot = SVGPlot(svg)
+
+Now we can query the plot for things such as the units used on the axes::
+
+    >>> plot.axis_labels
+    {'x': 's', 'y': 'V'}
+
+We can get a pandas data frame with actual plot data in the plot coordinate
+system::
+
+    >>> plot.df
+         x    y
+    0  0.0  0.0
+    1  1.0  1.0
+
+This data frame is built from the end points of the paths that make up the
+curve. We can also interpolate at equidistant points on the x-axis by
+specifying a `sampling_interval`::
+
+    >>> plot = SVGPlot(svg, sampling_interval=.1)
+    >>> plot.df
+          x    y
+    0   0.0  0.0
+    1   0.1  0.1
+    2   0.2  0.2
+    3   0.3  0.3
+    4   0.4  0.4
+    5   0.5  0.5
+    6   0.6  0.6
+    7   0.7  0.7
+    8   0.8  0.8
+    9   0.9  0.9
+    10  1.0  1.0
+
+"""
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -22,8 +134,6 @@
 import logging
 from functools import cache
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 logger = logging.getLogger("svgplot")
@@ -89,6 +199,7 @@ class SVGPlot:
         1  1.0  1.0
 
     """
+    _EPSILON = 1e-6
 
     def __init__(
         self,
@@ -230,14 +341,127 @@ class SVGPlot:
         }
 
     @property
+    def _marked_points_from_axis_markers(self):
+        r"""
+        Return the points that have been explicitly marked on the axes of the plot.
+
+        For each point, a tuple is returned relating the point's coordinates in
+        the SVG coordinate system to the point's coordinates in the plot
+        coordinate system, or `None` if that point's coordinate is not known.
+        """
+        points = {}
+
+        xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
+        ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
+
+        # Process explicitly marked point on the axes.
+        for labeled_paths in self.labeled_paths["ref_point"]:
+            assert len(labeled_paths) != 0
+
+            if len(labeled_paths) != 1:
+                raise ValueError(
+                    f"Expected exactly one path to be grouped with {labeled_paths.label}"
+                )
+
+            path = labeled_paths[0]
+
+            label = labeled_paths.label
+            point = label.point
+            value = float(label.value)
+            unit = label.unit or None
+
+            if point in xlabels:
+                plot = (value, None, unit)
+            elif point in ylabels:
+                plot = (None, value, unit)
+            else:
+                raise NotImplementedError(
+                    f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}."
+                )
+
+            if point in points:
+                raise Exception(f"Found axis label {label} more than once.")
+
+            if len(labeled_paths) != 1:
+                raise NotImplementedError(
+                    f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}."
+                )
+
+            points[point] = (path.far, plot)
+
+        return points
+
+    def _marked_points_from_scalebars(self, base_points):
+        r"""
+        Return the points that have been specified through a scalebar in the plot.
+
+        For each point, a tuple is returned relating the point's coordinates in
+        the SVG coordinate system to the point's coordinates in the plot
+        coordinate system, or `None` if that point's coordinate is not known.
+        """
+        points = {}
+
+        # Process scale bars.
+        for labeled_paths in self.labeled_paths["scale_bar"]:
+            if len(labeled_paths) != 2:
+                raise NotImplementedError(
+                    f"Expected exactly two paths to be grouped with the scalebar label {labeled_paths.label} but found {len(labeled_paths)}."
+                )
+
+            label = labeled_paths.label
+            axis = label.axis
+            value = float(label.value)
+            unit = label.unit or None
+
+            if axis not in [self.xlabel, self.ylabel]:
+                raise Exception(
+                    f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {axis}."
+                )
+
+            endpoints = [path.far for path in labeled_paths]
+            scalebar = (
+                endpoints[0][0] - endpoints[1][0],
+                endpoints[0][1] - endpoints[1][1],
+            )
+
+            # The scalebar has an explicit orientation in the SVG but the
+            # author of the scalebar was likely not aware.
+            # We assume here that the scalebar was meant to be oriented like
+            # the coordinate system in the SVG, i.e., x coordinates grow to the
+            # right, y coordinates grow to the bottom.
+            if (
+                axis == self.xlabel
+                and scalebar[0] < 0
+                or axis == self.ylabel
+                and scalebar[1] > 0
+            ):
+                scalebar = (-scalebar[0], -scalebar[1])
+
+            # Construct the second marked point from the first marked point + scalebar.
+            base_point = base_points[axis + "1"]
+            point = (
+                (base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]),
+                (None, None),
+            )
+
+            if axis == self.xlabel:
+                point = (point[0], (base_point[1][0] + value, None, unit))
+            else:
+                point = (point[0], (None, base_point[1][1] + value, unit))
+
+            points[axis + "2"] = point
+
+        return points
+
+    @property
     @cache
     def marked_points(self):
         r"""
         Return the points that have been marked on the axes of the plot.
 
         For each point, a tuple is returned relating the point's coordinates in
-        the SVG coordinate system to the points coordinates in the plot
-        coordinate system, or `None` if that points coordinate is not known.
+        the SVG coordinate system to the point's coordinates in the plot
+        coordinate system, or `None` if that point's coordinate is not known.
 
         EXAMPLES:
 
@@ -301,93 +525,21 @@ class SVGPlot:
             True
 
         """
-        points = {}
-
         xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
         ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
 
-        # Process explicitly marked point on the axes.
-        for labeled_paths in self.labeled_paths["ref_point"]:
-            label = labeled_paths.label.point
-            value = float(labeled_paths.label.value)
-            unit = labeled_paths.label.unit or None
-
-            if label in xlabels:
-                plot = (value, None, unit)
-            elif label in ylabels:
-                plot = (None, value, unit)
-            else:
-                raise NotImplementedError(
-                    f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}."
-                )
-
-            if label in points:
-                raise Exception(f"Found axis label {label} more than once.")
-
-            if len(labeled_paths.paths) != 1:
-                raise NotImplementedError(
-                    f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}."
-                )
-
-            path = labeled_paths.paths[0]
-
-            points[label] = (path.far, plot)
+        points = self._marked_points_from_axis_markers
 
         if xlabels[0] not in points:
             raise Exception(f"Label {xlabels[0]} not found in SVG.")
         if ylabels[0] not in points:
             raise Exception(f"Label {ylabels[0]} not found in SVG.")
 
-        # Process scale bars.
-        for labeled_paths in self.labeled_paths["scale_bar"]:
-            label = labeled_paths.label.axis
-            value = float(labeled_paths.label.value)
-            unit = labeled_paths.label.unit or None
+        for label, point in self._marked_points_from_scalebars(points).items():
+            if label in points:
+                raise Exception(f"Found an axis label and scale bar for {label}.")
 
-            if label not in [self.xlabel, self.ylabel]:
-                raise Exception(
-                    f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {label}."
-                )
-
-            if label + "2" in points:
-                raise Exception(
-                    f"Found more than one axis label {label}2 and scalebar for {label}."
-                )
-
-            if len(labeled_paths.paths) != 2:
-                raise NotImplementedError(
-                    f"Expected exactly two paths to be grouped with the scalebar label {label} but found {len(labeled_paths.paths)}."
-                )
-
-            endpoints = [path.far for path in labeled_paths.paths]
-            scalebar = (
-                endpoints[0][0] - endpoints[1][0],
-                endpoints[0][1] - endpoints[1][1],
-            )
-
-            # The scalebar has an explicit orientation in the SVG but the
-            # author of the scalebar was likely not aware.
-            # We assume here that the scalebar was meant to be oriented like
-            # the coordinate system in the SVG, i.e., x coordinates grow to the
-            # right, y coordinates grow to the bottom.
-            if (
-                label == self.xlabel
-                and scalebar[0] < 0
-                or label == self.ylabel
-                and scalebar[1] > 0
-            ):
-                scalebar = (-scalebar[0], -scalebar[1])
-
-            # Construct the second marked point from the first marked point + scalebar.
-            p1 = points[label + "1"]
-            p2 = ((p1[0][0] + scalebar[0], p1[0][1] + scalebar[1]), (None, None))
-
-            if label == self.xlabel:
-                p2 = (p2[0], (p1[1][0] + value, None, unit))
-            else:
-                p2 = (p2[0], (None, p1[1][1] + value, unit))
-
-            points[label + "2"] = p2
+            points[label] = point
 
         if xlabels[1] not in points:
             raise Exception(f"Label {xlabels[1]} not found in SVG.")
@@ -647,10 +799,10 @@ class SVGPlot:
         # We construct the basic transformation from the SVG coordinate system
         # to the plot coordinate system from four points in the SVG about we
         # know something in the plot coordinate system:
-        # * x1: a point whose x-coordinate we know
-        # * y1: a point whose y-coordinate we know
-        # * x2: a point whose x-coordinate we know
-        # * y2: a point whose y-coordinate we know
+        # * x_1: a point whose x-coordinate we know
+        # * y_1: a point whose y-coordinate we know
+        # * x_2: a point whose x-coordinate we know
+        # * y_2: a point whose y-coordinate we know
         # For the axis-aligned implementation, we further assume that only
         # changing the x coordinate in the SVG does not change the y coordinate
         # in the plot and conversely.
@@ -659,25 +811,25 @@ class SVGPlot:
         # have the same x coordinate in the plot coordinate system.
         # In any case, this gives six relations for the six unknowns of an
         # affine transformation.
-        x1 = self.marked_points[f"{self.xlabel}1"]
-        x2 = self.marked_points[f"{self.xlabel}2"]
-        y1 = self.marked_points[f"{self.ylabel}1"]
-        y2 = self.marked_points[f"{self.ylabel}2"]
+        x_1 = self.marked_points[f"{self.xlabel}1"]
+        x_2 = self.marked_points[f"{self.xlabel}2"]
+        y_1 = self.marked_points[f"{self.ylabel}1"]
+        y_2 = self.marked_points[f"{self.ylabel}2"]
 
         # We find the linear transformation:
-        # [A[0] A[1] A[2]]
-        # [A[3] A[4] A[5]]
+        # [transformation[0] transformation[1] transformation[2]]
+        # [transformation[3] transformation[4] transformation[5]]
         # [   0    0    1]
         # By solving for the linear conditions indicated above:
         conditions = [
             # x1 maps to something with the correct x coordinate
-            ([x1[0][0], x1[0][1], 1, 0, 0, 0], x1[1][0]),
+            ([x_1[0][0], x_1[0][1], 1, 0, 0, 0], x_1[1][0]),
             # y1 maps to something with the correct y coordinate
-            ([0, 0, 0, y1[0][0], y1[0][1], 1], y1[1][1]),
+            ([0, 0, 0, y_1[0][0], y_1[0][1], 1], y_1[1][1]),
             # x2 maps to something with the correct x coordinate
-            ([x2[0][0], x2[0][1], 1, 0, 0, 0], x2[1][0]),
+            ([x_2[0][0], x_2[0][1], 1, 0, 0, 0], x_2[1][0]),
             # y2 maps to something with the correct y coordinate
-            ([0, 0, 0, y2[0][0], y2[0][1], 1], y2[1][1]),
+            ([0, 0, 0, y_2[0][0], y_2[0][1], 1], y_2[1][1]),
         ]
 
         if self._algorithm == "axis-aligned":
@@ -693,9 +845,9 @@ class SVGPlot:
             conditions.extend(
                 [
                     # x1 and x2 map to the same y coordinate
-                    ([0, 0, 0, x1[0][0] - x2[0][0], x1[0][1] - x2[0][1], 0], 0),
+                    ([0, 0, 0, x_1[0][0] - x_2[0][0], x_1[0][1] - x_2[0][1], 0], 0),
                     # y1 and y2 map to the same x coordinate
-                    ([y1[0][0] - y2[0][0], y1[0][1] - y2[0][1], 0, 0, 0, 0], 0),
+                    ([y_1[0][0] - y_2[0][0], y_1[0][1] - y_2[0][1], 0, 0, 0, 0], 0),
                 ]
             )
         else:
@@ -780,9 +932,14 @@ class SVGPlot:
             Exception: No curve main curve found in SVG.
 
         """
+        curves = self.labeled_paths["curve"]
+
+        if len(curves) == 0:
+            raise Exception("No curve found in SVG.")
+
         curves = [
             curve
-            for curve in self.labeled_paths["curve"]
+            for curve in curves
             if self._curve is None or curve.label.curve_id == self._curve
         ]
 
@@ -791,7 +948,7 @@ class SVGPlot:
         if len(curves) > 1:
             raise Exception(f"More than one curve {self._curve} fonud in SVG.")
 
-        paths = curves[0].paths
+        paths = curves[0]
 
         if len(paths) == 0:
             raise Exception("Curve has not a single <path>.")
@@ -814,6 +971,41 @@ class SVGPlot:
         element. These text elements then tell us about the meaning of that
         path, e.g., the path that is labeled as `curve` is the actual graph we
         are going to extract the (x, y) coordinate pairs from.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.labeled_paths
+            {'ref_point': [], 'scale_bar': [], 'curve': [[Path "curve: 0"]]}
+
+        TESTS::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">kurve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> from unittest import TestCase
+            >>> with TestCase.assertLogs(_) as warnings:
+            ...     plot.labeled_paths
+            ...     print(warnings.output)
+            {'ref_point': [], 'scale_bar': [], 'curve': []}
+            ['WARNING:svgplot:Ignoring <path> with unsupported label kurve: 0.']
+
         """
         patterns = {
             "ref_point": r"^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
@@ -821,21 +1013,25 @@ class SVGPlot:
             "curve": r"^curve: ?(?P<curve_id>.+)",
         }
 
+        # Collect labeled paths with supported patterns.
         labeled_paths = {
             key: self.svg.get_labeled_paths(pattern)
             for (key, pattern) in patterns.items()
         }
 
+        # Collect all labeled paths and warn if there is a label that we do not recognize.
         for paths in self.svg.get_labeled_paths():
-            if paths.label._label not in [
-                p.label._label for pattern in patterns for p in labeled_paths[pattern]
+            if str(paths.label) not in [
+                str(recognized_paths.label)
+                for pattern in patterns
+                for recognized_paths in labeled_paths[pattern]
             ]:
                 logger.warning(f"Ignoring <path> with unsupported label {paths.label}.")
 
         return labeled_paths
 
     @classmethod
-    def sample_path(self, path, sampling_interval, endpoints="include"):
+    def sample_path(cls, path, sampling_interval, endpoints="include"):
         r"""
         Return points on `path`, sampled at equidistant increments on the
         x-axis.
@@ -907,8 +1103,8 @@ class SVGPlot:
             >>> path = Path("M 0 0 L 0 1 M 1 1 L 1 0")
             >>> SVGPlot.sample_path(path, .0001)
             [(0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 0.0)]
-            >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial points of the segments
-            [(0.0, 1.0), (1.0, 0.0)]
+            >>> SVGPlot.sample_path(path, .0001, endpoints='exclude')  # the implementation chooses the initial point of the first segment
+            [(0.0, 1.0)]
 
         TESTS:
 
@@ -920,120 +1116,264 @@ class SVGPlot:
             4159
 
         """
-        import numpy
-        import svgpathtools
-
-        EPS = 1e-6
-
         samples = []
 
-        # The current path length on the x-axis at which we plan to sample (in the range [0, length of the current path segment]):
-        X = 0
+        # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
+        sample_from_x = 0
 
         for segment in path:
-            sample_at = []
-
-            if endpoints == "include":
-                # Include the initial point of the new path segment.
-                sample_at.append(0)
-
-                # Continue sampling from the start of the new path segment.
-                assert (
-                    sampling_interval >= X
-                ), "sampling with endpoints should produce more points than sampling without"
-                X = sampling_interval
-
-            x = numpy.poly1d(numpy.real(segment.poly()))
-
-            # At the extrema of the projection to the x-axis, the curve changes direction.
-            extrema = list(
-                sorted(
-                    root.real
-                    for root in numpy.polyder(x).roots
-                    if abs(root.imag) < EPS and 0 < root.real < 1
-                )
+            sample_at, sample_from_x = cls._sample_segment(
+                segment=segment,
+                sampling_interval=sampling_interval,
+                sample_from_x_length=sample_from_x,
+                endpoints=endpoints,
             )
 
-            # Eventually this will contain the total length of this path segment.
-            segment_length = 0
+            # Do not sample at the initial point if the path is connected
+            # so we do not get a duplicate with the end point of the
+            # previous segment.
+            if samples and abs(segment.point(0) - samples[-1]) < cls._EPSILON:
+                sample_at = sample_at[1:]
 
-            # The time at which we sampled last.
-            T = 0
-
-            # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
-            for tmin, tmax in zip([0] + extrema, extrema + [1]):
-                snippet_length = abs(x(tmax) - x(tmin))
-                segment_length += snippet_length
-
-                sgn = 1 if x(tmax) > x(tmin) else -1
-                f = sgn * (x - x(tmin)) + (segment_length - snippet_length)
-
-                while X <= segment_length:
-                    if abs(X - segment_length) < EPS:
-                        # We are very close to the end of this segment. In this
-                        # case the root computation below tends to get unstable
-                        # returning roots that are slightly beyond [0, 1] so we
-                        # skip forward to the end of the segment.
-                        sample_at.append(tmax)
-                        X = segment_length
-                        break
-
-                    # The time at which we reach position X is in [tmin, tmax)
-                    # Note that this call is where all the runtime is spent in sampling.
-                    # Since the polynomial is at most of degree 3 we could
-                    # possibly solve symbolically and then plug in all the
-                    # values for X at once which might be much faster:
-                    # https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
-                    roots = (f - X).roots
-                    assert len(
-                        roots
-                    ), f"The polynomial {f} should not be constant and therefore should have some roots."
-                    real_roots = roots.real[abs(roots.imag) < EPS]
-                    assert len(
-                        real_roots
-                    ), f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but we only found complex roots {roots}"
-                    eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
-                    assert (
-                        eligible_roots
-                    ), f"The polynomial {f} should have a real root in [{tmin}, {tmax}] but all roots were outside that range: {roots}"
-                    t = min(eligible_roots)
-
-                    sample_at.append(t)
-
-                    X += sampling_interval
-
-            # We have left the current path segment.
-            if endpoints == "include":
-                # Include the final point of this path segment.
-                sample_at.append(1)
-
-            assert sample_at == sorted(
-                sample_at
-            ), f"Samples are out of order {sample_at}"
-
-            if endpoints == "include":
-                # Do not sample points that are just a numerical-error away from the end points.
-                assert (
-                    sample_at[1] > EPS
-                ), f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_at[1]}"
-                if 1 - sample_at[-2] < EPS:
-                    sample_at = sample_at[:-2] + [sample_at[-1]]
-
-                # Do not sample at the initial point if the path is connected
-                # so we do not get a duplicate with the end point of the
-                # previous segment.
-                if samples and abs(segment.point(0) - samples[-1]) < EPS:
-                    sample_at = sample_at[1:]
-
-            # Sample the curve
             samples.extend(segment.poly()(sample_at))
 
-            # Go to the next path segment.
-            X -= segment_length
-
-            assert X >= 0, f"Cannot sample at negative x={x}"
-
         return [(p.real, p.imag) for p in samples]
+
+    @classmethod
+    def _sample_segment(
+        cls, segment, sampling_interval, sample_from_x_length=0, endpoints="include"
+    ):
+        r"""
+        Sample the `segment` at equidistant points spaced by
+        `sampling_interval` on the x-axis starting at `starting_from_x_length`.
+
+        Returns the times at which to sample, and also the single place at
+        which to sample in the next segment written as a length on the x-axis.
+
+        This is a helper method for `sample_path`.
+
+        EXAMPLES:
+
+        A single line segment::
+
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M 0 0 L 1 1")
+            >>> segment = next(iter(path))
+            >>> SVGPlot._sample_segment(segment, .25)
+            ([0, 0.25, 0.5, 0.75, 1], 0.0)
+
+        The first point to sample can be shifted with `sample_from_x_length`;
+        this also shitfs the next point at which to sample next in the
+        following segment::
+
+            >>> SVGPlot._sample_segment(segment, .25, sample_from_x_length=.125, endpoints='exclude')
+            ([0.125, 0.375, 0.625, 0.875], 0.125)
+
+        When `sample_from_x_length` exceeds the length of the segment, no
+        sampling might be performed::
+
+            >>> SVGPlot._sample_segment(segment, .25, sample_from_x_length=2, endpoints='exclude')
+            ([], 1.0)
+
+        When including the endpoints, `sample_from_x_length` has no effect since
+        we always start and end sampling at the end points of the segment::
+
+            >>> SVGPlot._sample_segment(segment, .25, sample_from_x_length=2)
+            ([0, 0.25, 0.5, 0.75, 1], 0.0)
+
+        ::
+
+            >>> SVGPlot._sample_segment(segment, .75, sample_from_x_length=2)
+            ([0, 0.75, 1], 0.0)
+
+        """
+        if sample_from_x_length < 0:
+            raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
+
+        sample_at = []
+
+        # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
+        x_length_target = sample_from_x_length
+
+        if endpoints == "include":
+            # Include the initial point of the path segment.
+            sample_at.append(0)
+
+            # Continue sampling from the start of the path segment.
+            x_length_target = sampling_interval
+
+        import numpy
+
+        x = numpy.poly1d(numpy.real(segment.poly()))
+
+        # At the extrema of the projection to the x-axis, the curve changes direction.
+        extrema = list(
+            sorted(
+                root.real
+                for root in numpy.polyder(x).roots
+                if abs(root.imag) < cls._EPSILON and 0 < root.real < 1
+            )
+        )
+
+        # Eventually this will equal the total length of this path segment.
+        segment_length = 0
+
+        # Sample in the range [tmin, tmax] = [time at which the curve changed its behavior last, time at which the curve changes its behavior next]
+        for tmin, tmax in zip([0] + extrema, extrema + [1]):
+            snippet_length = abs(x(tmax) - x(tmin))
+
+            sample_snippet_at, x_length_target = cls._sample_snippet(
+                segment=segment,
+                t_range=(tmin, tmax),
+                sampling_interval=sampling_interval,
+                sample_from_x_length=x_length_target,
+                x_length_range=(segment_length, segment_length + snippet_length),
+            )
+            sample_at.extend(sample_snippet_at)
+
+            segment_length += snippet_length
+
+        # We have left the path segment.
+        if endpoints == "include":
+            # Include the final point of this path segment.
+            sample_at.append(1)
+
+        assert sample_at == sorted(sample_at), f"Samples are out of order {sample_at}"
+
+        if endpoints == "include":
+            # Do not sample points that are just a numerical-error away from the end points.
+            assert (
+                sample_at[1] > cls._EPSILON
+            ), f"First real sampling point should be quite a bit away from t=0 but it is only at {sample_at[1]}"
+            if 1 - sample_at[-2] < cls._EPSILON:
+                sample_at = sample_at[:-2] + [sample_at[-1]]
+
+            x_length_target = segment_length
+
+        # Go to the next path segment.
+        x_length_target -= segment_length
+
+        # Sample the curve
+        return sample_at, x_length_target
+
+    @classmethod
+    def _sample_snippet(
+        cls, segment, sampling_interval, sample_from_x_length, t_range, x_length_range
+    ):
+        r"""
+        Sample the path segment `segment` at times in the range `[t_range[0],
+        t_range[1]]` at equidistant steps spaced by `sampling_interval` on the
+        length of the segment projected to the x-axis, starting from
+        `sample_from_x_length`.
+
+        Returns the times at which to sample and the place at which to sample
+        in the next snippet written as a segment length on the x-axis.
+
+        For performance reasons, the length of the segment after projection to
+        the x-axis at the times `t_range` must be provided as a pair
+        `x_length_range`.
+
+        This is a helper method for `sample_path`.
+
+        EXAMPLES:
+
+        We sample a piece of a line segment::
+
+            >>> from svgpathtools.path import Path
+            >>> path = Path("M 0 0 L 1 1")
+            >>> segment = next(iter(path))
+            >>> SVGPlot._sample_snippet(segment, sampling_interval=.25, sample_from_x_length=.25, t_range=[.25, .75], x_length_range=[.25, .75])
+            ([0.25, 0.5, 0.75], 1.0)
+            >>> SVGPlot._sample_snippet(segment, sampling_interval=1, sample_from_x_length=.5, t_range=[.5, 1.], x_length_range=[.5, 1.])
+            ([0.5], 1.5)
+
+        """
+        if sample_from_x_length < 0:
+            raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
+
+        if t_range[1] < t_range[0]:
+            raise ValueError("Sampling must not go backwards in time.")
+
+        if x_length_range[1] < x_length_range[0]:
+            raise ValueError("Sampling must not go backwards on the segment.")
+
+        import numpy
+
+        x = numpy.poly1d(numpy.real(segment.poly()))
+
+        sample_at = []
+
+        # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
+        x_length_target = sample_from_x_length
+
+        sgn = 1 if x(t_range[1]) > x(t_range[0]) else -1
+        x_length = sgn * (x - x(t_range[0])) + x_length_range[0]
+
+        while x_length_target <= x_length_range[1]:
+            if abs(x_length_target - x_length_range[1]) < cls._EPSILON:
+                # We are very close to the end of this segment. In this
+                # case the root computation below tends to get unstable
+                # returning roots that are slightly beyond [0, 1] so we
+                # skip forward to the end of the segment.
+                sample_at.append(t_range[1])
+                x_length_target = x_length_range[1] + sampling_interval
+                break
+
+            # The time at which we reach position X is in [t_range[0], t_range[1])
+            # Note that this call is where all the runtime is spent in sampling.
+            # Since the polynomial is at most of degree 3 we could
+            # possibly solve symbolically and then plug in all the
+            # values for x_pos at once which might be much faster:
+            # https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
+            t = cls._min_real_root(x_length - x_length_target, t_range[0], t_range[1])
+            sample_at.append(t)
+
+            x_length_target += sampling_interval
+
+        return sample_at, x_length_target
+
+    @classmethod
+    def _min_real_root(cls, polynomial, tmin, tmax):
+        r"""
+        Return the smallest real root of `polynomial` in the range [tmin, tmax].
+
+        EXAMPLES:
+
+        A cubic polynomial with roots at 0, 1, 2::
+
+            >>> import numpy
+            >>> p = numpy.poly1d([1, -3, 2, 0])
+            >>> SVGPlot._min_real_root(p, 0, 10)
+            0.0
+            >>> SVGPlot._min_real_root(p, 1, 10)
+            1.0
+            >>> SVGPlot._min_real_root(p, 2, 10)
+            2.0
+            >>> SVGPlot._min_real_root(p, 3, 10)
+            Traceback (most recent call last):
+            ...
+            ValueError: ...
+
+
+        """
+        roots = polynomial.roots
+
+        if len(roots) == 0:
+            raise ValueError(f"The polynomial {polynomial} must not be constant.")
+
+        real_roots = roots.real[abs(roots.imag) < cls._EPSILON]
+        if len(real_roots) == 0:
+            raise ValueError(
+                f"The polynomials {polynomial} must have real roots. But all roots where complex: {roots}"
+            )
+
+        eligible_roots = [t for t in real_roots if tmin <= t <= tmax]
+        if len(eligible_roots) == 0:
+            raise ValueError(
+                f"The polynomial {polynomial} must have roots in [{tmin}, {tmax}]. But all roots where outside that range: {roots}"
+            )
+
+        return min(eligible_roots)
 
     @property
     @cache
