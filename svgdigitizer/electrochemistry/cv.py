@@ -16,7 +16,7 @@ With this information the time axis can be reconstructed.
 The CV can be digitized by importing the plot in an SVG editor, such as Inkscape,
 where the curve is traced, the axes are labeled and the scan rate is provided.
 This SVG file can then be analyzed by this class to produce the coordinates
-corrsponding to the original measured values.
+corresponding to the original measured values.
 
 A more detailed description on preparing the SVG files is provieded in the :class:`CV`
 or ...
@@ -66,7 +66,7 @@ class CV:
     Typically, the SVG input has been created by tracing a CV from
     a publication with a `<path>` in an SVG editor such as Inkscape. Such a
     path can then be analyzed by this class to produce the coordinates
-    corrsponding to the original measured values.
+    corresponding to the original measured values.
 
     TODO:: Link to workflow.md (see issue #73)
 

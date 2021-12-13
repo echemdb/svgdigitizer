@@ -147,7 +147,7 @@ class SVGPlot:
     Typically, the SVG input has been created by tracing a measurement plot from
     a publication with a `<path>` in an SVG editor such as Inkscape. Such a
     path can then be analyzed by this class to produce the coordinates
-    corrsponding to the original measured values.
+    corresponding to the original measured values.
 
     INPUT:
 
