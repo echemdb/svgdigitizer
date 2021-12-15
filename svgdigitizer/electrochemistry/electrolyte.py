@@ -151,7 +151,7 @@ class Electrolyte:
             >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
             >>> electrolyte_dict = {"type": "aq", "components": [{"name": "H2SO4","type": "acid", "concentration": {"value": 0.1, "unit": "M"}}, {"name": "Na2SO4","type": "salt", "concentration": {"value": 0.1, "unit": "M"}}]}
             >>> electrolyte = Electrolyte(electrolyte_dict)
-            >>> electrolyte._estimate_pH
+            >>> electrolyte._estimate_pH()
             1.3538681030273414
         
         """
@@ -164,7 +164,7 @@ class Electrolyte:
         acids_bases = []
         for i in self.electrolyte["components"]:
             if i["type"] != "solvent":
-                InChI = Electrolyte.lookup_chemical_ids_from_name(i["name"])
+                InChI = Electrolyte.lookup_chemical_ids_from_name(i["name"])['InChI']
                 temp = self.get_pKa(InChI)
                 for e in temp:
                     q = i["concentration"]["value"] * normalize_unit(
@@ -193,15 +193,15 @@ class Electrolyte:
         return pcp.get_cids(InChI, "inchi")[0]
 
     @classmethod
-    def get_chemical_ids_from_name(cls, chemical_name):
+    def lookup_chemical_ids_from_name(cls, chemical_name):
         r"""
         Get CID, InChI, and InChIKey from chemical name using the pubchempy package.
 
         EXAMPLES:
 
             >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
-            >>> Electrolyte.get_chemical_ids_from_name('phosphoric acid')
-            {'CID': 1004, 'InChI': 'InChI=1S/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)', 'InChIKey': 'NBIIXXVUZAFLBC-UHFFFAOYSA-N'}
+            >>> Electrolyte.lookup_chemical_ids_from_name('phosphoric acid')
+            {'CID': 1004, 'InChI': 'InChI=1S/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)'}
 
         """
         results = pcp.get_cids(chemical_name, "name")
@@ -215,7 +215,7 @@ class Electrolyte:
                 f"Name of chemical {chemical_name} not found in pubchem. Check spelling."
             )
         else:
-            return pcp.get_properties(("InChI", "InChIKey"), results[0])[0]
+            return pcp.get_properties(("InChI"), results[0])[0]
 
     def get_pKa(self, InChI):
         r"""
@@ -229,7 +229,7 @@ class Electrolyte:
             return acid_base[InChI]["components"]
         except KeyError:
             cid = self.get_CID_from_InChI(InChI=InChI)
-            pKa_result = self.get_pKa(cid)["pKa"]
+            pKa_result = self.lookup_pKa(cid)["pKa"]
             # TODO support salts etc.
             return [
                 Acid(
@@ -238,7 +238,7 @@ class Electrolyte:
                 )
             ]
 
-    def get_pKa(self, cid):
+    def lookup_pKa(self, cid):
         r"""
         get url from Pubchem to get pka  result
         'XML' can be replaced with 'JSON' but it is harder to parse later on
@@ -254,19 +254,17 @@ class Electrolyte:
             ".//*{http://pubchem.ncbi.nlm.nih.gov/pug_view}Information"
         )
 
-        # Get the pKa reference:
-        original_source = info_node.find(
-            "{http://pubchem.ncbi.nlm.nih.gov/pug_view}Reference"
-        ).text
         # Get the pKa result:
         pka_string = info_node.find(
             ".//*{http://pubchem.ncbi.nlm.nih.gov/pug_view}String"
         ).text
-        pka_result = re.sub(
-            r"^pKa = ", "", pka_result
-        )  # remove 'pka = ' part out of the string answer
 
-        return pka_result
+        pka_result = re.sub(
+            r"^pKa = ", "", pka_string
+        )  # remove 'pka = ' part out of the string answer
+        
+        if pka_result:
+            return pka_result
 
         else:
             raise RuntimeError("pKa not found in Pubchem.")
