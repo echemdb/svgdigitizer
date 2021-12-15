@@ -187,7 +187,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
         cv = CV(SVGPlot(SVG(infile)))
         xunit = CV.get_axis_unit(cv.x_label.unit)
 
-
     if sampling_interval is not None and xunit != u.V:
         # Determine conversion factor to volts.
         sampling_correction = xunit.to(u.V)
@@ -210,7 +209,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
             SVGPlot(SVG(infile), sampling_interval=sampling_interval),
             metadata=metadata,
         )
-
 
     from pathlib import Path
 

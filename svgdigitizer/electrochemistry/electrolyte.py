@@ -77,7 +77,7 @@ acid_base = {
     "InChI=1S/Na.H2O/h;1H2/q+1;/p-1": {
         "name": "NaOH",
         "components": [Neutral(charge=1)],
-        },
+    },
     "InChI=1S/ClH.Na/h1H;/q;+1/p-1": {
         "name": "NaCl",
         "components": [Acid(pKa=[-6.2], charge=0), Neutral(charge=1)],
@@ -123,7 +123,7 @@ class Electrolyte:
         r"""
         pH of the electrolyte which is either taken from the electrolyte description or if not
         present estimated using the pHcalc package.
-        
+
         EXAMPLES:
 
             >>> from svgdigitizer.electrochemistry.electrolyte import Electrolyte
@@ -138,9 +138,9 @@ class Electrolyte:
             1.3538681030273414
 
         """
-        if 'pH' in self.electrolyte: return self.electrolyte['pH']
+        if "pH" in self.electrolyte:
+            return self.electrolyte["pH"]
         return self._estimate_pH()
-
 
     def _estimate_pH(self):
         r"""
@@ -153,18 +153,17 @@ class Electrolyte:
             >>> electrolyte = Electrolyte(electrolyte_dict)
             >>> electrolyte._estimate_pH()
             1.3538681030273414
-        
+
         """
 
         if self.electrolyte["type"] != "aq":
             print("pH calculations are only implemented for aqueous solutions.")
             return None
 
-
         acids_bases = []
         for i in self.electrolyte["components"]:
             if i["type"] != "solvent":
-                InChI = Electrolyte.lookup_chemical_ids_from_name(i["name"])['InChI']
+                InChI = Electrolyte.lookup_chemical_ids_from_name(i["name"])["InChI"]
                 temp = self.get_pKa(InChI)
                 for e in temp:
                     q = i["concentration"]["value"] * normalize_unit(
@@ -219,7 +218,7 @@ class Electrolyte:
 
     def get_pKa(self, InChI):
         r"""
-        Get pKa of compound either from `acid_base` database in the `electrolyte` module or if not present there from 
+        Get pKa of compound either from `acid_base` database in the `electrolyte` module or if not present there from
         pubchem. Due to the complexity of modeling compounds with classes provided by the pHcalc package pubchem lookup
         works for neutral acids only.
 
@@ -246,7 +245,10 @@ class Electrolyte:
         copied from https://github.com/khoivan88/pka_lookup/blob/master/src/pka_lookup_pubchem.py which is MIT licensed.
         """
         from urllib.request import urlopen
-        response = urlopen(f'https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/XML?heading=Dissociation+Constants')
+
+        response = urlopen(
+            f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/XML?heading=Dissociation+Constants"
+        )
         tree = ET.fromstring(response.read())
 
         # Get the XML tree of <Information> only
@@ -262,7 +264,7 @@ class Electrolyte:
         pka_result = re.sub(
             r"^pKa = ", "", pka_string
         )  # remove 'pka = ' part out of the string answer
-        
+
         if pka_result:
             return pka_result
 
