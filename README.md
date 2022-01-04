@@ -120,7 +120,7 @@ cv.df.to_csv(Path(svgfile).with_suffix('.csv'), index=False)
 >>> from svgdigitizer.electrochemistry.cv import CV
 
 >>> with open('test/data/xy_rate.yaml') as f:
-...    metadata = yaml.load(f, Loader=yaml.FullLoader)
+...    metadata = yaml.load(f, Loader=yaml.SafeLoader)
 
 >>> cv = CV(SVGPlot(SVG(open('test/data/xy_rate.svg', 'rb'))), metadata=metadata)
 ```
