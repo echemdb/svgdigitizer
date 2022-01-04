@@ -36,7 +36,7 @@ jobs:
         shell: bash -l {0}
         run: |
           mamba install -y byexample
-          byexample -l shell -o +norm-ws --timeout=30 README.md
+          byexample -l shell,python -o +norm-ws --timeout=30 README.md
         # byexample is not available for Windows
         if: ${{ env.RUNNER_OS != "Windows" }}
       - name: digitize-xy-test
