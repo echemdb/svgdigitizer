@@ -32,56 +32,60 @@ jobs:
         shell: bash -l {0}
         run: |
           pytest --doctest-modules svgdigitizer
-      - name: cli-test
+      - name: byexample
+        shell: bash -l {0}
+        run: |
+          byexample -l shell -o +norm-ws --timeout=30 README.md
+      - name: digitize-xy-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/xy.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy.csv"), pandas.read_csv("test/data/xy.csv.expected"))'
-      - name: scalebar-test
+      - name: digitize-scalebar-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/scaling_factor.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/scaling_factor.csv"), pandas.read_csv("test/data/scaling_factor.csv.expected"))'
-      - name: sampling-test
+      - name: digitize-sampling-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/sampling.svg --sampling_interval .00101
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling.csv"), pandas.read_csv("test/data/sampling.csv.expected"))'
-      - name: sampling-many-points-test
+      - name: digitize-sampling-many-points-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval .001508
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling_many_points.csv"), pandas.read_csv("test/data/sampling_many_points.csv.expected"))'
-      - name: no-layer-test
+      - name: digitize-no-layer-test
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/svg_without_layer.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/svg_without_layer.csv"), pandas.read_csv("test/data/svg_without_layer.csv.expected"))'
-      - name: cv-test
+      - name: cv-xy-rate-test
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/xy_rate.svg --metadata test/data/xy_rate.yaml
           diff test/data/xy_rate.json test/data/xy_rate.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate.csv"), pandas.read_csv("test/data/xy_rate.csv.expected"))'
-      - name: cv-test-without-metadata
+      - name: cv-no-metadata-test
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/xy_rate_without_metadata.svg
           diff test/data/xy_rate_without_metadata.json test/data/xy_rate_without_metadata.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata.csv"), pandas.read_csv("test/data/xy_rate_without_metadata.csv.expected"))'
-      - name: cv-test-with_reference
+      - name: cv-reference-test
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml
           diff test/data/xy_rate_reference.json test/data/xy_rate_reference.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference.csv"), pandas.read_csv("test/data/xy_rate_reference.csv.expected"))'
-      - name: cv-package
+      - name: cv-package-test
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/package.svg --metadata test/data/package.yaml --package
           diff test/data/package.json test/data/package.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package.csv"), pandas.read_csv("test/data/package.csv.expected"))'
-      - name: cv-test-with_reference
+      - name: cv-metadata-test
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/cv_comment.svg --metadata test/data/cv_comment.yaml
