@@ -8,7 +8,6 @@ channels:
 dependencies:
   - astropy
   - black
-  - byexample
   - click
   - isort
   - matplotlib-base
