@@ -39,56 +39,56 @@ jobs:
           byexample -l shell,python -o +norm-ws --timeout=30 README.md
         # byexample is not available for Windows
         if: ${{ env.RUNNER_OS != "Windows" }}
-      - name: digitize-xy-test
+      - name: cli-digitize-xy
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/xy.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy.csv"), pandas.read_csv("test/data/xy.csv.expected"))'
-      - name: digitize-scalebar-test
+      - name: cli-digitize-scaling-factor
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/scaling_factor.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/scaling_factor.csv"), pandas.read_csv("test/data/scaling_factor.csv.expected"))'
-      - name: digitize-sampling-test
+      - name: cli-digitize-sampling-interval
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/sampling.svg --sampling_interval .00101
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling.csv"), pandas.read_csv("test/data/sampling.csv.expected"))'
-      - name: digitize-sampling-many-points-test
+      - name: cli-digitize-sampling-many-points
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval .001508
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling_many_points.csv"), pandas.read_csv("test/data/sampling_many_points.csv.expected"))'
-      - name: digitize-no-layer-test
+      - name: cli-digitize-svg-without-layer
         shell: bash -l {0}
         run: |
           svgdigitizer digitize test/data/svg_without_layer.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/svg_without_layer.csv"), pandas.read_csv("test/data/svg_without_layer.csv.expected"))'
-      - name: cv-xy-rate-test
+      - name: cli-cv-xy-rate
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/xy_rate.svg --metadata test/data/xy_rate.yaml
           diff test/data/xy_rate.json test/data/xy_rate.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate.csv"), pandas.read_csv("test/data/xy_rate.csv.expected"))'
-      - name: cv-no-metadata-test
+      - name: cli-cv-xy-rate-without-metadata
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/xy_rate_without_metadata.svg
           diff test/data/xy_rate_without_metadata.json test/data/xy_rate_without_metadata.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata.csv"), pandas.read_csv("test/data/xy_rate_without_metadata.csv.expected"))'
-      - name: cv-reference-test
+      - name: cli-cv-xy-rate-reference
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml
           diff test/data/xy_rate_reference.json test/data/xy_rate_reference.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference.csv"), pandas.read_csv("test/data/xy_rate_reference.csv.expected"))'
-      - name: cv-package-test
+      - name: cli-cv-package
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/package.svg --metadata test/data/package.yaml --package
           diff test/data/package.json test/data/package.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package.csv"), pandas.read_csv("test/data/package.csv.expected"))'
-      - name: cv-metadata-test
+      - name: cli-cv-cv-comment
         shell: bash -l {0}
         run: |
           svgdigitizer cv test/data/cv_comment.svg --metadata test/data/cv_comment.yaml
