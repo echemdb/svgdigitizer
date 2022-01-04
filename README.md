@@ -44,6 +44,7 @@ x,y
 
 $ svgdigitizer paginate test/data/mustermann_2021_svgdigitizer_1.pdf
 $ ls test/data/mustermann_*
+test/data/mustermann_2021_svgdigitizer_1.pdf
 test/data/mustermann_2021_svgdigitizer_1_p0.png
 test/data/mustermann_2021_svgdigitizer_1_p0.svg
 test/data/mustermann_2021_svgdigitizer_1_p1.png
@@ -52,7 +53,6 @@ test/data/mustermann_2021_svgdigitizer_1_p2.png
 test/data/mustermann_2021_svgdigitizer_1_p2.svg
 test/data/mustermann_2021_svgdigitizer_1_p3.png
 test/data/mustermann_2021_svgdigitizer_1_p3.svg
-test/data/mustermann_2021_svgdigitizer_1.pdf
 
 $ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.svg
 $ head doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.csv
