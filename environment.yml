@@ -6,24 +6,24 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - svg.path
-  - matplotlib-base
-  - pandas
-  - click
-  - pyyaml
-  - pillow
-  - pdf2image
-  - poppler
-  - svgwrite
-  - svgpathtools
-  - pytest
-  - scipy
   - astropy
-  - sphinx
-  - myst-parser
-  - pylint
   - black
+  - click
   - isort
+  - matplotlib-base
+  - myst-parser
+  - pandas
+  - pdf2image
+  - pillow
+  - poppler
+  - pylint
+  - pytest
+  - pyyaml
+  - scipy
+  - sphinx
+  - svg.path
+  - svgpathtools
+  - svgwrite
   - pip
   - pip:
     - linkchecker
