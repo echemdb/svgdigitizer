@@ -127,7 +127,7 @@
 <p><strong>1: Select an svg file with a plot to be digitized</strong></p>
 <p>For this example we use inkscape to digitize some data in plot 2a in the PDF, which is is located on page two of the manuscript (filename containing <code class="docutils literal notranslate"><span class="pre">_p1</span></code>). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single svg file. Therefore, create a copy of the SVG file of page two (<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.svg</span></code>) and rename it to<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p0_2b_blue.svg</span></code>, to indicate that this files contains the digitized curve of the blue curve in Figure 2a on page 2.</p>
 <p><strong>2: Trace the curve</strong></p>
-<ol>
+<ol class="arabic">
 <li><p>Open the SVG file.</p></li>
 <li><p>Mark two positions one for each axis (x and y). The first position on the x-axis will be 0.0 V vs RHE. Add a text label which contains <code class="docutils literal notranslate"><span class="pre">x1:</span> <span class="pre">0.0</span> <span class="pre">V</span> <span class="pre">vs</span> <span class="pre">RHE</span></code>. Draw a line from connecting the text label and the position on the x-axis. Finally group the line and the text label. Repeat this for positions <code class="docutils literal notranslate"><span class="pre">x2</span></code>, <code class="docutils literal notranslate"><span class="pre">y1</span></code> and <code class="docutils literal notranslate"><span class="pre">y2</span></code>.</p>
 <p><img alt="inkscape_x1_label" src="_images/inkscape_x1_label.png" /></p>
@@ -152,7 +152,7 @@
 <li><p>Group the text field and the curve.</p></li>
 </ol>
 <p><img alt="inkscape_smoothed_path_curve" src="_images/inkscape_smoothed_path_curve.png" /></p>
-<ol class="simple">
+<ol class="arabic simple">
 <li><p>Add a text field to the plot containing the scan rate, with which the data was acquired. This is not necessarily given in the plot or figure description and might have to extracted from the text of the manuscript: <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>.</p></li>
 </ol>
 <p>The final file should look like this:</p>
