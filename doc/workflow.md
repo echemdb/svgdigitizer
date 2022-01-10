@@ -16,7 +16,7 @@ Furthermore, the manipulation of SVG files is done with [Inkscape](https://inksc
 
 The directory should be named `FirstAuthorName_Year_FirstTitleWord_FirstPageNr`
 
-For the example PDF this comes down to
+**Do not use capital letters.** For the example PDF this comes down to
 
 `mustermann_2021_svgdigitizer_1`
 
