@@ -40,7 +40,7 @@ Choose Settings
 
 ![./files/images/scholar_options_selection.png](files/images/scholar_options_selection.png)
 
-Select `Show links to import citatons into BibTeX"
+Select `Show links to import citations into BibTeX"
 
 ![./files/images/scholar_options_bibtex.png](files/images/scholar_options_bibtex.png)
 
