@@ -56,6 +56,8 @@ Open the file and change the key, such that it matches the folder name:
 
 ![./files/images/bibtex_key.png](./files/images/bibtex_key.png)  
 
+Also fix any typos in the title.
+
 **The folder should now contain the following files:**
 
 `mustermann_2021_svgdigitizer_1.bib`
@@ -78,7 +80,7 @@ The filenames are of the form:
 
 **1: Select an svg file with a plot to be digitized**
 
-For this example we use inkscape to digitize some data in plot 2a in the PDF, which is is located on page two of the manuscript (filename containing `_p1`). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single svg file. Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_p0_2b_blue.svg`, to indicate that this files contains the digitized curve of the blue curve in Figure 2a on page 2. 
+For this example we use inkscape to digitize some data in plot 2a in the PDF, which is is located on page two of the manuscript (filename containing `_p1`). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single svg file. Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_p1_2b_blue.svg`, to indicate that this files contains the digitized curve of the blue curve in Figure 2a on page 2. 
 
  **2: Mark axis positions and labels**
 
