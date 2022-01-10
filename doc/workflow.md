@@ -28,7 +28,7 @@ Put the publication PDF in the newly created directory. The PDF should be named 
 
 **2: Place a BIB file in the folder.**
 
-The easiest approach is to search for the article with [Google Scholar](http://scholar.google.com/).
+A suggested approach is to search for the article with [Google Scholar](http://scholar.google.com/).
 
 Modify the scholar settings so that a BibTeX link appears below the citation:
 
