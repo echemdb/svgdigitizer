@@ -767,11 +767,34 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata
-            {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': 'noisy data'}}
+            {'figure description': {'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
         """
+
+        data_description = {
+                            "version": 1,
+                            "type": "digitized",
+                            "measurement type": "CV",
+                            "scan rate": {
+                                "value": float(self.rate.value),
+                                "unit": str(self.rate.unit)
+                            },
+                            "axes": { self.axis_properties["x"]["dimension"]: { 
+                                        "unit": "V",
+                                        "reference": self.x_label.reference,
+                                        },
+                                    self.axis_properties["y"]["dimension"]: {
+                                        "unit": str(self.axis_properties["y"]["unit"]),
+                                        },
+                                    "t": {
+                                        "unit": "s",
+                                        }
+                                    }
+                            }
+
         metadata = self._metadata.copy()
-        metadata.setdefault("figure description", {})
+        metadata.setdefault('figure description', {})
+        metadata.setdefault('data description', data_description)
         metadata["figure description"]["type"] = "digitized"
         metadata["figure description"]["measurement type"] = "CV"
         metadata["figure description"]["scan rate"] = {
