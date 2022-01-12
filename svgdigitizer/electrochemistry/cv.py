@@ -370,9 +370,7 @@ class CV:
         )
 
         if len(rates) == 0:
-            raise ValueError(
-                f"No text with scan rate found in the SVG."
-            )
+            raise ValueError(f"No text with scan rate found in the SVG.")
 
         if len(rates) > 1:
             raise ValueError(
