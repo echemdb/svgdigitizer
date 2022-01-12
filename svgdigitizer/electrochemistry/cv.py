@@ -364,36 +364,6 @@ class CV:
             >>> cv.rate
             <Quantity 50. V / s>
 
-            ::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ...   <text x="-300" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.rate
-
         """
         rates = self.svgplot.svg.get_texts(
             "(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
