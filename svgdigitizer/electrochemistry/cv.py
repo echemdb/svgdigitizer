@@ -123,7 +123,7 @@ class CV:
 
         >>> cv.plot()
 
-    The properties of the original plot can be returned as a dict::
+    The properties of the original plot and the dataframe can be returned as a dict::
 
         >>> cv.metadata
         {'figure description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
@@ -733,7 +733,9 @@ class CV:
     @property
     def metadata(self):
         r"""
-        Returns a dict with properties of the original figure derived from textlabels in the SVG file.
+        Returns a dict with properties of the original figure derived from 
+        textlabels in the SVG file, as well as properties of the dataframe
+        created with meth: df.
 
         EXAMPLES::
 
