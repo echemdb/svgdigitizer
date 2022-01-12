@@ -126,7 +126,7 @@ class CV:
     The properties of the original plot and the dataframe can be returned as a dict::
 
         >>> cv.metadata
-        {'figure description': {'version': 1, 'type': 'digitized', 'linked measurement': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+        {'figure description': {'version': 1, 'type': 'digitized', 'linked measurement': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE'}, 'j': {'unit': 'uA / cm2'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
     """
 
@@ -827,7 +827,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata
-            {'figure description': {'version': 1, 'type': 'digitized', 'linked measurement': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'potential scale': {'unit': 'mV', 'reference': 'RHE'}, 'current': {'unit': 'uA / cm2'}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+            {'figure description': {'version': 1, 'type': 'digitized', 'linked measurement': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE'}, 'j': {'unit': 'uA / cm2'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
         """
         metadata = self._metadata.copy()
@@ -843,15 +843,18 @@ class CV:
             "value": float(self.rate.value),
             "unit": str(self.rate.unit),
         }
-        metadata["figure description"].setdefault("potential scale", {})
-        metadata["figure description"]["potential scale"]["unit"] = str(
-            CV.get_axis_unit(self.x_label.unit)
-        )
-        metadata["figure description"]["potential scale"][
-            "reference"
-        ] = self.x_label.reference
-        metadata["figure description"]["current"] = {
-            "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"]))
+        metadata["figure description"].setdefault("axes", {})
+        metadata["figure description"]["axes"] = {
+            self.axis_properties["x"]["dimension"]: {
+                "unit": str(CV.get_axis_unit(self.x_label.unit)),
+                "reference": self.x_label.reference,
+            },
+            self.axis_properties["y"]["dimension"]: {
+                "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
+            },
+            "t": {
+                "unit": "s",
+            },
         }
         metadata["figure description"]["comment"] = self.comment
         # Add data_description to metadata
@@ -859,10 +862,6 @@ class CV:
         metadata["data description"]["version"] = 1
         metadata["data description"]["type"] = "digitized"
         metadata["data description"]["measurement type"] = "CV"
-        metadata["data description"]["scan rate"] = {
-            "value": float(self.rate.value),
-            "unit": str(self.rate.unit),
-        }
         metadata["data description"].setdefault("axes", {})
         metadata["data description"]["axes"] = {
             self.axis_properties["x"]["dimension"]: {
