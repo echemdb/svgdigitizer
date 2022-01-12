@@ -2,14 +2,14 @@ r"""
 This module contains specific functions to digitize cyclic voltammograms.
 Cyclic voltammograms represent current-voltage curves, where the voltage applied
 at an electrochemical working electrode is modulated by a triangular wave potential
-(applied vs. a known reference potential). An example is shwon in the top part of
+(applied vs. a known reference potential). An example is shown in the top part of
 the following Figure.
 
 .. image:: ../../doc/files/images/sample_data_2.png
   :width: 400
   :alt: Alternative text
 
-These curves are recorded with a constant scan rate given in units of ``V / s``.
+These curves were recorded with a constant scan rate given in units of ``V / s``.
 This quantity is usually provided in the scientific publication.
 With this information the time axis can be reconstructed.
 
@@ -364,12 +364,50 @@ class CV:
             >>> cv.rate
             <Quantity 50. V / s>
 
+            ::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ...   <text x="-300" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.rate
+
         """
         rates = self.svgplot.svg.get_texts(
             "(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
         )
-        # TODO: assert that only one label contains the scan rate (see issue #58)
-        # TODO: assert that a rate is available at all (see issue #58)
+
+        if len(rates) == 0:
+            raise ValueError(
+                f"No text with scan rate found in the SVG."
+            )
+
+        if len(rates) > 1:
+            raise ValueError(
+                f"Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
+            )
 
         # Convert to astropy unit
         rates[0].unit = CV.get_axis_unit(rates[0].unit)
