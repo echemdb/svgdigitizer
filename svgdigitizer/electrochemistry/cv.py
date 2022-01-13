@@ -848,11 +848,11 @@ class CV:
             self.axis_properties["x"]["dimension"]: {
                 "unit": str(CV.get_axis_unit(self.x_label.unit)),
                 "reference": self.x_label.reference,
-                "orientation": "x"
+                "orientation": "x",
             },
             self.axis_properties["y"]["dimension"]: {
                 "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
-                "orientation": "y"
+                "orientation": "y",
             },
             "t": {
                 "unit": "s",
