@@ -126,7 +126,7 @@ class CV:
     The properties of the original plot and the dataframe can be returned as a dict::
 
         >>> cv.metadata
-        {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE'}, 'j': {'unit': 'uA / cm2'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+        {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
     """
 
@@ -827,7 +827,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata
-            {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE'}, 'j': {'unit': 'uA / cm2'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+            {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
         """
         metadata = self._metadata.copy()
@@ -848,9 +848,11 @@ class CV:
             self.axis_properties["x"]["dimension"]: {
                 "unit": str(CV.get_axis_unit(self.x_label.unit)),
                 "reference": self.x_label.reference,
+                "orientation": "x"
             },
             self.axis_properties["y"]["dimension"]: {
                 "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
+                "orientation": "y"
             },
             "t": {
                 "unit": "s",
