@@ -79,7 +79,7 @@ class CV:
     * that the label of the point x2 on the y-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
     * that a rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` or ``<text>rate: 50 mV / s</text>`` placed anywhere in the SVG file.
 
-    The data of the CV can be returned as a dataframe with axis 't', 'U', and 'I' (current) or 'j' (current density).
+    The data of the CV can be returned as a dataframe with axis 't', 'E', and 'I' (current) or 'j' (current density).
     The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'::
 
         >>> from svgdigitizer.svg import SVG
@@ -113,7 +113,7 @@ class CV:
         ... </svg>'''))
         >>> cv = CV(SVGPlot(svg))
         >>> cv.df
-                 t      U     j
+                 t      E     j
         0  0.00000  0.000  0.00
         1  0.00002  0.001  0.01
 
@@ -126,7 +126,7 @@ class CV:
     The properties of the original plot and the dataframe can be returned as a dict::
 
         >>> cv.metadata
-        {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+        {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'E': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
     """
 
@@ -140,7 +140,7 @@ class CV:
         r"""
         Return the dimension and the SI units of the x- and y-axis.
 
-        * The x-axis dimension 'U' is given in 'V'.
+        * The x-axis dimension 'E' is given in 'V'.
         * The y-axis dimension can either be 'I' (current) or 'j' (current density), given in 'A' or 'A / m²', respectively.
         * The latter dimension and unit are derived from the ``<text>`` associated with the y-axis labels in the SVG file such as ``<text x="-100" y="0">y2: 1 A</text>``.
         * Labels in `x1` and `y1` position are ignored.
@@ -175,7 +175,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.axis_properties
-            {'x': {'dimension': 'U', 'unit': 'V'}, 'y': {'dimension': 'I', 'unit': 'A'}}
+            {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'I', 'unit': 'A'}}
 
         In this second example a current density 'j' is plotted on the y-axis in `uA / cm2`::
 
@@ -205,11 +205,11 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.axis_properties
-            {'x': {'dimension': 'U', 'unit': 'V'}, 'y': {'dimension': 'j', 'unit': 'A / m2'}}
+            {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'j', 'unit': 'A / m2'}}
 
         """
         return {
-            "x": {"dimension": "U", "unit": "V"},
+            "x": {"dimension": "E", "unit": "V"},
             "y": {
                 "dimension": "j"
                 if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels["y"]))
@@ -383,7 +383,7 @@ class CV:
     def df(self):
         # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltammogram and which is displayed in the documentation (see issue #73).
         r"""
-        Return a dataframe with axis 't', 'U', and 'I' (or 'j).
+        Return a dataframe with axis 't', 'E', and 'I' (or 'j).
         The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
 
         The dataframe is constructed from the 'x' and 'y' axis of 'svgplot.df',
@@ -423,7 +423,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.df
-                  t    U     j
+                  t    E     j
             0   0.0  0.0  0.00
             1  20.0  1.0  0.01
 
@@ -431,7 +431,7 @@ class CV:
 
             >>> cv = CV(SVGPlot(svg, sampling_interval=.1))
             >>> cv.df
-                   t    U      j
+                   t    E      j
             0    0.0  0.0  0.000
             1    2.0  0.1  0.001
             2    4.0  0.2  0.002
@@ -453,7 +453,7 @@ class CV:
         self._add_time_axis(df)
 
         # Rearrange columns.
-        return df[["t", "U", self.axis_properties["y"]["dimension"]]]
+        return df[["t", "E", self.axis_properties["y"]["dimension"]]]
 
     def _add_voltage_axis(self, df):
         r"""
@@ -496,7 +496,7 @@ class CV:
         voltage = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df["U"] = df["x"] * voltage.to(u.V).value  # pylint: disable=E1101
+        df["E"] = df["x"] * voltage.to(u.V).value  # pylint: disable=E1101
 
     def _add_current_axis(self, df):
         r"""
@@ -586,7 +586,7 @@ class CV:
             >>> cv._add_time_axis(df)
 
         """
-        df["deltaU"] = abs(df["U"].diff().fillna(0))
+        df["deltaU"] = abs(df["E"].diff().fillna(0))
         df["cumdeltaU"] = df["deltaU"].cumsum()
         df["t"] = df["cumdeltaU"] / float(self.rate.to(u.V / u.s).value)
 
@@ -827,7 +827,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata
-            {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'U': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'U': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+            {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'E': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
         """
         metadata = self._metadata.copy()

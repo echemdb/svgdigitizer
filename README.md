@@ -56,7 +56,7 @@ test/data/mustermann_2021_svgdigitizer_1_p3.svg
 
 $ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.svg
 $ head doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.csv
-t,U,j
+t,E,j
 0.0,-0.0960124785649914,-2.080260291844327
 0.7905675531192768,-0.05648410090902756,-1.0308948282866481
 2.248602982368486,0.016417670553432906,-0.16935125824021272
