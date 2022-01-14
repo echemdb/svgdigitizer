@@ -126,7 +126,7 @@ class CV:
     The properties of the original plot and the dataframe can be returned as a dict::
 
         >>> cv.metadata
-        {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'E': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+        {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurements': '', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'E': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
     """
 
@@ -737,8 +737,8 @@ class CV:
         along with the digitized data in the same figure or subplot.
 
         The names are read from a ``<text>`` in the SVG file such as
-        ``<text>simultaneous measurement: SXRD</text>``.
-        Besides `simultaneous measurement`, also `linked measurement`
+        ``<text>simultaneous measurements: SXRD</text>``.
+        Besides `simultaneous measurements`, also `linked measurement`
         or simply `linked` are acceptable.
 
         EXAMPLES::
@@ -827,7 +827,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata
-            {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurement': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'E': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
+            {'figure description': {'version': 1, 'type': 'digitized', 'simultaneous measurements': 'SXRD', 'measurement type': 'CV', 'scan rate': {'value': 50.0, 'unit': 'V / s'}, 'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'}, 'j': {'unit': 'uA / cm2', 'orientation': 'y'}, 't': {'unit': 's'}}, 'comment': 'noisy data'}, 'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'axes': {'E': {'unit': 'V', 'reference': 'RHE'}, 'j': {'unit': 'A / m2'}, 't': {'unit': 's'}}}}
 
         """
         metadata = self._metadata.copy()
@@ -836,7 +836,7 @@ class CV:
         metadata["figure description"]["version"] = 1
         metadata["figure description"]["type"] = "digitized"
         metadata["figure description"][
-            "simultaneous measurement"
+            "simultaneous measurements"
         ] = self.simultaneous_measurements
         metadata["figure description"]["measurement type"] = "CV"
         metadata["figure description"]["scan rate"] = {
