@@ -156,7 +156,7 @@ def digitize(svg, sampling_interval, outdir):
     "--sampling_interval",
     type=float,
     default=None,
-    help="sampling interval on the x-axis in volt (V)",
+    help="sampling interval on the x-axis in volts",
 )
 @click.option(
     "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
@@ -207,25 +207,20 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
 
     """
-
-    import yaml
-    from astropy import units as u
-
     from svgdigitizer.electrochemistry.cv import CV
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
 
-    # Determine unit of the voltage scale.
-    with open(svg, "rb") as infile:
-        cv = CV(SVGPlot(SVG(infile)))
-        xunit = CV.get_axis_unit(cv.x_label.unit)
+    if sampling_interval is not None:
+        # Rewrite the sampling interval in terms of the unit on the x-axis.
+        with open(svg, "rb") as infile:
+            cv = CV(SVGPlot(SVG(infile)))
 
-    if sampling_interval is not None and xunit != u.V:
-        # Determine conversion factor to volts.
-        sampling_correction = xunit.to(u.V)
-        sampling_interval = sampling_interval / sampling_correction
+            from astropy import units as u
+            sampling_interval /= CV.get_axis_unit(cv.x_label.unit).to(u.V)
 
     if metadata:
+        import yaml
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
     with open(svg, "rb") as infile:
@@ -243,25 +238,37 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
         package = Package(cv.metadata, base_path=outdir or os.path.dirname(csvname))
         package.infer(os.path.basename(csvname))
 
-    from datetime import date, datetime
-
-    def defaultconverter(item):
-        if isinstance(item, (datetime, date)):
-            return item.__str__()
-        return None
-
-    import json
-
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
         mode="w",
         encoding="utf-8",
-    ) as out:
-        json.dump(
-            package.descriptor if package else cv.metadata,
-            out,
-            default=defaultconverter,
-        )
+    ) as json:
+        _write_metadata(json, package.descriptor if package else cv.metadata)
+
+
+def _write_metadata(out, metadata):
+    r"""
+    Write `metadata` to the `out` stream in JSON format.
+
+    This is a helper method for :meth:`digitize_cv`.
+    """
+    def defaultconverter(item):
+        r"""
+        Return `item` that Python's json package does not know how to serialize
+        in a format that Python's json package does know how to serialize.
+        """
+        from datetime import date, datetime
+
+        # The YAML standard knows about dates and times, so we might see these
+        # in the metadata. However, standard JSON does not know about these so
+        # we need to serialize them as strings explicitly.
+        if isinstance(item, (datetime, date)):
+            return item.__str__()
+
+        raise TypeError(f"Cannot serialize ${item} of type ${type(item)} to JSON.")
+
+    import json
+    json.dump(metadata, out, default=defaultconverter)
 
 
 def _create_linked_svg(svg, png):
