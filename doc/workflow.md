@@ -86,7 +86,7 @@ For this example, we use inkscape to digitize some data in plot 2a in the PDF, w
 
 In the SVG file, by marking two positions on each axis, both the units and the scale of the axis will be extracted.
 
-In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label which contains `x1: 0.0 V vs RHE`. Draw a line from connecting the text label and the position on the x-axis. Finally **group** the **line** and the **text label**. 
+In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label that contains `x1: 0.0 V vs RHE`. Draw a line connecting the text label and the position on the x-axis. Finally **group** the **line** and the **text label**. 
 
 Repeat this for positions `x2`, `y1` and `y2`.
 
