@@ -104,7 +104,7 @@ Repeat this for positions `x2`, `y1` and `y2`.
 
 ![inkscape_x1_label](files/images/inkscape_x1_label.png)
 
-When all axes have been marked the plot looks like the following:
+When all axes have been marked, the plot looks like the following:
 
 ![inkscape_all_labels](files/images/inkscape_all_labels.png)
 
