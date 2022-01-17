@@ -53,12 +53,12 @@ jobs:
       - name: cli-digitize-sampling-interval
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sampling.svg --sampling_interval .00101
+          svgdigitizer digitize test/data/sampling.svg --sampling-interval .00101
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling.csv"), pandas.read_csv("test/data/sampling.csv.expected"))'
       - name: cli-digitize-sampling-many-points
         shell: bash -l {0}
         run: |
-          svgdigitizer digitize test/data/sampling_many_points.svg --sampling_interval .001508
+          svgdigitizer digitize test/data/sampling_many_points.svg --sampling-interval .001508
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling_many_points.csv"), pandas.read_csv("test/data/sampling_many_points.csv.expected"))'
       - name: cli-digitize-svg-without-layer
         shell: bash -l {0}
