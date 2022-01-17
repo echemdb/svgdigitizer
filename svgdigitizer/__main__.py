@@ -217,10 +217,12 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
             cv = CV(SVGPlot(SVG(infile)))
 
             from astropy import units as u
+
             sampling_interval /= CV.get_axis_unit(cv.x_label.unit).to(u.V)
 
     if metadata:
         import yaml
+
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
     with open(svg, "rb") as infile:
@@ -252,6 +254,7 @@ def _write_metadata(out, metadata):
 
     This is a helper method for :meth:`digitize_cv`.
     """
+
     def defaultconverter(item):
         r"""
         Return `item` that Python's json package does not know how to serialize
@@ -268,6 +271,7 @@ def _write_metadata(out, metadata):
         raise TypeError(f"Cannot serialize ${item} of type ${type(item)} to JSON.")
 
     import json
+
     json.dump(metadata, out, default=defaultconverter)
 
 
