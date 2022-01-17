@@ -92,7 +92,7 @@ def _outfile(template, suffix=None, outdir=None):
 
 @click.command()
 @click.option(
-    "--sampling_interval",
+    "--sampling-interval",
     type=float,
     default=None,
     help="Sampling interval on the x-axis.",
@@ -117,7 +117,7 @@ def plot(svg, sampling_interval):
 
 @click.command()
 @click.option(
-    "--sampling_interval",
+    "--sampling-interval",
     type=float,
     default=None,
     help="Sampling interval on the x-axis.",
@@ -153,7 +153,7 @@ def digitize(svg, sampling_interval, outdir):
 
 @click.command(name="cv")
 @click.option(
-    "--sampling_interval",
+    "--sampling-interval",
     type=float,
     default=None,
     help="sampling interval on the x-axis in volts",
