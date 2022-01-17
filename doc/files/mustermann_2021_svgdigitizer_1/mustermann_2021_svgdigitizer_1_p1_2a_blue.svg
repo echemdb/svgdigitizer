@@ -38,9 +38,9 @@
      inkscape:window-height="1017"
      id="namedview8"
      showgrid="false"
-     inkscape:zoom="0.57203454"
-     inkscape:cx="3571.0985"
-     inkscape:cy="3611.801"
+     inkscape:zoom="0.28601727"
+     inkscape:cx="2904.2731"
+     inkscape:cy="3062.505"
      inkscape:window-x="-8"
      inkscape:window-y="32"
      inkscape:window-maximized="1"
@@ -121,12 +121,12 @@
   <image
      sodipodi:absref="F:\Github\echemdb\svgdigitizer\doc\files\mustermann_2021_svgdigitizer_1\mustermann_2021_svgdigitizer_1_p1.png"
      xlink:href="mustermann_2021_svgdigitizer_1_p1.png"
-     height="6601"
-     width="5100"
-     x="0"
-     y="0"
+     sodipodi:insensitive="true"
      id="image4"
-     sodipodi:insensitive="true" />
+     y="0"
+     x="0"
+     width="5100"
+     height="6601" />
   <g
      id="g4571">
     <text
@@ -240,4 +240,24 @@
        id="tspan1121"
        x="3641.3884"
        y="3274.2778">scan rate: 50 mV / s</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="3357.8628"
+     y="3416.5474"
+     id="text1123-0"><tspan
+       sodipodi:role="line"
+       id="tspan1121-3"
+       x="3357.8628"
+       y="3416.5474">comment: The curve is a bit noisy.</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:66.66666412px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="4132.7935"
+     y="3588.1064"
+     id="text1123-0-5"><tspan
+       sodipodi:role="line"
+       id="tspan1121-3-1"
+       x="4132.7935"
+       y="3588.1064">linked: DEMS</tspan></text>
 </svg>
