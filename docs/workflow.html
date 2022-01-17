@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/cv.html">Cyclic Voltamograms</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Digitizing plots for echemdb</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#step-1-prepare-pdf-and-bib-file">Step 1: Prepare PDF and BIB file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-prepare-pdf-and-bib-files">Step 1: Prepare PDF and BIB files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-2-prepare-svg-and-png-files-from-the-pdf">Step 2: Prepare SVG and PNG files from the PDF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-3-digitize-a-plot">Step 3: Digitize a plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-4-create-a-metadata-file-for-each-digitized-curve">Step 4: Create a metadata file for each digitized curve</a></li>
@@ -86,23 +86,23 @@
 <p>To follow the step by step tutorial, some steps require an installation of the recent version of <a class="reference external" href="https://github.com/echemdb/svgdigitizer">svgdigitizer</a> (Link to Installation instructions).</p>
 <p><strong>TODO #86:</strong> Add link to installation instructions.</p>
 <p>Furthermore, the manipulation of SVG files is done with <a class="reference external" href="https://inkscape.org/">Inkscape</a> (tested with V. 0.92).</p>
-<section id="step-1-prepare-pdf-and-bib-file">
-<h2>Step 1: Prepare PDF and BIB file<a class="headerlink" href="#step-1-prepare-pdf-and-bib-file" title="Permalink to this headline"></a></h2>
+<section id="step-1-prepare-pdf-and-bib-files">
+<h2>Step 1: Prepare PDF and BIB files<a class="headerlink" href="#step-1-prepare-pdf-and-bib-files" title="Permalink to this headline"></a></h2>
 <p><strong>1: Create a new directory:</strong></p>
 <p>The directory should be named <code class="docutils literal notranslate"><span class="pre">FirstAuthorName_Year_FirstTitleWord_FirstPageNr</span></code></p>
-<p>For the example PDF this comes down to</p>
+<p><strong>Do not use capital letters.</strong> For the example PDF this comes down to</p>
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1</span></code></p>
 <p>The page number should be the page number in the published pdf. Since the example is not published the page number is <code class="docutils literal notranslate"><span class="pre">1</span></code>. In other cases this could be <code class="docutils literal notranslate"><span class="pre">1021</span></code>.</p>
 <p>Put the publication PDF in the newly created directory. The PDF should be named according to the same scheme:</p>
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1.pdf</span></code></p>
 <p><strong>2: Place a BIB file in the folder.</strong></p>
-<p>The easiest approach is to search for the article with <a class="reference external" href="http://scholar.google.com/">Google Scholar</a>.</p>
+<p>A suggested approach is to search for the article with <a class="reference external" href="http://scholar.google.com/">Google Scholar</a>.</p>
 <p>Modify the scholar settings so that a BibTeX link appears below the citation:</p>
 <p>Click on the 3 lines next to the Google Scholar logo</p>
 <p><img alt="./files/images/scholar_options.png" src="_images/scholar_options.png" /></p>
 <p>Choose Settings</p>
 <p><img alt="./files/images/scholar_options_selection.png" src="_images/scholar_options_selection.png" /></p>
-<p>Select `Show links to import citatons into BibTeX”</p>
+<p>Select `Show links to import citations into BibTeX”</p>
 <p><img alt="./files/images/scholar_options_bibtex.png" src="_images/scholar_options_bibtex.png" /></p>
 <p>An <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">into</span> <span class="pre">BibTeX</span></code> link appears below the linked article:</p>
 <p><img alt="./files/images/scholar_options_bibtex_link.png" src="_images/scholar_options_bibtex_link.png" /></p>
@@ -110,6 +110,7 @@
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1.bib</span></code></p>
 <p>Open the file and change the key, such that it matches the folder name:</p>
 <p><img alt="./files/images/bibtex_key.png" src="_images/bibtex_key.png" /></p>
+<p>Also fix any typos in the title.</p>
 <p><strong>The folder should now contain the following files:</strong></p>
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1.bib</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1.pdf</span></code></p>
@@ -125,23 +126,31 @@
 <section id="step-3-digitize-a-plot">
 <h2>Step 3: Digitize a plot<a class="headerlink" href="#step-3-digitize-a-plot" title="Permalink to this headline"></a></h2>
 <p><strong>1: Select an svg file with a plot to be digitized</strong></p>
-<p>For this example we use inkscape to digitize some data in plot 2a in the PDF, which is is located on page two of the manuscript (filename containing <code class="docutils literal notranslate"><span class="pre">_p1</span></code>). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single svg file. Therefore, create a copy of the SVG file of page two (<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.svg</span></code>) and rename it to<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p0_2b_blue.svg</span></code>, to indicate that this files contains the digitized curve of the blue curve in Figure 2a on page 2.</p>
-<p><strong>2: Trace the curve</strong></p>
-<ol class="arabic">
-<li><p>Open the SVG file.</p></li>
-<li><p>Mark two positions one for each axis (x and y). The first position on the x-axis will be 0.0 V vs RHE. Add a text label which contains <code class="docutils literal notranslate"><span class="pre">x1:</span> <span class="pre">0.0</span> <span class="pre">V</span> <span class="pre">vs</span> <span class="pre">RHE</span></code>. Draw a line from connecting the text label and the position on the x-axis. Finally group the line and the text label. Repeat this for positions <code class="docutils literal notranslate"><span class="pre">x2</span></code>, <code class="docutils literal notranslate"><span class="pre">y1</span></code> and <code class="docutils literal notranslate"><span class="pre">y2</span></code>.</p>
-<p><img alt="inkscape_x1_label" src="_images/inkscape_x1_label.png" /></p>
-<p><strong>Some notes on labels:</strong></p>
-<p><strong>TODO #86:</strong> Add link to possible typos.</p>
+<p>For this example, we use inkscape to digitize some data in plot 2a in the PDF, which is located on page two of the manuscript (filename containing <code class="docutils literal notranslate"><span class="pre">_p1</span></code>). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single SVG file. Therefore, create a copy of the SVG file of page two (<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.svg</span></code>) and rename it to<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1_f2a_blue.svg</span></code>. Here, <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code> indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.</p>
+<p><strong>2: Mark axis positions and labels</strong></p>
+<p>In the SVG file, by marking two positions on each axis, both the units and the scale of the axis will be extracted.</p>
+<p>In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label that contains <code class="docutils literal notranslate"><span class="pre">x1:</span> <span class="pre">0.0</span> <span class="pre">V</span> <span class="pre">vs</span> <span class="pre">RHE</span></code>. Draw a line connecting the text label and the position on the x-axis. Finally <strong>group</strong> the <strong>line</strong> and the <strong>text label</strong>.</p>
+<p>Repeat this for positions <code class="docutils literal notranslate"><span class="pre">x2</span></code>, <code class="docutils literal notranslate"><span class="pre">y1</span></code> and <code class="docutils literal notranslate"><span class="pre">y2</span></code>.</p>
+<p><strong>Some notes on units and labels:</strong></p>
 <ul class="simple">
-<li><p>In principle the units have to be provided only on the <code class="docutils literal notranslate"><span class="pre">x2</span></code> and <code class="docutils literal notranslate"><span class="pre">y2</span></code> position.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\mu\)</span> can be used, but it is more convenient to use <code class="docutils literal notranslate"><span class="pre">u</span></code>instead.</p></li>
-<li><p><span class="math notranslate nohighlight">\(^{-2}\)</span> can be written as <code class="docutils literal notranslate"><span class="pre">-2</span></code></p></li>
-<li><p>The reference on the voltage axis is not always given in the plot. Extract this information from the manuscript text.</p></li>
+<li><p>Units should be provided in the <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html">astropy format</a>. In brief:</p>
+<ul>
+<li><p><a class="reference external" href="https://docs.astropy.org/en/stable/units/standard_units.html">Standard units</a> simply read: <code class="docutils literal notranslate"><span class="pre">V</span></code>, <code class="docutils literal notranslate"><span class="pre">A</span></code> or <code class="docutils literal notranslate"><span class="pre">m</span></code></p></li>
+<li><p>Units can be preceeded by common prefixes, i.e., <code class="docutils literal notranslate"><span class="pre">mV</span></code>, <code class="docutils literal notranslate"><span class="pre">kV</span></code> or <code class="docutils literal notranslate"><span class="pre">uV</span></code>.</p></li>
+<li><p>Note that <span class="math notranslate nohighlight">\(\mu\)</span> is <code class="docutils literal notranslate"><span class="pre">u</span></code></p></li>
+<li><p>fractions read as follows (note the spaces between the dashes): <code class="docutils literal notranslate"><span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">mA</span> <span class="pre">/</span> <span class="pre">cm2</span></code></p></li>
+<li><p>For square, cubic, etc units simply add <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">3</span></code>, etc. to the unit (see above)</p></li>
+<li><p>Use parentheses if more than one unit is in the numerator or denominator, i.e., <code class="docutils literal notranslate"><span class="pre">(kg</span> <span class="pre">m)</span> <span class="pre">/</span> <span class="pre">s2</span></code></p></li>
 </ul>
-<p>When all axes have been marked the plot looks like the following:</p>
-<p><img alt="inkscape_all_labels" src="_images/inkscape_all_labels.png" /></p>
 </li>
+<li><p>If the reference on the voltage axis is not given in the plot, extract this information from the manuscript text. Note that the reference scale given in the experimental section can be different to that in the main text of the manuscript.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> only considers units in the labels for positions<code class="docutils literal notranslate"><span class="pre">x2</span></code> and <code class="docutils literal notranslate"><span class="pre">y2</span></code>.</p></li>
+</ul>
+<p><img alt="inkscape_x1_label" src="_images/inkscape_x1_label.png" /></p>
+<p>When all axes have been marked, the plot looks like the following:</p>
+<p><img alt="inkscape_all_labels" src="_images/inkscape_all_labels.png" /></p>
+<p><strong>3: Trace the curve</strong></p>
+<ol class="arabic">
 <li><p>Roughly trace the blue curve by selecting the the tool <code class="docutils literal notranslate"><span class="pre">Draw</span> <span class="pre">Bezier</span> <span class="pre">curves</span></code> <img alt="inkscape_draw_Bezier" src="_images/inkscape_draw_Bezier.png" /> and select the mode <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">regular</span> <span class="pre">Bezier</span> <span class="pre">path</span></code><img alt="inkscape_Bezier_mode" src="_images/inkscape_Bezier_mode.png" />.</p>
 <p><img alt="inkscape_rough_select" src="_images/inkscape_rough_select.png" /></p>
 <p>Select the curve, select the tool <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">paths</span> <span class="pre">by</span> <span class="pre">node</span></code><img alt="inkscape_edit_paths_by_node" src="_images/inkscape_edit_paths_by_node.png" />, and select all nodes by pressing <code class="docutils literal notranslate"><span class="pre">CTRL-a</span></code>. Click on the option <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">selected</span> <span class="pre">nodes</span> <span class="pre">smooth</span></code><img alt="inkscape_node_options" src="_images/inkscape_node_options.png" />.</p>
@@ -153,14 +162,16 @@
 </ol>
 <p><img alt="inkscape_smoothed_path_curve" src="_images/inkscape_smoothed_path_curve.png" /></p>
 <ol class="arabic simple">
-<li><p>Add a text field to the plot containing the scan rate, with which the data was acquired. This is not necessarily given in the plot or figure description and might have to extracted from the text of the manuscript: <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>.</p></li>
+<li><p>Add a text field to the plot containing the scan rate with which the data was acquired. This value is not necessarily given in the plot or figure description and might have to be extracted from the text of the manuscript. Here, <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>.</p></li>
+<li><p>Feel free to add a comment to the plot. This comment will later be included in the metadata file and will be shown on the website. Use a full sentence, for example, <code class="docutils literal notranslate"><span class="pre">comment:</span> <span class="pre">The</span> <span class="pre">curve</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">bit</span> <span class="pre">noisy.</span></code></p></li>
+<li><p>Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by <code class="docutils literal notranslate"><span class="pre">linked:</span> <span class="pre">DEMS</span></code>. The field can contain multiple types of measurements if applicable. Also use acronyms commonly used in the community.</p></li>
 </ol>
 <p>The final file should look like this:</p>
 <p><img alt="inkscape_final" src="_images/inkscape_final.png" /></p>
 </section>
 <section id="step-4-create-a-metadata-file-for-each-digitized-curve">
 <h2>Step 4: Create a metadata file for each digitized curve<a class="headerlink" href="#step-4-create-a-metadata-file-for-each-digitized-curve" title="Permalink to this headline"></a></h2>
-<p>Create a YAML file with the same name than the SVG file: <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml</span></code></p>
+<p>Create a YAML file with the same name as the SVG file: <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p0_f2b_blue.yaml</span></code></p>
 <p>The general structure of the yaml file for the website is provided at <a class="reference external" href="https://github.com/echemdb/electrochemistry-metadata-schema/blob/main/examples/Author_YYYY_FirstTitleWord_Page_fignr_identifier.yaml">echemdb/electrochemistry-metadata-schema</a></p>
 <p><strong>TODO #86:</strong> Templates for various systems can be found in the examples section of the <a class="reference external" href="https://github.com/echemdb/electrochemistry-metadata-schema">electrochemistry-metdadata-schema</a>. The example yaml file for the example plot is located <a class="reference download internal" download="" href="_downloads/43c9e7806b559a0d037fa8f831b795f9/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a>.</p>
 <p>Adjust all keys in the file according to the content of the research article.</p>
