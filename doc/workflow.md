@@ -100,7 +100,7 @@ Repeat this for positions `x2`, `y1` and `y2`.
   * For square, cubic, etc units simply add `2`, `3`, etc. to the unit (see above)
   * Use parentheses if more than one unit is in the numerator or denominator, i.e., `(kg m) / s2`
 * If the reference on the voltage axis is not given in the plot, extract this information from the manuscript text. Note that the reference scale given in the experimental section can be different to that in the main text of the manuscript.
-* `svgdigitizer` only considers units in the labels in positions`x2` and `y2`. 
+* `svgdigitizer` only considers units in the labels for positions`x2` and `y2`. 
 
 ![inkscape_x1_label](files/images/inkscape_x1_label.png)
 
