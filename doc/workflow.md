@@ -94,7 +94,7 @@ Repeat this for positions `x2`, `y1` and `y2`.
 
 * Units should be provided in the [astropy format](https://docs.astropy.org/en/stable/units/index.html). In brief:
   * [Standard units](https://docs.astropy.org/en/stable/units/standard_units.html) simply read: `V`, `A` or `m`
-  * These can be preceeded by common prefixes, i.e., `mV`, `kV` or `uV`.
+  * Units can be preceeded by common prefixes, i.e., `mV`, `kV` or `uV`.
   * Note that $\mu$ is `u`
   * fractions read as follows (note the spaces between the dashes): `mV / s`, `mA / cm2`
   * For square, cubic, etc units simply add `2`, `3`, etc. to the unit (see above)
