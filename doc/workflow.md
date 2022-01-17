@@ -138,9 +138,7 @@ The final file should look like this:
 
 ## Step 4: Create a metadata file for each digitized curve
 
-Create a YAML file with the same name than the SVG file: `mustermann_2021_svgdigitizer_1_p0_f2b_blue.yaml`
-
-
+Create a YAML file with the same name as the SVG file: `mustermann_2021_svgdigitizer_1_p0_f2b_blue.yaml`
 
 The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema/blob/main/examples/Author_YYYY_FirstTitleWord_Page_fignr_identifier.yaml)
 
