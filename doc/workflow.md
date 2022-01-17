@@ -128,7 +128,7 @@ When all axes have been marked, the plot looks like the following:
 
 ![inkscape_smoothed_path_curve](files/images/inkscape_smoothed_path_curve.png)
 
-7. Add a text field to the plot containing the scan rate, with which the data was acquired. This value is not necessarily given in the plot or figure description and might have to be extracted from the text of the manuscript. Here `scan rate: 50 mV / s`.
+7. Add a text field to the plot containing the scan rate with which the data was acquired. This value is not necessarily given in the plot or figure description and might have to be extracted from the text of the manuscript. Here, `scan rate: 50 mV / s`.
 8. Feel free to add a comment (full sentence) to the plot, which will later be included in the metadata file and will be printed on the website. For example, `comment: The curve is a bit noisy.` 
 7. Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by `linked: DEMS`. The field can contain multiple types of measurements if applicable. Also use acronyms commonly used in the community.
 
