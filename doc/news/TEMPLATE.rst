@@ -1,16 +1,23 @@
 **Added:**
 
-* Added <news item>
+* Added <news item>.
 
 **Changed:**
 
-* Changed <news item>
+* Changed <news item>.
 
 **Removed:**
 
-* Removed <news item>
+* Removed <news item>.
 
 **Fixed:**
 
-* Fixed <news item>
+* Fixed <news item>.
 
+**Deprecated:**
+
+* Deprecated <news item>.
+
+**Performance:**
+
+* Improved <news item>.
