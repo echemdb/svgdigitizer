@@ -11,7 +11,7 @@ source_suffix = [".rst", ".md"]
 
 templates_path = ['_templates']
 
-exclude_patterns = ['generated', 'Thumbs.db', '.DS_Store', 'README.md']
+exclude_patterns = ['generated', 'Thumbs.db', '.DS_Store', 'README.md', 'news']
 
 todo_include_todos = True
 

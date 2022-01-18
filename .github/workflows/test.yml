@@ -14,6 +14,7 @@ jobs:
       matrix:
         python: ["3.9", "3.10"]
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        source: ["conda", "pip"]
     steps:
       - uses: actions/checkout@v2
         with: { submodules: recursive }
@@ -24,14 +25,22 @@ jobs:
         run: |
           mamba env update --quiet -n test -f environment.yml
           conda list
+        if: ${{ matrix.source == 'conda' }}
       - name: install svgdigitizer
         shell: bash -l {0}
         run: |
-          pip install -e .
+          pip install --no-dependencies .
+        if: ${{ matrix.source == 'conda' }}
+      - name: install svgdigitizer
+        shell: bash -l {0}
+        run: |
+          pip install .
+        if: ${{ matrix.source == 'pip' }}
       - name: doctest
         shell: bash -l {0}
         run: |
           pytest --doctest-modules svgdigitizer
+        if: ${{ matrix.source == 'conda' }}
       - name: byexample
         shell: bash -l {0}
         run: |
@@ -39,7 +48,7 @@ jobs:
           byexample -l shell,python -o +norm-ws --timeout=30 README.md
         # byexample is not available for Windows
         # the exact numerical output of commands differs between Linux & macOS
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.source == 'conda' }}
       - name: cli-digitize-xy
         shell: bash -l {0}
         run: |
