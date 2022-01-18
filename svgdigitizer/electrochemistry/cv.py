@@ -739,7 +739,7 @@ class CV:
     @property
     def simultaneous_measurements(self):
         r"""
-        Returns the names of additional measurments which are plotted
+        Returns the names of additional measurements which are plotted
         along with the digitized data in the same figure or subplot.
 
         The names are read from a ``<text>`` in the SVG file such as
