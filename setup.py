@@ -27,7 +27,9 @@ setup(
     version = '0.1.0',
     packages = ['svgdigitizer', 'svgdigitizer.electrochemistry', 'svgdigitizer.test'],
     license = 'GPL 3.0+',
-    long_description = open('README.md').read(),
+    description = 'svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications.',
+    long_description = open('README.md', encoding='UTF-8').read(),
+    long_description_content_type = 'text/markdown',
     include_package_data=True,
     install_requires = [
         'astropy>=5,<6',
