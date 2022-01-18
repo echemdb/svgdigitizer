@@ -32,6 +32,7 @@ setup(
     install_requires = [
         'astropy>=5,<6',
         'click>=8,<9',
+        'datapackage>=1.15,<2',
         'matplotlib>=3.5,<4',
         'pandas>=1.3,<2',
         'pdf2image>=1.16,<2',
