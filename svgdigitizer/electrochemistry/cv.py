@@ -795,7 +795,7 @@ class CV:
     @property
     def metadata(self):
         r"""
-        Returns a dict with properties of the original figure derived from
+        A dict with properties of the original figure derived from
         textlabels in the SVG file, as well as properties of the dataframe
         created with `df`.
 
