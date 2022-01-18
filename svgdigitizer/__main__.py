@@ -4,7 +4,7 @@ The svgdigitizer suite.
 EXAMPLES::
 
     >>> from .test.cli import invoke
-    >>> invoke(cli, "--help") # doctest: +NORMALIZE_WHITESPACE
+    >>> invoke(cli, "--help")  # doctest: +NORMALIZE_WHITESPACE
     Usage: cli [OPTIONS] COMMAND [ARGS]...
       The svgdigitizer suite.
     Options:
