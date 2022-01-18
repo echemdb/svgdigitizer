@@ -1,0 +1,29 @@
+{
+    "creators": [
+        {   
+            "orcid": "0000-0002-9686-3948",
+            "name": "Engstfeld, Albert Kilian",
+            "affiliation": "Ulm University"
+        },
+        {   
+            "orcid": "0000-0001-7119-1295",
+            "name": "Hermann, Johannes M.",
+            "affiliation": "Ulm University"
+        },
+        {   
+            "orcid": "0000-0001-6944-5575",
+            "name": "Hörmann, Nicolas",
+            "affiliation": "Fritz-Haber-Institut"
+        },
+        {   
+            "orcid": "0000-0002-3930-9107",
+            "name": "Rüth, Julian"
+        }
+    ],    
+
+    "license": "GPL-3.0-or-later",
+    "title": "svgdigitizer",
+    "description": "<p>svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications.</p>"
+}
+
+
