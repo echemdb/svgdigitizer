@@ -873,7 +873,7 @@ class CV:
         metadata["data description"].setdefault("axes", {})
         metadata["data description"]["axes"] = {
             self.axis_properties["x"]["dimension"]: {
-                "unit": "V",
+                "unit": "E",
                 "reference": self.x_label.reference,
             },
             self.axis_properties["y"]["dimension"]: {
