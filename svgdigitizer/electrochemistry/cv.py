@@ -370,11 +370,11 @@ class CV:
         )
 
         if len(rates) == 0:
-            raise ValueError(f"No text with scan rate found in the SVG.")
+            raise ValueError("No text with scan rate found in the SVG.")
 
         if len(rates) > 1:
             raise ValueError(
-                f"Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
+                "Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
             )
 
         # Convert to astropy unit
