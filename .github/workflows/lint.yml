@@ -23,7 +23,7 @@ jobs:
       - name: pylint
         shell: bash -l {0}
         run: |
-          pylint svgdigitizer || true
+          pylint svgdigitizer
       - name: black
         shell: bash -l {0}
         run: |
