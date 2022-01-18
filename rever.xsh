@@ -47,7 +47,7 @@ $ACTIVITIES = [
 ]
 
 $VERSION_BUMP_PATTERNS = [
-    ('setup.py', r"    version=", r"    version='$VERSION',"),
+    ('setup.py', r"    version=", r'    version="$VERSION",'),
 ]
 
 $CHANGELOG_FILENAME = 'ChangeLog'

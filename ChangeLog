@@ -4,6 +4,15 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.1.2
+====================
+
+**Fixed:**
+
+* Fixed version number in `setup.py` and thus on PyPI when releasing.
+
+
+
 v0.1.1
 ====================
 
