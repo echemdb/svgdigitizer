@@ -35,12 +35,12 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install .
-          pip install pytest
         if: ${{ matrix.source == 'pip' }}
       - name: doctest
         shell: bash -l {0}
         run: |
           pytest --doctest-modules svgdigitizer
+        if: ${{ matrix.source == 'conda' }}
       - name: byexample
         shell: bash -l {0}
         run: |
