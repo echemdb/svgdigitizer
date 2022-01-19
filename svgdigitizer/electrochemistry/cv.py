@@ -804,7 +804,7 @@ class CV:
                 f"More than one text field with linked measurements. Ignoring all text field except for the first: {linked[0]}."
             )
 
-        return linked[0].value
+        return [i.strip() for i in linked[0].value.split(',')]
 
     @property
     def metadata(self):
