@@ -757,7 +757,7 @@ class CV:
         along with the digitized data in the same figure or subplot.
 
         The names are read from a ``<text>`` in the SVG file such as
-        ``<text>simultaneous measurements: SXRD</text>``.
+        ``<text>simultaneous measurements: SXRD, SHG</text>``.
         Besides `simultaneous measurements`, also `linked measurement`
         or simply `linked` are acceptable.
 
