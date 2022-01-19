@@ -789,7 +789,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.simultaneous_measurements
-            'SXRD'
+            ['SXRD', 'SHG']
 
         """
         linked = self.svgplot.svg.get_texts(
