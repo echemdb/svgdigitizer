@@ -753,13 +753,13 @@ class CV:
     @property
     def simultaneous_measurements(self):
         r"""
-        Returns the names of additional measurements which are plotted
+        Returns a list of names of additional measurements which are plotted
         along with the digitized data in the same figure or subplot.
 
         The names are read from a ``<text>`` in the SVG file such as
         ``<text>simultaneous measurements: SXRD, SHG</text>``.
         Besides `simultaneous measurements`, also `linked measurement`
-        or simply `linked` are acceptable.
+        or simply `linked` are acceptable in the text field.
 
         EXAMPLES::
 
@@ -785,7 +785,7 @@ class CV:
             ...     <text x="-100" y="0">y2: 1 A</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ...   <text x="-400" y="430">linked: SXRD</text>
+            ...   <text x="-400" y="430">linked: SXRD, SHG</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.simultaneous_measurements
@@ -797,7 +797,7 @@ class CV:
         )
 
         if not linked:
-            return ""
+            return []
 
         if len(linked) > 1:
             logger.warning(
