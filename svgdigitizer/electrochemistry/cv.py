@@ -849,7 +849,7 @@ class CV:
             >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
             {'figure description': {'version': 1,
               'type': 'digitized',
-              'simultaneous measurements': 'SXRD',
+              'simultaneous measurements': ['SXRD', 'SHG'],
               'measurement type': 'CV',
               'scan rate': {'value': 50.0, 'unit': 'V / s'},
               'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'},
