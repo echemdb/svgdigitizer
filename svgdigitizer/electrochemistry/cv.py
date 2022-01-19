@@ -843,7 +843,7 @@ class CV:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ...   <text x="-400" y="430">comment: noisy data</text>
-            ...   <text x="-400" y="430">linked: SXRD</text>
+            ...   <text x="-400" y="430">linked: SXRD, SHG</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
