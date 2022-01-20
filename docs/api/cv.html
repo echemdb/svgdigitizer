@@ -107,7 +107,7 @@ It requires:</p>
 <li><p>that the label of the point x2 on the y-axis contains a value and a unit such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;y2:</span> <span class="pre">1</span> <span class="pre">uA</span> <span class="pre">/</span> <span class="pre">cm2&lt;/text&gt;</span></code>.</p></li>
 <li><p>that a rate is provided in a text field such as <code class="docutils literal notranslate"><span class="pre">&lt;text&quot;&gt;scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">V</span> <span class="pre">/</span> <span class="pre">s&lt;/text&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;rate:</span> <span class="pre">50</span> <span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s&lt;/text&gt;</span></code> placed anywhere in the SVG file.</p></li>
 </ul>
-<p>The data of the CV can be returned as a dataframe with axis ‘t’, ‘U’, and ‘I’ (current) or ‘j’ (current density).
+<p>The data of the CV can be returned as a dataframe with axis ‘t’, ‘E’, and ‘I’ (current) or ‘j’ (current density).
 The dimensions are in SI units ‘s’, ‘V’ and ‘A’ or ‘A / m2’:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
@@ -136,10 +136,11 @@ The dimensions are in SI units ‘s’, ‘V’ and ‘A’ or ‘A / m2’:</p>
 <span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-300&quot; y=&quot;330&quot;&gt;comment: noisy data&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">df</span>
-<span class="go">         t      U     j</span>
+<span class="go">         t      E     j</span>
 <span class="go">0  0.00000  0.000  0.00</span>
 <span class="go">1  0.00002  0.001  0.01</span>
 </pre></div>
@@ -150,9 +151,23 @@ where the axis labels and the data are provided in SI units
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The properties of the original plot can be returned as a dict:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">metadata</span>
-<span class="go">{&#39;figure description&#39;: {&#39;type&#39;: &#39;digitized&#39;, &#39;measurement type&#39;: &#39;CV&#39;, &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;}, &#39;potential scale&#39;: {&#39;unit&#39;: &#39;mV&#39;, &#39;reference&#39;: &#39;RHE&#39;}, &#39;current&#39;: {&#39;unit&#39;: &#39;uA / cm2&#39;}, &#39;comment&#39;: &#39;&#39;}}</span>
+<p>The properties of the original plot and the dataframe can be returned as a dict:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">metadata</span>  
+<span class="go">{&#39;figure description&#39;: {&#39;version&#39;: 1,</span>
+<span class="go">  &#39;type&#39;: &#39;digitized&#39;,</span>
+<span class="go">  &#39;simultaneous measurements&#39;: [],</span>
+<span class="go">  &#39;measurement type&#39;: &#39;CV&#39;,</span>
+<span class="go">  &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;},</span>
+<span class="go">  &#39;axes&#39;: {&#39;E&#39;: {&#39;unit&#39;: &#39;mV&#39;, &#39;reference&#39;: &#39;RHE&#39;, &#39;orientation&#39;: &#39;x&#39;},</span>
+<span class="go">   &#39;j&#39;: {&#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;},</span>
+<span class="go">   &#39;t&#39;: {&#39;unit&#39;: &#39;s&#39;}},</span>
+<span class="go">  &#39;comment&#39;: &#39;noisy data&#39;},</span>
+<span class="go"> &#39;data description&#39;: {&#39;version&#39;: 1,</span>
+<span class="go">  &#39;type&#39;: &#39;digitized&#39;,</span>
+<span class="go">  &#39;measurement type&#39;: &#39;CV&#39;,</span>
+<span class="go">  &#39;axes&#39;: {&#39;E&#39;: {&#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">   &#39;j&#39;: {&#39;unit&#39;: &#39;A / m2&#39;},</span>
+<span class="go">   &#39;t&#39;: {&#39;unit&#39;: &#39;s&#39;}}}}</span>
 </pre></div>
 </div>
 <dl class="py property">
@@ -160,7 +175,7 @@ where the axis labels and the data are provided in SI units
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axis_properties</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.axis_properties" title="Permalink to this definition"></a></dt>
 <dd><p>Return the dimension and the SI units of the x- and y-axis.</p>
 <ul class="simple">
-<li><p>The x-axis dimension ‘U’ is given in ‘V’.</p></li>
+<li><p>The x-axis dimension ‘E’ is given in ‘V’.</p></li>
 <li><p>The y-axis dimension can either be ‘I’ (current) or ‘j’ (current density), given in ‘A’ or ‘A / m²’, respectively.</p></li>
 <li><p>The latter dimension and unit are derived from the <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> associated with the y-axis labels in the SVG file such as <code class="docutils literal notranslate"><span class="pre">&lt;text</span> <span class="pre">x=&quot;-100&quot;</span> <span class="pre">y=&quot;0&quot;&gt;y2:</span> <span class="pre">1</span> <span class="pre">A&lt;/text&gt;</span></code>.</p></li>
 <li><p>Labels in <cite>x1</cite> and <cite>y1</cite> position are ignored.</p></li>
@@ -193,7 +208,7 @@ where the axis labels and the data are provided in SI units
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">axis_properties</span>
-<span class="go">{&#39;x&#39;: {&#39;dimension&#39;: &#39;U&#39;, &#39;unit&#39;: &#39;V&#39;}, &#39;y&#39;: {&#39;dimension&#39;: &#39;I&#39;, &#39;unit&#39;: &#39;A&#39;}}</span>
+<span class="go">{&#39;x&#39;: {&#39;dimension&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;}, &#39;y&#39;: {&#39;dimension&#39;: &#39;I&#39;, &#39;unit&#39;: &#39;A&#39;}}</span>
 </pre></div>
 </div>
 <p>In this second example a current density ‘j’ is plotted on the y-axis in <cite>uA / cm2</cite>:</p>
@@ -223,7 +238,7 @@ where the axis labels and the data are provided in SI units
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">axis_properties</span>
-<span class="go">{&#39;x&#39;: {&#39;dimension&#39;: &#39;U&#39;, &#39;unit&#39;: &#39;V&#39;}, &#39;y&#39;: {&#39;dimension&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;}}</span>
+<span class="go">{&#39;x&#39;: {&#39;dimension&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;}, &#39;y&#39;: {&#39;dimension&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;}}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -298,7 +313,7 @@ where the axis labels and the data are provided in SI units
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.df">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.df" title="Permalink to this definition"></a></dt>
-<dd><p>Return a dataframe with axis ‘t’, ‘U’, and ‘I’ (or ‘j).
+<dd><p>Return a dataframe with axis ‘t’, ‘E’, and ‘I’ (or ‘j).
 The dimensions are in SI units ‘s’, ‘V’ and ‘A’ (or ‘A / m2’).</p>
 <p>The dataframe is constructed from the ‘x’ and ‘y’ axis of ‘svgplot.df’,
 which are usually not in SI units.</p>
@@ -334,7 +349,7 @@ which are usually not in SI units.</p>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">df</span>
-<span class="go">      t    U     j</span>
+<span class="go">      t    E     j</span>
 <span class="go">0   0.0  0.0  0.00</span>
 <span class="go">1  20.0  1.0  0.01</span>
 </pre></div>
@@ -342,7 +357,7 @@ which are usually not in SI units.</p>
 <p>The same cv but now sampled at 0.1 V increments on the voltage axis (x-axis):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">.1</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">df</span>
-<span class="go">       t    U      j</span>
+<span class="go">       t    E      j</span>
 <span class="go">0    0.0  0.0  0.000</span>
 <span class="go">1    2.0  0.1  0.001</span>
 <span class="go">2    4.0  0.2  0.002</span>
@@ -375,7 +390,9 @@ which are usually not in SI units.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.metadata">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.metadata" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a dict with properties of the original figure derived from textlabels in the SVG file.</p>
+<dd><p>A dict with properties of the original figure derived from
+textlabels in the SVG file, as well as properties of the dataframe
+created with <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.df" title="svgdigitizer.electrochemistry.cv.CV.df"><code class="xref py py-meth docutils literal notranslate"><span class="pre">df()</span></code></a>.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
@@ -405,10 +422,25 @@ which are usually not in SI units.</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-400&quot; y=&quot;430&quot;&gt;comment: noisy data&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-400&quot; y=&quot;430&quot;&gt;linked: SXRD, SHG&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">metadata</span>
-<span class="go">{&#39;figure description&#39;: {&#39;type&#39;: &#39;digitized&#39;, &#39;measurement type&#39;: &#39;CV&#39;, &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;}, &#39;potential scale&#39;: {&#39;unit&#39;: &#39;mV&#39;, &#39;reference&#39;: &#39;RHE&#39;}, &#39;current&#39;: {&#39;unit&#39;: &#39;uA / cm2&#39;}, &#39;comment&#39;: &#39;noisy data&#39;}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">metadata</span>  
+<span class="go">{&#39;figure description&#39;: {&#39;version&#39;: 1,</span>
+<span class="go">  &#39;type&#39;: &#39;digitized&#39;,</span>
+<span class="go">  &#39;simultaneous measurements&#39;: [&#39;SXRD&#39;, &#39;SHG&#39;],</span>
+<span class="go">  &#39;measurement type&#39;: &#39;CV&#39;,</span>
+<span class="go">  &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;},</span>
+<span class="go">  &#39;axes&#39;: {&#39;E&#39;: {&#39;unit&#39;: &#39;mV&#39;, &#39;reference&#39;: &#39;RHE&#39;, &#39;orientation&#39;: &#39;x&#39;},</span>
+<span class="go">   &#39;j&#39;: {&#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;},</span>
+<span class="go">   &#39;t&#39;: {&#39;unit&#39;: &#39;s&#39;}},</span>
+<span class="go">  &#39;comment&#39;: &#39;noisy data&#39;},</span>
+<span class="go"> &#39;data description&#39;: {&#39;version&#39;: 1,</span>
+<span class="go">  &#39;type&#39;: &#39;digitized&#39;,</span>
+<span class="go">  &#39;measurement type&#39;: &#39;CV&#39;,</span>
+<span class="go">  &#39;axes&#39;: {&#39;E&#39;: {&#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">   &#39;j&#39;: {&#39;unit&#39;: &#39;A / m2&#39;},</span>
+<span class="go">   &#39;t&#39;: {&#39;unit&#39;: &#39;s&#39;}}}}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -485,6 +517,47 @@ which are usually not in SI units.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">rate</span>
 <span class="go">&lt;Quantity 50. V / s&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.simultaneous_measurements">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simultaneous_measurements</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.simultaneous_measurements" title="Permalink to this definition"></a></dt>
+<dd><p>A list of names of additional measurements which are plotted
+along with the digitized data in the same figure or subplot.</p>
+<p>The names are read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as
+<code class="docutils literal notranslate"><span class="pre">&lt;text&gt;simultaneous</span> <span class="pre">measurements:</span> <span class="pre">SXRD,</span> <span class="pre">SHG&lt;/text&gt;</span></code>.
+Besides <cite>simultaneous measurements</cite>, also <cite>linked measurement</cite>
+or simply <cite>linked</cite> are acceptable in the text field.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-400&quot; y=&quot;430&quot;&gt;linked: SXRD, SHG&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">simultaneous_measurements</span>
+<span class="go">[&#39;SXRD&#39;, &#39;SHG&#39;]</span>
 </pre></div>
 </div>
 </dd></dl>
