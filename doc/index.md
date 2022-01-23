@@ -62,6 +62,17 @@ A plot can be created via
 ```
 ![files/images/example_plot_p0_demo_digitized.png](files/images/example_plot_p0_demo_digitized.png) 
 
+Installation
+============
+
+The package can be installed via
+
+```sh
+pip install svgdigitizer
+```
+
+Read the [installation instructions](installation.md) on further details if you want to contribut to the project.
+
 ```{toctree}
 :maxdepth: 2
 :caption: "Contents:"
