@@ -65,13 +65,23 @@ A plot can be created via
 Installation
 ============
 
-The package can be installed via
+The package is hosted on [PiPY](https://pypi.org/project/svgdigitizer/) and can be installed via
 
 ```sh
 pip install svgdigitizer
 ```
 
 Read the [installation instructions](installation.md) on further details if you want to contribut to the project.
+
+Further information
+===================
+
+The svgdigitizer can be enhanced with other modules for specific datasets.
+
+Currently the following datasets are supported:
+* cyclic voltammograms (I vs. E - current vs. potential curves or j vs. E - current density vs. potential curves) commonly found in electrochemistry. For further details refer to the specific instructions to [digitize CVs](workflow.md).
+
+We would be delighted if you would [cite](https://zenodo.org/record/5881475) our project when you use the svgdigitizer.
 
 ```{toctree}
 :maxdepth: 2
