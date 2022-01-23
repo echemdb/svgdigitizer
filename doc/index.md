@@ -1,10 +1,12 @@
 Welcome to svgdigitizer's documentation!
 ========================================
 
+<!--
 ```{todo}
 * what is svgdigitizer and what is our aim.
 * then refer to installation, cli, api and cv.
 ```
+-->
 
 Svgdigitizer allows recovering data from a curve, plotted in a 2D coordinate 
 system with defined axes.
