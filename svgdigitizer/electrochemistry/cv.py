@@ -244,18 +244,18 @@ class CV:
             >>> from svgdigitizer.electrochemistry.cv import CV
             >>> CV.to_normal_script('some text: 10 mV s⁻¹')
             'some text: 10 mV s-1'
- 
-        """      
+
+        """
         normal = "0123456789+-"
         superscript = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻"
-        
+
         normal_script = []
         for character in with_superscript:
             if character in superscript:
                 normal_script.append(normal[superscript.index(character)])
             else:
                 normal_script.append(character)
-            
+
         return "".join(normal_script)
 
     @classmethod
