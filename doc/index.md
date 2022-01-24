@@ -27,6 +27,7 @@ can be provided anywhere in the SVG file. The resulting file looks as follows:
 
 ![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png) 
 
+## [Command line interface](cli.md)
 This file can be digitized from the [command line interface](cli.md), which creates a CVS file of the x and y data. 
 The resolution can be specified by `--sampling-interval`.
 
@@ -34,6 +35,7 @@ The resolution can be specified by `--sampling-interval`.
 svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval 0.01
 ```
 
+## [API](api.md)
 With the [API](api.md), the file can also be used to create an actual [SVGplot class](api/svgplot.md).
 
 ```python
