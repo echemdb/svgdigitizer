@@ -250,11 +250,11 @@ class CV:
         superscript = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻"
         
         normal_script = []
-        for chr in with_superscript:
-            if chr in superscript:
-                normal_script.append(normal[superscript.index(chr)])
+        for character in with_superscript:
+            if character in superscript:
+                normal_script.append(normal[superscript.index(character)])
             else:
-                normal_script.append(chr)
+                normal_script.append(character)
             
         return "".join(normal_script)
 
