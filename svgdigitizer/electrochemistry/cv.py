@@ -253,12 +253,6 @@ class CV:
             Unit("uA / cm2")
 
 
-        >>> unit = 'milliV'
-        >>> CV.get_axis_unit(unit) # doctest: +IGNORE_EXCEPTION_DETAIL
-        Traceback (most recent call last):
-        ...
-        ValueError: Astropy was not able to convert the given string (milliV) into a meaningful astropy unit. Please review the unit string.
-        """
         return u.Unit(u)
 
     @property
