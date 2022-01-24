@@ -252,6 +252,7 @@ class CV:
             >>> CV.get_axis_unit(unit)
             Unit("uA / cm2")
 
+        """
 
         return u.Unit(u)
 
