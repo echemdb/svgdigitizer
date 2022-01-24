@@ -259,12 +259,7 @@ class CV:
         ...
         ValueError: Astropy was not able to convert the given string (milliV) into a meaningful astropy unit. Please review the unit string.
         """
-        try:
-            return u.Unit(unit)
-        except ValueError as err:
-            raise ValueError(
-                f"Astropy was not able to convert the given string ({unit}) into a meaningful astropy unit. Please review the unit string."
-            ) from err
+        return u.Unit(u)
 
     @property
     def x_label(self):
