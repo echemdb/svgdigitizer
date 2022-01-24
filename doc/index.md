@@ -27,7 +27,7 @@ can be provided anywhere in the SVG file. The resulting file looks as follows:
 
 ![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png) 
 
-This file can be digitized from the [command line interface](cli.md), which creates a CVS file of the y and y data. 
+This file can be digitized from the [command line interface](cli.md), which creates a CVS file of the x and y data. 
 The resolution can be specified by `--sampling-interval`.
 
 ```sh
@@ -58,6 +58,18 @@ Now one can query things such as the axis labels or any other text label in the 
  <text>operator: Mr. X</text>]
 ```
 
+The data is stored in a [pandas](https://pandas.pydata.org/) dataframe:
+```python
+>>> plot.df
+	        x	        y
+0	11.660079	13.681307
+1	11.670079	13.681548
+2	11.680079	13.681934
+3	11.690079	13.682416
+4	11.700079	13.682976
+...	      ...	      ...
+```
+
 A plot can be created via
 ```python
 >>> plot.plot()
@@ -73,7 +85,7 @@ The package is hosted on [PiPY](https://pypi.org/project/svgdigitizer/) and can 
 pip install svgdigitizer
 ```
 
-Read the [installation instructions](installation.md) on further details if you want to contribut to the project.
+Read the [installation instructions](installation.md) on further details if you want to contribute to the project.
 
 Further information
 ===================
@@ -81,9 +93,9 @@ Further information
 The svgdigitizer can be enhanced with other modules for specific datasets.
 
 Currently the following datasets are supported:
-* cyclic voltammograms (I vs. E - current vs. potential curves or j vs. E - current density vs. potential curves) commonly found in electrochemistry. For further details refer to the specific instructions to [digitize CVs](workflow.md).
+* [cyclic voltammograms](api/cv.md) (I vs. E - current vs. potential curves or j vs. E - current density vs. potential curves) commonly found in electrochemistry. For further details and requirements refer to the specific instructions of the [cv module](api/cv.md) itself or the detailed description on how to [digitize cyclic voltamograms](workflow.md) for the [echemdb](https://echemdb.github.io/website/).
 
-We would be delighted if you would [cite](https://zenodo.org/record/5881475) our project when you use the svgdigitizer.
+We would be delighted if you would [cite](https://zenodo.org/record/5881475) our project when you use the svgdigitizer in your project.
 
 ```{toctree}
 :maxdepth: 2
