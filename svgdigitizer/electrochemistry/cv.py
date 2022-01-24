@@ -255,8 +255,10 @@ class CV:
         """
         try:
             return u.Unit(unit)
-        except ValueError as e:
-            raise ValueError(f"Astropy was not able to convert the given string ({unit}) to a meaningful unit. Please review the unit string.")
+        except ValueError as err:
+            raise ValueError(
+                f"Astropy was not able to convert the given string ({unit}) into a meaningful astropy unit. Please review the unit string."
+            ) from err
 
     @property
     def x_label(self):
