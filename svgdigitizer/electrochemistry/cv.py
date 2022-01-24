@@ -254,7 +254,7 @@ class CV:
 
         """
 
-        return u.Unit(u)
+        return u.Unit(unit)
 
     @property
     def x_label(self):
