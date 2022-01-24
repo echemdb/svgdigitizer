@@ -234,6 +234,30 @@ class CV:
             },
         }
 
+    @staticmethod
+    def to_normal_script(with_superscript):
+        r"""
+        Return the a string with super script characters converted to normal script.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> CV.to_normal_script('some text: 10 mV s⁻¹')
+            'some text: 10 mV s-1'
+ 
+        """      
+        normal = "0123456789+-"
+        superscript = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻"
+        
+        normal_script = []
+        for chr in with_superscript:
+            if chr in superscript:
+                normal_script.append(normal[superscript.index(chr)])
+            else:
+                normal_script.append(chr)
+            
+        return "".join(normal_script)
+
     @classmethod
     def get_axis_unit(cls, unit):
         r"""
@@ -244,7 +268,7 @@ class CV:
         EXAMPLES::
 
             >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> unit = 'uA cm-2'
+            >>> unit = 'uA cm⁻²'
             >>> CV.get_axis_unit(unit)
             Unit("uA / cm2")
 
@@ -252,23 +276,16 @@ class CV:
         unit_typos = {
             "uA / cm2": [
                 "uA / cm2",
-                "uA / cm²",
-                "µA / cm²",
+                "µA / cm2",
                 "uA/cm2",
-                "uA/cm²",
-                "µA/cm²",
-                "µA cm⁻²",
                 "uA cm-2",
             ],
             "mA / cm2": [
                 "mA / cm2",
-                "mA / cm²",
-                "mA cm⁻²",
                 "mA/cm2",
-                "mA/cm²",
                 "mA cm-2",
             ],
-            "A / cm2": ["A / cm2", "A/cm2", "A cm⁻²", "A cm-2"],
+            "A / cm2": ["A / cm2", "A/cm2", "A cm-2"],
             "uA": ["uA", "µA", "microampere"],
             "mA": ["mA", "milliampere"],
             "A": ["A", "ampere", "amps", "amp"],
@@ -277,10 +294,10 @@ class CV:
             "V / s": ["V s-1", "V/s", "V / s"],
             "mV / s": ["mV / s", "mV s-1", "mV/s"],
         }
-
+        normal_script_unit = CV.to_normal_script(unit)
         for correct_unit, typos in unit_typos.items():
             for typo in typos:
-                if unit == typo:
+                if normal_script_unit == typo:
                     return u.Unit(correct_unit)
 
         raise ValueError(f"Unknown Unit {unit}")
