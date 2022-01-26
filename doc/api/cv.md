@@ -1,5 +1,5 @@
 ---
-github_url: /echemdb/svgdigitizer/blob/master/svgdigitizer/electrochemistry/cv.py
+github_url: https://github.com/echemdb/svgdigitizer/blob/master/svgdigitizer/cv.py
 ---
 
 Cyclic Voltammograms
