@@ -18,3 +18,11 @@ todo_include_todos = True
 html_theme = 'sphinx_rtd_theme'
 
 html_static_path = []
+
+# Add Edit on GitHub links
+html_context = {
+    'display_github': True,
+    'github_user': 'echemdb',
+    'github_repo': 'svgdigitizer',
+    'github_version': 'master/doc/',
+}

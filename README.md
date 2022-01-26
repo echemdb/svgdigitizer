@@ -87,7 +87,7 @@ The examples are based on the test files provided with `svgdigitizer` in the fol
 
 ## Submodule CV
 
-The submodule `electrochemistry.cv` is specifically designed to digitize cyclic voltamograms
+The submodule `electrochemistry.cv` is specifically designed to digitize cyclic voltammograms
 commonly found in the field of electrochemistry.
 
 ```python
