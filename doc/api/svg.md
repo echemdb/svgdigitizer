@@ -1,5 +1,5 @@
 ---
-github_url: https://github.com/echemdb/svgdigitizer/blob/master/svgdigitizer/svg.py
+github_url: /echemdb/svgdigitizer/blob/master/svgdigitizer/svg.py
 ---
 
 # `svgdigitizer.svg`
