@@ -1,0 +1,7 @@
+{%- extends "sphinx_rtd_theme/breadcrumbs.html" %}
+
+{% block breadcrumbs_aside %}
+  {% if pagename not in ['genindex'] %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
