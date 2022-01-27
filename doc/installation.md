@@ -1,9 +1,95 @@
 Installation
 ============
 
-```{todo}
-* explain installation for developers.
-* explain installation from conda-forge, assuming we release it there soon.
-* explain installation from PyPI, assuming we release it there soon.
-* only leave the very basics of installation in the README and refer here instead.
+The recommended way to install the svgdigitizer is to use your package manager,
+(e.g., `apt-get` on Debian or Ubuntu, `pacman` on Arch Linux, `brew` on macOS.)
+
+You can consult [repology](https://repology.org/project/svgdigitizer/packages)
+to see if the svgdigitizer is available for your package manager.
+
+Alternatively, the svgdigitizer can easily be installed by one of the following
+methods.
+
+Install with pip from PyPI
+--------------------------
+
+The latest stable version of the svgdigitizer is available on
+[PyPI](https://pypi.org/project/svgdigitizer/) for all platforms and can be
+easily if you have Python and pip installed already:
+
+```sh
+pip install svgdigitizer
 ```
+
+This command downloads and installs the svgdigitizer and its dependencies into
+your local Python installation.
+
+If the above command fails because you don't have permission to modify your
+Python installation, you can install the svgdigitizer into your user account:
+
+```sh
+pip install --user svgdigitizer
+```
+
+You can instead also install the latest unreleased version the svgdigitizer
+from our [GitHub Repository](https://github.com/echemdb/svgdigitizer) with
+
+```sh
+pip install git+https://github.com/echemdb/svgdigitizer@master
+```
+
+
+Install with conda from conda-forge
+-----------------------------------
+
+The svgdigitizer is [available on
+conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock) for all
+platforms.
+
+If you don't have conda yet, we recommend to install
+[Miniforge](https://github.com/conda-forge/miniforge#miniforge3).
+
+Miniforge is already pre-configured for conda-forge. If you already had another
+release of conda installed, make sure that conda-forge channel is
+[configured correctly](https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge)
+
+Once your conda setup is ready, create a new `svgdigitizer` environment with
+the latest stable version of the svgdigitizer
+
+```sh
+conda create -n svgdigitizer svgdigitizer
+```
+
+To use the svgdigitizer, activate the `svgdigitizer` environment:
+
+```sh
+conda activate svgdigitizer
+svgdigitizer --help
+```
+
+To install the svgdigitizer into an existing environment, activate that environment and then
+
+```sh
+conda install svgdigitizer
+```
+
+Install with pip for development
+--------------------------------
+
+If you want to work on the svgdigitizer itself, get a copy of the latest
+unreleased version the svgdigitizer:
+
+```sh
+git clone https://github.com/echemdb/svgdigitizer.git
+```
+
+Create an [editable](https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs) install of the svgdigitizer:
+
+```sh
+pip install -e svgdigitizer
+```
+
+Any changes you make to the files in your local copy of the svgdigitizer should
+now be available in your next Python session. 
+
+We would love to see your contribution to the svgdigitizer.
