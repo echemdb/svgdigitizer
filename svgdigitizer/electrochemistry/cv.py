@@ -248,42 +248,13 @@ class CV:
             >>> CV.get_axis_unit(unit)
             Unit("uA / cm2")
 
+            >>> unit = 'uA cm⁻²'
+            >>> CV.get_axis_unit(unit)
+            Unit("uA / cm2")
+
         """
-        unit_typos = {
-            "uA / cm2": [
-                "uA / cm2",
-                "uA / cm²",
-                "µA / cm²",
-                "uA/cm2",
-                "uA/cm²",
-                "µA/cm²",
-                "µA cm⁻²",
-                "uA cm-2",
-            ],
-            "mA / cm2": [
-                "mA / cm2",
-                "mA / cm²",
-                "mA cm⁻²",
-                "mA/cm2",
-                "mA/cm²",
-                "mA cm-2",
-            ],
-            "A / cm2": ["A / cm2", "A/cm2", "A cm⁻²", "A cm-2"],
-            "uA": ["uA", "µA", "microampere"],
-            "mA": ["mA", "milliampere"],
-            "A": ["A", "ampere", "amps", "amp"],
-            "mV": ["milliV", "millivolt", "milivolt", "miliv", "mV"],
-            "V": ["V", "v", "Volt", "volt"],
-            "V / s": ["V s-1", "V/s", "V / s"],
-            "mV / s": ["mV / s", "mV s-1", "mV/s"],
-        }
 
-        for correct_unit, typos in unit_typos.items():
-            for typo in typos:
-                if unit == typo:
-                    return u.Unit(correct_unit)
-
-        raise ValueError(f"Unknown Unit {unit}")
+        return u.Unit(unit)
 
     @property
     def x_label(self):
