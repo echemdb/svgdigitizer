@@ -142,10 +142,14 @@ import pandas as pd
 logger = logging.getLogger("svgplot")
 
 class PageOrientation(Enum):
+    r"""Enum representing the page orientation to be able to to autodetect axis orientation.
+    """
     PORTRAIT = auto()
     LANDSCAPE = auto()
 
 class AxisOrientation(Enum):
+    r"""Enum representing axis orientation.
+    """
     HORIZONTAL = auto()
     VERTICAL = auto()
 
@@ -275,7 +279,7 @@ class SVGPlot:
             else:
                 labeled_paths = self.labeled_paths["scale_bar"]
                 axis_paths = [i for i in labeled_paths if i[0].label._value.startswith(axis)][0]
-                
+
                 endpoints = [path.far for path in axis_paths]
                 scalebar = (
                     endpoints[0][0] - endpoints[1][0],
@@ -288,7 +292,7 @@ class SVGPlot:
                 axis_orientations[axis] = AxisOrientation.HORIZONTAL
             elif (delta_y > delta_x) or (self.page_orientation == PageOrientation.LANDSCAPE):
                 axis_orientations[axis] = AxisOrientation.VERTICAL
-        
+
         return axis_orientations
 
     @property
@@ -324,7 +328,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot._grouped_ref_points
+            >>> plot.axis_symbols
             Traceback (most recent call last):
             ...
             ValueError: Reference points contain more than two axis names (['b', 'x', 'y']).
@@ -690,12 +694,12 @@ class SVGPlot:
             True
 
         """
-        if self.xlabel == None:
+        if self.xlabel is None:
             if len([k for k, v in self.axis_orientations.items() if v == AxisOrientation.HORIZONTAL]) > 0:
                 self.xlabel = [k for k, v in self.axis_orientations.items() if v == AxisOrientation.HORIZONTAL][0]
             else:
                 self.xlabel = "x"
-        if self.ylabel == None:
+        if self.ylabel is None:
             if len([k for k, v in self.axis_orientations.items() if v == AxisOrientation.VERTICAL]) > 0:
                 self.ylabel = [k for k, v in self.axis_orientations.items() if v == AxisOrientation.VERTICAL][0]
             else:
