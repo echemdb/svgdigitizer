@@ -134,10 +134,20 @@ specifying a `sampling_interval`::
 import logging
 from functools import cache
 
+import itertools
+from enum import Enum, auto
+
 import pandas as pd
 
 logger = logging.getLogger("svgplot")
 
+class PageOrientation(Enum):
+    PORTRAIT = auto()
+    LANDSCAPE = auto()
+
+class AxisOrientation(Enum):
+    HORIZONTAL = auto()
+    VERTICAL = auto()
 
 class SVGPlot:
     r"""
@@ -204,18 +214,171 @@ class SVGPlot:
     def __init__(
         self,
         svg,
-        xlabel=None,
-        ylabel=None,
+        force_xaxis=None,
+        force_yaxis=None,
+        page_orientation=PageOrientation.PORTRAIT,
         sampling_interval=None,
         curve=None,
         algorithm="axis-aligned",
     ):
         self.svg = svg
-        self.xlabel = xlabel or "x"
-        self.ylabel = ylabel or "y"
+        self.page_orientation = page_orientation
+        self.xlabel = force_xaxis
+        self.ylabel = force_yaxis
         self.sampling_interval = sampling_interval
         self._curve = curve
         self._algorithm = algorithm
+
+    @property
+    @cache
+    def axis_orientations(self):
+        r"""
+        Return the orientation for each axis.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.axis_orientations
+            {'E': <AxisOrientation.HORIZONTAL: 1>, 'j': <AxisOrientation.VERTICAL: 2>}
+
+        """
+
+        axis_orientations = {}
+
+        for axis, points in self._grouped_ref_points.items():
+            # distinguish between 2 ref points
+            if len(points) == 2:
+                delta_x = abs(points[0].points[0][0] - points[1].points[0][0])
+                delta_y = abs(points[0].points[0][1] - points[1].points[0][1])
+            # and ref point together with scalebar
+            else:
+                labeled_paths = self.labeled_paths["scale_bar"]
+                axis_paths = [i for i in labeled_paths if i[0].label._value.startswith(axis)][0]
+                
+                endpoints = [path.far for path in axis_paths]
+                scalebar = (
+                    endpoints[0][0] - endpoints[1][0],
+                    endpoints[0][1] - endpoints[1][1],
+                )
+                delta_x = abs(scalebar[0])
+                delta_y = abs(scalebar[1])
+            # invert on landscape page orientation
+            if (delta_y < delta_x) or (self.page_orientation == PageOrientation.LANDSCAPE):
+                axis_orientations[axis] = AxisOrientation.HORIZONTAL
+            elif (delta_y > delta_x) or (self.page_orientation == PageOrientation.LANDSCAPE):
+                axis_orientations[axis] = AxisOrientation.VERTICAL
+        
+        return axis_orientations
+
+    @property
+    @cache
+    def _grouped_ref_points(self):
+        r"""
+        Return the label for each axis.
+
+        EXAMPLES::
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1m</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">b2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._grouped_ref_points
+            Traceback (most recent call last):
+            ...
+            ValueError: Reference points contain more than two axis names (['b', 'x', 'y']).
+        """
+
+        # group ref_points by axis
+        keyfunc = lambda x: x.label._value.split(":")[0][:-1] # allow multi character axis label
+        ref_points = [points[0] for points in self.labeled_paths["ref_point"]]
+        # without sorting only the last contiguous occurences are returned in the grouping dict
+        ref_points = sorted(ref_points, key=keyfunc)
+        # grouping by first letter of the label text
+        grouped_ref_points = {quantity: list(g) for quantity, g in itertools.groupby(ref_points, keyfunc)}
+
+        if len(grouped_ref_points) > 2:
+            raise ValueError(f"Reference points contain more than two axis names ({list(grouped_ref_points.keys())}).")
+
+        return grouped_ref_points
+
+    @property
+    @cache
+    def axis_symbols(self):
+        r"""
+        Return the label for each axis.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.axis_symbols
+            ['E', 'j']
+
+        """
+
+        return list(self._grouped_ref_points.keys())
 
     @property
     @cache
@@ -231,24 +394,24 @@ class SVGPlot:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">E1: 0 cm</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">E2: 1cm</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: 0</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A</text>
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.axis_labels
-            {'x': 'cm', 'y': 'A'}
+            {'E': 'cm', 'j': 'A'}
 
         TESTS:
 
@@ -316,6 +479,8 @@ class SVGPlot:
 
         """
 
+
+
         def axis_label(axis):
             labels = [
                 point[1][-1]
@@ -335,10 +500,8 @@ class SVGPlot:
                     )
             return labels[-1]
 
-        return {
-            self.xlabel: axis_label(self.xlabel),
-            self.ylabel: axis_label(self.ylabel),
-        }
+        return {axis_symbol: axis_label(axis_symbol) for axis_symbol in self.axis_symbols}
+
 
     @property
     def _marked_points_from_axis_markers(self):
@@ -350,6 +513,8 @@ class SVGPlot:
         coordinate system, or `None` if that point's coordinate is not known.
         """
         points = {}
+
+
 
         xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
         ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
@@ -525,6 +690,17 @@ class SVGPlot:
             True
 
         """
+        if self.xlabel == None:
+            if len([k for k, v in self.axis_orientations.items() if v == AxisOrientation.HORIZONTAL]) > 0:
+                self.xlabel = [k for k, v in self.axis_orientations.items() if v == AxisOrientation.HORIZONTAL][0]
+            else:
+                self.xlabel = "x"
+        if self.ylabel == None:
+            if len([k for k, v in self.axis_orientations.items() if v == AxisOrientation.VERTICAL]) > 0:
+                self.ylabel = [k for k, v in self.axis_orientations.items() if v == AxisOrientation.VERTICAL][0]
+            else:
+                self.ylabel = "y"
+
         xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
         ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
 
@@ -563,7 +739,7 @@ class SVGPlot:
             ...   <text x="0" y="0">y_scaling_factor: 50.6</text>
             ...   <text x="0" y="0">xsf: 50.6</text>
             ... </svg>'''))
-            >>> plot = SVGPlot(svg)
+            >>> plot = SVGPlot(svg, force_xaxis='x', force_yaxis='y')
             >>> plot.scaling_factors
             {'x': 50.6, 'y': 50.6}
 
@@ -1008,8 +1184,8 @@ class SVGPlot:
 
         """
         patterns = {
-            "ref_point": r"^(?P<point>(x|y)\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
-            "scale_bar": r"^(?P<axis>x|y)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
+            "ref_point": r"^(?P<point>\w+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
+            "scale_bar": r"^(?P<axis>\w+)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "curve": r"^curve: ?(?P<curve_id>.+)",
         }
 
