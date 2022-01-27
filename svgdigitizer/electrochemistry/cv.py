@@ -583,7 +583,7 @@ class CV:
 
     def plot(self):
         r"""
-        Visualize the digitized cyclic voltamogram with values in SI units.
+        Visualize the digitized cyclic voltammogram with values in SI units.
 
         EXAMPLES::
 
