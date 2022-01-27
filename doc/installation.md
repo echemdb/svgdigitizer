@@ -15,7 +15,7 @@ Install with pip from PyPI
 
 The latest stable version of the svgdigitizer is available on
 [PyPI](https://pypi.org/project/svgdigitizer/) for all platforms and can be
-easily if you have Python and pip installed already:
+installed if you have Python and pip installed already:
 
 ```sh
 pip install svgdigitizer
@@ -24,14 +24,14 @@ pip install svgdigitizer
 This command downloads and installs the svgdigitizer and its dependencies into
 your local Python installation.
 
-If the above command fails because you don't have permission to modify your
+If the above command fails because you do not have permission to modify your
 Python installation, you can install the svgdigitizer into your user account:
 
 ```sh
 pip install --user svgdigitizer
 ```
 
-You can instead also install the latest unreleased version the svgdigitizer
+You can instead also install the latest unreleased version of the svgdigitizer
 from our [GitHub Repository](https://github.com/echemdb/svgdigitizer) with
 
 ```sh
@@ -50,11 +50,11 @@ If you don't have conda yet, we recommend to install
 [Miniforge](https://github.com/conda-forge/miniforge#miniforge3).
 
 Miniforge is already pre-configured for conda-forge. If you already had another
-release of conda installed, make sure that conda-forge channel is
+release of conda installed, make sure the conda-forge channel is
 [configured correctly](https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge)
 
 Once your conda setup is ready, create a new `svgdigitizer` environment with
-the latest stable version of the svgdigitizer
+the latest stable version of the svgdigitizer:
 
 ```sh
 conda create -n svgdigitizer svgdigitizer
@@ -77,7 +77,7 @@ Install with pip for development
 --------------------------------
 
 If you want to work on the svgdigitizer itself, get a copy of the latest
-unreleased version the svgdigitizer:
+unreleased version of the svgdigitizer:
 
 ```sh
 git clone https://github.com/echemdb/svgdigitizer.git
