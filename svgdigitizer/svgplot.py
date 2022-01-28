@@ -110,6 +110,8 @@ specifying a `sampling_interval`::
     10  1.0  1.0
 
 """
+
+import itertools
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -132,10 +134,8 @@ specifying a `sampling_interval`::
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 import logging
-from functools import cache
-
-import itertools
 from enum import Enum, auto
+from functools import cache
 
 import pandas as pd
 
