@@ -226,10 +226,10 @@ class CV:
             "x": {"dimension": "E", "unit": "V"},
             "y": {
                 "dimension": "j"
-                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels["y"]))
+                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
                 else "I",
                 "unit": "A / m2"
-                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels["y"]))
+                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
                 else "A",
             },
         }
@@ -335,7 +335,7 @@ class CV:
 
         """
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
-        match = re.match(pattern, self.svgplot.axis_labels["x"], re.IGNORECASE)
+        match = re.match(pattern, self.svgplot.axis_labels[self.svgplot.xlabel], re.IGNORECASE)
 
         return namedtuple("Label", ["label", "unit", "reference"])(
             match[0], match[1], match[2] or "unknown"
@@ -516,7 +516,7 @@ class CV:
         voltage = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df["E"] = df["x"] * voltage.to(u.V).value  # pylint: disable=E1101
+        df["E"] = df[self.svgplot.xlabel] * voltage.to(u.V).value  # pylint: disable=E1101
 
     def _add_current_axis(self, df):
         r"""
@@ -649,22 +649,22 @@ class CV:
 
         """
         self.df.plot(
-            x=self.axis_properties["x"]["dimension"],
-            y=self.axis_properties["y"]["dimension"],
+            x=self.axis_properties[self.svgplot.xlabel]["dimension"],
+            y=self.axis_properties[self.svgplot.ylabel]["dimension"],
         )
         plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
         plt.xlabel(
-            self.axis_properties["x"]["dimension"]
+            self.axis_properties[self.svgplot.xlabel]["dimension"]
             + " ["
-            + str(self.axis_properties["x"]["unit"])
+            + str(self.axis_properties[self.svgplot.xlabel]["unit"])
             + " vs. "
             + self.x_label.reference
             + "]"
         )
         plt.ylabel(
-            self.axis_properties["y"]["dimension"]
+            self.axis_properties[self.svgplot.ylabel]["dimension"]
             + " ["
-            + str(self.axis_properties["y"]["unit"])
+            + str(self.axis_properties[self.svgplot.ylabel]["unit"])
             + "]"
         )
 
@@ -879,12 +879,12 @@ class CV:
         }
         metadata["figure description"].setdefault("axes", {})
         metadata["figure description"]["axes"] = {
-            self.axis_properties["x"]["dimension"]: {
+            self.axis_properties[self.svgplot.xlabel]["dimension"]: {
                 "unit": str(CV.get_axis_unit(self.x_label.unit)),
                 "reference": self.x_label.reference,
                 "orientation": "x",
             },
-            self.axis_properties["y"]["dimension"]: {
+            self.axis_properties[self.svgplot.ylabel]["dimension"]: {
                 "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
                 "orientation": "y",
             },
@@ -900,12 +900,12 @@ class CV:
         metadata["data description"]["measurement type"] = "CV"
         metadata["data description"].setdefault("axes", {})
         metadata["data description"]["axes"] = {
-            self.axis_properties["x"]["dimension"]: {
+            self.axis_properties[self.svgplot.xlabel]["dimension"]: {
                 "unit": "V",
                 "reference": self.x_label.reference,
             },
-            self.axis_properties["y"]["dimension"]: {
-                "unit": str(self.axis_properties["y"]["unit"]),
+            self.axis_properties[self.svgplot.ylabel]["dimension"]: {
+                "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
             },
             "t": {
                 "unit": "s",
