@@ -218,8 +218,6 @@ class SVGPlot:
     def __init__(
         self,
         svg,
-        force_xaxis=None,
-        force_yaxis=None,
         page_orientation=PageOrientation.PORTRAIT,
         sampling_interval=None,
         curve=None,
@@ -227,11 +225,98 @@ class SVGPlot:
     ):
         self.svg = svg
         self.page_orientation = page_orientation
-        self.xlabel = force_xaxis
-        self.ylabel = force_yaxis
         self.sampling_interval = sampling_interval
         self._curve = curve
         self._algorithm = algorithm
+
+    @property
+    @cache
+    def xlabel(self):
+        r"""
+        Return the label of the x axis.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.xlabel
+            'E'
+
+            >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
+            >>> plot.xlabel
+            'j'
+
+        """
+
+        for axis, orientation in self.axis_orientations.items():
+            if orientation == AxisOrientation.HORIZONTAL:
+                return axis
+        return "x"
+
+    @property
+    @cache
+    def ylabel(self):
+        r"""
+        Return the label of the x axis.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.xlabel
+            'E'
+
+            >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
+            >>> plot.xlabel
+            'j'
+
+        """
+
+        for axis, orientation in self.axis_orientations.items():
+            if orientation == AxisOrientation.VERTICAL:
+                return axis
+
+        return "y"
 
     @property
     @cache
@@ -266,6 +351,10 @@ class SVGPlot:
             >>> plot.axis_orientations
             {'E': <AxisOrientation.HORIZONTAL: 1>, 'j': <AxisOrientation.VERTICAL: 2>}
 
+            >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
+            >>> plot.axis_orientations
+            {'E': <AxisOrientation.VERTICAL: 2>, 'j': <AxisOrientation.HORIZONTAL: 1>}
+
         """
 
         axis_orientations = {}
@@ -288,64 +377,13 @@ class SVGPlot:
                 delta_x = abs(scalebar[0])
                 delta_y = abs(scalebar[1])
             # invert on landscape page orientation
-            if (delta_y < delta_x) or (self.page_orientation == PageOrientation.LANDSCAPE):
+            if (delta_y < delta_x) ^ (self.page_orientation == PageOrientation.LANDSCAPE):
                 axis_orientations[axis] = AxisOrientation.HORIZONTAL
-            elif (delta_y > delta_x) or (self.page_orientation == PageOrientation.LANDSCAPE):
+            elif (delta_y > delta_x) ^ (self.page_orientation == PageOrientation.LANDSCAPE):
                 axis_orientations[axis] = AxisOrientation.VERTICAL
 
+
         return axis_orientations
-
-    @property
-    @cache
-    def _grouped_ref_points(self):
-        r"""
-        Return the label for each axis.
-
-        EXAMPLES::
-            >>> from svgdigitizer.svg import SVG
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1m</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">b2: 1 A</text>
-            ...   </g>
-            ... </svg>'''))
-            >>> plot = SVGPlot(svg)
-            >>> plot.axis_symbols
-            Traceback (most recent call last):
-            ...
-            ValueError: Reference points contain more than two axis names (['b', 'x', 'y']).
-        """
-
-        # group ref_points by axis
-        keyfunc = lambda x: x.label._value.split(":")[0][:-1] # allow multi character axis label
-        ref_points = [points[0] for points in self.labeled_paths["ref_point"]]
-        # without sorting only the last contiguous occurences are returned in the grouping dict
-        ref_points = sorted(ref_points, key=keyfunc)
-        # grouping by first letter of the label text
-        grouped_ref_points = {quantity: list(g) for quantity, g in itertools.groupby(ref_points, keyfunc)}
-
-        if len(grouped_ref_points) > 2:
-            raise ValueError(f"Reference points contain more than two axis names ({list(grouped_ref_points.keys())}).")
-
-        return grouped_ref_points
 
     @property
     @cache
@@ -380,6 +418,29 @@ class SVGPlot:
             >>> plot.axis_symbols
             ['E', 'j']
 
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">intensity1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">intensity2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.axis_symbols
+            ['E', 'intensity']
+
         """
 
         return list(self._grouped_ref_points.keys())
@@ -388,7 +449,7 @@ class SVGPlot:
     @cache
     def axis_labels(self):
         r"""
-        Return the label for each axis.
+        Return the label for each axis as dict with symbol as key and unit as value.
 
         EXAMPLES::
 
@@ -483,8 +544,6 @@ class SVGPlot:
 
         """
 
-
-
         def axis_label(axis):
             labels = [
                 point[1][-1]
@@ -506,6 +565,25 @@ class SVGPlot:
 
         return {axis_symbol: axis_label(axis_symbol) for axis_symbol in self.axis_symbols}
 
+    @property
+    @cache
+    def _grouped_ref_points(self):
+        r"""
+        Return the reference points grouped by axis symbol.
+        """
+
+        # group ref_points by axis
+        keyfunc = lambda x: x.label._value.split(":")[0][:-1] # allow multi character axis label
+        ref_points = [points[0] for points in self.labeled_paths["ref_point"]]
+        # without sorting only the last contiguous occurences are returned in the grouping dict
+        ref_points = sorted(ref_points, key=keyfunc)
+        # grouping by first letter of the label text
+        grouped_ref_points = {quantity: list(g) for quantity, g in itertools.groupby(ref_points, keyfunc)}
+
+        if len(grouped_ref_points) > 2:
+            raise ValueError(f"Reference points contain more than two axis names ({list(grouped_ref_points.keys())}). At the moment only 2D plots are supported.")
+
+        return grouped_ref_points
 
     @property
     def _marked_points_from_axis_markers(self):
@@ -517,8 +595,6 @@ class SVGPlot:
         coordinate system, or `None` if that point's coordinate is not known.
         """
         points = {}
-
-
 
         xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
         ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
@@ -694,16 +770,6 @@ class SVGPlot:
             True
 
         """
-        if self.xlabel is None:
-            if len([k for k, v in self.axis_orientations.items() if v == AxisOrientation.HORIZONTAL]) > 0:
-                self.xlabel = [k for k, v in self.axis_orientations.items() if v == AxisOrientation.HORIZONTAL][0]
-            else:
-                self.xlabel = "x"
-        if self.ylabel is None:
-            if len([k for k, v in self.axis_orientations.items() if v == AxisOrientation.VERTICAL]) > 0:
-                self.ylabel = [k for k, v in self.axis_orientations.items() if v == AxisOrientation.VERTICAL][0]
-            else:
-                self.ylabel = "y"
 
         xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
         ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
@@ -742,12 +808,29 @@ class SVGPlot:
             ... <svg>
             ...   <text x="0" y="0">y_scaling_factor: 50.6</text>
             ...   <text x="0" y="0">xsf: 50.6</text>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
             ... </svg>'''))
-            >>> plot = SVGPlot(svg, force_xaxis='x', force_yaxis='y')
+            >>> plot = SVGPlot(svg)
             >>> plot.scaling_factors
             {'x': 50.6, 'y': 50.6}
 
         """
+
         scaling_factors = {self.xlabel: 1, self.ylabel: 1}
 
         for label in self.svg.get_texts(
@@ -846,8 +929,8 @@ class SVGPlot:
             ...     <text x="100" y="200">x2: 1</text>
             ...   </g>
             ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <path d="M 0 100 L 0 100" />
+            ...     <text x="0" y="100">y1: 0</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 0 0 L 100 0" />
@@ -962,8 +1045,8 @@ class SVGPlot:
             ...     <text x="100" y="200">x2: 1</text>
             ...   </g>
             ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <path d="M 0 100 L 0 100" />
+            ...     <text x="0" y="100">y1: 0</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 0 0 L 100 0" />
@@ -976,6 +1059,7 @@ class SVGPlot:
                    [ 0.  ,  0.  ,  1.  ]])
 
         """
+
         # We construct the basic transformation from the SVG coordinate system
         # to the plot coordinate system from four points in the SVG about we
         # know something in the plot coordinate system:
