@@ -367,7 +367,7 @@ class SVGPlot:
             # and ref point together with scalebar
             else:
                 labeled_paths = self.labeled_paths["scale_bar"]
-                axis_paths = [i for i in labeled_paths if i[0].label._value.startswith(axis)][0]
+                axis_paths = [i for i in labeled_paths if str(i[0].label).startswith(axis)][0]
 
                 endpoints = [path.far for path in axis_paths]
                 scalebar = (
@@ -573,7 +573,7 @@ class SVGPlot:
         """
 
         # group ref_points by axis
-        keyfunc = lambda x: x.label._value.split(":")[0][:-1] # allow multi character axis label
+        keyfunc = lambda x: str(x.label).split(":")[0][:-1] # allow multi character axis label
         ref_points = [points[0] for points in self.labeled_paths["ref_point"]]
         # without sorting only the last contiguous occurences are returned in the grouping dict
         ref_points = sorted(ref_points, key=keyfunc)
