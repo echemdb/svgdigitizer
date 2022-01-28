@@ -226,10 +226,12 @@ class CV:
             "x": {"dimension": "E", "unit": "V"},
             "y": {
                 "dimension": "j"
-                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
+                if "m2"
+                in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
                 else "I",
                 "unit": "A / m2"
-                if "m2" in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
+                if "m2"
+                in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
                 else "A",
             },
         }
@@ -306,7 +308,9 @@ class CV:
 
         """
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
-        match = re.match(pattern, self.svgplot.axis_labels[self.svgplot.xlabel], re.IGNORECASE)
+        match = re.match(
+            pattern, self.svgplot.axis_labels[self.svgplot.xlabel], re.IGNORECASE
+        )
 
         return namedtuple("Label", ["label", "unit", "reference"])(
             match[0], match[1], match[2] or "unknown"
@@ -487,7 +491,9 @@ class CV:
         voltage = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df["E"] = df[self.svgplot.xlabel] * voltage.to(u.V).value  # pylint: disable=E1101
+        df["E"] = (
+            df[self.svgplot.xlabel] * voltage.to(u.V).value
+        )  # pylint: disable=E1101
 
     def _add_current_axis(self, df):
         r"""

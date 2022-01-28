@@ -141,17 +141,18 @@ import pandas as pd
 
 logger = logging.getLogger("svgplot")
 
+
 class PageOrientation(Enum):
-    r"""Enum representing the page orientation to be able to to autodetect axis orientation.
-    """
+    r"""Enum representing the page orientation to be able to to autodetect axis orientation."""
     PORTRAIT = auto()
     LANDSCAPE = auto()
 
+
 class AxisOrientation(Enum):
-    r"""Enum representing axis orientation.
-    """
+    r"""Enum representing axis orientation."""
     HORIZONTAL = auto()
     VERTICAL = auto()
+
 
 class SVGPlot:
     r"""
@@ -367,7 +368,9 @@ class SVGPlot:
             # and ref point together with scalebar
             else:
                 labeled_paths = self.labeled_paths["scale_bar"]
-                axis_paths = [i for i in labeled_paths if str(i[0].label).startswith(axis)][0]
+                axis_paths = [
+                    i for i in labeled_paths if str(i[0].label).startswith(axis)
+                ][0]
 
                 endpoints = [path.far for path in axis_paths]
                 scalebar = (
@@ -377,11 +380,14 @@ class SVGPlot:
                 delta_x = abs(scalebar[0])
                 delta_y = abs(scalebar[1])
             # invert on landscape page orientation
-            if (delta_y < delta_x) ^ (self.page_orientation == PageOrientation.LANDSCAPE):
+            if (delta_y < delta_x) ^ (
+                self.page_orientation == PageOrientation.LANDSCAPE
+            ):
                 axis_orientations[axis] = AxisOrientation.HORIZONTAL
-            elif (delta_y > delta_x) ^ (self.page_orientation == PageOrientation.LANDSCAPE):
+            elif (delta_y > delta_x) ^ (
+                self.page_orientation == PageOrientation.LANDSCAPE
+            ):
                 axis_orientations[axis] = AxisOrientation.VERTICAL
-
 
         return axis_orientations
 
@@ -563,7 +569,9 @@ class SVGPlot:
                     )
             return labels[-1]
 
-        return {axis_symbol: axis_label(axis_symbol) for axis_symbol in self.axis_symbols}
+        return {
+            axis_symbol: axis_label(axis_symbol) for axis_symbol in self.axis_symbols
+        }
 
     @property
     @cache
@@ -573,15 +581,21 @@ class SVGPlot:
         """
 
         # group ref_points by axis
-        keyfunc = lambda x: str(x.label).split(":")[0][:-1] # allow multi character axis label
+        keyfunc = lambda x: str(x.label).split(":")[0][
+            :-1
+        ]  # allow multi character axis label
         ref_points = [points[0] for points in self.labeled_paths["ref_point"]]
         # without sorting only the last contiguous occurences are returned in the grouping dict
         ref_points = sorted(ref_points, key=keyfunc)
         # grouping by first letter of the label text
-        grouped_ref_points = {quantity: list(g) for quantity, g in itertools.groupby(ref_points, keyfunc)}
+        grouped_ref_points = {
+            quantity: list(g) for quantity, g in itertools.groupby(ref_points, keyfunc)
+        }
 
         if len(grouped_ref_points) > 2:
-            raise ValueError(f"Reference points contain more than two axis names ({list(grouped_ref_points.keys())}). At the moment only 2D plots are supported.")
+            raise ValueError(
+                f"Reference points contain more than two axis names ({list(grouped_ref_points.keys())}). At the moment only 2D plots are supported."
+            )
 
         return grouped_ref_points
 
