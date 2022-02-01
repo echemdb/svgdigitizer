@@ -112,6 +112,7 @@ specifying a `sampling_interval`::
 """
 
 import itertools
+
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
