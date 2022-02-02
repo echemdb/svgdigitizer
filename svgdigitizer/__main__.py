@@ -180,8 +180,8 @@ def digitize(svg, sampling_interval, outdir, skewed):
     default=None,
     help="write output files to this directory",
 )
-@skewed_option
 @click.argument("svg", type=click.Path(exists=True))
+@skewed_option
 def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     r"""
     Digitize a cylic voltammogram.
