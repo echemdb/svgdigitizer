@@ -9,7 +9,7 @@ Welcome to svgdigitizer's documentation!
 -->
 
 Svgdigitizer allows recovering data from a curve, plotted in a 2D coordinate 
-system with defined axes.
+system.
 Such plots are often found in scientific publications, where
 in many cases, especially for old pulications, the underlying data 
 is not accessible anymore. 
