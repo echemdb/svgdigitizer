@@ -42,7 +42,7 @@ With the [API](api.md), the file can also be used to create an actual [SVGplot c
 >>> from svgdigitizer.svg import SVG
 >>> from svgdigitizer.svgplot import SVGPlot
 
->>> plot = SVGPlot(SVG(open('./svgdigitizer/doc/files/others/example_plot_p0_demo.svg', 'r')), sampling_interval=0.01)
+>>> plot = SVGPlot(SVG(open('./svgdigitizer/doc/files/others/example_plot_p0_demo.svg', 'rb')), sampling_interval=0.01, algorithm='mark-aligned')
 ```
 
 Now one can query things such as the axis labels or any other text label in the SVG file.
