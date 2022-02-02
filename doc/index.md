@@ -92,7 +92,7 @@ pip install svgdigitizer
 ```
 <!-- #endregion -->
 
-Read the [installation instructions](installation.md) on further details if you want to contribute to the project.
+Please consult [our documentation](installation.md) for detailed installation instructions.
 
 Further information
 ===================
