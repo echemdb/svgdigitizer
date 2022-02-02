@@ -13,7 +13,7 @@ system.
 Such plots are often found in scientific publications, where
 in many cases, especially for old puplications, the underlying data 
 is not accessible anymore. 
-In some cases, the axis of the plot can be a bit skewed, caused from scanning 
+In some cases, the axes of the plot can be skewed, e.g., when scanning 
 printed documents. An extreme case for such a plot is depicted in the following figure.
 
 ![files/images/example_plot_p0.png](files/images/example_plot_p0.png) 
