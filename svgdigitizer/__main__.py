@@ -114,6 +114,10 @@ def plot(svg, sampling_interval):
 
     SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
 
+skewed_option = click.option('--skewed',
+              is_flag=True,
+              help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical."
+)
 
 @click.command()
 @click.option(
@@ -128,10 +132,7 @@ def plot(svg, sampling_interval):
     default=None,
     help="write output files to this directory",
 )
-@click.option('--skewed',
-              is_flag=True
-              help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical."
-)
+@skewed_option
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval, outdir, skewed):
     r"""
@@ -173,10 +174,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
     default=None,
     help="write output files to this directory",
 )
-@click.option('--skewed',
-              is_flag=True
-              help="If the plot axes are skewed use '--skewed' to align the axes along the markers instead of orthogonally (default)."
-)
+@skewed_option
 @click.argument("svg", type=click.Path(exists=True))
 def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     r"""
