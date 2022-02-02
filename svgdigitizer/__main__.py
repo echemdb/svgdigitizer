@@ -114,10 +114,13 @@ def plot(svg, sampling_interval):
 
     SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
 
-skewed_option = click.option('--skewed',
-              is_flag=True,
-              help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical."
+
+skewed_option = click.option(
+    "--skewed",
+    is_flag=True,
+    help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
 )
+
 
 @click.command()
 @click.option(
@@ -149,10 +152,13 @@ def digitize(svg, sampling_interval, outdir, skewed):
     """
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
+
     algorithm = "mark-aligned" if skewed else "axis-aligned"
 
     with open(svg, "rb") as infile:
-        svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval, algorithm=algorithm)
+        svg_plot = SVGPlot(
+            SVG(infile), sampling_interval=sampling_interval, algorithm=algorithm
+        )
 
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
@@ -218,7 +224,6 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
 
-
     algorithm = "mark-aligned" if skewed else "axis-aligned"
 
     if sampling_interval is not None:
@@ -237,7 +242,9 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     with open(svg, "rb") as infile:
         cv = CV(
-            SVGPlot(SVG(infile), sampling_interval=sampling_interval, algorithm=algorithm),
+            SVGPlot(
+                SVG(infile), sampling_interval=sampling_interval, algorithm=algorithm
+            ),
             metadata=metadata,
         )
 
