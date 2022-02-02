@@ -148,6 +148,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
     """
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
+    algorithm = "mark-aligned" if skewed else "axis-aligned"
 
     with open(svg, "rb") as infile:
         svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval, algorithm=algorithm)
