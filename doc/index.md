@@ -20,10 +20,10 @@ printed documents. An extreme case for such a plot is depicted in the following 
 
 In order to recover the underlying data, first the plot is imported in a 
 vector graphics program, such as [Inkscape](https://inkscape.org/).
-The curve is traced with *regular bezier path* and two points are marked 
-with a group of textlabel and line on each axis to define the coordinate system.
-The curve should be assigned a text label. Additonal labels describing the data 
-can be provided anywhere in the SVG file. The resulting file looks as follows:
+The curve is traced with *regular bezier paths* and two points and text labels
+are created and grouped for each axis to define the coordinate system.
+The curve should be assigned a text label. Additional labels describing the data 
+can be provided anywhere in the SVG file. The resulting file looks as follows.
 
 ![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png) 
 
