@@ -220,6 +220,9 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
 
+
+    algorithm = "mark-aligned" if skewed else "axis-aligned"
+
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
         with open(svg, "rb") as infile:
