@@ -352,11 +352,11 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.axis_orientations
-            {'E': <AxisOrientation.HORIZONTAL: "horizontal">, 'j': <AxisOrientation.VERTICAL: "vertical">}
+            {'E': <AxisOrientation.HORIZONTAL: 'horizontal'>, 'j': <AxisOrientation.VERTICAL: 'vertical'>}
 
             >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
             >>> plot.axis_orientations
-            {'E': <AxisOrientation.VERTICAL: "vertical">, 'j': <AxisOrientation.HORIZONTAL: "horizontal">}
+            {'E': <AxisOrientation.VERTICAL: 'vertical'>, 'j': <AxisOrientation.HORIZONTAL: 'horizontal'>}
 
         """
 
