@@ -111,8 +111,6 @@ specifying a `sampling_interval`::
 
 """
 
-import itertools
-
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -134,9 +132,11 @@ import itertools
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+
 import logging
-from enum import Enum, auto
+from enum import Enum
 from functools import cache
+from itertools import groupby
 
 import pandas as pd
 
@@ -145,14 +145,14 @@ logger = logging.getLogger("svgplot")
 
 class PageOrientation(Enum):
     r"""Enum representing the page orientation to be able to to autodetect axis orientation."""
-    PORTRAIT = auto()
-    LANDSCAPE = auto()
+    PORTRAIT = "portrait"
+    LANDSCAPE = "landscape"
 
 
 class AxisOrientation(Enum):
     r"""Enum representing axis orientation."""
-    HORIZONTAL = auto()
-    VERTICAL = auto()
+    HORIZONTAL = "horizontal"
+    VERTICAL = "vertical"
 
 
 class SVGPlot:
@@ -325,6 +325,7 @@ class SVGPlot:
     def axis_orientations(self):
         r"""
         Return the orientation for each axis.
+        The current implementation does not work for extrem cases where a plot is tilted by 45°.
 
         EXAMPLES::
 
@@ -351,11 +352,11 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.axis_orientations
-            {'E': <AxisOrientation.HORIZONTAL: 1>, 'j': <AxisOrientation.VERTICAL: 2>}
+            {'E': <AxisOrientation.HORIZONTAL: "horizontal">, 'j': <AxisOrientation.VERTICAL: "vertical">}
 
             >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
             >>> plot.axis_orientations
-            {'E': <AxisOrientation.VERTICAL: 2>, 'j': <AxisOrientation.HORIZONTAL: 1>}
+            {'E': <AxisOrientation.VERTICAL: "vertical">, 'j': <AxisOrientation.HORIZONTAL: "horizontal">}
 
         """
 
@@ -590,7 +591,7 @@ class SVGPlot:
         ref_points = sorted(ref_points, key=keyfunc)
         # grouping by first letter of the label text
         grouped_ref_points = {
-            quantity: list(g) for quantity, g in itertools.groupby(ref_points, keyfunc)
+            quantity: list(g) for quantity, g in groupby(ref_points, keyfunc)
         }
 
         if len(grouped_ref_points) > 2:
