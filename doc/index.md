@@ -28,7 +28,7 @@ can be provided anywhere in the SVG file. The resulting file looks as follows.
 ![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png) 
 
 ## [Command line interface](cli.md)
-This file can be digitized from the [command line interface](cli.md), which creates a CVS file of the x and y data. 
+This SVG can be digitized from the [command line interface](cli.md), which creates a CSV file of the x and y data. 
 The resolution can be specified by `--sampling-interval`.
 
 ```sh
