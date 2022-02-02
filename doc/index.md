@@ -60,7 +60,7 @@ Now one can query things such as the axis labels or any other text label in the 
  <text>operator: Mr. X</text>]
 ```
 
-The data is stored in a [pandas](https://pandas.pydata.org/) dataframe:
+The sampled data can be extracted as a [pandas](https://pandas.pydata.org/) dataframe:
 ```python
 >>> plot.df
 	        x	        y
