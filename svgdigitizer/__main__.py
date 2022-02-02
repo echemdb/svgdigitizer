@@ -128,8 +128,13 @@ def plot(svg, sampling_interval):
     default=None,
     help="write output files to this directory",
 )
+@click.option('--algorithm',
+              type=click.Choice(['axis-aligned', 'mark-aligned'], case_sensitive=False),
+              default='axis-aligned',
+              help="For orthogonal plot axes use 'axis-aligned' (default). For skewed axis use 'mark-aligned'."
+)
 @click.argument("svg", type=click.Path(exists=True))
-def digitize(svg, sampling_interval, outdir):
+def digitize(svg, sampling_interval, outdir, algorithm):
     r"""
     Digitize a plot.
 
@@ -146,7 +151,7 @@ def digitize(svg, sampling_interval, outdir):
     from svgdigitizer.svgplot import SVGPlot
 
     with open(svg, "rb") as infile:
-        svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval)
+        svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval, algorithm=algorithm)
 
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
@@ -168,8 +173,13 @@ def digitize(svg, sampling_interval, outdir):
     default=None,
     help="write output files to this directory",
 )
+@click.option('--algorithm',
+              type=click.Choice(['axis-aligned', 'mark-aligned'], case_sensitive=False),
+              default='axis-aligned',
+              help="For orthogonal plot axes use 'axis-aligned' (default). For skewed axis use 'mark-aligned'."
+)
 @click.argument("svg", type=click.Path(exists=True))
-def digitize_cv(svg, sampling_interval, metadata, package, outdir):
+def digitize_cv(svg, sampling_interval, metadata, package, outdir, algorithm):
     r"""
     Digitize a cylic voltammogram.
 
@@ -214,7 +224,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
         with open(svg, "rb") as infile:
-            cv = CV(SVGPlot(SVG(infile)))
+            cv = CV(SVGPlot(SVG(infile), algorithm=algorithm))
 
             from astropy import units as u
 
@@ -227,7 +237,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 
     with open(svg, "rb") as infile:
         cv = CV(
-            SVGPlot(SVG(infile), sampling_interval=sampling_interval),
+            SVGPlot(SVG(infile), sampling_interval=sampling_interval, algorithm=algorithm),
             metadata=metadata,
         )
 
