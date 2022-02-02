@@ -1,3 +1,18 @@
+---
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.13.6
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
 Welcome to svgdigitizer's documentation!
 ========================================
 
@@ -8,13 +23,13 @@ Welcome to svgdigitizer's documentation!
 ```
 -->
 
-Svgdigitizer allows recovering data from a curve, plotted in a 2D coordinate 
-system.
+The `svgdigitizer` allows recovering data from a curve in a figure, 
+plotted in a 2D coordinate system.
 Such plots are often found in scientific publications, where
 in many cases, especially for old puplications, the underlying data 
 is not accessible anymore. 
-In some cases, the axes of the plot can be skewed, e.g., when scanning 
-printed documents. An extreme case for such a plot is depicted in the following figure.
+In some cases, the axes of the plot can be skewed, e.g., in scanning
+documents. An extreme case for such a plot is depicted in the following figure.
 
 ![files/images/example_plot_p0.png](files/images/example_plot_p0.png) 
 
@@ -29,63 +44,53 @@ can be provided anywhere in the SVG file. The resulting file looks as follows.
 
 ## [Command line interface](cli.md)
 This SVG can be digitized from the [command line interface](cli.md), which creates a CSV file of the x and y data. 
-The resolution can be specified by `--sampling-interval`.
+The resolution can be specified by `--sampling-interval`. To recover the data from a plot with skewed axis specific an `--algorithm`.  
 
-```sh
-svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval 0.01
+
+```sh .noeval
+svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval 0.01 --alogorithm XXX
 ```
+
 
 ## [API](api.md)
-With the [API](api.md), the file can also be used to create an actual [SVGplot class](api/svgplot.md).
+With the Python [API](api.md), the SVG can also be used to create an [SVGPlot instance](api/svgplot.md).
 
 ```python
->>> from svgdigitizer.svg import SVG
->>> from svgdigitizer.svgplot import SVGPlot
+from svgdigitizer.svg import SVG
+from svgdigitizer.svgplot import SVGPlot
 
->>> plot = SVGPlot(SVG(open('./svgdigitizer/doc/files/others/example_plot_p0_demo.svg', 'rb')), sampling_interval=0.01, algorithm='mark-aligned')
+plot = SVGPlot(SVG(open('./files/others/example_plot_p0_demo.svg', 'rb')), sampling_interval=0.01, algorithm='mark-aligned')
 ```
 
-Now axis labels or any other text label in the SVG file can be queried.
+Now axis labels or any other text label in the SVG can be queried.
 ```python
->>> plot.axis_labels
-{'x': 'V', 'y': 'm / s'}
+plot.axis_labels
+```
 
->>> plot.svg.get_texts()
-[<text>curve: blue</text>,
- <text>x2: 80 V</text>,
- <text>x1: 10 V</text>,
- <text>y1: 10 m / s</text>,
- <text>y2: 60 m / s</text>,
- <text>comment: random data</text>,
- <text>operator: Mr. X</text>]
+```python
+plot.svg.get_texts()
 ```
 
 The sampled data can be extracted as a [pandas](https://pandas.pydata.org/) dataframe:
 ```python
->>> plot.df
-	        x	        y
-0	11.660079	13.681307
-1	11.670079	13.681548
-2	11.680079	13.681934
-3	11.690079	13.682416
-4	11.700079	13.682976
-...	      ...	      ...
+plot.df
 ```
 
 A plot can be created via
 ```python
->>> plot.plot()
+plot.plot()
 ```
-![files/images/example_plot_p0_demo_digitized.png](files/images/example_plot_p0_demo_digitized.png) 
-
+<!-- #region -->
 Installation
 ============
 
 The package is hosted on [PiPY](https://pypi.org/project/svgdigitizer/) and can be installed via
 
 ```sh
+%%sh
 pip install svgdigitizer
 ```
+<!-- #endregion -->
 
 Read the [installation instructions](installation.md) on further details if you want to contribute to the project.
 
