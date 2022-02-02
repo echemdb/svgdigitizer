@@ -178,7 +178,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
               help="If the plot axes are skewed use '--skewed' to align the axes along the markers instead of orthogonally (default)."
 )
 @click.argument("svg", type=click.Path(exists=True))
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, algorithm):
+def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     r"""
     Digitize a cylic voltammogram.
 
