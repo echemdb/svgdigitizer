@@ -173,10 +173,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
     default=None,
     help="write output files to this directory",
 )
-@click.option('--algorithm',
-              type=click.Choice(['axis-aligned', 'mark-aligned'], case_sensitive=False),
-              default='axis-aligned',
-              help="For orthogonal plot axes use 'axis-aligned' (default). For skewed axis use 'mark-aligned'."
+@click.option('--skewed',
+              is_flag=True
+              help="If the plot axes are skewed use '--skewed' to align the axes along the markers instead of orthogonally (default)."
 )
 @click.argument("svg", type=click.Path(exists=True))
 def digitize_cv(svg, sampling_interval, metadata, package, outdir, algorithm):
