@@ -130,7 +130,7 @@ def plot(svg, sampling_interval):
 )
 @click.option('--skewed',
               is_flag=True
-              help="If the plot axes are skewed use '--skewed' to align the axes along the markers instead of orthogonally (default)."
+              help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical."
 )
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval, outdir, skewed):
