@@ -11,7 +11,7 @@ Welcome to svgdigitizer's documentation!
 Svgdigitizer allows recovering data from a curve, plotted in a 2D coordinate 
 system.
 Such plots are often found in scientific publications, where
-in many cases, especially for old pulications, the underlying data 
+in many cases, especially for old puplications, the underlying data 
 is not accessible anymore. 
 In some cases, the axis of the plot can be a bit skewed, caused from scanning 
 printed documents. An extreme case for such a plot is depicted in the following figure.
