@@ -45,7 +45,7 @@ With the [API](api.md), the file can also be used to create an actual [SVGplot c
 >>> plot = SVGPlot(SVG(open('./svgdigitizer/doc/files/others/example_plot_p0_demo.svg', 'rb')), sampling_interval=0.01, algorithm='mark-aligned')
 ```
 
-Now one can query things such as the axis labels or any other text label in the SVG file.
+Now axis labels or any other text label in the SVG file can be queried.
 ```python
 >>> plot.axis_labels
 {'x': 'V', 'y': 'm / s'}
