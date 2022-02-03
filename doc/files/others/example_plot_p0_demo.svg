@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -43,7 +43,7 @@
      id="namedview8"
      showgrid="false"
      inkscape:zoom="0.29821261"
-     inkscape:cx="1524.2142"
+     inkscape:cx="979.30096"
      inkscape:cy="529.69273"
      inkscape:window-x="-8"
      inkscape:window-y="32"
@@ -54,12 +54,12 @@
   <image
      sodipodi:absref="F:\Github\echemdb\svgdigitizer\doc\files\others\../images/example_plot_p0.png"
      xlink:href="../images/example_plot_p0.png"
-     id="image4"
-     y="0"
-     x="0"
-     width="2126px"
+     height="1418px"
      sodipodi:insensitive="true"
-     height="1418px" />
+     width="2126px"
+     x="0"
+     y="0"
+     id="image4" />
   <g
      id="g4517"
      inkscape:export-filename="F:\Github\echemdb\svgdigitizer\doc\files\images\example_plot_p0_demo.png"
@@ -96,7 +96,7 @@
          y="1347.6027"
          x="1583.3571"
          id="tspan4519-2"
-         sodipodi:role="line">x2: 80 V</tspan></text>
+         sodipodi:role="line">U2: 80 V</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path4557"
@@ -117,7 +117,7 @@
          y="1384.804"
          x="418.47305"
          id="tspan4519"
-         sodipodi:role="line">x1: 10 V</tspan></text>
+         sodipodi:role="line">U1: 10 V</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path4564"
@@ -138,7 +138,7 @@
          y="900.1532"
          x="431.48019"
          id="tspan4519-29"
-         sodipodi:role="line">y1: 10 m / s</tspan></text>
+         sodipodi:role="line">v1: 10 m / s</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path4571"
@@ -159,7 +159,7 @@
          y="149.40761"
          x="540.17865"
          id="tspan4519-0"
-         sodipodi:role="line">y2: 60 m / s</tspan></text>
+         sodipodi:role="line">v2: 60 m / s</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path4578"

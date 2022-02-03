@@ -13,22 +13,25 @@ jupyter:
     name: python3
 ---
 
+<!-- #raw -->
+<!-- 
+The original figure in this documentation were produced with Xournal++ (./files/others/example_plot.xopp). The content of the XOPP was exported as pdf (./files/others/example_plot.pdf). With the paginate function of svgdigitizer the page was exported as PNG and SVG.
+* (./files/others/example_plot.png)
+* (./files/others/example_plot.svg)
+
+The latter was renamed and to ./files/others/example_plot_demo.svg and the curve was digitized. The digitized plot was exported as ./files/others/example_plot_demo.png
+-->
+<!-- #endraw -->
+
 Welcome to svgdigitizer's documentation!
 ========================================
-
-<!--
-```{todo}
-* what is svgdigitizer and what is our aim.
-* then refer to installation, cli, api and cv.
-```
--->
 
 The `svgdigitizer` allows recovering data from a curve in a figure, 
 plotted in a 2D coordinate system.
 Such plots are often found in scientific publications, where
 in many cases, especially for old puplications, the underlying data 
 is not accessible anymore. 
-In some cases, the axes of the plot can be skewed, e.g., in scanning
+In some cases, the axes of the plot can be skewed, e.g., in scanned
 documents. An extreme case for such a plot is depicted in the following figure.
 
 ![files/images/example_plot_p0.png](files/images/example_plot_p0.png) 
@@ -42,13 +45,14 @@ can be provided anywhere in the SVG file. The resulting file looks as follows.
 
 ![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png) 
 
+
 ## [Command line interface](cli.md)
-This SVG can be digitized from the [command line interface](cli.md), which creates a CSV file of the x and y data. 
-The resolution can be specified by `--sampling-interval`. To recover the data from a plot with skewed axis specific an `--algorithm`.  
+This SVG can be digitized from the [command line interface](cli.md), which creates a {download}`CSV <./files/others/example_plot_p0_demo.csv>` file of the x and y data (here U and v). 
+The resolution can be specified by `--sampling-interval`. In this specifc case also indicate that the axes are `--skewed`.  
 
 
 ```sh .noeval
-svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval 0.01 --alogorithm XXX
+svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval 0.01 --skewed
 ```
 
 
@@ -71,7 +75,7 @@ plot.axis_labels
 plot.svg.get_texts()
 ```
 
-The sampled data can be extracted as a [pandas](https://pandas.pydata.org/) dataframe:
+The sampled data can be extracted as a [pandas](https://pandas.pydata.org/) dataframe, where the values are given the original plots units:
 ```python
 plot.df
 ```
@@ -80,19 +84,17 @@ A plot can be created via
 ```python
 plot.plot()
 ```
-<!-- #region -->
 Installation
 ============
 
 The package is hosted on [PiPY](https://pypi.org/project/svgdigitizer/) and can be installed via
 
-```sh
-%%sh
+```sh .noeval
 pip install svgdigitizer
 ```
-<!-- #endregion -->
 
-Please consult [our documentation](installation.md) for detailed installation instructions.
+
+Read the [installation instructions](installation.md) on further details if you want to contribute to the project.
 
 Further information
 ===================
