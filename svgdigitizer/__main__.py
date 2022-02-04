@@ -115,7 +115,11 @@ def _create_svgplot(svg, sampling_interval, skewed):
     from svgdigitizer.svg import SVG
     from svgdigitizer.svgplot import SVGPlot
 
-    return SVGPlot(SVG(svg), sampling_interval=sampling_interval, algorithm="mark-aligned" if skewed else "axis-aligned")
+    return SVGPlot(
+        SVG(svg),
+        sampling_interval=sampling_interval,
+        algorithm="mark-aligned" if skewed else "axis-aligned",
+    )
 
 
 @click.command()
@@ -171,7 +175,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
 
     """
     with open(svg, "rb") as infile:
-        svg_plot = _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed)
+        svg_plot = _create_svgplot(
+            infile, sampling_interval=sampling_interval, skewed=skewed
+        )
 
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
