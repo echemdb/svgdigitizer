@@ -795,6 +795,35 @@ class SVGPlot:
                    [ 0.  , -0.01,  1.  ],
                    [ 0.  ,  0.  ,  1.  ]])
 
+        A skewed plot like the one above but with a scale bar::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -100 200" />
+            ...     <text x="-300" y="300">y_scale_bar: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> SVGPlot(svg, algorithm='mark-aligned').transformation
+            array([[ 0.01,  0.01, -1.  ],
+                   [ 0.  , -0.01,  1.  ],
+                   [ 0.  ,  0.  ,  1.  ]])
+
         """
         # We construct the basic transformation from the SVG coordinate system
         # to the plot coordinate system from four points in the SVG about we
