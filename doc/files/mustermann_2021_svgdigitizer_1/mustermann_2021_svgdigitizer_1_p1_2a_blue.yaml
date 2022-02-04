@@ -17,7 +17,7 @@ curator:
     
 figure description:
     version: 1
-    linked measurements: DEMS # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
+    simultaneous measurements: DEMS # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
     comment: data acquisition rate was low. Some features do not appear smooth. # Add whatever you think is important to understand the data
 
 electrochemical system:
