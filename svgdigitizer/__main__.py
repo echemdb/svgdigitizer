@@ -19,10 +19,10 @@ EXAMPLES::
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021 Albert Engstfeld
-#        Copyright (C) 2021 Johannes Hermann
-#        Copyright (C) 2021 Julian Rüth
-#        Copyright (C) 2021 Nicolas Hörmann
+#        Copyright (C) 2021-2022 Albert Engstfeld
+#        Copyright (C)      2021 Johannes Hermann
+#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C)      2021 Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -49,6 +49,14 @@ def cli():
 
     This redirects to the individual commands listed below.
     """
+
+
+# The --skewed flag that is shared by many of the subcommands
+skewed_option = click.option(
+    "--skewed",
+    is_flag=True,
+    help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
+)
 
 
 def _outfile(template, suffix=None, outdir=None):
@@ -90,6 +98,30 @@ def _outfile(template, suffix=None, outdir=None):
     return template
 
 
+def _create_svgplot(svg, sampling_interval, skewed):
+    r"""
+    Return an :class:`SVGPlot` as read from the stream `svg`.
+
+    EXAMPLES::
+
+        >>> from .test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy.svg") as directory:
+        ...     svg = os.path.join(directory, "xy.svg")
+        ...     with open(svg, "rb") as infile:
+        ...         _create_svgplot(infile, sampling_interval=None, skewed=False)
+        <svgdigitizer.svgplot.SVGPlot object at 0x...>
+
+    """
+    from svgdigitizer.svg import SVG
+    from svgdigitizer.svgplot import SVGPlot
+
+    return SVGPlot(
+        SVG(svg),
+        sampling_interval=sampling_interval,
+        algorithm="mark-aligned" if skewed else "axis-aligned",
+    )
+
+
 @click.command()
 @click.option(
     "--sampling-interval",
@@ -97,8 +129,9 @@ def _outfile(template, suffix=None, outdir=None):
     default=None,
     help="Sampling interval on the x-axis.",
 )
+@skewed_option
 @click.argument("svg", type=click.File("rb"))
-def plot(svg, sampling_interval):
+def plot(svg, sampling_interval, skewed):
     r"""
     Display a plot of the data traced in an SVG.
 
@@ -109,10 +142,8 @@ def plot(svg, sampling_interval):
         ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
 
     """
-    from svgdigitizer.svg import SVG
-    from svgdigitizer.svgplot import SVGPlot
-
-    SVGPlot(SVG(svg), sampling_interval=sampling_interval).plot()
+    svgplot = _create_svgplot(svg, sampling_interval=sampling_interval, skewed=skewed)
+    svgplot.plot()
 
 
 @click.command()
@@ -128,8 +159,9 @@ def plot(svg, sampling_interval):
     default=None,
     help="write output files to this directory",
 )
+@skewed_option
 @click.argument("svg", type=click.Path(exists=True))
-def digitize(svg, sampling_interval, outdir):
+def digitize(svg, sampling_interval, outdir, skewed):
     r"""
     Digitize a plot.
 
@@ -142,11 +174,10 @@ def digitize(svg, sampling_interval, outdir):
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
     """
-    from svgdigitizer.svg import SVG
-    from svgdigitizer.svgplot import SVGPlot
-
     with open(svg, "rb") as infile:
-        svg_plot = SVGPlot(SVG(infile), sampling_interval=sampling_interval)
+        svg_plot = _create_svgplot(
+            infile, sampling_interval=sampling_interval, skewed=skewed
+        )
 
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
@@ -169,7 +200,8 @@ def digitize(svg, sampling_interval, outdir):
     help="write output files to this directory",
 )
 @click.argument("svg", type=click.Path(exists=True))
-def digitize_cv(svg, sampling_interval, metadata, package, outdir):
+@skewed_option
+def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     r"""
     Digitize a cylic voltammogram.
 
@@ -208,13 +240,11 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 
     """
     from svgdigitizer.electrochemistry.cv import CV
-    from svgdigitizer.svg import SVG
-    from svgdigitizer.svgplot import SVGPlot
 
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
         with open(svg, "rb") as infile:
-            cv = CV(SVGPlot(SVG(infile)))
+            cv = CV(_create_svgplot(infile, sampling_interval=None, skewed=skewed))
 
             from astropy import units as u
 
@@ -227,7 +257,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir):
 
     with open(svg, "rb") as infile:
         cv = CV(
-            SVGPlot(SVG(infile), sampling_interval=sampling_interval),
+            _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
         )
 
