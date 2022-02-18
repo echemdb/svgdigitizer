@@ -259,7 +259,6 @@ class SVGPlot:
         for axis, orientation in self.axis_orientations.items():
             if orientation == AxisOrientation.HORIZONTAL:
                 return axis
-        return "x"
 
     @property
     @cache
@@ -298,8 +297,6 @@ class SVGPlot:
         for axis, orientation in self.axis_orientations.items():
             if orientation == AxisOrientation.VERTICAL:
                 return axis
-
-        return "y"
 
     @property
     @cache
@@ -420,7 +417,6 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.axis_varaibles
             ['E', 'intensity']
-
         """
 
         return list(self._grouped_ref_points.keys())
@@ -521,7 +517,6 @@ class SVGPlot:
             ...    print(logs.output)
             {'x': 'm', 'y': 'A'}
             ['WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.']
-
         """
 
         def axis_label(axis):
