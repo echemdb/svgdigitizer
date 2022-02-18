@@ -899,9 +899,6 @@ class SVGPlot:
     @property
     @cache
     def transformation(self):
-        return self._transformation(self.xlabel, self.ylabel, self._algorithm)
-
-    def _transformation(self, xlabel, ylabel, algorithm):
         r"""
         Return the affine map from the SVG coordinate system to the plot
         coordinate system as a matrix, see
@@ -1004,6 +1001,14 @@ class SVGPlot:
             array([[ 0.01,  0.01, -1.  ],
                    [ 0.  , -0.01,  1.  ],
                    [ 0.  ,  0.  ,  1.  ]])
+        """
+        return self._transformation(self.xlabel, self.ylabel, self._algorithm)
+
+    def _transformation(self, xlabel, ylabel, algorithm):
+        r"""
+        Return the affine map from the SVG coordinate system to the plot
+        coordinate system as a matrix. Takes x and y variable name and
+        algorithm as arguments.
         """
 
         # We construct the basic transformation from the SVG coordinate system
