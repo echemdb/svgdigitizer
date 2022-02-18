@@ -355,9 +355,9 @@ class SVGPlot:
                 delta_x = abs(scalebar[0])
                 delta_y = abs(scalebar[1])
             # invert on landscape page orientation
-            if (delta_y < delta_x):
+            if delta_y < delta_x:
                 axis_orientations[axis] = AxisOrientation.HORIZONTAL
-            elif (delta_y > delta_x):
+            elif delta_y > delta_x:
                 axis_orientations[axis] = AxisOrientation.VERTICAL
 
         return axis_orientations
