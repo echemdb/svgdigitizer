@@ -136,7 +136,6 @@ specifying a `sampling_interval`::
 import logging
 from enum import Enum
 from functools import cache
-from itertools import groupby
 
 import pandas as pd
 
@@ -259,7 +258,7 @@ class SVGPlot:
             'E'
         """
 
-        [axis] = [axis for axis in self.axis_orientations.items() if self.axis_orientations[axis] == AxisOrientation.HORIZONTAL]
+        [axis] = [axis for axis, orientation in self.axis_orientations.items() if orientation == AxisOrientation.HORIZONTAL]
         return axis
 
     @property
@@ -296,7 +295,7 @@ class SVGPlot:
             'j'
         """
 
-        [axis] = [axis for axis in self.axis_orientations.items() if self.axis_orientations[axis] == AxisOrientation.VERTICAL]
+        [axis] = [axis for axis, orientation in self.axis_orientations.items() if orientation == AxisOrientation.VERTICAL]
         return axis
 
     @property
@@ -416,7 +415,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.axis_varaibles
+            >>> plot.axis_variables
             ['E', 'intensity']
         """
 
@@ -550,19 +549,17 @@ class SVGPlot:
         Return the reference points grouped by axis variable.
         """
 
-        # group ref_points by axis
-        keyfunc = lambda x: str(x.label).split(":")[0][
-            :-1
-        ]  # allow multi character axis label
         ref_points = [points[0] for points in self.labeled_paths["ref_point"]]
-        # without sorting only the last contiguous occurences are returned in the grouping dict
-        ref_points = sorted(ref_points, key=keyfunc)
-        # grouping by first letter of the label text
-        grouped_ref_points = {
-            variable: list(g) for variable, g in groupby(ref_points, keyfunc)
-        }
 
-        if len(grouped_ref_points) != 2:
+        def variable(point):
+            return str(point.label).split(":")[0].strip()[:-1]
+
+        # sort variables for simpler testing of dependent methods
+        variables = sorted(set(variable(point) for point in ref_points))
+
+        grouped_ref_points = {v: [point for point in ref_points if variable(point) == v] for v in variables}
+
+        if len(variables) != 2:
             raise NotImplementedError(
                 f"Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables {list(grouped_ref_points.keys())} on the axes."
             )
