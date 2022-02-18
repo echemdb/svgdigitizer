@@ -144,7 +144,9 @@ logger = logging.getLogger("svgplot")
 
 
 class AxisOrientation(Enum):
-    r"""Enum representing axis orientation."""
+    r"""
+    The orientation of a plot axis.
+    """
     HORIZONTAL = "horizontal"
     VERTICAL = "vertical"
 
