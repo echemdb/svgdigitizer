@@ -559,7 +559,7 @@ class SVGPlot:
         ref_points = sorted(ref_points, key=keyfunc)
         # grouping by first letter of the label text
         grouped_ref_points = {
-            quantity: list(g) for quantity, g in groupby(ref_points, keyfunc)
+            variable: list(g) for variable, g in groupby(ref_points, keyfunc)
         }
 
         if len(grouped_ref_points) > 2:
