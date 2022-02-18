@@ -208,8 +208,8 @@ class SVGPlot:
              x    y
         0  0.0  0.0
         1  1.0  1.0
-
     """
+
     _EPSILON = 1e-6
 
     def __init__(
@@ -333,32 +333,20 @@ class SVGPlot:
             {'E': <AxisOrientation.HORIZONTAL: 'horizontal'>, 'j': <AxisOrientation.VERTICAL: 'vertical'>}
         """
 
+        from numpy import trace
+
         axis_orientations = {}
 
-        for axis, points in self._grouped_ref_points.items():
-            # distinguish between 2 ref points
-            if len(points) == 2:
-                delta_x = abs(points[0].points[0][0] - points[1].points[0][0])
-                delta_y = abs(points[0].points[0][1] - points[1].points[0][1])
-            # and ref point together with scalebar
-            else:
-                labeled_paths = self.labeled_paths["scale_bar"]
-                axis_paths = [
-                    i for i in labeled_paths if str(i[0].label).startswith(axis)
-                ][0]
-
-                endpoints = [path.far for path in axis_paths]
-                scalebar = (
-                    endpoints[0][0] - endpoints[1][0],
-                    endpoints[0][1] - endpoints[1][1],
-                )
-                delta_x = abs(scalebar[0])
-                delta_y = abs(scalebar[1])
-            # invert on landscape page orientation
-            if delta_y < delta_x:
-                axis_orientations[axis] = AxisOrientation.HORIZONTAL
-            elif delta_y > delta_x:
-                axis_orientations[axis] = AxisOrientation.VERTICAL
+        if (trace(
+            self._transformation(self.axis_variables[0], self.axis_variables[1], "mark-aligned")
+            ) >
+               trace(
+            self._transformation(self.axis_variables[1], self.axis_variables[0], "mark-aligned"))):
+            axis_orientations[self.axis_variables[0]] = AxisOrientation.HORIZONTAL
+            axis_orientations[self.axis_variables[1]] = AxisOrientation.VERTICAL
+        else:
+            axis_orientations[self.axis_variables[0]] = AxisOrientation.HORIZONTAL
+            axis_orientations[self.axis_variables[1]] = AxisOrientation.VERTICAL
 
         return axis_orientations
 
@@ -521,12 +509,12 @@ class SVGPlot:
 
         def axis_label(axis):
             labels = [
-                point[1][-1]
+                point[-1]
                 for point in [
                     self.marked_points[axis + "1"],
                     self.marked_points[axis + "2"],
                 ]
-                if point[1][-1] is not None
+                if point[-1] is not None
             ]
 
             if len(labels) == 0:
@@ -549,11 +537,18 @@ class SVGPlot:
         Return the reference points grouped by axis variable.
         """
 
-        ref_points = [points[0] for points in self.labeled_paths["ref_point"]]
-
         def variable(point):
             return str(point.label).split(":")[0].strip()[:-1]
 
+        ref_points = []
+        for labeled_paths in self.labeled_paths["ref_point"]:
+            assert len(labeled_paths) != 0
+
+            if len(labeled_paths) != 1:
+                raise ValueError(
+                    f"Expected exactly one path to be grouped with {labeled_paths.label}"
+                )
+            ref_points.append(labeled_paths[0])
         # sort variables for simpler testing of dependent methods
         variables = sorted(set(variable(point) for point in ref_points))
 
@@ -577,43 +572,20 @@ class SVGPlot:
         """
         points = {}
 
-        xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
-        ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
-
         # Process explicitly marked point on the axes.
-        for labeled_paths in self.labeled_paths["ref_point"]:
-            assert len(labeled_paths) != 0
 
-            if len(labeled_paths) != 1:
-                raise ValueError(
-                    f"Expected exactly one path to be grouped with {labeled_paths.label}"
-                )
+        for grouped_paths in self._grouped_ref_points.values():
 
-            path = labeled_paths[0]
+            for labeled_path in grouped_paths:
+                label = labeled_path.label
+                point = label.point
+                value = float(label.value)
+                unit = label.unit or None
 
-            label = labeled_paths.label
-            point = label.point
-            value = float(label.value)
-            unit = label.unit or None
+                if point in points:
+                    raise Exception(f"Found axis label {label} more than once.")
 
-            if point in xlabels:
-                plot = (value, None, unit)
-            elif point in ylabels:
-                plot = (None, value, unit)
-            else:
-                raise NotImplementedError(
-                    f"Unexpected label grouped with marked point. Expected the label to be one of {xlabels + ylabels} but found {label}."
-                )
-
-            if point in points:
-                raise Exception(f"Found axis label {label} more than once.")
-
-            if len(labeled_paths) != 1:
-                raise NotImplementedError(
-                    f"Expected exactly one path to be grouped with the marked point {label} but found {len(labeled_paths.paths)}."
-                )
-
-            points[point] = (path.far, plot)
+                points[point] = (labeled_path.far, value, unit)
 
         return points
 
@@ -625,6 +597,7 @@ class SVGPlot:
         the SVG coordinate system to the point's coordinates in the plot
         coordinate system, or `None` if that point's coordinate is not known.
         """
+
         points = {}
 
         # Process scale bars.
@@ -639,9 +612,9 @@ class SVGPlot:
             value = float(label.value)
             unit = label.unit or None
 
-            if axis not in [self.xlabel, self.ylabel]:
+            if axis not in self.axis_variables:
                 raise Exception(
-                    f"Expected label on scalebar to be one of {self.xlabel}, {self.ylabel} but found {axis}."
+                    f"Expected label on scalebar to be one of {*self.axis_variables,} but found {axis}."
                 )
 
             endpoints = [path.far for path in labeled_paths]
@@ -655,25 +628,26 @@ class SVGPlot:
             # We assume here that the scalebar was meant to be oriented like
             # the coordinate system in the SVG, i.e., x coordinates grow to the
             # right, y coordinates grow to the bottom.
-            if (
-                axis == self.xlabel
-                and scalebar[0] < 0
-                or axis == self.ylabel
-                and scalebar[1] > 0
-            ):
-                scalebar = (-scalebar[0], -scalebar[1])
+            # TODO figure out how this can be replaced 
+            # if (
+            #     axis == self.xlabel
+            #     and scalebar[0] < 0
+            #     or axis == self.ylabel
+            #     and scalebar[1] > 0
+            # ):
+            #     scalebar = (-scalebar[0], -scalebar[1])
 
             # Construct the second marked point from the first marked point + scalebar.
             base_point = base_points[axis + "1"]
             point = (
-                (base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]),
-                (None, None),
+                (base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]), value,
+                unit,
             )
-
-            if axis == self.xlabel:
-                point = (point[0], (base_point[1][0] + value, None, unit))
-            else:
-                point = (point[0], (None, base_point[1][1] + value, unit))
+            # TODO do we need this?
+            # if axis == self.xlabel:
+            #     point = (point[0], base_point[1][0] + value, unit))
+            # else:
+            #     point = (point[0], (None, base_point[1][1] + value, unit))
 
             points[axis + "2"] = point
 
@@ -717,7 +691,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
+            >>> plot.marked_points == {'x2': ((100.0, 100.0), 1.0, None), 'x1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 0.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None)}
             True
 
         TESTS:
@@ -747,31 +721,27 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.marked_points == {'x2': ((100.0, 100.0), (1.0, None, None)), 'x1': ((0.0, 100.0), (0.0, None, None)), 'y2': ((0.0, 0.0), (None, 1.0, None)), 'y1': ((0.0, 100.0), (None, 0.0, None))}
+            >>> plot.marked_points  == {'x1': ((0.0, 100.0), 0.0, None), 'x2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 200.0), 1.0, None)}
             True
-
         """
 
-        xlabels = [f"{self.xlabel}1", f"{self.xlabel}2"]
-        ylabels = [f"{self.ylabel}1", f"{self.ylabel}2"]
-
         points = self._marked_points_from_axis_markers
-
-        if xlabels[0] not in points:
-            raise Exception(f"Label {xlabels[0]} not found in SVG.")
-        if ylabels[0] not in points:
-            raise Exception(f"Label {ylabels[0]} not found in SVG.")
+        # TODO
+        # if xlabels[0] not in points:
+        #     raise Exception(f"Label {xlabels[0]} not found in SVG.")
+        # if ylabels[0] not in points:
+        #     raise Exception(f"Label {ylabels[0]} not found in SVG.")
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
                 raise Exception(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
-
-        if xlabels[1] not in points:
-            raise Exception(f"Label {xlabels[1]} not found in SVG.")
-        if ylabels[1] not in points:
-            raise Exception(f"Label {ylabels[1]} not found in SVG.")
+        # TODO
+        # if xlabels[1] not in points:
+        #     raise Exception(f"Label {xlabels[1]} not found in SVG.")
+        # if ylabels[1] not in points:
+        #     raise Exception(f"Label {ylabels[1]} not found in SVG.")
 
         return points
 
@@ -809,10 +779,9 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.scaling_factors
             {'x': 50.6, 'y': 50.6}
-
         """
 
-        scaling_factors = {self.xlabel: 1, self.ylabel: 1}
+        scaling_factors = {axis: 1 for axis in self.axis_variables}
 
         for label in self.svg.get_texts(
             r"^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)"
@@ -927,8 +896,8 @@ class SVGPlot:
             (0.0, 1.0)
             >>> plot.from_svg(0, 0)
             (-1.0, 1.0)
-
         """
+
         from numpy import dot
 
         return tuple(dot(self.transformation, [x, y, 1])[:2])
@@ -936,6 +905,9 @@ class SVGPlot:
     @property
     @cache
     def transformation(self):
+        return self._transformation(self.xlabel, self.ylabel, self._algorithm)
+
+    def _transformation(self, xlabel, ylabel, algorithm):
         r"""
         Return the affine map from the SVG coordinate system to the plot
         coordinate system as a matrix, see
@@ -1038,7 +1010,6 @@ class SVGPlot:
             array([[ 0.01,  0.01, -1.  ],
                    [ 0.  , -0.01,  1.  ],
                    [ 0.  ,  0.  ,  1.  ]])
-
         """
 
         # We construct the basic transformation from the SVG coordinate system
@@ -1056,10 +1027,10 @@ class SVGPlot:
         # have the same x coordinate in the plot coordinate system.
         # In any case, this gives six relations for the six unknowns of an
         # affine transformation.
-        x_1 = self.marked_points[f"{self.xlabel}1"]
-        x_2 = self.marked_points[f"{self.xlabel}2"]
-        y_1 = self.marked_points[f"{self.ylabel}1"]
-        y_2 = self.marked_points[f"{self.ylabel}2"]
+        x_1 = self.marked_points[f"{xlabel}1"]
+        x_2 = self.marked_points[f"{xlabel}2"]
+        y_1 = self.marked_points[f"{ylabel}1"]
+        y_2 = self.marked_points[f"{ylabel}2"]
 
         # We find the linear transformation:
         # [transformation[0] transformation[1] transformation[2]]
@@ -1067,17 +1038,18 @@ class SVGPlot:
         # [   0    0    1]
         # By solving for the linear conditions indicated above:
         conditions = [
+            # TODO check if it doesn't break anything to use `x_1[1]` instead of `x_1[1]`
             # x1 maps to something with the correct x coordinate
-            ([x_1[0][0], x_1[0][1], 1, 0, 0, 0], x_1[1][0]),
+            ([x_1[0][0], x_1[0][1], 1, 0, 0, 0], x_1[1]),
             # y1 maps to something with the correct y coordinate
-            ([0, 0, 0, y_1[0][0], y_1[0][1], 1], y_1[1][1]),
+            ([0, 0, 0, y_1[0][0], y_1[0][1], 1], y_1[1]),
             # x2 maps to something with the correct x coordinate
-            ([x_2[0][0], x_2[0][1], 1, 0, 0, 0], x_2[1][0]),
+            ([x_2[0][0], x_2[0][1], 1, 0, 0, 0], x_2[1]),
             # y2 maps to something with the correct y coordinate
-            ([0, 0, 0, y_2[0][0], y_2[0][1], 1], y_2[1][1]),
+            ([0, 0, 0, y_2[0][0], y_2[0][1], 1], y_2[1]),
         ]
 
-        if self._algorithm == "axis-aligned":
+        if algorithm == "axis-aligned":
             conditions.extend(
                 [
                     # Moving along the SVG x axis does not change the y coordinate
@@ -1086,7 +1058,7 @@ class SVGPlot:
                     ([0, 1, 0, 0, 0, 0], 0),
                 ]
             )
-        elif self._algorithm == "mark-aligned":
+        elif algorithm == "mark-aligned":
             conditions.extend(
                 [
                     # x1 and x2 map to the same y coordinate
@@ -1114,8 +1086,8 @@ class SVGPlot:
 
         A = dot(
             [
-                [1 / self.scaling_factors[self.xlabel], 0, 0],
-                [0, 1 / self.scaling_factors[self.ylabel], 0],
+                [1 / self.scaling_factors[xlabel], 0, 0],
+                [0, 1 / self.scaling_factors[ylabel], 0],
                 [0, 0, 1],
             ],
             A,
@@ -1175,8 +1147,8 @@ class SVGPlot:
             Traceback (most recent call last):
             ...
             Exception: No curve main curve found in SVG.
-
         """
+
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
@@ -1250,8 +1222,8 @@ class SVGPlot:
             ...     print(warnings.output)
             {'ref_point': [], 'scale_bar': [], 'curve': []}
             ['WARNING:svgplot:Ignoring <path> with unsupported label kurve: 0.']
-
         """
+
         patterns = {
             "ref_point": r"^(?P<point>\w+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "scale_bar": r"^(?P<axis>\w+)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
@@ -1359,8 +1331,8 @@ class SVGPlot:
             >>> path = Path("M-267 26 C -261 25, -266 24, -264 23")
             >>> len(SVGPlot.sample_path(path, .001))
             4159
-
         """
+
         samples = []
 
         # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
@@ -1430,8 +1402,8 @@ class SVGPlot:
 
             >>> SVGPlot._sample_segment(segment, .75, sample_from_x_length=2)
             ([0, 0.75, 1], 0.0)
-
         """
+
         if sample_from_x_length < 0:
             raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
 
@@ -1531,8 +1503,8 @@ class SVGPlot:
             ([0.25, 0.5, 0.75], 1.0)
             >>> SVGPlot._sample_snippet(segment, sampling_interval=1, sample_from_x_length=.5, t_range=[.5, 1.], x_length_range=[.5, 1.])
             ([0.5], 1.5)
-
         """
+
         if sample_from_x_length < 0:
             raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
 
@@ -1598,9 +1570,8 @@ class SVGPlot:
             Traceback (most recent call last):
             ...
             ValueError: ...
-
-
         """
+
         roots = polynomial.roots
 
         if len(roots) == 0:
@@ -1723,8 +1694,8 @@ class SVGPlot:
             3  0.6  0.0
             4  0.8  0.0
             5  1.0  0.0
-
         """
+
         if self.sampling_interval:
             points = SVGPlot.sample_path(self.curve, self.sampling_interval)
         else:
@@ -1767,8 +1738,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.plot()
-
         """
+
         self.df.plot(
             x=self.xlabel,
             y=self.ylabel,
