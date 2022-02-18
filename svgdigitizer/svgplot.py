@@ -143,12 +143,6 @@ import pandas as pd
 logger = logging.getLogger("svgplot")
 
 
-class PageOrientation(Enum):
-    r"""Enum representing the page orientation to be able to to autodetect axis orientation."""
-    PORTRAIT = "portrait"
-    LANDSCAPE = "landscape"
-
-
 class AxisOrientation(Enum):
     r"""Enum representing axis orientation."""
     HORIZONTAL = "horizontal"
@@ -220,13 +214,11 @@ class SVGPlot:
     def __init__(
         self,
         svg,
-        page_orientation=PageOrientation.PORTRAIT,
         sampling_interval=None,
         curve=None,
         algorithm="axis-aligned",
     ):
         self.svg = svg
-        self.page_orientation = page_orientation
         self.sampling_interval = sampling_interval
         self._curve = curve
         self._algorithm = algorithm
@@ -263,13 +255,7 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.xlabel
             'E'
-
-            >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
-            >>> plot.xlabel
-            'j'
-
         """
-
         for axis, orientation in self.axis_orientations.items():
             if orientation == AxisOrientation.HORIZONTAL:
                 return axis
@@ -305,13 +291,8 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.xlabel
-            'E'
-
-            >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
-            >>> plot.xlabel
+            >>> plot.ylabel
             'j'
-
         """
 
         for axis, orientation in self.axis_orientations.items():
@@ -353,11 +334,6 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.axis_orientations
             {'E': <AxisOrientation.HORIZONTAL: 'horizontal'>, 'j': <AxisOrientation.VERTICAL: 'vertical'>}
-
-            >>> plot = SVGPlot(svg, page_orientation=PageOrientation.LANDSCAPE)
-            >>> plot.axis_orientations
-            {'E': <AxisOrientation.VERTICAL: 'vertical'>, 'j': <AxisOrientation.HORIZONTAL: 'horizontal'>}
-
         """
 
         axis_orientations = {}
@@ -382,13 +358,9 @@ class SVGPlot:
                 delta_x = abs(scalebar[0])
                 delta_y = abs(scalebar[1])
             # invert on landscape page orientation
-            if (delta_y < delta_x) ^ (
-                self.page_orientation == PageOrientation.LANDSCAPE
-            ):
+            if (delta_y < delta_x):
                 axis_orientations[axis] = AxisOrientation.HORIZONTAL
-            elif (delta_y > delta_x) ^ (
-                self.page_orientation == PageOrientation.LANDSCAPE
-            ):
+            elif (delta_y > delta_x):
                 axis_orientations[axis] = AxisOrientation.VERTICAL
 
         return axis_orientations
