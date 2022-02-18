@@ -562,9 +562,9 @@ class SVGPlot:
             variable: list(g) for variable, g in groupby(ref_points, keyfunc)
         }
 
-        if len(grouped_ref_points) > 2:
-            raise ValueError(
-                f"Reference points contain more than two axis names ({list(grouped_ref_points.keys())}). At the moment only 2D plots are supported."
+        if len(grouped_ref_points) != 2:
+            raise NotImplementedError(
+                f"Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables {list(grouped_ref_points.keys())} on the axes."
             )
 
         return grouped_ref_points
