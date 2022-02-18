@@ -266,7 +266,7 @@ class SVGPlot:
     @cache
     def ylabel(self):
         r"""
-        Return the label of the x axis.
+        Return the label of the y axis.
 
         EXAMPLES::
 
