@@ -367,7 +367,7 @@ class SVGPlot:
 
     @property
     @cache
-    def axis_symbols(self):
+    def axis_variables(self):
         r"""
         Return the label for each axis.
 
@@ -395,7 +395,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.axis_symbols
+            >>> plot.axis_variables
             ['E', 'j']
 
             >>> svg = SVG(StringIO(r'''
@@ -418,7 +418,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.axis_symbols
+            >>> plot.axis_varaibles
             ['E', 'intensity']
 
         """
@@ -429,7 +429,7 @@ class SVGPlot:
     @cache
     def axis_labels(self):
         r"""
-        Return the label for each axis as dict with symbol as key and unit as value.
+        Return the label for each axis as dict with variable as key and unit as value.
 
         EXAMPLES::
 
@@ -544,14 +544,14 @@ class SVGPlot:
             return labels[-1]
 
         return {
-            axis_symbol: axis_label(axis_symbol) for axis_symbol in self.axis_symbols
+            axis_variable: axis_label(axis_variable) for axis_variable in self.axis_variables
         }
 
     @property
     @cache
     def _grouped_ref_points(self):
         r"""
-        Return the reference points grouped by axis symbol.
+        Return the reference points grouped by axis variable.
         """
 
         # group ref_points by axis
