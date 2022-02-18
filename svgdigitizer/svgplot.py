@@ -258,9 +258,9 @@ class SVGPlot:
             >>> plot.xlabel
             'E'
         """
-        for axis, orientation in self.axis_orientations.items():
-            if orientation == AxisOrientation.HORIZONTAL:
-                return axis
+
+        [axis] = [axis for axis in self.axis_orientations.items() if self.axis_orientations[axis] == AxisOrientation.HORIZONTAL]
+        return axis
 
     @property
     @cache
@@ -296,9 +296,8 @@ class SVGPlot:
             'j'
         """
 
-        for axis, orientation in self.axis_orientations.items():
-            if orientation == AxisOrientation.VERTICAL:
-                return axis
+        [axis] = [axis for axis in self.axis_orientations.items() if self.axis_orientations[axis] == AxisOrientation.VERTICAL]
+        return axis
 
     @property
     @cache
