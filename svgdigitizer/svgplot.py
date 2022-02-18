@@ -258,7 +258,11 @@ class SVGPlot:
             'E'
         """
 
-        [axis] = [axis for axis, orientation in self.axis_orientations.items() if orientation == AxisOrientation.HORIZONTAL]
+        [axis] = [
+            axis
+            for axis, orientation in self.axis_orientations.items()
+            if orientation == AxisOrientation.HORIZONTAL
+        ]
         return axis
 
     @property
@@ -295,7 +299,11 @@ class SVGPlot:
             'j'
         """
 
-        [axis] = [axis for axis, orientation in self.axis_orientations.items() if orientation == AxisOrientation.VERTICAL]
+        [axis] = [
+            axis
+            for axis, orientation in self.axis_orientations.items()
+            if orientation == AxisOrientation.VERTICAL
+        ]
         return axis
 
     @property
@@ -337,11 +345,15 @@ class SVGPlot:
 
         axis_orientations = {}
 
-        if (trace(
-            self._transformation(self.axis_variables[0], self.axis_variables[1], "mark-aligned")
-            ) >
-               trace(
-            self._transformation(self.axis_variables[1], self.axis_variables[0], "mark-aligned"))):
+        if trace(
+            self._transformation(
+                self.axis_variables[0], self.axis_variables[1], "mark-aligned"
+            )
+        ) > trace(
+            self._transformation(
+                self.axis_variables[1], self.axis_variables[0], "mark-aligned"
+            )
+        ):
             axis_orientations[self.axis_variables[0]] = AxisOrientation.HORIZONTAL
             axis_orientations[self.axis_variables[1]] = AxisOrientation.VERTICAL
         else:
@@ -527,7 +539,8 @@ class SVGPlot:
             return labels[-1]
 
         return {
-            axis_variable: axis_label(axis_variable) for axis_variable in self.axis_variables
+            axis_variable: axis_label(axis_variable)
+            for axis_variable in self.axis_variables
         }
 
     @property
@@ -552,7 +565,10 @@ class SVGPlot:
         # sort variables for simpler testing of dependent methods
         variables = sorted(set(variable(point) for point in ref_points))
 
-        grouped_ref_points = {v: [point for point in ref_points if variable(point) == v] for v in variables}
+        grouped_ref_points = {
+            v: [point for point in ref_points if variable(point) == v]
+            for v in variables
+        }
 
         if len(variables) != 2:
             raise NotImplementedError(
@@ -634,7 +650,8 @@ class SVGPlot:
             # Construct the second marked point from the first marked point + scalebar.
             base_point = base_points[axis + "1"]
             point = (
-                (base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]), value,
+                (base_point[0][0] + scalebar[0], base_point[0][1] + scalebar[1]),
+                value,
                 unit,
             )
             # TODO do we need this?
