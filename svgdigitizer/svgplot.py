@@ -625,17 +625,11 @@ class SVGPlot:
 
             # The scalebar has an explicit orientation in the SVG but the
             # author of the scalebar was likely not aware.
+            # TODO correct description
             # We assume here that the scalebar was meant to be oriented like
             # the coordinate system in the SVG, i.e., x coordinates grow to the
             # right, y coordinates grow to the bottom.
-            # TODO figure out how this can be replaced 
-            # if (
-            #     axis == self.xlabel
-            #     and scalebar[0] < 0
-            #     or axis == self.ylabel
-            #     and scalebar[1] > 0
-            # ):
-            #     scalebar = (-scalebar[0], -scalebar[1])
+            scalebar = (-abs(scalebar[0]), -abs(scalebar[1]))
 
             # Construct the second marked point from the first marked point + scalebar.
             base_point = base_points[axis + "1"]
@@ -721,12 +715,12 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.marked_points  == {'x1': ((0.0, 100.0), 0.0, None), 'x2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 200.0), 1.0, None)}
+            >>> plot.marked_points  == {'x1': ((0.0, 100.0), 0.0, None), 'x2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 0.0), 1.0, None)}
             True
         """
 
         points = self._marked_points_from_axis_markers
-        # TODO
+        # TODO see if still needed
         # if xlabels[0] not in points:
         #     raise Exception(f"Label {xlabels[0]} not found in SVG.")
         # if ylabels[0] not in points:
@@ -737,7 +731,7 @@ class SVGPlot:
                 raise Exception(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
-        # TODO
+        # TODO see if still needed
         # if xlabels[1] not in points:
         #     raise Exception(f"Label {xlabels[1]} not found in SVG.")
         # if ylabels[1] not in points:
