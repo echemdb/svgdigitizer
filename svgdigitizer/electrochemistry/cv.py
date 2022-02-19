@@ -314,6 +314,56 @@ class CV:
 
     @property
     @cache
+    def figure_label(self):
+        r"""
+        Return the figure name.
+
+        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ...   <text x="-200" y="330">Figure: 2b</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.figure_label
+            '2b'
+
+        """
+        figure_labels = self.svgplot.svg.get_texts("(?:figure|fig): (?P<label>.+)")
+        if len(figure_labels) == 0:
+            raise ValueError("No text with figure or fig found in the SVG.")
+
+        if len(figure_labels) > 1:
+            raise ValueError(
+                "Multiple text fields with a figure or fig were provided in the SVG file. Remove all but one."
+            )
+
+        return figure_labels[0].name
+
+    @property
+    @cache
     def rate(self):
         r"""
         Return the scan rate of the plot.
@@ -356,11 +406,11 @@ class CV:
         )
 
         if len(rates) == 0:
-            raise ValueError("No text with scan rate found in the SVG.")
+            raise ValueError("No text with scan rate or rate found in the SVG.")
 
         if len(rates) > 1:
             raise ValueError(
-                "Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
+                "Multiple text fields with a scan rate or rate were provided in the SVG file. Remove all but one."
             )
 
         # Convert to astropy unit
