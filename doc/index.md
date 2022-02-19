@@ -1,19 +1,18 @@
 ---
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.13.6
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
+jupytext:
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.13.6
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
 ---
 
-<!-- #raw -->
+```{raw-cell}
 <!-- 
 The original figure in this documentation were produced with Xournal++ (./files/others/example_plot.xopp). The content of the XOPP was exported as pdf (./files/others/example_plot.pdf). With the paginate function of svgdigitizer the page was exported as PNG and SVG.
 * (./files/others/example_plot.png)
@@ -21,7 +20,7 @@ The original figure in this documentation were produced with Xournal++ (./files/
 
 The latter was renamed and to ./files/others/example_plot_demo.svg and the curve was digitized. The digitized plot was exported as ./files/others/example_plot_demo.png
 -->
-<!-- #endraw -->
+```
 
 Welcome to svgdigitizer's documentation!
 ========================================
@@ -45,6 +44,7 @@ can be provided anywhere in the SVG file. The resulting file looks as follows.
 
 ![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png) 
 
++++
 
 ## [Command line interface](cli.md)
 This SVG can be digitized from the [command line interface](cli.md), which creates a {download}`CSV <./files/others/example_plot_p0_demo.csv>` file of the x and y data (here U and v). 
@@ -55,11 +55,12 @@ The resolution can be specified by `--sampling-interval`. In this specifc case a
 svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval 0.01 --skewed
 ```
 
++++
 
 ## [API](api.md)
 With the Python [API](api.md), the SVG can also be used to create an [SVGPlot instance](api/svgplot.md).
 
-```python
+```{code-cell} ipython3
 from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 
@@ -67,23 +68,27 @@ plot = SVGPlot(SVG(open('./files/others/example_plot_p0_demo.svg', 'rb')), sampl
 ```
 
 Now axis labels or any other text label in the SVG can be queried.
-```python
+
+```{code-cell} ipython3
 plot.axis_labels
 ```
 
-```python
+```{code-cell} ipython3
 plot.svg.get_texts()
 ```
 
 The sampled data can be extracted as a [pandas](https://pandas.pydata.org/) dataframe, where the values are given the original plots units:
-```python
+
+```{code-cell} ipython3
 plot.df
 ```
 
 A plot can be created via
-```python
+
+```{code-cell} ipython3
 plot.plot()
 ```
+
 Installation
 ============
 
@@ -93,6 +98,7 @@ The package is hosted on [PiPY](https://pypi.org/project/svgdigitizer/) and can 
 pip install svgdigitizer
 ```
 
++++
 
 Read the [installation instructions](installation.md) on further details if you want to contribute to the project.
 
