@@ -1,3 +1,3 @@
 **Added:**
 
-* Added flag `--skewed` in the CLI to the options `digitze` and `digitive_cv` to enable digitization of skewed plots (non orthogonal axis).
+* Added flag `--skewed` in the CLI to the commands `digitze` and `cv` to enable digitization of skewed plots (non-orthogonal axes).
