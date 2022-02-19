@@ -641,7 +641,6 @@ class SVGPlot:
 
             # The scalebar has an explicit orientation in the SVG but the
             # author of the scalebar was likely not aware.
-            # TODO correct description
             # We assume here that the scalebar was meant to be oriented like
             # the coordinate system in the SVG, i.e., x coordinates grow to the
             # right, y coordinates grow to the bottom.
@@ -654,11 +653,6 @@ class SVGPlot:
                 value,
                 unit,
             )
-            # TODO do we need this?
-            # if axis == self.xlabel:
-            #     point = (point[0], base_point[1][0] + value, unit))
-            # else:
-            #     point = (point[0], (None, base_point[1][1] + value, unit))
 
             points[axis + "2"] = point
 
@@ -737,22 +731,12 @@ class SVGPlot:
         """
 
         points = self._marked_points_from_axis_markers
-        # TODO see if still needed
-        # if xlabels[0] not in points:
-        #     raise Exception(f"Label {xlabels[0]} not found in SVG.")
-        # if ylabels[0] not in points:
-        #     raise Exception(f"Label {ylabels[0]} not found in SVG.")
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
                 raise Exception(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
-        # TODO see if still needed
-        # if xlabels[1] not in points:
-        #     raise Exception(f"Label {xlabels[1]} not found in SVG.")
-        # if ylabels[1] not in points:
-        #     raise Exception(f"Label {ylabels[1]} not found in SVG.")
 
         return points
 
@@ -1054,7 +1038,6 @@ class SVGPlot:
         # [   0    0    1]
         # By solving for the linear conditions indicated above:
         conditions = [
-            # TODO check if it doesn't break anything to use `x_1[1]` instead of `x_1[1]`
             # x1 maps to something with the correct x coordinate
             ([x_1[0][0], x_1[0][1], 1, 0, 0, 0], x_1[1]),
             # y1 maps to something with the correct y coordinate
