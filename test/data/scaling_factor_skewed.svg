@@ -15,7 +15,7 @@
    width="210.01567mm"
    height="279.99268mm"
    viewBox="0 0 793.76001 1058.24"
-   sodipodi:docname="scaling_factor.svg"
+   sodipodi:docname="scaling_factor_skewed.svg"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
   <metadata
      id="metadata30">
@@ -40,9 +40,9 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      units="mm"
-     inkscape:zoom="3.1713032"
-     inkscape:cx="97.020486"
-     inkscape:cy="633.29009"
+     inkscape:zoom="2.24245"
+     inkscape:cx="60.775668"
+     inkscape:cy="638.26286"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="-8"
@@ -129,8 +129,10 @@
          id="path1426" />
       <path
          style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m 137.9756,446.18695 38.97667,39.41971"
-         id="path39532" />
+         d="m 144.91281,446.18695 32.03946,39.41971"
+         id="path39532"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
     </g>
     <g
        id="g40164">
