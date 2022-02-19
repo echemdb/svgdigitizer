@@ -59,6 +59,11 @@ jobs:
         run: |
           svgdigitizer digitize test/data/scaling_factor.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/scaling_factor.csv"), pandas.read_csv("test/data/scaling_factor.csv.expected"))'
+      - name: cli-digitize-x_and_y_scale_bar
+        shell: bash -l {0}
+        run: |
+          svgdigitizer digitize test/data/x_and_y_scale_bar.svg
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/x_and_y_scale_bar.csv"), pandas.read_csv("test/data/x_and_y_scale_bar.csv.expected"))'
       - name: cli-digitize-sampling-interval
         shell: bash -l {0}
         run: |

@@ -644,7 +644,7 @@ class SVGPlot:
             # We assume here that the scalebar was meant to be oriented like
             # the coordinate system in the SVG, i.e., x coordinates grow to the
             # right, y coordinates grow to the bottom.
-            scalebar = (-abs(scalebar[0]), -abs(scalebar[1]))
+            scalebar = (abs(scalebar[0]), -abs(scalebar[1]))
 
             # Construct the second marked point from the first marked point + scalebar.
             base_point = base_points[axis + "1"]
@@ -1002,7 +1002,36 @@ class SVGPlot:
             array([[ 0.01,  0.01, -1.  ],
                    [ 0.  , -0.01,  1.  ],
                    [ 0.  ,  0.  ,  1.  ]])
+
+        A skewed plot like the one above but with a scale bar::
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -100 200" />
+            ...     <text x="-300" y="300">y_scale_bar: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> SVGPlot(svg, algorithm='mark-aligned').transformation
+            array([[ 0.01,  0.01, -1.  ],
+                   [ 0.  , -0.01,  1.  ],
+                   [ 0.  ,  0.  ,  1.  ]])
         """
+
         return self._transformation(self.xlabel, self.ylabel, self._algorithm)
 
     def _transformation(self, xlabel, ylabel, algorithm):
