@@ -111,6 +111,8 @@ class CV:
         ...   <text x="-200" y="330">scan rate: 50 V/s</text>
         ...   <text x="-300" y="330">comment: noisy data</text>
         ...   <text x="-400" y="330">figure: 2b</text>
+        ...   <text x="-400" y="530">linked: SXRD, SHG</text>
+        ...   <text x="-400" y="330">tags: BCV, HER, OER</text>
         ... </svg>'''))
         >>> cv = CV(SVGPlot(svg))
         >>> cv.df
@@ -127,10 +129,11 @@ class CV:
     The properties of the original plot and the dataframe can be returned as a dict::
 
         >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
-        {'source': {'figure': '2b', 'curve': '0'},
+        {'experimental': {'tags': ['BCV', 'HER', 'OER']},
+         'source': {'figure': '2b', 'curve': '0'},
          'figure description': {'version': 1,
           'type': 'digitized',
-          'simultaneous measurements': [],
+          'simultaneous measurements': ['SXRD', 'SHG'],
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
           'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'},
@@ -980,12 +983,14 @@ class CV:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ...   <text x="-400" y="430">comment: noisy data</text>
-            ...   <text x="-400" y="430">linked: SXRD, SHG</text>
-            ...   <text x="-200" y="330">Figure: 2b</text>
+            ...   <text x="-400" y="530">linked: SXRD, SHG</text>
+            ...   <text x="-200" y="630">Figure: 2b</text>
+            ...   <text x="-200" y="730">tags: BCV, HER, OER</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
-            {'source': {'figure': '2b', 'curve': '0'},
+            {'experimental': {'tags': ['BCV', 'HER', 'OER']},
+             'source': {'figure': '2b', 'curve': '0'},
              'figure description': {'version': 1,
               'type': 'digitized',
               'simultaneous measurements': ['SXRD', 'SHG'],
@@ -1004,10 +1009,14 @@ class CV:
 
         """
         metadata = self._metadata.copy()
-        # Add figure_description to metadata
+        # Add experimental to metadata
+        metadata.setdefault("experimental", {})
+        metadata["experimental"]["tags"] = self.tags
+        # Add source to metadata
         metadata.setdefault("source", {})
         metadata["source"]["figure"] = self.figure_label
         metadata["source"]["curve"] = self.curve_label
+        # Add figure_description to metadata
         metadata.setdefault("figure description", {})
         metadata["figure description"]["version"] = 1
         metadata["figure description"]["type"] = "digitized"
