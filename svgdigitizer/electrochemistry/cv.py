@@ -883,6 +883,60 @@ class CV:
         return [i.strip() for i in linked[0].value.split(",")]
 
     @property
+    def tags(self):
+        r"""
+        A list of acronyms commonly used in the communits to describe
+        the measurement.
+
+        The names are read from a ``<text>`` in the SVG file such as
+        ``<text>tags: BCV, HER, OER </text>``.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ...   <text x="-400" y="430">tags: BCV, HER, OER</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.tags
+            ['BCV', 'HER', 'OER']
+
+        """
+        linked = self.svgplot.svg.get_texts(
+            "(?:tags): (?P<value>.*)"
+        )
+
+        if not linked:
+            return []
+
+        if len(linked) > 1:
+            logger.warning(
+                f"More than one text field with tags. Ignoring all text field except for the first: {linked[0]}."
+            )
+
+        return [i.strip() for i in linked[0].value.split(",")]
+
+    @property
     def metadata(self):
         r"""
         A dict with properties of the original figure derived from
