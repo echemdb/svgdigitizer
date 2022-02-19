@@ -320,7 +320,10 @@ class CV:
         r"""
         Return the figure name.
 
-        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
+        The figure name is read from a ``<text>`` in the SVG file
+        such as ``<text>figure: 2b</text>``.
+
+        Besides `figure`, also `fig` is acceptable in the text field.
 
         EXAMPLES::
 
@@ -354,12 +357,13 @@ class CV:
 
         """
         figure_labels = self.svgplot.svg.get_texts("(?:figure|fig): (?P<label>.+)")
-        if len(figure_labels) == 0:
-            raise ValueError("No text with figure or fig found in the SVG.")
+
+        if not figure_labels:
+            return ''
 
         if len(figure_labels) > 1:
-            raise ValueError(
-                "Multiple text fields with a figure or fig were provided in the SVG file. Remove all but one."
+            logger.warning(
+                f"More than one text field with figure labels. Ignoring all text fields except for the first: {figure_labels[0]}."
             )
 
         return figure_labels[0].label
@@ -368,9 +372,9 @@ class CV:
     @cache
     def curve_label(self):
         r"""
-        Return the figure name.
+        Return the curve label.
 
-        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
+        The curve label read from a ``<text>`` in the SVG file such as ``<text>curve: solid line</text>``.
 
         EXAMPLES::
 
@@ -407,12 +411,13 @@ class CV:
 
         """
         curve_labels = self.svgplot.svg.get_texts("(?:curve): (?P<label>.+)")
-        if len(curve_labels) == 0:
-            raise ValueError("No text with curve found in the SVG.")
+
+        if not curve_labels:
+            return ''
 
         if len(curve_labels) > 1:
-            raise ValueError(
-                "Multiple text fields with curve labels were provided in the SVG file. Remove all but the one grouped with the curve."
+            logger.warning(
+                f"More than one text field with curve labels. Ignoring all text fields except for the first: {curve_labels[0]}."
             )
 
         return curve_labels[0].label
@@ -424,6 +429,8 @@ class CV:
         Return the scan rate of the plot.
 
         The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
+
+        Besides `scan rate`, also `rate` is acceptable in the text field.
 
         EXAMPLES::
 
@@ -750,7 +757,7 @@ class CV:
         r"""
         Return a comment describing the plot.
 
-        The comment is read from a ``<text>`` in the SVG file such as ``<text>comment: noisy data</text>``.
+        The comment is read from a ``<text>`` field in the SVG file such as ``<text>comment: noisy data</text>``.
 
         EXAMPLES:
 
@@ -877,7 +884,7 @@ class CV:
 
         if len(linked) > 1:
             logger.warning(
-                f"More than one text field with linked measurements. Ignoring all text field except for the first: {linked[0]}."
+                f"More than one text field with linked measurements. Ignoring all text fields except for the first: {linked[0]}."
             )
 
         return [i.strip() for i in linked[0].value.split(",")]
@@ -885,7 +892,7 @@ class CV:
     @property
     def tags(self):
         r"""
-        A list of acronyms commonly used in the communits to describe
+        A list of acronyms commonly used in the community to describe
         the measurement.
 
         The names are read from a ``<text>`` in the SVG file such as
@@ -922,19 +929,19 @@ class CV:
             ['BCV', 'HER', 'OER']
 
         """
-        linked = self.svgplot.svg.get_texts(
+        tags = self.svgplot.svg.get_texts(
             "(?:tags): (?P<value>.*)"
         )
 
-        if not linked:
+        if not tags:
             return []
 
-        if len(linked) > 1:
+        if len(tags) > 1:
             logger.warning(
-                f"More than one text field with tags. Ignoring all text field except for the first: {linked[0]}."
+                f"More than one text field with tags. Ignoring all text fields except for the first: {tags[0]}."
             )
 
-        return [i.strip() for i in linked[0].value.split(",")]
+        return [i.strip() for i in tags[0].value.split(",")]
 
     @property
     def metadata(self):
