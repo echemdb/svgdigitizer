@@ -136,17 +136,17 @@ class CV:
           'simultaneous measurements': ['SXRD', 'SHG'],
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'fields': [{'name': 'E', 'unit': 'mV', 
-                'reference': 'RHE', 'orientation': 'x'}, 
-                {'name': 'j', 'unit': 'uA / cm2', 
-                'orientation': 'y'}, 
-                {'name': 't', 'unit': 's'}], 
-                'comment': 'noisy data'}, 
-          'data description': {'version': 1, 'type': 
-          'digitized', 'measurement type': 'CV', 
-          'fields': [{'name': 'E', 'unit': 'V', 
-                'reference': 'RHE'}, 
-                {'name': 'j', 'unit': 'A / m2'}, 
+          'fields': [{'name': 'E', 'unit': 'mV',
+                'reference': 'RHE', 'orientation': 'x'},
+                {'name': 'j', 'unit': 'uA / cm2',
+                'orientation': 'y'},
+                {'name': 't', 'unit': 's'}],
+                'comment': 'noisy data'},
+          'data description': {'version': 1, 'type':
+          'digitized', 'measurement type': 'CV',
+          'fields': [{'name': 'E', 'unit': 'V',
+                'reference': 'RHE'},
+                {'name': 'j', 'unit': 'A / m2'},
                 {'name': 't', 'unit': 's'}]}}
 
     """
@@ -998,17 +998,17 @@ class CV:
              'simultaneous measurements': ['SXRD', 'SHG'],
              'measurement type': 'CV',
              'scan rate': {'value': 50.0, 'unit': 'V / s'},
-             'fields': [{'name': 'E', 'unit': 'mV', 
-                        'reference': 'RHE', 'orientation': 'x'}, 
-                        {'name': 'j', 'unit': 'uA / cm2', 
-                        'orientation': 'y'}, 
-                        {'name': 't', 'unit': 's'}], 
-                        'comment': 'noisy data'}, 
-             'data description': {'version': 1, 'type': 
-             'digitized', 'measurement type': 'CV', 
-             'fields': [{'name': 'E', 'unit': 'V', 
-                        'reference': 'RHE'}, 
-                        {'name': 'j', 'unit': 'A / m2'}, 
+             'fields': [{'name': 'E', 'unit': 'mV',
+                        'reference': 'RHE', 'orientation': 'x'},
+                        {'name': 'j', 'unit': 'uA / cm2',
+                        'orientation': 'y'},
+                        {'name': 't', 'unit': 's'}],
+                        'comment': 'noisy data'},
+             'data description': {'version': 1, 'type':
+             'digitized', 'measurement type': 'CV',
+             'fields': [{'name': 'E', 'unit': 'V',
+                        'reference': 'RHE'},
+                        {'name': 'j', 'unit': 'A / m2'},
                         {'name': 't', 'unit': 's'}]}}
 
         """
