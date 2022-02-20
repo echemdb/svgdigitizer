@@ -136,16 +136,18 @@ class CV:
           'simultaneous measurements': ['SXRD', 'SHG'],
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'},
-           'j': {'unit': 'uA / cm2', 'orientation': 'y'},
-           't': {'unit': 's'}},
-          'comment': 'noisy data'},
-         'data description': {'version': 1,
-          'type': 'digitized',
-          'measurement type': 'CV',
-          'axes': {'E': {'unit': 'V', 'reference': 'RHE'},
-           'j': {'unit': 'A / m2'},
-           't': {'unit': 's'}}}}
+          'fields': [{'name': 'E', 'unit': 'mV', 
+                'reference': 'RHE', 'orientation': 'x'}, 
+                {'name': 'j', 'unit': 'uA / cm2', 
+                'orientation': 'y'}, 
+                {'name': 't', 'unit': 's'}], 
+                'comment': 'noisy data'}, 
+          'data description': {'version': 1, 'type': 
+          'digitized', 'measurement type': 'CV', 
+          'fields': [{'name': 'E', 'unit': 'V', 
+                'reference': 'RHE'}, 
+                {'name': 'j', 'unit': 'A / m2'}, 
+                {'name': 't', 'unit': 's'}]}}
 
     """
 
@@ -992,20 +994,22 @@ class CV:
             {'experimental': {'tags': ['BCV', 'HER', 'OER']},
              'source': {'figure': '2b', 'curve': '0'},
              'figure description': {'version': 1,
-              'type': 'digitized',
-              'simultaneous measurements': ['SXRD', 'SHG'],
-              'measurement type': 'CV',
-              'scan rate': {'value': 50.0, 'unit': 'V / s'},
-              'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'},
-               'j': {'unit': 'uA / cm2', 'orientation': 'y'},
-               't': {'unit': 's'}},
-              'comment': 'noisy data'},
-             'data description': {'version': 1,
-              'type': 'digitized',
-              'measurement type': 'CV',
-              'axes': {'E': {'unit': 'V', 'reference': 'RHE'},
-               'j': {'unit': 'A / m2'},
-               't': {'unit': 's'}}}}
+             'type': 'digitized',
+             'simultaneous measurements': ['SXRD', 'SHG'],
+             'measurement type': 'CV',
+             'scan rate': {'value': 50.0, 'unit': 'V / s'},
+             'fields': [{'name': 'E', 'unit': 'mV', 
+                        'reference': 'RHE', 'orientation': 'x'}, 
+                        {'name': 'j', 'unit': 'uA / cm2', 
+                        'orientation': 'y'}, 
+                        {'name': 't', 'unit': 's'}], 
+                        'comment': 'noisy data'}, 
+             'data description': {'version': 1, 'type': 
+             'digitized', 'measurement type': 'CV', 
+             'fields': [{'name': 'E', 'unit': 'V', 
+                        'reference': 'RHE'}, 
+                        {'name': 'j', 'unit': 'A / m2'}, 
+                        {'name': 't', 'unit': 's'}]}}
 
         """
         metadata = self._metadata.copy()
@@ -1028,39 +1032,45 @@ class CV:
             "value": float(self.rate.value),
             "unit": str(self.rate.unit),
         }
-        metadata["figure description"].setdefault("axes", {})
-        metadata["figure description"]["axes"] = {
-            self.axis_properties["x"]["dimension"]: {
+        metadata["figure description"].setdefault("fields", [])
+        metadata["figure description"]["fields"] = [
+            {
+                "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
                 "unit": str(CV.get_axis_unit(self.x_label.unit)),
                 "reference": self.x_label.reference,
                 "orientation": "x",
             },
-            self.axis_properties["y"]["dimension"]: {
+            {
+                "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
                 "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
                 "orientation": "y",
             },
-            "t": {
+            {
+                "name": "t",
                 "unit": "s",
             },
-        }
+        ]
         metadata["figure description"]["comment"] = self.comment
         # Add data_description to metadata
         metadata.setdefault("data description", {})
         metadata["data description"]["version"] = 1
         metadata["data description"]["type"] = "digitized"
         metadata["data description"]["measurement type"] = "CV"
-        metadata["data description"].setdefault("axes", {})
-        metadata["data description"]["axes"] = {
-            self.axis_properties["x"]["dimension"]: {
+        metadata["data description"].setdefault("fields", [])
+        metadata["data description"]["fields"] = [
+            {
+                "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
                 "unit": "V",
                 "reference": self.x_label.reference,
             },
-            self.axis_properties["y"]["dimension"]: {
-                "unit": str(self.axis_properties["y"]["unit"]),
+            {
+                "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
+                "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
             },
-            "t": {
+            {
+                "name": "t",
                 "unit": "s",
             },
-        }
+        ]
 
         return metadata
