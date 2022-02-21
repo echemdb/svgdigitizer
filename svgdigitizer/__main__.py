@@ -275,10 +275,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         
         new_fields = []
         for idx, field in enumerate(package_fields):
-            print(field)
-            print(data_description_fields[idx]["name"])
             if field["name"] == data_description_fields[idx]["name"]:
-                print(field)
                 new_fields.append(data_description_fields[idx] | package_fields[idx])
         package.descriptor["resources"][0]["schema"]["fields"] = new_fields
 
