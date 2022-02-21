@@ -137,17 +137,15 @@ class CV:
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
           'fields': [{'name': 'E', 'unit': 'mV',
-                'reference': 'RHE', 'orientation': 'x'},
-                {'name': 'j', 'unit': 'uA / cm2',
-                'orientation': 'y'},
-                {'name': 't', 'unit': 's'}],
-                'comment': 'noisy data'},
-          'data description': {'version': 1, 'type':
-          'digitized', 'measurement type': 'CV',
-          'fields': [{'name': 'E', 'unit': 'V',
-                'reference': 'RHE'},
-                {'name': 'j', 'unit': 'A / m2'},
-                {'name': 't', 'unit': 's'}]}}
+                    'reference': 'RHE', 'orientation': 'x'},
+                    {'name': 'j', 'unit': 'uA / cm2',
+                    'orientation': 'y'}],
+                    'comment': 'noisy data'},
+          'data description': {'version': 1, 'type': 'digitized',
+                                'measurement type': 'CV',
+                                'fields': [{'name': 't', 'unit': 's'},
+                                {'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                                {'name': 'j', 'unit': 'A / m2'}]}}
 
     """
 
@@ -999,15 +997,13 @@ class CV:
              'fields': [{'name': 'E', 'unit': 'mV',
                         'reference': 'RHE', 'orientation': 'x'},
                         {'name': 'j', 'unit': 'uA / cm2',
-                        'orientation': 'y'},
-                        {'name': 't', 'unit': 's'}],
+                        'orientation': 'y'}],
                         'comment': 'noisy data'},
-             'data description': {'version': 1, 'type':
-             'digitized', 'measurement type': 'CV',
-             'fields': [{'name': 'E', 'unit': 'V',
-                        'reference': 'RHE'},
-                        {'name': 'j', 'unit': 'A / m2'},
-                        {'name': 't', 'unit': 's'}]}}
+             'data description': {'version': 1, 'type': 'digitized',
+                                  'measurement type': 'CV',
+                                  'fields': [{'name': 't', 'unit': 's'},
+                                  {'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                                  {'name': 'j', 'unit': 'A / m2'}]}}
 
         """
         metadata = self._metadata.copy()
@@ -1052,7 +1048,7 @@ class CV:
         metadata["data description"]["measurement type"] = "CV"
         metadata["data description"].setdefault("fields", [])
         metadata["data description"]["fields"] = [
-                        {
+            {
                 "name": "t",
                 "unit": "s",
             },
