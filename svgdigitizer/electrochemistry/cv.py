@@ -646,7 +646,7 @@ class CV:
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if "m2" in str(current.unit):
-            conversion_factor = current.to(u.A / u.m ** 2)
+            conversion_factor = current.to(u.A / u.m**2)
         else:
             conversion_factor = current.to(u.A)
 
