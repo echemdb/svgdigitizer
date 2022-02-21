@@ -364,7 +364,7 @@ class CV:
         figure_labels = self.svgplot.svg.get_texts("(?:figure|fig): (?P<label>.+)")
 
         if not figure_labels:
-            return ''
+            return ""
 
         if len(figure_labels) > 1:
             logger.warning(
@@ -418,7 +418,7 @@ class CV:
         curve_labels = self.svgplot.svg.get_texts("(?:curve): (?P<label>.+)")
 
         if not curve_labels:
-            return ''
+            return ""
 
         if len(curve_labels) > 1:
             logger.warning(
@@ -648,7 +648,7 @@ class CV:
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if "m2" in str(current.unit):
-            conversion_factor = current.to(u.A / u.m**2)
+            conversion_factor = current.to(u.A / u.m ** 2)
         else:
             conversion_factor = current.to(u.A)
 
@@ -934,9 +934,7 @@ class CV:
             ['BCV', 'HER', 'OER']
 
         """
-        tags = self.svgplot.svg.get_texts(
-            "(?:tags): (?P<value>.*)"
-        )
+        tags = self.svgplot.svg.get_texts("(?:tags): (?P<value>.*)")
 
         if not tags:
             return []
@@ -1045,10 +1043,6 @@ class CV:
                 "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
                 "orientation": "y",
             },
-            {
-                "name": "t",
-                "unit": "s",
-            },
         ]
         metadata["figure description"]["comment"] = self.comment
         # Add data_description to metadata
@@ -1058,6 +1052,10 @@ class CV:
         metadata["data description"]["measurement type"] = "CV"
         metadata["data description"].setdefault("fields", [])
         metadata["data description"]["fields"] = [
+                        {
+                "name": "t",
+                "unit": "s",
+            },
             {
                 "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
                 "unit": "V",
@@ -1066,10 +1064,6 @@ class CV:
             {
                 "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
                 "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
-            },
-            {
-                "name": "t",
-                "unit": "s",
             },
         ]
 

@@ -269,6 +269,18 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
         package = Package(cv.metadata, base_path=outdir or os.path.dirname(csvname))
         package.infer(os.path.basename(csvname))
+        # Update 
+        package_fields = package.descriptor["resources"][0]["schema"]['fields']
+        data_description_fields = package.descriptor["data description"]['fields']
+        
+        new_fields = []
+        for idx, field in enumerate(package_fields):
+            print(field)
+            print(data_description_fields[idx]["name"])
+            if field["name"] == data_description_fields[idx]["name"]:
+                print(field)
+                new_fields.append(data_description_fields[idx] | package_fields[idx])
+        package.descriptor["resources"][0]["schema"]["fields"] = new_fields
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
