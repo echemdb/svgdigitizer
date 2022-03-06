@@ -104,3 +104,10 @@ jobs:
           svgdigitizer cv test/data/cv_comment.svg --metadata test/data/cv_comment.yaml
           diff test/data/cv_comment.json test/data/cv_comment.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/cv_comment.csv"), pandas.read_csv("test/data/cv_comment.csv.expected"))'
+      - name: cli-cv-xy-rate-without-metadata-skewed
+        shell: bash -l {0}
+        run: |
+          svgdigitizer cv test/data/xy_rate_without_metadata_skewed.svg --skewed
+          diff test/data/xy_rate_without_metadata_skewed.json test/data/xy_rate_without_metadata_skewed.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv"), pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv.expected"))'
+
