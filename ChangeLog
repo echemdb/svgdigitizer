@@ -4,6 +4,21 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.3.0
+====================
+
+**Added:**
+
+* Added flag `--skewed` in the CLI to the commands `digitze` and `cv` to enable digitization of skewed plots (non-orthogonal axes).
+* Added "Edit on GitHub" links to documentation.
+
+**Fixed:**
+
+* Fixed version number in title of generated documentation.
+* Upgraded dependency on vulnerable version of pillow, see https://github.com/advisories/GHSA-8vj2-vxx3-667w.
+
+
+
 v0.2.0
 ====================
 
