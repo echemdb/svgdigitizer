@@ -431,9 +431,7 @@ class CV:
         r"""
         Return the scan rate of the plot.
 
-        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
-
-        Besides `scan rate`, also `rate` is acceptable in the text field.
+        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V / s</text>``.
 
         EXAMPLES::
 
@@ -459,7 +457,7 @@ class CV:
             ...     <path d="M -100 0 L 0 0" />
             ...     <text x="-100" y="0">y2: 1 A</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ...   <text x="-200" y="330">scan rate: 50 V / s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.rate
@@ -467,15 +465,15 @@ class CV:
 
         """
         rates = self.svgplot.svg.get_texts(
-            "(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
+            "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
         )
 
         if len(rates) == 0:
-            raise ValueError("No text with scan rate or rate found in the SVG.")
+            raise ValueError("No text with scan rate found in the SVG.")
 
         if len(rates) > 1:
             raise ValueError(
-                "Multiple text fields with a scan rate or rate were provided in the SVG file. Remove all but one."
+                "Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
             )
 
         # Convert to astropy unit
