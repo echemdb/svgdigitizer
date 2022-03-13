@@ -326,8 +326,6 @@ class CV:
         The figure name is read from a ``<text>`` in the SVG file
         such as ``<text>figure: 2b</text>``.
 
-        Besides `figure`, also `fig` is acceptable in the text field.
-
         EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
@@ -359,7 +357,7 @@ class CV:
             '2b'
 
         """
-        figure_labels = self.svgplot.svg.get_texts("(?:figure|fig): (?P<label>.+)")
+        figure_labels = self.svgplot.svg.get_texts("(?:figure): (?P<label>.+)")
 
         if not figure_labels:
             return ""
