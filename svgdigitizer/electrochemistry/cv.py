@@ -321,7 +321,7 @@ class CV:
     @cache
     def figure_label(self):
         r"""
-        Return the figure name.
+        An identifier of the plot to distinguish it from other figures on the same page.
 
         The figure name is read from a ``<text>`` in the SVG file
         such as ``<text>figure: 2b</text>``.
@@ -375,7 +375,7 @@ class CV:
     @cache
     def curve_label(self):
         r"""
-        Return the curve label.
+        A descriptive label for this curve to distinguish it from other curves in the same plot.
 
         The curve label read from a ``<text>`` in the SVG file such as ``<text>curve: solid line</text>``.
 
