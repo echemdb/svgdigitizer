@@ -77,7 +77,7 @@ class CV:
 
     * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>x2: 1 mV</text>``.  Optionally, this text also indicates the reference scale, e.g. ``<text>x2: 1 mV vs. RHE</text>`` for RHE scale.
     * that the label of the point x2 on the y-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
-    * that a rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` or ``<text>rate: 50 mV / s</text>`` placed anywhere in the SVG file.
+    * that a scan rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` placed anywhere in the SVG file.
 
     The data of the CV can be returned as a dataframe with axis 't', 'E', and 'I' (current) or 'j' (current density).
     The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'::
@@ -921,6 +921,7 @@ class CV:
             ...     <text x="-100" y="0">y2: 1 A</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ...   <text x="-300" y="330">tags: BCV, HER, OER</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.tags
