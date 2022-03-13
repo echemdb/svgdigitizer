@@ -925,7 +925,6 @@ class CV:
             ...     <text x="-100" y="0">y2: 1 A</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ...   <text x="-400" y="430">tags: BCV, HER, OER</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.tags
