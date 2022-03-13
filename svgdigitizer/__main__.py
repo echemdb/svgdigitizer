@@ -265,7 +265,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     cv.df.to_csv(csvname, index=False)
 
     if package:
-        package = _create_package(cv.metadat, csvname, outdir)
+        package = _create_package(cv.metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
@@ -284,7 +284,7 @@ def _create_package(metadata, csvname, outdir):
     """
     from datapackage import Package
 
-    package = Package(cv.metadata, base_path=outdir or os.path.dirname(csvname))
+    package = Package(metadata, base_path=outdir or os.path.dirname(csvname))
     package.infer(os.path.basename(csvname))
     # Update fields describing the data in the CSV
     package_fields = package.descriptor["resources"][0]["schema"]["fields"]
