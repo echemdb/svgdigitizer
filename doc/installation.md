@@ -4,7 +4,7 @@ Installation
 The recommended way to install the svgdigitizer is to use your package manager,
 (e.g., `apt-get` on Debian or Ubuntu, `pacman` on Arch Linux, `brew` on macOS.)
 
-You can consult [repology](https://repology.org/project/svgdigitizer/packages)
+You can consult [repology](https://repology.org/project/python:svgdigitizer/packages)
 to see if the svgdigitizer is available for your package manager.
 
 Alternatively, the svgdigitizer can easily be installed by one of the following
