@@ -26,7 +26,6 @@ dependencies:
   - svgpathtools>=1.4,<2
   - svgwrite>=1.4,<2
   - pip>=21,<22
-  - wdiff>=1,<2
   - pip:
     - linkchecker>=10.1,<11
     - sphinx_rtd_theme>=1,<2
