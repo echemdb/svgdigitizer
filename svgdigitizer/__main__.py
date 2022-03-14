@@ -284,7 +284,15 @@ def _create_package(metadata, csvname, outdir):
     """
     from frictionless import Package, Resource, Schema
 
-    package = Package(metadata, resources=[Resource(path=os.path.basename(csvname), basepath=outdir or os.path.dirname(csvname))])
+    package = Package(
+        metadata,
+        resources=[
+            Resource(
+                path=os.path.basename(csvname),
+                basepath=outdir or os.path.dirname(csvname),
+            )
+        ],
+    )
     package.infer()
     # Update fields in the datapackage describing the data in the CSV
     package_schema = package["resources"][0]["schema"]
@@ -293,11 +301,16 @@ def _create_package(metadata, csvname, outdir):
     new_fields = []
     for name in package_schema.field_names:
         if not name in data_description_schema.field_names:
-            raise KeyError(f"Field with name {name} is not specified in `data_descripton.fields`.")
-        new_fields.append(data_description_schema.get_field(name).to_dict() | package_schema.get_field(name).to_dict())
+            raise KeyError(
+                f"Field with name {name} is not specified in `data_descripton.fields`."
+            )
+        new_fields.append(
+            data_description_schema.get_field(name).to_dict()
+            | package_schema.get_field(name).to_dict()
+        )
 
     package["resources"][0]["schema"]["fields"] = new_fields
-    del(package["data description"])
+    del package["data description"]
 
     return package
 
