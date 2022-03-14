@@ -9,7 +9,6 @@ dependencies:
   - astropy>=5,<6
   - black
   - click>=8,<9
-  - frictionless>=4,<5
   - isort
   - matplotlib-base>=3.5,<4
   - myst-parser>=0.16,<0.17
@@ -29,3 +28,4 @@ dependencies:
   - pip:
     - linkchecker>=10.1,<11
     - sphinx_rtd_theme>=1,<2
+    - frictionless>=4,<5
