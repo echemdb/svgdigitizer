@@ -889,7 +889,9 @@ class CV:
             )
 
         if not linked:
-            return self._metadata.get("figure description", {}).get("simultaneous measurements", [])
+            return self._metadata.get("figure description", {}).get(
+                "simultaneous measurements", []
+            )
 
         return [i.strip() for i in linked[0].value.split(",")]
 
