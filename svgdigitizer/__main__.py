@@ -282,20 +282,25 @@ def _create_package(metadata, csvname, outdir):
 
     This is a helper method for :meth:`digitize_cv`.
     """
-    from datapackage import Package
+    from frictionless import Package, Schema
 
     package = Package(metadata, base_path=outdir or os.path.dirname(csvname))
     package.infer(os.path.basename(csvname))
-    # Update fields describing the data in the CSV
-    package_fields = package.descriptor["resources"][0]["schema"]["fields"]
-    data_description_fields = package.descriptor["data description"]["fields"]
+    # Update fields in the datapackage describing the data in the CSV
+    package_fields = package["resources"][0]["schema"]["fields"]
+    data_description_fields = Schema(fields=package["data description"]["fields"])
 
     new_fields = []
-    for idx, field in enumerate(package_fields):
-        if field["name"] == data_description_fields[idx]["name"]:
-            new_fields.append(data_description_fields[idx] | package_fields[idx])
-    package.descriptor["resources"][0]["schema"]["fields"] = new_fields
-    package.descriptor["data description"]["fields"] = new_fields
+    for name in package_fields.field_names:
+        if not name in data_description_fields.field_names:
+            raise KeyError(f"Field with name {name} is not specified in `data_descripton.fields`.")
+        new_fields.append(data_description_fields.get_field(name).to_dict() | package_fields.get_field(name).to_dict())
+
+    #for idx, field in enumerate(package_fields):
+    #    if field["name"] == data_description_fields[idx]["name"]:
+    #        new_fields.append(data_description_fields[idx] | package_fields[idx])
+    package["resources"][0]["schema"]["fields"] = new_fields
+    package["data description"]["fields"] = new_fields
 
     return package
 
