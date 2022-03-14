@@ -39,7 +39,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-with-pip-from-pypi">Install with pip from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-with-conda-from-conda-forge">Install with conda from conda-forge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-with-pip-for-development">Install with pip for development</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/cv.html">Cyclic Voltammograms</a></li>
@@ -77,15 +82,73 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<ul class="simple">
-<li><p>explain installation for developers.</p></li>
-<li><p>explain installation from conda-forge, assuming we release it there soon.</p></li>
-<li><p>explain installation from PyPI, assuming we release it there soon.</p></li>
-<li><p>only leave the very basics of installation in the README and refer here instead.</p></li>
-</ul>
+<p>The recommended way to install the svgdigitizer is to use your package manager,
+(e.g., <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> on Debian or Ubuntu, <code class="docutils literal notranslate"><span class="pre">pacman</span></code> on Arch Linux, <code class="docutils literal notranslate"><span class="pre">brew</span></code> on macOS.)</p>
+<p>You can consult <a class="reference external" href="https://repology.org/project/python:svgdigitizer/packages">repology</a>
+to see if the svgdigitizer is available for your package manager.</p>
+<p>Alternatively, the svgdigitizer can be installed by one of the following
+methods.</p>
+<section id="install-with-pip-from-pypi">
+<h2>Install with pip from PyPI<a class="headerlink" href="#install-with-pip-from-pypi" title="Permalink to this headline"></a></h2>
+<p>The latest stable version of the svgdigitizer is available on
+<a class="reference external" href="https://pypi.org/project/svgdigitizer/">PyPI</a> for all platforms and can be
+installed if you have Python and pip installed already:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install svgdigitizer
+</pre></div>
 </div>
+<p>This command downloads and installs the svgdigitizer and its dependencies into
+your local Python installation.</p>
+<p>If the above command fails because you do not have permission to modify your
+Python installation, you can install the svgdigitizer into your user account:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install --user svgdigitizer
+</pre></div>
+</div>
+<p>You can instead also install the latest unreleased version of the svgdigitizer
+from our <a class="reference external" href="https://github.com/echemdb/svgdigitizer">GitHub Repository</a> with</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/echemdb/svgdigitizer@master
+</pre></div>
+</div>
+</section>
+<section id="install-with-conda-from-conda-forge">
+<h2>Install with conda from conda-forge<a class="headerlink" href="#install-with-conda-from-conda-forge" title="Permalink to this headline"></a></h2>
+<p>The svgdigitizer is <a class="reference external" href="https://github.com/conda-forge/svgdigitizer-feedstock">available on
+conda-forge</a> for all
+platforms.</p>
+<p>If you don’t have conda yet, we recommend to install
+<a class="reference external" href="https://github.com/conda-forge/miniforge#miniforge3">Miniforge</a>.</p>
+<p>Miniforge is already pre-configured for conda-forge. If you already had another
+release of conda installed, make sure the conda-forge channel is
+<a class="reference external" href="https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge">configured correctly</a></p>
+<p>Once your conda setup is ready, create a new <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> environment with
+the latest stable version of the svgdigitizer:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda create -n svgdigitizer svgdigitizer
+</pre></div>
+</div>
+<p>To use the svgdigitizer, activate the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> environment:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda activate svgdigitizer
+svgdigitizer --help
+</pre></div>
+</div>
+<p>To install the svgdigitizer into an existing environment, activate that environment and then</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda install svgdigitizer
+</pre></div>
+</div>
+</section>
+<section id="install-with-pip-for-development">
+<h2>Install with pip for development<a class="headerlink" href="#install-with-pip-for-development" title="Permalink to this headline"></a></h2>
+<p>If you want to work on the svgdigitizer itself, get a copy of the latest
+unreleased version of the svgdigitizer:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/echemdb/svgdigitizer.git
+</pre></div>
+</div>
+<p>Create an <a class="reference external" href="https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs">editable</a> install of the svgdigitizer:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install -e svgdigitizer
+</pre></div>
+</div>
+<p>Any changes you make to the files in your local copy of the svgdigitizer should
+now be available in your next Python session.</p>
+<p>We would love to see your contribution to the svgdigitizer.</p>
+</section>
 </section>
 
 
