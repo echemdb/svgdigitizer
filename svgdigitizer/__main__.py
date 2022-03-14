@@ -297,7 +297,7 @@ def _create_package(metadata, csvname, outdir):
         new_fields.append(data_description_schema.get_field(name).to_dict() | package_schema.get_field(name).to_dict())
 
     package["resources"][0]["schema"]["fields"] = new_fields
-    package["data description"]["fields"] = new_fields
+    del(package["data description"])
 
     return package
 
