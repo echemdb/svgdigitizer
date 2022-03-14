@@ -6,9 +6,14 @@ The purpose of this project is to digitize plots in scientific publications, rec
 
 ## Installation
 
+Install the latest stable version of svgdigitizer with
+
 ```sh
-pip install -e .
+pip install svgdigitizer
 ```
+
+Please consult our [documentation](https://echemdb.github.io/svgdigitizer/) for
+more detailed [installation instructions](https://echemdb.github.io/svgdigitizer/installation.html).
 
 ## Command Line Interface
 
