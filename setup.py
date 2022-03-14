@@ -24,7 +24,7 @@ from distutils.core import setup
 
 setup(
     name="svgdigitizer",
-    version="0.2.0",
+    version="0.3.0",
     packages=["svgdigitizer", "svgdigitizer.electrochemistry", "svgdigitizer.test"],
     license="GPL 3.0+",
     description="svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications.",
@@ -38,7 +38,7 @@ setup(
         "matplotlib>=3.5,<4",
         "pandas>=1.3,<2",
         "pdf2image>=1.16,<2",
-        "pillow>=8.4,<9",
+        "pillow>=9,<10",
         "pyyaml>=6,<7",
         "scipy>=1.7,<2",
         "svg.path>=4.1,<5",
