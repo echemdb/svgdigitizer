@@ -361,7 +361,9 @@ class CV:
         figure_labels = self.svgplot.svg.get_texts("(?:figure): (?P<label>.+)")
 
         if len(figure_labels) == 0:
-            raise ValueError("No text with `figure` containing a label such as `figure: 1a` found in the SVG.")
+            logger.warning(
+                "No text with `figure` containing a label such as `figure: 1a` found in the SVG."
+            )
 
         if len(figure_labels) > 1:
             logger.warning(
@@ -643,7 +645,7 @@ class CV:
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if "m2" in str(current.unit):
-            conversion_factor = current.to(u.A / u.m**2)
+            conversion_factor = current.to(u.A / u.m ** 2)
         else:
             conversion_factor = current.to(u.A)
 
