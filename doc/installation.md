@@ -7,7 +7,7 @@ The recommended way to install the svgdigitizer is to use your package manager,
 You can consult [repology](https://repology.org/project/python:svgdigitizer/packages)
 to see if the svgdigitizer is available for your package manager.
 
-Alternatively, the svgdigitizer can easily be installed by one of the following
+Alternatively, the svgdigitizer can be installed by one of the following
 methods.
 
 Install with pip from PyPI
