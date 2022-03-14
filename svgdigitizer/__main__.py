@@ -284,7 +284,7 @@ def _create_package(metadata, csvname, outdir):
     """
     from frictionless import Package, Resource, Schema
 
-    package = Package(metadata, resources=[Resource(path=csvname)])
+    package = Package(metadata, resources=[Resource(path=os.path.basename(csvname), basepath=outdir or os.path.dirname(csvname))])
     package.infer()
     # Update fields in the datapackage describing the data in the CSV
     package_schema = package["resources"][0]["schema"]
