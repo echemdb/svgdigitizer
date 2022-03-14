@@ -51,6 +51,7 @@ import logging
 import re
 from collections import namedtuple
 from functools import cache
+from telnetlib import EC
 
 import matplotlib.pyplot as plt
 from astropy import units as u
@@ -359,8 +360,8 @@ class CV:
         """
         figure_labels = self.svgplot.svg.get_texts("(?:figure): (?P<label>.+)")
 
-        if not figure_labels:
-            return ""
+        if len(figure_labels) == 0:
+            raise ValueError("No text with `figure` containing a label such as `figure: 1a` found in the SVG.")
 
         if len(figure_labels) > 1:
             logger.warning(
