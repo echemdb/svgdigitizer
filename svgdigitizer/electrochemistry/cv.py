@@ -481,7 +481,7 @@ class CV:
             if "value" not in rate or "unit" not in rate:
                 raise ValueError("No text with scan rate found in the SVG.")
 
-            return float(rate["value"]) * u(str(rate["unit"]))
+            return float(rate["value"]) * u.Unit(str(rate["unit"]))
 
         return float(rates[0].value) * CV.get_axis_unit(rates[0].unit)
 
