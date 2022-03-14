@@ -51,7 +51,6 @@ import logging
 import re
 from collections import namedtuple
 from functools import cache
-from telnetlib import EC
 
 import matplotlib.pyplot as plt
 from astropy import units as u
