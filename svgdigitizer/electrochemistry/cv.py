@@ -364,6 +364,7 @@ class CV:
             logger.warning(
                 "No text with `figure` containing a label such as `figure: 1a` found in the SVG."
             )
+            return ""
 
         if len(figure_labels) > 1:
             logger.warning(
