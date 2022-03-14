@@ -9,7 +9,7 @@ dependencies:
   - astropy>=5,<6
   - black
   - click>=8,<9
-  - frictionless>3.0,<4
+  - frictionless>=3.0,<4
   - isort
   - matplotlib-base>=3.5,<4
   - myst-parser>=0.16,<0.17
