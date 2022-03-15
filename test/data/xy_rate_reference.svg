@@ -2,21 +2,21 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="68.749329mm"
    height="87.545334mm"
    viewBox="0 0 68.749329 87.545334"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
-   sodipodi:docname="xy_rate_reference.svg">
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="xy_rate_reference.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -27,8 +27,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.959798"
-     inkscape:cx="172.37736"
-     inkscape:cy="34.850266"
+     inkscape:cx="172.48355"
+     inkscape:cy="115.66247"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -59,7 +59,6 @@
      id="layer1"
      transform="translate(-54.07177,-79.358292)">
     <image
-       sodipodi:absref="F:\1-drive\_To_Do\Projects\SingleCrystalDB\echemdb\svgdigitizer\test\data\Ni111_NaOH_Beden1985_Fig2c.png"
        xlink:href="Ni111_NaOH_Beden1985_Fig2c.png"
        style="display:inline"
        width="68.749329"
@@ -77,13 +76,13 @@
          inkscape:connector-curvature="0" />
       <text
          xml:space="preserve"
-         style="font-size:3.17499995px;line-height:1.25;font-family:sans-serif;stroke-width:0.26458299"
+         style="font-size:3.175px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
          x="47.401714"
          y="122.56773"
          id="text10650"><tspan
            sodipodi:role="line"
            id="tspan10648"
-           style="stroke-width:0.26458299"
+           style="stroke-width:0.264583"
            x="47.401714"
            y="122.56773">y2: 0.1 uA cm-2</tspan></text>
     </g>
@@ -99,13 +98,13 @@
          inkscape:connector-curvature="0" />
       <text
          xml:space="preserve"
-         style="font-size:3.17499995px;line-height:1.25;font-family:sans-serif;stroke-width:0.26458299"
+         style="font-size:3.175px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
          x="47.220585"
          y="155.55656"
          id="text2906"><tspan
            sodipodi:role="line"
            id="tspan2904"
-           style="stroke-width:0.26458299"
+           style="stroke-width:0.264583"
            x="47.220585"
            y="155.55656">y1: -0.2  uA cm-2</tspan></text>
     </g>
@@ -119,13 +118,13 @@
          inkscape:connector-curvature="0" />
       <text
          xml:space="preserve"
-         style="font-size:3.17499995px;line-height:1.25;font-family:sans-serif;stroke-width:0.26458299"
+         style="font-size:3.175px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
          x="6.8084121"
          y="83.536674"
          id="text15406"><tspan
            sodipodi:role="line"
            id="tspan15404"
-           style="stroke-width:0.26458299"
+           style="stroke-width:0.264583"
            x="6.8084121"
            y="83.536674">x1: 0 V @ RHE</tspan></text>
     </g>
@@ -139,13 +138,13 @@
          inkscape:connector-curvature="0" />
       <text
          xml:space="preserve"
-         style="font-size:3.17499995px;line-height:1.25;font-family:sans-serif;stroke-width:0.26458299"
+         style="font-size:3.175px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
          x="61.111824"
          y="81.725914"
          id="text18116"><tspan
            sodipodi:role="line"
            id="tspan18114"
-           style="stroke-width:0.26458299"
+           style="stroke-width:0.264583"
            x="61.111824"
            y="81.725914">x2: 0.6 V @ RHE</tspan></text>
     </g>
@@ -153,14 +152,14 @@
        id="g6722">
       <text
          xml:space="preserve"
-         style="font-size:3.17499995px;line-height:1.25;font-family:sans-serif;stroke-width:0.26458299"
+         style="font-size:3.175px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
          x="59.903938"
          y="122.60182"
          id="text10650-7-3"
          transform="translate(19.93607,-2.0085839)"><tspan
            sodipodi:role="line"
            id="tspan10648-5-5"
-           style="stroke-width:0.26458299"
+           style="stroke-width:0.264583"
            x="59.903938"
            y="122.60182">curve: label</tspan></text>
       <path
@@ -172,7 +171,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="65.163452"
        y="114.31835"
        id="text839"><tspan
@@ -180,6 +179,6 @@
          id="tspan837"
          x="65.163452"
          y="114.31835"
-         style="stroke-width:0.26458332">rate: 50 mV/s</tspan></text>
+         style="stroke-width:0.264583">scan rate: 50 mV/s</tspan></text>
   </g>
 </svg>
