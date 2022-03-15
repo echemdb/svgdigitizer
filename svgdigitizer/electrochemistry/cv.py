@@ -29,10 +29,10 @@ For the documentation below, the path of a CV is presented simply as line.
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021 Albert Engstfeld
-#        Copyright (C) 2021 Johannes Hermann
-#        Copyright (C) 2021 Julian Rüth
-#        Copyright (C) 2021 Nicolas Hörmann
+#        Copyright (C) 2021-2022 Albert Engstfeld
+#        Copyright (C) 2021      Johannes Hermann
+#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C) 2021      Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ class CV:
 
     * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>x2: 1 mV</text>``.  Optionally, this text also indicates the reference scale, e.g. ``<text>x2: 1 mV vs. RHE</text>`` for RHE scale.
     * that the label of the point x2 on the y-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
-    * that a rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` or ``<text>rate: 50 mV / s</text>`` placed anywhere in the SVG file.
+    * that a scan rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` placed anywhere in the SVG file.
 
     The data of the CV can be returned as a dataframe with axis 't', 'E', and 'I' (current) or 'j' (current density).
     The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'::
@@ -110,6 +110,9 @@ class CV:
         ...   </g>
         ...   <text x="-200" y="330">scan rate: 50 V/s</text>
         ...   <text x="-300" y="330">comment: noisy data</text>
+        ...   <text x="-400" y="330">figure: 2b</text>
+        ...   <text x="-400" y="530">linked: SXRD, SHG</text>
+        ...   <text x="-400" y="330">tags: BCV, HER, OER</text>
         ... </svg>'''))
         >>> cv = CV(SVGPlot(svg))
         >>> cv.df
@@ -126,21 +129,23 @@ class CV:
     The properties of the original plot and the dataframe can be returned as a dict::
 
         >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
-        {'figure description': {'version': 1,
+        {'experimental': {'tags': ['BCV', 'HER', 'OER']},
+         'source': {'figure': '2b', 'curve': '0'},
+         'figure description': {'version': 1,
           'type': 'digitized',
-          'simultaneous measurements': [],
+          'simultaneous measurements': ['SXRD', 'SHG'],
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'},
-           'j': {'unit': 'uA / cm2', 'orientation': 'y'},
-           't': {'unit': 's'}},
-          'comment': 'noisy data'},
-         'data description': {'version': 1,
-          'type': 'digitized',
-          'measurement type': 'CV',
-          'axes': {'E': {'unit': 'V', 'reference': 'RHE'},
-           'j': {'unit': 'A / m2'},
-           't': {'unit': 's'}}}}
+          'fields': [{'name': 'E', 'unit': 'mV',
+                    'reference': 'RHE', 'orientation': 'x'},
+                    {'name': 'j', 'unit': 'uA / cm2',
+                    'orientation': 'y'}],
+                    'comment': 'noisy data'},
+          'data description': {'version': 1, 'type': 'digitized',
+                                'measurement type': 'CV',
+                                'fields': [{'name': 't', 'unit': 's'},
+                                {'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                                {'name': 'j', 'unit': 'A / m2'}]}}
 
     """
 
@@ -255,7 +260,6 @@ class CV:
             Unit("uA / cm2")
 
         """
-
         return u.Unit(unit)
 
     @property
@@ -318,11 +322,12 @@ class CV:
 
     @property
     @cache
-    def rate(self):
+    def figure_label(self):
         r"""
-        Return the scan rate of the plot.
+        An identifier of the plot to distinguish it from other figures on the same page.
 
-        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V/s</text>``.
+        The figure name is read from a ``<text>`` in the SVG file
+        such as ``<text>figure: 2b</text>``.
 
         EXAMPLES::
 
@@ -348,7 +353,117 @@ class CV:
             ...     <path d="M -100 0 L 0 0" />
             ...     <text x="-100" y="0">y2: 1 A</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ...   <text x="-200" y="330">Figure: 2b</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.figure_label
+            '2b'
+
+        """
+        figure_labels = self.svgplot.svg.get_texts("(?:figure): (?P<label>.+)")
+
+        if len(figure_labels) > 1:
+            logger.warning(
+                f"More than one text field with figure labels. Ignoring all text fields except for the first: {figure_labels[0]}."
+            )
+
+        if not figure_labels:
+            figure_label = self._metadata.get("source", {}).get("figure", "")
+            if not figure_label:
+                logger.warning(
+                    "No text with `figure` containing a label such as `figure: 1a` found in the SVG."
+                )
+            return figure_label
+
+        return figure_labels[0].label
+
+    @property
+    @cache
+    def curve_label(self):
+        r"""
+        A descriptive label for this curve to distinguish it from other curves in the same plot.
+
+        The curve label read from a ``<text>`` in the SVG file such as ``<text>curve: solid line</text>``.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: solid line</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.curve_label
+            'solid line'
+
+        """
+        curve_labels = self.svgplot.svg.get_texts("(?:curve): (?P<label>.+)")
+
+        if len(curve_labels) > 1:
+            logger.warning(
+                f"More than one text field with curve labels. Ignoring all text fields except for the first: {curve_labels[0]}."
+            )
+
+        if not curve_labels:
+            return self._metadata.get("source", {}).get("curve", "")
+
+        return curve_labels[0].label
+
+    @property
+    @cache
+    def rate(self):
+        r"""
+        Return the scan rate of the plot.
+
+        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V / s</text>``.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V / s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.rate
@@ -356,22 +471,23 @@ class CV:
 
         """
         rates = self.svgplot.svg.get_texts(
-            "(?:scan rate|rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
+            "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
         )
-
-        if len(rates) == 0:
-            raise ValueError("No text with scan rate found in the SVG.")
 
         if len(rates) > 1:
             raise ValueError(
                 "Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
             )
 
-        # Convert to astropy unit
-        rates[0].unit = CV.get_axis_unit(rates[0].unit)
-        rate = float(rates[0].value) * rates[0].unit
+        if not rates:
+            rate = self._metadata.get("figure description", {}).get("scan rate", {})
 
-        return rate
+            if "value" not in rate or "unit" not in rate:
+                raise ValueError("No text with scan rate found in the SVG.")
+
+            return float(rate["value"]) * u.Unit(str(rate["unit"]))
+
+        return float(rates[0].value) * CV.get_axis_unit(rates[0].unit)
 
     @property
     @cache
@@ -651,7 +767,7 @@ class CV:
         r"""
         Return a comment describing the plot.
 
-        The comment is read from a ``<text>`` in the SVG file such as ``<text>comment: noisy data</text>``.
+        The comment is read from a ``<text>`` field in the SVG file such as ``<text>comment: noisy data</text>``.
 
         EXAMPLES:
 
@@ -717,13 +833,13 @@ class CV:
         """
         comments = self.svgplot.svg.get_texts("(?:comment): (?P<value>.*)")
 
-        if not comments:
-            return ""
-
         if len(comments) > 1:
             logger.warning(
                 f"More than one comment. Ignoring all comments except for the first: {comments[0]}."
             )
+
+        if not comments:
+            return self._metadata.get("figure description", {}).get("comment", "")
 
         return comments[0].value
 
@@ -773,15 +889,69 @@ class CV:
             "(?:simultaneous measuerment|linked|linked measurement): (?P<value>.*)"
         )
 
-        if not linked:
-            return []
-
         if len(linked) > 1:
             logger.warning(
-                f"More than one text field with linked measurements. Ignoring all text field except for the first: {linked[0]}."
+                f"More than one text field with linked measurements. Ignoring all text fields except for the first: {linked[0]}."
+            )
+
+        if not linked:
+            return self._metadata.get("figure description", {}).get(
+                "simultaneous measurements", []
             )
 
         return [i.strip() for i in linked[0].value.split(",")]
+
+    @property
+    def tags(self):
+        r"""
+        A list of acronyms commonly used in the community to describe
+        the measurement.
+
+        The names are read from a ``<text>`` in the SVG file such as
+        ``<text>tags: BCV, HER, OER </text>``.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ...   <text x="-300" y="330">tags: BCV, HER, OER</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.tags
+            ['BCV', 'HER', 'OER']
+
+        """
+        tags = self.svgplot.svg.get_texts("(?:tags): (?P<value>.*)")
+
+        if len(tags) > 1:
+            logger.warning(
+                f"More than one text field with tags. Ignoring all text fields except for the first: {tags[0]}."
+            )
+
+        if not tags:
+            return self._metadata.get("experimental", {}).get("tags", [])
+
+        return [i.strip() for i in tags[0].value.split(",")]
 
     @property
     def metadata(self):
@@ -820,73 +990,85 @@ class CV:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ...   <text x="-400" y="430">comment: noisy data</text>
-            ...   <text x="-400" y="430">linked: SXRD, SHG</text>
+            ...   <text x="-400" y="530">linked: SXRD, SHG</text>
+            ...   <text x="-200" y="630">Figure: 2b</text>
+            ...   <text x="-200" y="730">tags: BCV, HER, OER</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
-            {'figure description': {'version': 1,
-              'type': 'digitized',
-              'simultaneous measurements': ['SXRD', 'SHG'],
-              'measurement type': 'CV',
-              'scan rate': {'value': 50.0, 'unit': 'V / s'},
-              'axes': {'E': {'unit': 'mV', 'reference': 'RHE', 'orientation': 'x'},
-               'j': {'unit': 'uA / cm2', 'orientation': 'y'},
-               't': {'unit': 's'}},
-              'comment': 'noisy data'},
-             'data description': {'version': 1,
-              'type': 'digitized',
-              'measurement type': 'CV',
-              'axes': {'E': {'unit': 'V', 'reference': 'RHE'},
-               'j': {'unit': 'A / m2'},
-               't': {'unit': 's'}}}}
+            {'experimental': {'tags': ['BCV', 'HER', 'OER']},
+             'source': {'figure': '2b', 'curve': '0'},
+             'figure description': {'version': 1,
+             'type': 'digitized',
+             'simultaneous measurements': ['SXRD', 'SHG'],
+             'measurement type': 'CV',
+             'scan rate': {'value': 50.0, 'unit': 'V / s'},
+             'fields': [{'name': 'E', 'unit': 'mV',
+                        'reference': 'RHE', 'orientation': 'x'},
+                        {'name': 'j', 'unit': 'uA / cm2',
+                        'orientation': 'y'}],
+                        'comment': 'noisy data'},
+             'data description': {'version': 1, 'type': 'digitized',
+                                  'measurement type': 'CV',
+                                  'fields': [{'name': 't', 'unit': 's'},
+                                  {'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                                  {'name': 'j', 'unit': 'A / m2'}]}}
 
         """
-        metadata = self._metadata.copy()
-        # Add figure_description to metadata
-        metadata.setdefault("figure description", {})
-        metadata["figure description"]["version"] = 1
-        metadata["figure description"]["type"] = "digitized"
-        metadata["figure description"][
-            "simultaneous measurements"
-        ] = self.simultaneous_measurements
-        metadata["figure description"]["measurement type"] = "CV"
-        metadata["figure description"]["scan rate"] = {
-            "value": float(self.rate.value),
-            "unit": str(self.rate.unit),
-        }
-        metadata["figure description"].setdefault("axes", {})
-        metadata["figure description"]["axes"] = {
-            self.axis_properties[self.svgplot.xlabel]["dimension"]: {
-                "unit": str(CV.get_axis_unit(self.x_label.unit)),
-                "reference": self.x_label.reference,
-                "orientation": "x",
+        metadata = {
+            "experimental": {
+                "tags": self.tags,
             },
-            self.axis_properties[self.svgplot.ylabel]["dimension"]: {
-                "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
-                "orientation": "y",
+            "source": {
+                "figure": self.figure_label,
+                "curve": self.curve_label,
             },
-            "t": {
-                "unit": "s",
+            "figure description": {
+                "version": 1,
+                "type": "digitized",
+                "simultaneous measurements": self.simultaneous_measurements,
+                "measurement type": "CV",
+                "scan rate": {
+                    "value": float(self.rate.value),
+                    "unit": str(self.rate.unit),
+                },
+                "fields": [
+                    {
+                        "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
+                        "unit": str(CV.get_axis_unit(self.x_label.unit)),
+                        "reference": self.x_label.reference,
+                        "orientation": "x",
+                    },
+                    {
+                        "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
+                        "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
+                        "orientation": "y",
+                    },
+                ],
+                "comment": self.comment,
             },
-        }
-        metadata["figure description"]["comment"] = self.comment
-        # Add data_description to metadata
-        metadata.setdefault("data description", {})
-        metadata["data description"]["version"] = 1
-        metadata["data description"]["type"] = "digitized"
-        metadata["data description"]["measurement type"] = "CV"
-        metadata["data description"].setdefault("axes", {})
-        metadata["data description"]["axes"] = {
-            self.axis_properties[self.svgplot.xlabel]["dimension"]: {
-                "unit": "V",
-                "reference": self.x_label.reference,
-            },
-            self.axis_properties[self.svgplot.ylabel]["dimension"]: {
-                "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
-            },
-            "t": {
-                "unit": "s",
+            "data description": {
+                "version": 1,
+                "type": "digitized",
+                "measurement type": "CV",
+                "fields": [
+                    {
+                        "name": "t",
+                        "unit": "s",
+                    },
+                    {
+                        "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
+                        "unit": "V",
+                        "reference": self.x_label.reference,
+                    },
+                    {
+                        "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
+                        "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
+                    },
+                ],
             },
         }
 
-        return metadata
+        from mergedeep import merge
+
+        return merge({}, self._metadata, metadata)

@@ -265,10 +265,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     cv.df.to_csv(csvname, index=False)
 
     if package:
-        from datapackage import Package
-
-        package = Package(cv.metadata, base_path=outdir or os.path.dirname(csvname))
-        package.infer(os.path.basename(csvname))
+        package = _create_package(cv.metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
@@ -276,6 +273,31 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         encoding="utf-8",
     ) as json:
         _write_metadata(json, package.descriptor if package else cv.metadata)
+
+
+def _create_package(metadata, csvname, outdir):
+    r"""
+    Return a data package built from a :param:`metadata` dict and tabular data
+    in :param:`csvname`.
+
+    This is a helper method for :meth:`digitize_cv`.
+    """
+    from datapackage import Package
+
+    package = Package(metadata, base_path=outdir or os.path.dirname(csvname))
+    package.infer(os.path.basename(csvname))
+    # Update fields describing the data in the CSV
+    package_fields = package.descriptor["resources"][0]["schema"]["fields"]
+    data_description_fields = package.descriptor["data description"]["fields"]
+
+    new_fields = []
+    for idx, field in enumerate(package_fields):
+        if field["name"] == data_description_fields[idx]["name"]:
+            new_fields.append(data_description_fields[idx] | package_fields[idx])
+    package.descriptor["resources"][0]["schema"]["fields"] = new_fields
+    package.descriptor["data description"]["fields"] = new_fields
+
+    return package
 
 
 def _write_metadata(out, metadata):
