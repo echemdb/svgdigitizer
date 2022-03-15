@@ -29,10 +29,10 @@ For the documentation below, the path of a CV is presented simply as line.
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021 Albert Engstfeld
-#        Copyright (C) 2021 Johannes Hermann
-#        Copyright (C) 2021 Julian Rüth
-#        Copyright (C) 2021 Nicolas Hörmann
+#        Copyright (C) 2021-2022 Albert Engstfeld
+#        Copyright (C) 2021      Johannes Hermann
+#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C) 2021      Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -258,7 +258,6 @@ class CV:
             Unit("uA / cm2")
 
         """
-
         return u.Unit(unit)
 
     @property
@@ -359,16 +358,18 @@ class CV:
         """
         figure_labels = self.svgplot.svg.get_texts("(?:figure): (?P<label>.+)")
 
-        if len(figure_labels) == 0:
-            logger.warning(
-                "No text with `figure` containing a label such as `figure: 1a` found in the SVG."
-            )
-            return ""
-
         if len(figure_labels) > 1:
             logger.warning(
                 f"More than one text field with figure labels. Ignoring all text fields except for the first: {figure_labels[0]}."
             )
+
+        if not figure_labels:
+            figure_label = self._metadata.get("source", {}).get("figure", "")
+            if not figure_label:
+                logger.warning(
+                    "No text with `figure` containing a label such as `figure: 1a` found in the SVG."
+                )
+            return figure_label
 
         return figure_labels[0].label
 
@@ -416,13 +417,13 @@ class CV:
         """
         curve_labels = self.svgplot.svg.get_texts("(?:curve): (?P<label>.+)")
 
-        if not curve_labels:
-            return ""
-
         if len(curve_labels) > 1:
             logger.warning(
                 f"More than one text field with curve labels. Ignoring all text fields except for the first: {curve_labels[0]}."
             )
+
+        if not curve_labels:
+            return self._metadata.get("source", {}).get("curve", "")
 
         return curve_labels[0].label
 
@@ -469,19 +470,20 @@ class CV:
             "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
         )
 
-        if len(rates) == 0:
-            raise ValueError("No text with scan rate found in the SVG.")
-
         if len(rates) > 1:
             raise ValueError(
                 "Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
             )
 
-        # Convert to astropy unit
-        rates[0].unit = CV.get_axis_unit(rates[0].unit)
-        rate = float(rates[0].value) * rates[0].unit
+        if not rates:
+            rate = self._metadata.get("figure description", {}).get("scan rate", {})
 
-        return rate
+            if "value" not in rate or "unit" not in rate:
+                raise ValueError("No text with scan rate found in the SVG.")
+
+            return float(rate["value"]) * u.Unit(str(rate["unit"]))
+
+        return float(rates[0].value) * CV.get_axis_unit(rates[0].unit)
 
     @property
     @cache
@@ -825,13 +827,13 @@ class CV:
         """
         comments = self.svgplot.svg.get_texts("(?:comment): (?P<value>.*)")
 
-        if not comments:
-            return ""
-
         if len(comments) > 1:
             logger.warning(
                 f"More than one comment. Ignoring all comments except for the first: {comments[0]}."
             )
+
+        if not comments:
+            return self._metadata.get("figure description", {}).get("comment", "")
 
         return comments[0].value
 
@@ -881,12 +883,14 @@ class CV:
             "(?:simultaneous measuerment|linked|linked measurement): (?P<value>.*)"
         )
 
-        if not linked:
-            return []
-
         if len(linked) > 1:
             logger.warning(
                 f"More than one text field with linked measurements. Ignoring all text fields except for the first: {linked[0]}."
+            )
+
+        if not linked:
+            return self._metadata.get("figure description", {}).get(
+                "simultaneous measurements", []
             )
 
         return [i.strip() for i in linked[0].value.split(",")]
@@ -933,13 +937,13 @@ class CV:
         """
         tags = self.svgplot.svg.get_texts("(?:tags): (?P<value>.*)")
 
-        if not tags:
-            return []
-
         if len(tags) > 1:
             logger.warning(
                 f"More than one text field with tags. Ignoring all text fields except for the first: {tags[0]}."
             )
+
+        if not tags:
+            return self._metadata.get("experimental", {}).get("tags", [])
 
         return [i.strip() for i in tags[0].value.split(",")]
 
@@ -1005,61 +1009,60 @@ class CV:
                                   {'name': 'j', 'unit': 'A / m2'}]}}
 
         """
-        metadata = self._metadata.copy()
-        # Add experimental to metadata
-        metadata.setdefault("experimental", {})
-        metadata["experimental"]["tags"] = self.tags
-        # Add source to metadata
-        metadata.setdefault("source", {})
-        metadata["source"]["figure"] = self.figure_label
-        metadata["source"]["curve"] = self.curve_label
-        # Add figure_description to metadata
-        metadata.setdefault("figure description", {})
-        metadata["figure description"]["version"] = 1
-        metadata["figure description"]["type"] = "digitized"
-        metadata["figure description"][
-            "simultaneous measurements"
-        ] = self.simultaneous_measurements
-        metadata["figure description"]["measurement type"] = "CV"
-        metadata["figure description"]["scan rate"] = {
-            "value": float(self.rate.value),
-            "unit": str(self.rate.unit),
+        metadata = {
+            "experimental": {
+                "tags": self.tags,
+            },
+            "source": {
+                "figure": self.figure_label,
+                "curve": self.curve_label,
+            },
+            "figure description": {
+                "version": 1,
+                "type": "digitized",
+                "simultaneous measurements": self.simultaneous_measurements,
+                "measurement type": "CV",
+                "scan rate": {
+                    "value": float(self.rate.value),
+                    "unit": str(self.rate.unit),
+                },
+                "fields": [
+                    {
+                        "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
+                        "unit": str(CV.get_axis_unit(self.x_label.unit)),
+                        "reference": self.x_label.reference,
+                        "orientation": "x",
+                    },
+                    {
+                        "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
+                        "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
+                        "orientation": "y",
+                    },
+                ],
+                "comment": self.comment,
+            },
+            "data description": {
+                "version": 1,
+                "type": "digitized",
+                "measurement type": "CV",
+                "fields": [
+                    {
+                        "name": "t",
+                        "unit": "s",
+                    },
+                    {
+                        "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
+                        "unit": "V",
+                        "reference": self.x_label.reference,
+                    },
+                    {
+                        "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
+                        "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
+                    },
+                ],
+            },
         }
-        metadata["figure description"].setdefault("fields", [])
-        metadata["figure description"]["fields"] = [
-            {
-                "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
-                "unit": str(CV.get_axis_unit(self.x_label.unit)),
-                "reference": self.x_label.reference,
-                "orientation": "x",
-            },
-            {
-                "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
-                "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
-                "orientation": "y",
-            },
-        ]
-        metadata["figure description"]["comment"] = self.comment
-        # Add data_description to metadata
-        metadata.setdefault("data description", {})
-        metadata["data description"]["version"] = 1
-        metadata["data description"]["type"] = "digitized"
-        metadata["data description"]["measurement type"] = "CV"
-        metadata["data description"].setdefault("fields", [])
-        metadata["data description"]["fields"] = [
-            {
-                "name": "t",
-                "unit": "s",
-            },
-            {
-                "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
-                "unit": "V",
-                "reference": self.x_label.reference,
-            },
-            {
-                "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
-                "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
-            },
-        ]
 
-        return metadata
+        from mergedeep import merge
+
+        return merge({}, self._metadata, metadata)
