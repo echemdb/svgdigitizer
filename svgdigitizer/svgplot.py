@@ -345,15 +345,19 @@ class SVGPlot:
         from numpy.linalg import det, qr
 
         axis_orientations = {}
-        case1 = self._transformation(self.axis_variables[0], self.axis_variables[1], "mark-aligned")
+        case1 = self._transformation(
+            self.axis_variables[0], self.axis_variables[1], "mark-aligned"
+        )
         case1 = [sublist[:-1] for sublist in case1[:-1]]
-        q_1, _ = qr(case1, mode='complete')
+        q_1, _ = qr(case1, mode="complete")
         if det(q_1) < 0:
             case1 = case1[::-1]
 
-        case2 = self._transformation(self.axis_variables[1], self.axis_variables[0], "mark-aligned")
+        case2 = self._transformation(
+            self.axis_variables[1], self.axis_variables[0], "mark-aligned"
+        )
         case2 = [sublist[:-1] for sublist in case2[:-1]]
-        q_2, _ = qr(case2, mode='complete')
+        q_2, _ = qr(case2, mode="complete")
         if det(q_2) < 0:
             case2 = case2[::-1]
 
