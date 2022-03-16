@@ -342,13 +342,20 @@ class SVGPlot:
         """
 
         from numpy import trace
+        from numpy.linalg import det, qr
 
         axis_orientations = {}
         case1 = self._transformation(self.axis_variables[0], self.axis_variables[1], "mark-aligned")
-        case1 = [sublist[:1] for sublist in case1[:1]]
-        
+        case1 = [sublist[:-1] for sublist in case1[:-1]]
+        q1, _ = qr(case1, mode='complete')
+        if det(q1) < 0:
+            case1 = case1[::-1]
+
         case2 = self._transformation(self.axis_variables[1], self.axis_variables[0], "mark-aligned")
-        case2 = [sublist[:1] for sublist in case1[:1]]
+        case2 = [sublist[:-1] for sublist in case2[:-1]]
+        q2, _ = qr(case2, mode='complete')
+        if det(q2) < 0:
+            case2 = case2[::-1]
 
         if trace(case1) > trace(case2):
             axis_orientations[self.axis_variables[0]] = AxisOrientation.HORIZONTAL
