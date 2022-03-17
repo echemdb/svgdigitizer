@@ -609,7 +609,7 @@ class CV:
         # to convert the potential values in the df to V
         df["E"] = (
             df[self.svgplot.xlabel] * voltage.to(u.V).value
-        )  # pylint: disable=E1101
+        )
 
     def _add_current_axis(self, df):
         r"""
