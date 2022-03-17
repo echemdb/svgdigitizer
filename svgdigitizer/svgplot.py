@@ -1032,6 +1032,7 @@ class SVGPlot:
                    [ 0.  ,  0.  ,  1.  ]])
 
         A skewed plot like the one above but with a scale bar::
+
             >>> from svgdigitizer.svg import SVG
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
