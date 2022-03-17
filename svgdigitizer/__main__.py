@@ -310,7 +310,7 @@ def _create_package(metadata, csvname, outdir):
         )
 
     package["resources"][0]["schema"]["fields"] = new_fields
-    del package["data description"]
+    del package["data description"]["fields"]
 
     return package
 
