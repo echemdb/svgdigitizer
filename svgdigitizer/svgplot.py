@@ -258,12 +258,7 @@ class SVGPlot:
             'E'
 
         """
-        [axis] = [
-            axis
-            for axis, orientation in self.axis_orientations.items()
-            if orientation == AxisOrientation.HORIZONTAL
-        ]
-        return axis
+        return self.axis_orientations[AxisOrientation.HORIZONTAL]
 
     @property
     @cache
@@ -299,12 +294,7 @@ class SVGPlot:
             'j'
 
         """
-        [axis] = [
-            axis
-            for axis, orientation in self.axis_orientations.items()
-            if orientation == AxisOrientation.VERTICAL
-        ]
-        return axis
+        return self.axis_orientations[AxisOrientation.VERTICAL]
 
     @property
     @cache
@@ -349,7 +339,7 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.axis_orientations
-            {'E': <AxisOrientation.HORIZONTAL: 'horizontal'>, 'j': <AxisOrientation.VERTICAL: 'vertical'>}
+            {<AxisOrientation.HORIZONTAL: 'horizontal'>: 'E', <AxisOrientation.VERTICAL: 'vertical'>: 'j'}
 
         """
         def score(horizontal, vertical):
@@ -382,13 +372,13 @@ class SVGPlot:
 
         if score(self.axis_variables[0], self.axis_variables[1]) > score(self.axis_variables[1], self.axis_variables[0]):
             return {
-                self.axis_variables[0]: AxisOrientation.HORIZONTAL,
-                self.axis_variables[1]: AxisOrientation.VERTICAL,
+                AxisOrientation.HORIZONTAL: self.axis_variables[0],
+                AxisOrientation.VERTICAL: self.axis_variables[1],
             }
         else:
             return {
-                self.axis_variables[0]: AxisOrientation.VERTICAL,
-                self.axis_variables[1]: AxisOrientation.HORIZONTAL,
+                AxisOrientation.HORIZONTAL: self.axis_variables[1],
+                AxisOrientation.VERTICAL: self.axis_variables[0],
             }
 
     @property
