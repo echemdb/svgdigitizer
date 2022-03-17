@@ -3,7 +3,7 @@ The svgdigitizer suite.
 
 EXAMPLES::
 
-    >>> from .test.cli import invoke
+    >>> from svgdigitizer.test.cli import invoke
     >>> invoke(cli, "--help")  # doctest: +NORMALIZE_WHITESPACE
     Usage: cli [OPTIONS] COMMAND [ARGS]...
       The svgdigitizer suite.
@@ -69,7 +69,7 @@ def _outfile(template, suffix=None, outdir=None):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     outname = _outfile(os.path.join(directory, "xy.svg"), suffix=".csv")
         ...     with open(outname, mode="wb") as csv:
@@ -104,7 +104,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     svg = os.path.join(directory, "xy.svg")
         ...     with open(svg, "rb") as infile:
@@ -137,7 +137,7 @@ def plot(svg, sampling_interval, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
 
@@ -169,7 +169,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
@@ -209,7 +209,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
 
@@ -217,7 +217,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     The command can be invoked on files in the current directory::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> cwd = os.getcwd()
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     os.chdir(directory)
@@ -228,7 +228,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     The command can be invoked without sampling when data is not given in volts::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
@@ -265,17 +265,54 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     cv.df.to_csv(csvname, index=False)
 
     if package:
-        from datapackage import Package
-
-        package = Package(cv.metadata, base_path=outdir or os.path.dirname(csvname))
-        package.infer(os.path.basename(csvname))
+        package = _create_package(cv.metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
         mode="w",
         encoding="utf-8",
     ) as json:
-        _write_metadata(json, package.descriptor if package else cv.metadata)
+        _write_metadata(json, package.to_dict() if package else cv.metadata)
+
+
+def _create_package(metadata, csvname, outdir):
+    r"""
+    Return a data package built from a :param:`metadata` dict and tabular data
+    in :param:`csvname`.
+
+    This is a helper method for :meth:`digitize_cv`.
+    """
+    from frictionless import Package, Resource, Schema
+
+    package = Package(
+        metadata,
+        resources=[
+            Resource(
+                path=os.path.basename(csvname),
+                basepath=outdir or os.path.dirname(csvname),
+            )
+        ],
+    )
+    package.infer()
+    # Update fields in the datapackage describing the data in the CSV
+    package_schema = package["resources"][0]["schema"]
+    data_description_schema = Schema(fields=package["data description"]["fields"])
+
+    new_fields = []
+    for name in package_schema.field_names:
+        if not name in data_description_schema.field_names:
+            raise KeyError(
+                f"Field with name {name} is not specified in `data_descripton.fields`."
+            )
+        new_fields.append(
+            data_description_schema.get_field(name).to_dict()
+            | package_schema.get_field(name).to_dict()
+        )
+
+    package["resources"][0]["schema"]["fields"] = new_fields
+    del package["data description"]
+
+    return package
 
 
 def _write_metadata(out, metadata):
@@ -363,7 +400,7 @@ def paginate(onlypng, pdf, outdir):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
