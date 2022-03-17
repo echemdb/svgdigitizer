@@ -1703,8 +1703,8 @@ class SVGPlot:
             4  0.8  0.8
             5  1.0  1.0
 
-        Again diagonal from (0, 100) to (100, 0) in the SVG coordinate system,
-        i.e., visually the function y=x. However, the coordinate system is
+        Again diagonal from (0, 100) to (100, 50) in the SVG coordinate system,
+        i.e., visually the function y=x/2. However, the coordinate system is
         skewed, the x-axis is parallel to the plot and so this is actually the
         function y=0::
 
@@ -1713,7 +1713,7 @@ class SVGPlot:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
+            ...     <path d="M 0 100 L 100 50" />
             ...     <text x="0" y="0">curve: 0</text>
             ...   </g>
             ...   <g>
@@ -1721,7 +1721,7 @@ class SVGPlot:
             ...     <text x="0" y="200">x1: 0</text>
             ...   </g>
             ...   <g>
-            ...     <path d="M 100 200 L 100 0" />
+            ...     <path d="M 100 200 L 100 50" />
             ...     <text x="100" y="200">x2: 1</text>
             ...   </g>
             ...   <g>
