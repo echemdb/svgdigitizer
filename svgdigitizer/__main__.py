@@ -3,7 +3,7 @@ The svgdigitizer suite.
 
 EXAMPLES::
 
-    >>> from .test.cli import invoke
+    >>> from svgdigitizer.test.cli import invoke
     >>> invoke(cli, "--help")  # doctest: +NORMALIZE_WHITESPACE
     Usage: cli [OPTIONS] COMMAND [ARGS]...
       The svgdigitizer suite.
@@ -69,7 +69,7 @@ def _outfile(template, suffix=None, outdir=None):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     outname = _outfile(os.path.join(directory, "xy.svg"), suffix=".csv")
         ...     with open(outname, mode="wb") as csv:
@@ -104,7 +104,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     svg = os.path.join(directory, "xy.svg")
         ...     with open(svg, "rb") as infile:
@@ -137,7 +137,7 @@ def plot(svg, sampling_interval, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
 
@@ -169,7 +169,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
@@ -209,7 +209,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
 
@@ -217,7 +217,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     The command can be invoked on files in the current directory::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> cwd = os.getcwd()
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     os.chdir(directory)
@@ -228,7 +228,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     The command can be invoked without sampling when data is not given in volts::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
@@ -400,7 +400,7 @@ def paginate(onlypng, pdf, outdir):
 
     EXAMPLES::
 
-        >>> from .test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
