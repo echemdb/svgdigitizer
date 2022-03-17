@@ -375,10 +375,10 @@ class SVGPlot:
 
             # Normalize the rotation by dropping any flips.
             if det(Q) < 0:
-                A = A[::-1]
+                Q = Q[::-1]
 
             # The trace of A is 1 + 2 cos(α) so a large trace means a small angle.
-            return trace(A)
+            return trace(Q)
 
         if score(self.axis_variables[0], self.axis_variables[1]) > score(self.axis_variables[1], self.axis_variables[0]):
             return {
