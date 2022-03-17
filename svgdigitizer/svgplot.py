@@ -346,7 +346,11 @@ class SVGPlot:
 
         axis_orientations = {}
         case1 = self._transformation(
-            self.axis_variables[0], self.axis_variables[1], "mark-aligned"
+            self.marked_points[f"{self.axis_variables[0]}1"],
+            self.marked_points[f"{self.axis_variables[0]}2"],
+            self.marked_points[f"{self.axis_variables[1]}1"],
+            self.marked_points[f"{self.axis_variables[1]}2"],
+            "mark-aligned",
         )
         case1 = [sublist[:-1] for sublist in case1[:-1]]
         q_1, _ = qr(case1, mode="complete")
@@ -354,7 +358,11 @@ class SVGPlot:
             case1 = case1[::-1]
 
         case2 = self._transformation(
-            self.axis_variables[1], self.axis_variables[0], "mark-aligned"
+            self.marked_points[f"{self.axis_variables[1]}1"],
+            self.marked_points[f"{self.axis_variables[1]}2"],
+            self.marked_points[f"{self.axis_variables[0]}1"],
+            self.marked_points[f"{self.axis_variables[0]}2"],
+            "mark-aligned",
         )
         case2 = [sublist[:-1] for sublist in case2[:-1]]
         q_2, _ = qr(case2, mode="complete")
@@ -1041,35 +1049,40 @@ class SVGPlot:
                    [ 0.  ,  0.  ,  1.  ]])
 
         """
-        return self._transformation(self.xlabel, self.ylabel, self._algorithm)
+        return self._transformation(
+                self.marked_points[f"{self.xlabel}1"],
+                self.marked_points[f"{self.xlabel}2"],
+                self.marked_points[f"{self.ylabel}1"],
+                self.marked_points[f"{self.ylabel}2"],
+                self._algorithm,
+                self.scaling_factors[self.xlabel],
+                self.scaling_factors[self.ylabel])
 
-    def _transformation(self, xlabel, ylabel, algorithm):
+    @classmethod
+    def _transformation(self, x_1, x_2, y_1, y_2, algorithm, x_scaling_factor=1., y_scaling_factor=1.):
         r"""
         Return the affine map from the SVG coordinate system to the plot
-        coordinate system as a matrix. Takes x and y variable name and
-        algorithm as arguments.
+        coordinate system as a matrix.
+
+        ALGORITHM:
+
+        We construct the basic transformation from the SVG coordinate system
+        to the plot coordinate system from four points in the SVG about we
+        know something in the plot coordinate system:
+        * x_1: a point whose x-coordinate we know
+        * y_1: a point whose y-coordinate we know
+        * x_2: a point whose x-coordinate we know
+        * y_2: a point whose y-coordinate we know
+        For the axis-aligned implementation, we further assume that only
+        changing the x coordinate in the SVG does not change the y coordinate
+        in the plot and conversely.
+        For the mark-aligned algorithm, we assume that x1 and x2 have the
+        same y coordinate in the plot coordinate system. And that y1 and y2
+        have the same x coordinate in the plot coordinate system.
+        In any case, this gives six relations for the six unknowns of an
+        affine transformation.
 
         """
-        # We construct the basic transformation from the SVG coordinate system
-        # to the plot coordinate system from four points in the SVG about we
-        # know something in the plot coordinate system:
-        # * x_1: a point whose x-coordinate we know
-        # * y_1: a point whose y-coordinate we know
-        # * x_2: a point whose x-coordinate we know
-        # * y_2: a point whose y-coordinate we know
-        # For the axis-aligned implementation, we further assume that only
-        # changing the x coordinate in the SVG does not change the y coordinate
-        # in the plot and conversely.
-        # For the mark-aligned algorithm, we assume that x1 and x2 have the
-        # same y coordinate in the plot coordinate system. And that y1 and y2
-        # have the same x coordinate in the plot coordinate system.
-        # In any case, this gives six relations for the six unknowns of an
-        # affine transformation.
-        x_1 = self.marked_points[f"{xlabel}1"]
-        x_2 = self.marked_points[f"{xlabel}2"]
-        y_1 = self.marked_points[f"{ylabel}1"]
-        y_2 = self.marked_points[f"{ylabel}2"]
-
         # We find the linear transformation:
         # [transformation[0] transformation[1] transformation[2]]
         # [transformation[3] transformation[4] transformation[5]]
@@ -1123,8 +1136,8 @@ class SVGPlot:
 
         A = dot(
             [
-                [1 / self.scaling_factors[xlabel], 0, 0],
-                [0, 1 / self.scaling_factors[ylabel], 0],
+                [1 / x_scaling_factor, 0, 0],
+                [0, 1 / y_scaling_factor, 0],
                 [0, 0, 1],
             ],
             A,
