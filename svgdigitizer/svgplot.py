@@ -343,8 +343,7 @@ class SVGPlot:
 
         """
         def score(horizontal, vertical):
-            from numpy import trace
-            from numpy.linalg import det, qr
+            from numpy.linalg import qr
 
             A = self._transformation(
                 self.marked_points[f"{horizontal}1"],
@@ -363,12 +362,16 @@ class SVGPlot:
             # Extract the orthogonal part of the transformation.
             Q, _ = qr(A, mode="complete")
 
-            # Normalize the rotation by dropping any flips.
-            if det(Q) < 0:
-                Q = Q[::-1]
+            # Since we are passing from a negative (SVG) coordinate system to a
+            # positive (plot) coordinate system, the determinant of Q is going
+            # to be negative. We undo this (and ignore but support any
+            # negatively oriented axis by taking the absolute value of the
+            # diagonal entries).
 
-            # The trace of A is 1 + 2 cos(α) so a large trace means a small angle.
-            return trace(Q)
+            # We compute the absolute value of the trace of the rotation matrix
+            # underlying Q which is 1 + |2 cos(α)| so a large trace means a
+            # small angle of rotation.
+            return abs(Q[0][0]) + abs(Q[1][1])
 
         if score(self.axis_variables[0], self.axis_variables[1]) > score(self.axis_variables[1], self.axis_variables[0]):
             return {
@@ -1121,7 +1124,7 @@ class SVGPlot:
                 ]
             )
         else:
-            raise NotImplementedError(f"Unknown algorithm {self._algorithm}.")
+            raise NotImplementedError(f"Unknown algorithm {algorithm}.")
 
         from numpy.linalg import solve
 
