@@ -310,8 +310,19 @@ class SVGPlot:
     @cache
     def axis_orientations(self):
         r"""
-        Return the orientation for each axis.
-        The current implementation does not work for extrem cases where a plot is tilted by 45°.
+        Return the :class:`Orientation` for each axis.
+
+        ALGORITHM:
+
+        We suppose that one axis was meant to be the horizontal axis and one
+        axis was meant to be the vertical axis. Under this assumption we
+        compute the transformation that makes the axes perfectly horizontal and
+        vertical. We determine how much rotation is needed in this transformation.
+        Now we exchange the roles of the axes and again the amount of rotation needed.
+        We then label the axes such that the amount of rotation is minimized.
+
+        Naturally, this does not work very well when the axes are at almost 45°
+        and it is not clear which axis was meant to be horizontal and vertical.
 
         EXAMPLES::
 
@@ -341,42 +352,44 @@ class SVGPlot:
             {'E': <AxisOrientation.HORIZONTAL: 'horizontal'>, 'j': <AxisOrientation.VERTICAL: 'vertical'>}
 
         """
-        from numpy import trace
-        from numpy.linalg import det, qr
+        def score(horizontal, vertical):
+            from numpy import trace
+            from numpy.linalg import det, qr
 
-        axis_orientations = {}
-        case1 = self._transformation(
-            self.marked_points[f"{self.axis_variables[0]}1"],
-            self.marked_points[f"{self.axis_variables[0]}2"],
-            self.marked_points[f"{self.axis_variables[1]}1"],
-            self.marked_points[f"{self.axis_variables[1]}2"],
-            "mark-aligned",
-        )
-        case1 = [sublist[:-1] for sublist in case1[:-1]]
-        q_1, _ = qr(case1, mode="complete")
-        if det(q_1) < 0:
-            case1 = case1[::-1]
+            A = self._transformation(
+                self.marked_points[f"{horizontal}1"],
+                self.marked_points[f"{horizontal}2"],
+                self.marked_points[f"{vertical}1"],
+                self.marked_points[f"{vertical}2"],
+                # We use marked aligned here to get a rotational portion in the
+                # transformation even if the user asked for axis-aligned for
+                # the eventual transformation.
+                "mark-aligned",
+            )
 
-        case2 = self._transformation(
-            self.marked_points[f"{self.axis_variables[1]}1"],
-            self.marked_points[f"{self.axis_variables[1]}2"],
-            self.marked_points[f"{self.axis_variables[0]}1"],
-            self.marked_points[f"{self.axis_variables[0]}2"],
-            "mark-aligned",
-        )
-        case2 = [sublist[:-1] for sublist in case2[:-1]]
-        q_2, _ = qr(case2, mode="complete")
-        if det(q_2) < 0:
-            case2 = case2[::-1]
+            # Focus on the linear 2×2 part of the affine transformation.
+            A = [sublist[:-1] for sublist in A[:-1]]
 
-        if trace(case1) > trace(case2):
-            axis_orientations[self.axis_variables[0]] = AxisOrientation.HORIZONTAL
-            axis_orientations[self.axis_variables[1]] = AxisOrientation.VERTICAL
+            # Extract the orthogonal part of the transformation.
+            Q, _ = qr(A, mode="complete")
+
+            # Normalize the rotation by dropping any flips.
+            if det(Q) < 0:
+                A = A[::-1]
+
+            # The trace of A is 1 + 2 cos(α) so a large trace means a small angle.
+            return trace(A)
+
+        if score(self.axis_variables[0], self.axis_variables[1]) > score(self.axis_variables[1], self.axis_variables[0]):
+            return {
+                self.axis_variables[0]: AxisOrientation.HORIZONTAL,
+                self.axis_variables[1]: AxisOrientation.VERTICAL,
+            }
         else:
-            axis_orientations[self.axis_variables[0]] = AxisOrientation.HORIZONTAL
-            axis_orientations[self.axis_variables[1]] = AxisOrientation.VERTICAL
-
-        return axis_orientations
+            return {
+                self.axis_variables[0]: AxisOrientation.VERTICAL,
+                self.axis_variables[1]: AxisOrientation.HORIZONTAL,
+            }
 
     @property
     @cache
