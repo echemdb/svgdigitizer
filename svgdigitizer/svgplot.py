@@ -208,8 +208,8 @@ class SVGPlot:
              x    y
         0  0.0  0.0
         1  1.0  1.0
-    """
 
+    """
     _EPSILON = 1e-6
 
     def __init__(
@@ -256,8 +256,8 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.xlabel
             'E'
-        """
 
+        """
         [axis] = [
             axis
             for axis, orientation in self.axis_orientations.items()
@@ -297,8 +297,8 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.ylabel
             'j'
-        """
 
+        """
         [axis] = [
             axis
             for axis, orientation in self.axis_orientations.items()
@@ -339,8 +339,8 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.axis_orientations
             {'E': <AxisOrientation.HORIZONTAL: 'horizontal'>, 'j': <AxisOrientation.VERTICAL: 'vertical'>}
-        """
 
+        """
         from numpy import trace
         from numpy.linalg import det, qr
 
@@ -425,8 +425,8 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.axis_variables
             ['E', 'intensity']
-        """
 
+        """
         return list(self._grouped_ref_points.keys())
 
     @property
@@ -525,8 +525,8 @@ class SVGPlot:
             ...    print(logs.output)
             {'x': 'm', 'y': 'A'}
             ['WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.']
-        """
 
+        """
         def axis_label(axis):
             labels = [
                 point[-1]
@@ -556,8 +556,8 @@ class SVGPlot:
     def _grouped_ref_points(self):
         r"""
         Return the reference points grouped by axis variable.
-        """
 
+        """
         def variable(point):
             return str(point.label).split(":")[0].strip()[:-1]
 
@@ -593,6 +593,7 @@ class SVGPlot:
         For each point, a tuple is returned relating the point's coordinates in
         the SVG coordinate system to the point's coordinates in the plot
         coordinate system, or `None` if that point's coordinate is not known.
+
         """
         points = {}
 
@@ -620,8 +621,8 @@ class SVGPlot:
         For each point, a tuple is returned relating the point's coordinates in
         the SVG coordinate system to the point's coordinates in the plot
         coordinate system, or `None` if that point's coordinate is not known.
-        """
 
+        """
         points = {}
 
         # Process scale bars.
@@ -736,8 +737,8 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.marked_points  == {'x1': ((0.0, 100.0), 0.0, None), 'x2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 0.0), 1.0, None)}
             True
-        """
 
+        """
         points = self._marked_points_from_axis_markers
 
         for label, point in self._marked_points_from_scalebars(points).items():
@@ -782,8 +783,8 @@ class SVGPlot:
             >>> plot = SVGPlot(svg)
             >>> plot.scaling_factors
             {'x': 50.6, 'y': 50.6}
-        """
 
+        """
         scaling_factors = {axis: 1 for axis in self.axis_variables}
 
         for label in self.svg.get_texts(
@@ -899,8 +900,8 @@ class SVGPlot:
             (0.0, 1.0)
             >>> plot.from_svg(0, 0)
             (-1.0, 1.0)
-        """
 
+        """
         from numpy import dot
 
         return tuple(dot(self.transformation, [x, y, 1])[:2])
@@ -1038,8 +1039,8 @@ class SVGPlot:
             array([[ 0.01,  0.01, -1.  ],
                    [ 0.  , -0.01,  1.  ],
                    [ 0.  ,  0.  ,  1.  ]])
-        """
 
+        """
         return self._transformation(self.xlabel, self.ylabel, self._algorithm)
 
     def _transformation(self, xlabel, ylabel, algorithm):
@@ -1047,8 +1048,8 @@ class SVGPlot:
         Return the affine map from the SVG coordinate system to the plot
         coordinate system as a matrix. Takes x and y variable name and
         algorithm as arguments.
-        """
 
+        """
         # We construct the basic transformation from the SVG coordinate system
         # to the plot coordinate system from four points in the SVG about we
         # know something in the plot coordinate system:
@@ -1183,8 +1184,8 @@ class SVGPlot:
             Traceback (most recent call last):
             ...
             Exception: No curve main curve found in SVG.
-        """
 
+        """
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
@@ -1258,8 +1259,8 @@ class SVGPlot:
             ...     print(warnings.output)
             {'ref_point': [], 'scale_bar': [], 'curve': []}
             ['WARNING:svgplot:Ignoring <path> with unsupported label kurve: 0.']
-        """
 
+        """
         patterns = {
             "ref_point": r"^(?P<point>\w+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "scale_bar": r"^(?P<axis>\w+)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
@@ -1367,8 +1368,8 @@ class SVGPlot:
             >>> path = Path("M-267 26 C -261 25, -266 24, -264 23")
             >>> len(SVGPlot.sample_path(path, .001))
             4159
-        """
 
+        """
         samples = []
 
         # The path length on the x-axis at which we plan to sample (in the range [0, length of the path segment]):
@@ -1438,8 +1439,8 @@ class SVGPlot:
 
             >>> SVGPlot._sample_segment(segment, .75, sample_from_x_length=2)
             ([0, 0.75, 1], 0.0)
-        """
 
+        """
         if sample_from_x_length < 0:
             raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
 
@@ -1539,8 +1540,8 @@ class SVGPlot:
             ([0.25, 0.5, 0.75], 1.0)
             >>> SVGPlot._sample_snippet(segment, sampling_interval=1, sample_from_x_length=.5, t_range=[.5, 1.], x_length_range=[.5, 1.])
             ([0.5], 1.5)
-        """
 
+        """
         if sample_from_x_length < 0:
             raise ValueError(f"Cannot sample at negative length {sample_from_x_length}")
 
@@ -1606,8 +1607,8 @@ class SVGPlot:
             Traceback (most recent call last):
             ...
             ValueError: ...
-        """
 
+        """
         roots = polynomial.roots
 
         if len(roots) == 0:
@@ -1730,8 +1731,8 @@ class SVGPlot:
             3  0.6  0.0
             4  0.8  0.0
             5  1.0  0.0
-        """
 
+        """
         if self.sampling_interval:
             points = SVGPlot.sample_path(self.curve, self.sampling_interval)
         else:
@@ -1774,8 +1775,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.plot()
-        """
 
+        """
         self.df.plot(
             x=self.xlabel,
             y=self.ylabel,
