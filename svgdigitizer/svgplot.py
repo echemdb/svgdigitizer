@@ -754,7 +754,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.marked_points  == {'x1': ((0.0, 100.0), 0.0, None), 'x2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 0.0), 1.0, None)}
+            >>> plot.marked_points == {'x1': ((0.0, 100.0), 0.0, None), 'x2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 0.0), 1.0, None)}
             True
 
         """
