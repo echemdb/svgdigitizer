@@ -607,9 +607,7 @@ class CV:
         voltage = 1 * CV.get_axis_unit(self.x_label.unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df["E"] = (
-            df[self.svgplot.xlabel] * voltage.to(u.V).value
-        )
+        df["E"] = df[self.svgplot.xlabel] * voltage.to(u.V).value
 
     def _add_current_axis(self, df):
         r"""

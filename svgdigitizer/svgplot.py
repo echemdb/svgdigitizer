@@ -342,6 +342,7 @@ class SVGPlot:
             {<AxisOrientation.HORIZONTAL: 'horizontal'>: 'E', <AxisOrientation.VERTICAL: 'vertical'>: 'j'}
 
         """
+
         def score(horizontal, vertical):
             from numpy.linalg import qr
 
@@ -373,16 +374,18 @@ class SVGPlot:
             # small angle of rotation.
             return abs(Q[0][0]) + abs(Q[1][1])
 
-        if score(self.axis_variables[0], self.axis_variables[1]) > score(self.axis_variables[1], self.axis_variables[0]):
-            return {
+        return (
+            {
                 AxisOrientation.HORIZONTAL: self.axis_variables[0],
                 AxisOrientation.VERTICAL: self.axis_variables[1],
             }
-        else:
-            return {
+            if score(self.axis_variables[0], self.axis_variables[1])
+            > score(self.axis_variables[1], self.axis_variables[0])
+            else {
                 AxisOrientation.HORIZONTAL: self.axis_variables[1],
                 AxisOrientation.VERTICAL: self.axis_variables[0],
             }
+        )
 
     @property
     @cache
@@ -541,6 +544,7 @@ class SVGPlot:
             ['WARNING:svgplot:Labels on y axis do not match. Will ignore label mA and use A.']
 
         """
+
         def axis_label(axis):
             labels = [
                 point[-1]
@@ -572,6 +576,7 @@ class SVGPlot:
         Return the reference points grouped by axis variable.
 
         """
+
         def variable(point):
             return str(point.label).split(":")[0].strip()[:-1]
 
@@ -1056,16 +1061,19 @@ class SVGPlot:
 
         """
         return self._transformation(
-                self.marked_points[f"{self.xlabel}1"],
-                self.marked_points[f"{self.xlabel}2"],
-                self.marked_points[f"{self.ylabel}1"],
-                self.marked_points[f"{self.ylabel}2"],
-                self._algorithm,
-                self.scaling_factors[self.xlabel],
-                self.scaling_factors[self.ylabel])
+            self.marked_points[f"{self.xlabel}1"],
+            self.marked_points[f"{self.xlabel}2"],
+            self.marked_points[f"{self.ylabel}1"],
+            self.marked_points[f"{self.ylabel}2"],
+            self._algorithm,
+            self.scaling_factors[self.xlabel],
+            self.scaling_factors[self.ylabel],
+        )
 
     @classmethod
-    def _transformation(self, x_1, x_2, y_1, y_2, algorithm, x_scaling_factor=1., y_scaling_factor=1.):
+    def _transformation(
+        cls, x_1, x_2, y_1, y_2, algorithm, x_scaling_factor=1.0, y_scaling_factor=1.0
+    ):
         r"""
         Return the affine map from the SVG coordinate system to the plot
         coordinate system as a matrix.
