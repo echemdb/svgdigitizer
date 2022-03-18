@@ -20,6 +20,7 @@
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # *********************************************************************
 import os
+import setuptools
 from distutils.core import setup
 
 setup(
