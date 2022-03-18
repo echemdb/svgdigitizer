@@ -2,18 +2,32 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="svg2"
    width="210.01567mm"
    height="279.99268mm"
    viewBox="0 0 793.76001 1058.24"
-   sodipodi:docname="sato_effect_2006_725_p728_4a_red.svg"
-   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   sodipodi:docname="scaling_factor.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata30">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
   <defs
      id="defs6" />
   <sodipodi:namedview
@@ -26,13 +40,13 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      units="mm"
-     inkscape:zoom="0.79282581"
-     inkscape:cx="404.88087"
-     inkscape:cy="649.57522"
-     inkscape:window-width="2560"
-     inkscape:window-height="1355"
-     inkscape:window-x="0"
-     inkscape:window-y="48"
+     inkscape:zoom="3.1713032"
+     inkscape:cx="97.020486"
+     inkscape:cy="633.29009"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
      inkscape:current-layer="g8"
      inkscape:document-units="mm" />
@@ -41,13 +55,14 @@
      inkscape:label="Image"
      id="g8">
     <image
-       width="793.76001"
-       height="1058.24"
-       preserveAspectRatio="none"
-       style="image-rendering:optimizeQuality"
+       sodipodi:absref="F:\Github\echemdb\svgdigitizer\test\data\../../downloads/sato_effect_2006_725/sato_effect_2006_725_p728.png"
        xlink:href="../../downloads/sato_effect_2006_725/sato_effect_2006_725_p728.png"
+       sodipodi:insensitive="true"
        id="image10"
-       sodipodi:insensitive="true" />
+       style="image-rendering:optimizeQuality"
+       preserveAspectRatio="none"
+       height="1058.24"
+       width="793.76001" />
     <text
        xml:space="preserve"
        style="font-size:12px;line-height:1.25;font-family:sans-serif;fill:#808000"

@@ -1,0 +1,8 @@
+{%- extends "sphinx_rtd_theme/breadcrumbs.html" %}
+
+{% block breadcrumbs_aside %}
+  {# Do not show an "Edit on GitHub" link for pages that were created by Sphinx and have no corresponding .md page in our repository. #}
+  {% if pagename not in ['genindex'] %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}

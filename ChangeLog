@@ -1,0 +1,52 @@
+=======================
+svgdigitizer Change Log
+=======================
+
+.. current developments
+
+v0.3.0
+====================
+
+**Added:**
+
+* Added flag `--skewed` in the CLI to the commands `digitze` and `cv` to enable digitization of skewed plots (non-orthogonal axes).
+* Added "Edit on GitHub" links to documentation.
+
+**Fixed:**
+
+* Fixed version number in title of generated documentation.
+* Upgraded dependency on vulnerable version of pillow, see https://github.com/advisories/GHSA-8vj2-vxx3-667w.
+
+
+
+v0.2.0
+====================
+
+**Added:**
+
+* Added the property `svgdigitizer.electrochemistry.cv.CV.simultaneous_measurement` which is read from a text field in the SVG file.
+
+**Changed:**
+
+* Changed the property `svgdigitizer.electrochemistry.cv.CV.metadata`. It now includes 'data description' which contains the units to the values in the dataframe.
+* Changed the dimension on the x-axis of CVs from `U` to `E` (potential).
+
+
+
+v0.1.2
+====================
+
+**Fixed:**
+
+* Fixed version number in `setup.py` and thus on PyPI when releasing.
+
+
+
+v0.1.1
+====================
+
+**Fixed:**
+
+* Fixed description in `setup.py` to be compatible with PyPI.
+
+
