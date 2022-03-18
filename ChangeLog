@@ -4,6 +4,30 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.4.0
+====================
+
+**Added:**
+
+* Added property `CV.tags`, `CV.figure_label`, and `CV.curve_label` which are extracted from `<text>` elements in the SVG. The extracted values are stored in `CV.metadata`.
+* Added installation instructions.
+* Added automatic symbol and orientation detection of axes.
+
+**Changed:**
+
+* Changed entry `axes` in `figure description` and `data description` to `field` according to `Frictionless Table Schema <https://specs.frictionlessdata.io/table-schema>`_.
+* Replaced module `datapackage` with `frictionless`.
+
+**Removed:**
+
+* Removed `data description` in datapackage created with `digitize_cv`.
+
+**Fixed:**
+
+* Fixed data package creation in `__main__.digitize_cv`, where `data_description` was removed instead of `data_description.fields`.
+
+
+
 v0.3.0
 ====================
 
