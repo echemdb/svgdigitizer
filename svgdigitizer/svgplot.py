@@ -114,7 +114,7 @@ specifying a `sampling_interval`::
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C)      2021 Albert Engstfeld
+#        Copyright (C) 2021-2022 Albert Engstfeld
 #        Copyright (C) 2021-2022 Johannes Hermann
 #        Copyright (C) 2021-2022 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
@@ -1655,6 +1655,26 @@ class SVGPlot:
             )
 
         return min(eligible_roots)
+
+    @property
+    def fields(self):
+
+        def orientation(axis):
+            if axis == 'vertical':
+                return 'y'
+            if axis == 'horizontal':
+                return 'x'
+            else:
+                raise Exception("The axis must be either 'vertical' or 'horizontal")
+        
+        fields = [] 
+        for key, label in self.axis_orientations.items():
+            field = {'name': label,
+                     'unit': self.axis_labels[label],
+                     'orientation': orientation(key.value),}
+            fields.append(field)
+
+        return fields
 
     @property
     @cache
