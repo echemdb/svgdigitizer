@@ -48,6 +48,7 @@ For the documentation below, the path of a CV is presented simply as line.
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 import logging
+from msilib.schema import Error
 import re
 from collections import namedtuple
 from functools import cache
@@ -152,6 +153,56 @@ class CV:
     def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
         self._metadata = metadata or {}
+
+    @property
+    def _schema(self):
+        from frictionless import Schema
+        return Schema(fields = self.svgplot.fields)
+
+    @property    
+    def voltage_dimension(self):
+        if 'E' in self._schema.field_names:
+            voltage = 'E'
+        if 'U' in self._schema.field_names:
+            voltage = 'U'
+        else:
+            raise Error("None of the axis labels has a dimension voltage 'U' or potential 'E'.")
+
+        return voltage
+
+    @property    
+    def current_dimension(self):
+        if 'I' in self._schema.field_names:
+            current = 'I'
+        if 'j' in self._schema.field_names:
+            current = 'j'
+        else:
+            raise Error("None of the axis labels has a dimension current 'I' or current density 'j'.")
+
+        return current
+
+    @property
+    def fields(self):
+        """A frictionless fields object, describing the voltage and current axis.
+        
+        """
+        from frictionless import Schema
+        import re
+
+        schema = Schema(fields = self.svgplot.fields)
+
+        pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
+        match = re.match(
+            pattern, schema.get_field(self.voltage_dimension)['unit'], re.IGNORECASE
+        )
+
+        schema.get_field(self.voltage_dimension)['unit'] = match[1]
+        schema.get_field(self.voltage_dimension)['reference'] = match[2] or 'unknown'
+
+        schema.add_field(name='t')
+        schema.get_field('t')['unit'] = 's'
+
+        return schema.fields
 
     @property
     @cache
@@ -516,19 +567,19 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
             ... </svg>'''))
