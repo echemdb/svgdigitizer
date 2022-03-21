@@ -137,16 +137,16 @@ class CV:
           'simultaneous measurements': ['SXRD', 'SHG'],
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'fields': [{'name': 'E', 'unit': 'mV',
-                    'reference': 'RHE', 'orientation': 'x'},
-                    {'name': 'j', 'unit': 'uA / cm2',
-                    'orientation': 'y'}],
+          'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x', 
+                    'reference': 'RHE'}, 
+                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
                     'comment': 'noisy data'},
-          'data description': {'version': 1, 'type': 'digitized',
-                                'measurement type': 'CV',
-                                'fields': [{'name': 't', 'unit': 's'},
-                                {'name': 'E', 'unit': 'V', 'reference': 'RHE'},
-                                {'name': 'j', 'unit': 'A / m2'}]}}
+          'data description': {'version': 1, 'type': 'digitized', 
+                              'measurement type': 'CV', 'fields': 
+                              [{'name': 'E', 'unit': 'mV', 
+                              'orientation': 'x', 'reference': 'RHE'}, 
+                              {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}, 
+                              {'name': 't', 'unit': 's'}]}}
 
     """
 
@@ -1015,19 +1015,19 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 mV vs. RHE</text>
+            ...     <text x="0" y="200">E1: 0 mV vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 mV vs. RHE</text>
+            ...     <text x="100" y="200">E2: 1 mV vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 uA / cm2</text>
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ...   <text x="-400" y="430">comment: noisy data</text>
@@ -1044,16 +1044,16 @@ class CV:
              'simultaneous measurements': ['SXRD', 'SHG'],
              'measurement type': 'CV',
              'scan rate': {'value': 50.0, 'unit': 'V / s'},
-             'fields': [{'name': 'E', 'unit': 'mV',
-                        'reference': 'RHE', 'orientation': 'x'},
-                        {'name': 'j', 'unit': 'uA / cm2',
-                        'orientation': 'y'}],
+             'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x', 
+                        'reference': 'RHE'}, 
+                        {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
                         'comment': 'noisy data'},
-             'data description': {'version': 1, 'type': 'digitized',
-                                  'measurement type': 'CV',
-                                  'fields': [{'name': 't', 'unit': 's'},
-                                  {'name': 'E', 'unit': 'V', 'reference': 'RHE'},
-                                  {'name': 'j', 'unit': 'A / m2'}]}}
+             'data description': {'version': 1, 'type': 'digitized', 
+                                  'measurement type': 'CV', 'fields': 
+                                  [{'name': 'E', 'unit': 'mV', 
+                                  'orientation': 'x', 'reference': 'RHE'}, 
+                                  {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}, 
+                                  {'name': 't', 'unit': 's'}]}}
 
         """
         metadata = {
@@ -1073,40 +1073,16 @@ class CV:
                     "value": float(self.rate.value),
                     "unit": str(self.rate.unit),
                 },
-                "fields": [
-                    {
-                        "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
-                        "unit": str(CV.get_axis_unit(self.x_label.unit)),
-                        "reference": self.x_label.reference,
-                        "orientation": "x",
-                    },
-                    {
-                        "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
-                        "unit": str(CV.get_axis_unit(self.svgplot.axis_labels["y"])),
-                        "orientation": "y",
-                    },
-                ],
+                "fields": [ self.schema.get_field(self.voltage_dimension), 
+                            self.schema.get_field(self.current_dimension),
+                            ],
                 "comment": self.comment,
             },
             "data description": {
                 "version": 1,
                 "type": "digitized",
                 "measurement type": "CV",
-                "fields": [
-                    {
-                        "name": "t",
-                        "unit": "s",
-                    },
-                    {
-                        "name": self.axis_properties[self.svgplot.xlabel]["dimension"],
-                        "unit": "V",
-                        "reference": self.x_label.reference,
-                    },
-                    {
-                        "name": self.axis_properties[self.svgplot.ylabel]["dimension"],
-                        "unit": str(self.axis_properties[self.svgplot.ylabel]["unit"]),
-                    },
-                ],
+                "fields": self.schema.fields,
             },
         }
 
