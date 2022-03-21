@@ -783,22 +783,22 @@ class CV:
 
         """
         self.df.plot(
-            x=self.axis_properties[self.svgplot.xlabel]["dimension"],
-            y=self.axis_properties[self.svgplot.ylabel]["dimension"],
+            x=self.voltage_dimension,
+            y=self.current_dimension,
         )
         plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
         plt.xlabel(
-            self.axis_properties[self.svgplot.xlabel]["dimension"]
+            self.voltage_dimension
             + " ["
-            + str(self.axis_properties[self.svgplot.xlabel]["unit"])
+            + str(self.schema.get_field(self.voltage_dimension)['unit'])
             + " vs. "
-            + self.x_label.reference
+            + self.schema.get_field(self.voltage_dimension)['reference']
             + "]"
         )
         plt.ylabel(
-            self.axis_properties[self.svgplot.ylabel]["dimension"]
+            self.current_dimension
             + " ["
-            + str(self.axis_properties[self.svgplot.ylabel]["unit"])
+            + str(self.schema.get_field(self.current_dimension)['unit'])
             + "]"
         )
 
