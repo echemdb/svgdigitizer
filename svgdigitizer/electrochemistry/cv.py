@@ -95,19 +95,19 @@ class CV:
         ...   </g>
         ...   <g>
         ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0 mV vs. RHE</text>
+        ...     <text x="0" y="200">E1: 0 mV vs. RHE</text>
         ...   </g>
         ...   <g>
         ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1 mV vs. RHE</text>
+        ...     <text x="100" y="200">E2: 1 mV vs. RHE</text>
         ...   </g>
         ...   <g>
         ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+        ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
         ...   </g>
         ...   <g>
         ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1 uA / cm2</text>
+        ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
         ...   </g>
         ...   <text x="-200" y="330">scan rate: 50 V/s</text>
         ...   <text x="-300" y="330">comment: noisy data</text>
@@ -154,32 +154,23 @@ class CV:
         self.svgplot = svgplot
         self._metadata = metadata or {}
 
-    # @property
-    # def _schema(self):
-    #     from frictionless import Schema
-    #     return Schema(fields = self.svgplot.fields)
-
     @property    
     def voltage_dimension(self):
         if 'E' in self.svgplot.schema.field_names:
-            voltage = 'E'
+            return 'E'
         if 'U' in self.svgplot.schema.field_names:
-            voltage = 'U'
+            return 'U'
         else:
             raise Error("None of the axis labels has a dimension voltage 'U' or potential 'E'.")
-
-        return voltage
 
     @property    
     def current_dimension(self):
         if 'I' in self.svgplot.schema.field_names:
-            current = 'I'
+            return 'I'
         if 'j' in self.svgplot.schema.field_names:
-            current = 'j'
+            return 'j'
         else:
             raise Error("None of the axis labels has a dimension current 'I' or current density 'j'.")
-
-        return current
 
     @property
     def schema(self):
@@ -635,34 +626,35 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv._add_voltage_axis(df = cv.svgplot.df.copy())
 
         """
-        voltage = 1 * CV.get_axis_unit(self.schema.get_field(self.voltage_dimension).unit)
+        voltage = 1 * CV.get_axis_unit(self.schema.get_field(self.voltage_dimension)['unit'])
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df[self.voltage_dimension] = df[self.voltage_dimension] * voltage.si #to(u.V).value
 
     def _add_current_axis(self, df):
         r"""
-        Add a current 'I' or current density 'j' column to the dataframe `df`, based on the :meth:`get_axis_unit` of the y axis.
+        Add a current 'I' or current density 'j' column to the dataframe `df`,
+        based on the :meth:`get_axis_unit` of the y axis.
 
         EXAMPLES::
 
@@ -678,35 +670,35 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv._add_current_axis(df = cv.svgplot.df.copy())
 
         """
-        current = 1 * CV.get_axis_unit(self.svgplot.axis_labels["y"])
+        current = 1 * CV.get_axis_unit(self.schema.get_field(self.current_dimension)['unit'])
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if "m2" in str(current.unit):
-            conversion_factor = current.to(u.A / u.m**2)
+            conversion_factor = current.si #to(u.A / u.m**2)
         else:
-            conversion_factor = current.to(u.A)
+            conversion_factor = current.si# to(u.A)
 
-        df[self.axis_properties["y"]["dimension"]] = df["y"] * conversion_factor
+        df[self.current_dimension] = df[self.current_dimension] * conversion_factor
 
     def _add_time_axis(self, df):
         r"""
@@ -726,19 +718,19 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
             ... </svg>'''))
@@ -748,9 +740,9 @@ class CV:
             >>> cv._add_time_axis(df)
 
         """
-        df["deltaU"] = abs(df["E"].diff().fillna(0))
+        df["deltaU"] = abs(df[self.voltage_dimension].diff().fillna(0))
         df["cumdeltaU"] = df["deltaU"].cumsum()
-        df["t"] = df["cumdeltaU"] / float(self.rate.to(u.V / u.s).value)
+        df["t"] = df["cumdeltaU"] / float(self.rate.si.value) #to(u.V / u.s).value)
 
     def plot(self):
         r"""
@@ -770,19 +762,19 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0</text>
+            ...     <text x="0" y="200">E1: 0 mV</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 mV</text>
+            ...     <text x="100" y="200">E2: 1 mV</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 uA/cm2</text>
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
