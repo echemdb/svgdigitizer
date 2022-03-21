@@ -210,78 +210,66 @@ class CV:
 
         In this first example a current I is plotted on the y-axis in `mA`.::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 mA</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 mA</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.axis_properties
-            {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'I', 'unit': 'A'}}
+        #     >>> from svgdigitizer.svg import SVG
+        #     >>> from svgdigitizer.svgplot import SVGPlot
+        #     >>> from svgdigitizer.electrochemistry.cv import CV
+        #     >>> from io import StringIO
+        #     >>> svg = SVG(StringIO(r'''
+        #     ... <svg>
+        #     ...   <g>
+        #     ...     <path d="M 0 200 L 0 100" />
+        #     ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 100 200 L 100 100" />
+        #     ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 100 L 0 100" />
+        #     ...     <text x="-100" y="100">y1: 0 mA</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 0 L 0 0" />
+        #     ...     <text x="-100" y="0">y2: 1 mA</text>
+        #     ...   </g>
+        #     ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+        #     ... </svg>'''))
+        #     >>> cv = CV(SVGPlot(svg))
+        #     >>> cv.axis_properties
+        #     {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'I', 'unit': 'A'}}
 
-        In this second example a current density 'j' is plotted on the y-axis in `uA / cm2`::
+        # In this second example a current density 'j' is plotted on the y-axis in `uA / cm2`::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.axis_properties
-            {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'j', 'unit': 'A / m2'}}
+        #     >>> from svgdigitizer.svg import SVG
+        #     >>> from svgdigitizer.svgplot import SVGPlot
+        #     >>> from svgdigitizer.electrochemistry.cv import CV
+        #     >>> from io import StringIO
+        #     >>> svg = SVG(StringIO(r'''
+        #     ... <svg>
+        #     ...   <g>
+        #     ...     <path d="M 0 200 L 0 100" />
+        #     ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 100 200 L 100 100" />
+        #     ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 100 L 0 100" />
+        #     ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 0 L 0 0" />
+        #     ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+        #     ...   </g>
+        #     ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+        #     ... </svg>'''))
+        #     >>> cv = CV(SVGPlot(svg))
+        #     >>> cv.axis_properties
+        #     {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'j', 'unit': 'A / m2'}}
 
         """
-        return {
-            "x": {"dimension": "E", "unit": "V"},
-            "y": {
-                "dimension": "j"
-                if "m2"
-                in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
-                else "I",
-                "unit": "A / m2"
-                if "m2"
-                in str(CV.get_axis_unit(self.svgplot.axis_labels[self.svgplot.ylabel]))
-                else "A",
-            },
-        }
+        pass
 
     @classmethod
     def get_axis_unit(cls, unit):
