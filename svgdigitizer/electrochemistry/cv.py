@@ -154,16 +154,16 @@ class CV:
         self.svgplot = svgplot
         self._metadata = metadata or {}
 
-    @property
-    def _schema(self):
-        from frictionless import Schema
-        return Schema(fields = self.svgplot.fields)
+    # @property
+    # def _schema(self):
+    #     from frictionless import Schema
+    #     return Schema(fields = self.svgplot.fields)
 
     @property    
     def voltage_dimension(self):
-        if 'E' in self._schema.field_names:
+        if 'E' in self.svgplot.schema.field_names:
             voltage = 'E'
-        if 'U' in self._schema.field_names:
+        if 'U' in self.svgplot.schema.field_names:
             voltage = 'U'
         else:
             raise Error("None of the axis labels has a dimension voltage 'U' or potential 'E'.")
@@ -172,9 +172,9 @@ class CV:
 
     @property    
     def current_dimension(self):
-        if 'I' in self._schema.field_names:
+        if 'I' in self.svgplot.schema.field_names:
             current = 'I'
-        if 'j' in self._schema.field_names:
+        if 'j' in self.svgplot.schema.field_names:
             current = 'j'
         else:
             raise Error("None of the axis labels has a dimension current 'I' or current density 'j'.")
@@ -182,14 +182,14 @@ class CV:
         return current
 
     @property
-    def fields(self):
-        """A frictionless fields object, describing the voltage and current axis.
+    def schema(self):
+        """A frictionless `Schema` object, including a `Fields` object
+        describing the voltage and current axis.
         
         """
-        from frictionless import Schema
         import re
 
-        schema = Schema(fields = self.svgplot.fields)
+        schema = self.svgplot.schema
 
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
         match = re.match(
@@ -202,7 +202,7 @@ class CV:
         schema.add_field(name='t')
         schema.get_field('t')['unit'] = 's'
 
-        return schema.fields
+        return schema
 
     @property
     @cache
@@ -615,7 +615,7 @@ class CV:
         self._add_time_axis(df)
 
         # Rearrange columns.
-        return df[["t", "E", self.axis_properties["y"]["dimension"]]]
+        return df[["t", self.voltage_dimension, self.current_dimension]]
 
     def _add_voltage_axis(self, df):
         r"""
@@ -655,10 +655,10 @@ class CV:
             >>> cv._add_voltage_axis(df = cv.svgplot.df.copy())
 
         """
-        voltage = 1 * CV.get_axis_unit(self.x_label.unit)
+        voltage = 1 * CV.get_axis_unit(self.schema.get_field(self.voltage_dimension).unit)
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df["E"] = df[self.svgplot.xlabel] * voltage.to(u.V).value
+        df[self.voltage_dimension] = df[self.voltage_dimension] * voltage.si #to(u.V).value
 
     def _add_current_axis(self, df):
         r"""

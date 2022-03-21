@@ -1657,7 +1657,7 @@ class SVGPlot:
         return min(eligible_roots)
 
     @property
-    def fields(self):
+    def schema(self):
 
         def orientation(axis):
             if axis == 'vertical':
@@ -1674,7 +1674,9 @@ class SVGPlot:
                      'orientation': orientation(key.value),}
             fields.append(field)
 
-        return fields
+        from frictionless import Schema
+
+        return Schema(fields=fields)
 
     @property
     @cache
