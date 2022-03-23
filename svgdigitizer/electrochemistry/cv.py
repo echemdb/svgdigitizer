@@ -581,7 +581,7 @@ class CV:
 
     @property
     @cache
-    def rate(self):
+    def scan_rate(self):
         r"""
         Return the scan rate of the plot.
 
@@ -615,7 +615,7 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V / s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.rate
+            >>> cv.scan_rate
             <Quantity 50. V / s>
 
         """
@@ -852,7 +852,7 @@ class CV:
         """
         df["deltaU"] = abs(df[self.voltage_dimension].diff().fillna(0))
         df["cumdeltaU"] = df["deltaU"].cumsum()
-        df["t"] = df["cumdeltaU"] / float(self.rate.si.value)
+        df["t"] = df["cumdeltaU"] / float(self.scan_rate.si.value)
 
     def plot(self):
         r"""
@@ -1180,8 +1180,8 @@ class CV:
                 "simultaneous measurements": self.simultaneous_measurements,
                 "measurement type": "CV",
                 "scan rate": {
-                    "value": float(self.rate.value),
-                    "unit": str(self.rate.unit),
+                    "value": float(self.scan_rate.value),
+                    "unit": str(self.scan_rate.unit),
                 },
                 "fields": [ self.schema.get_field(self.voltage_dimension), 
                             self.schema.get_field(self.current_dimension),
