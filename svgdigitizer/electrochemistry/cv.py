@@ -23,7 +23,7 @@ or ...
 
 TODO:: Link to workflow.md (see issue #73)
 
-For the documentation below, the path of a CV is presented simply as line.
+For the documentation below, the path of a CV is presented simply as a line.
 
 """
 # ********************************************************************
@@ -75,12 +75,26 @@ class CV:
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
 
-    * that the label of the point x2 on the x-axis contains a value and a unit such as ``<text>x2: 1 mV</text>``.  Optionally, this text also indicates the reference scale, e.g. ``<text>x2: 1 mV vs. RHE</text>`` for RHE scale.
-    * that the label of the point x2 on the y-axis contains a value and a unit such as ``<text>y2: 1 uA / cm2</text>``.
-    * that a scan rate is provided in a text field such as ``<text">scan rate: 50 V / s</text>`` placed anywhere in the SVG file.
+    * that one of the axis is labeled with U or E (V) and another axis 
+      is labeld by I (in A) or j (A / cm2)
+    * that the label of the second point (furthest from the origin) 
+      on the x- or y-axis contains a value and a unit 
+      such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.  
+      Optionally, this text of the E/U scale also indicates the 
+      reference scale, e.g., ``<text>xE2: 1 mV vs. RHE</text>`` for RHE scale.
+    * that a scan rate is provided in a text field such as 
+      ``<text">scan rate: 50 mV / s</text>``, placed anywhere in the SVG file.
 
-    The data of the CV can be returned as a dataframe with axis 't', 'E', and 'I' (current) or 'j' (current density).
-    The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'::
+    In addition the following text fields are accessible with this class
+    * A comment describing the data, i.e., ``<text>comment: noisy data</text>``
+    * Other measurements linked to this measurement or performed simultanouesly, i.e., 
+      ``<text>linked: SXRD, DEMS</text>``
+    * A list of tags describing the content of a plot, i.e., 
+      ``<text>tags: BCV, HER, OER</text>``
+    * The figure label provided in the original plot, i.e.,
+      ``<text>figure: 1b</text>``
+    
+    A sample file looks as follows::
 
         >>> from svgdigitizer.svg import SVG
         >>> from svgdigitizer.svgplot import SVGPlot
@@ -115,6 +129,11 @@ class CV:
         ...   <text x="-400" y="330">tags: BCV, HER, OER</text>
         ... </svg>'''))
         >>> cv = CV(SVGPlot(svg))
+
+    The data of the CV can be returned as a dataframe 
+    with axis 't', 'E' or 'U', and 'I' (current) or 'j' (current density).
+    The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'.::
+
         >>> cv.df
                  t      E     j
         0  0.00000  0.000  0.00
@@ -275,7 +294,8 @@ class CV:
         r"""
         Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
 
-        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' which astropy understands.
+        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' 
+        which astropy understands.
 
         EXAMPLES::
 
@@ -324,7 +344,7 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
+            ...     <text x="-100" y="0">y2: 1 uA / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
@@ -368,19 +388,19 @@ class CV:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">E1: 0 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">E2: 1 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">Figure: 2b</text>
             ... </svg>'''))
@@ -428,19 +448,19 @@ class CV:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">E1: 0 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">E2: 1 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
@@ -466,7 +486,8 @@ class CV:
         r"""
         Return the scan rate of the plot.
 
-        The scan rate is read from a ``<text>`` in the SVG file such as ``<text>scan rate: 50 V / s</text>``.
+        The scan rate is read from a ``<text>`` in the SVG file such as 
+        ``<text>scan rate: 50 V / s</text>``.
 
         EXAMPLES::
 
@@ -478,19 +499,19 @@ class CV:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">E1: 0 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">E2: 1 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V / s</text>
             ... </svg>'''))
@@ -523,13 +544,15 @@ class CV:
     def df(self):
         # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltammogram and which is displayed in the documentation (see issue #73).
         r"""
-        Return a dataframe with axis 't', 'E', and 'I' (or 'j).
+        Return a dataframe with axis 't', 'E' (or 'U'), and 'I' (or 'j).
         The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
 
-        The dataframe is constructed from the 'x' and 'y' axis of 'svgplot.df',
-        which are usually not in SI units.
+        The dataframe is constructed based on the units and values,
+        determined from ``svplot``. These are usually not in SI units 
+        and will be converted in the process of creating the df.
 
-        The time axis can only be created when a (scan) rate is given in the plot, i.e., '50 mV /s'.
+        The time axis can only be created when a scan rate is given 
+        in the plot, i.e., '50 mV /s'.
 
         EXAMPLES::
 
@@ -597,7 +620,8 @@ class CV:
 
     def _add_voltage_axis(self, df):
         r"""
-        Add a voltage column to the dataframe `df`, based on the :meth:`get_axis_unit` of the x axis.
+        Add a voltage column to the dataframe `df`, based on 
+        the :meth:`get_axis_unit` of the x axis.
 
         EXAMPLES::
 
@@ -636,7 +660,7 @@ class CV:
         voltage = 1 * CV.get_axis_unit(self.schema.get_field(self.voltage_dimension)['unit'])
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
-        df[self.voltage_dimension] = df[self.voltage_dimension] * voltage.si #to(u.V).value
+        df[self.voltage_dimension] = df[self.voltage_dimension] * voltage.si
 
     def _add_current_axis(self, df):
         r"""
@@ -681,9 +705,9 @@ class CV:
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if "m2" in str(current.unit):
-            conversion_factor = current.si #to(u.A / u.m**2)
+            conversion_factor = current.si
         else:
-            conversion_factor = current.si# to(u.A)
+            conversion_factor = current.si
 
         df[self.current_dimension] = df[self.current_dimension] * conversion_factor
 
@@ -729,7 +753,7 @@ class CV:
         """
         df["deltaU"] = abs(df[self.voltage_dimension].diff().fillna(0))
         df["cumdeltaU"] = df["deltaU"].cumsum()
-        df["t"] = df["cumdeltaU"] / float(self.rate.si.value) #to(u.V / u.s).value)
+        df["t"] = df["cumdeltaU"] / float(self.rate.si.value)
 
     def plot(self):
         r"""
@@ -808,19 +832,19 @@ class CV:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">x1: 0 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">x2: 1 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: A / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ...   <text x="-400" y="430">comment: noisy data</text>
@@ -838,19 +862,19 @@ class CV:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">x1: 0 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">x2: 1 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: A / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
@@ -891,19 +915,19 @@ class CV:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">x1: 0 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">x2: 1 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: A / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ...   <text x="-400" y="430">linked: SXRD, SHG</text>
@@ -947,19 +971,19 @@ class CV:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 cm</text>
+            ...     <text x="0" y="200">x1: 0 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1cm</text>
+            ...     <text x="100" y="200">x2: 1 V</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0</text>
+            ...     <text x="-100" y="100">j1: A / cm2</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 A</text>
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ...   <text x="-300" y="330">tags: BCV, HER, OER</text>
