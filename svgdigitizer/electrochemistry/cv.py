@@ -292,8 +292,10 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.current_dimension
-            'j'
+            >>> cv.schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'E', 'unit': 'V', 'orientation': 'x', 'reference': 'RHE'},
+                        {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}, 
+                        {'name': 't', 'unit': 's'}]}
         """
         import re
 
