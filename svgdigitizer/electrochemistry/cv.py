@@ -48,7 +48,6 @@ For the documentation below, the path of a CV is presented simply as line.
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 import logging
-from msilib.schema import Error
 import re
 from collections import namedtuple
 from functools import cache
@@ -161,7 +160,7 @@ class CV:
         if 'U' in self.svgplot.schema.field_names:
             return 'U'
         else:
-            raise Error("None of the axis labels has a dimension voltage 'U' or potential 'E'.")
+            raise Exception("None of the axis labels has a dimension voltage 'U' or potential 'E'.")
 
     @property    
     def current_dimension(self):
@@ -170,7 +169,7 @@ class CV:
         if 'j' in self.svgplot.schema.field_names:
             return 'j'
         else:
-            raise Error("None of the axis labels has a dimension current 'I' or current density 'j'.")
+            raise Exception("None of the axis labels has a dimension current 'I' or current density 'j'.")
 
     @property
     def schema(self):
