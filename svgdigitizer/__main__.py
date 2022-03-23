@@ -248,7 +248,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
             from astropy import units as u
 
-            sampling_interval /= CV.get_axis_unit(cv.x_label.unit).to(u.V)
+            sampling_interval /= CV.get_axis_unit(cv.schema.get_field(cv.voltage_dimension)["unit"]).to(u.V)
 
     if metadata:
         import yaml
