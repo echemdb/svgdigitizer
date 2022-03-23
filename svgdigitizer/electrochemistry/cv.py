@@ -76,7 +76,7 @@ class CV:
     It requires:
 
     * that one of the axis is labeled with U or E (V) and another axis 
-      is labeld by I (in A) or j (A / cm2)
+      is labeld by I (A) or j (A / cm2)
     * that the label of the second point (furthest from the origin) 
       on the x- or y-axis contains a value and a unit 
       such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.  
@@ -312,82 +312,6 @@ class CV:
 
         return schema
 
-    @property
-    @cache
-    def axis_properties(self):
-        r"""
-        Return the dimension and the SI units of the x- and y-axis.
-
-        * The x-axis dimension 'E' is given in 'V'.
-        * The y-axis dimension can either be 'I' (current) or 'j' (current density), given in 'A' or 'A / m²', respectively.
-        * The latter dimension and unit are derived from the ``<text>`` associated with the y-axis labels in the SVG file such as ``<text x="-100" y="0">y2: 1 A</text>``.
-        * Labels in `x1` and `y1` position are ignored.
-
-        EXAMPLES:
-
-        In this first example a current I is plotted on the y-axis in `mA`.::
-
-        #     >>> from svgdigitizer.svg import SVG
-        #     >>> from svgdigitizer.svgplot import SVGPlot
-        #     >>> from svgdigitizer.electrochemistry.cv import CV
-        #     >>> from io import StringIO
-        #     >>> svg = SVG(StringIO(r'''
-        #     ... <svg>
-        #     ...   <g>
-        #     ...     <path d="M 0 200 L 0 100" />
-        #     ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
-        #     ...   </g>
-        #     ...   <g>
-        #     ...     <path d="M 100 200 L 100 100" />
-        #     ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
-        #     ...   </g>
-        #     ...   <g>
-        #     ...     <path d="M -100 100 L 0 100" />
-        #     ...     <text x="-100" y="100">y1: 0 mA</text>
-        #     ...   </g>
-        #     ...   <g>
-        #     ...     <path d="M -100 0 L 0 0" />
-        #     ...     <text x="-100" y="0">y2: 1 mA</text>
-        #     ...   </g>
-        #     ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-        #     ... </svg>'''))
-        #     >>> cv = CV(SVGPlot(svg))
-        #     >>> cv.axis_properties
-        #     {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'I', 'unit': 'A'}}
-
-        # In this second example a current density 'j' is plotted on the y-axis in `uA / cm2`::
-
-        #     >>> from svgdigitizer.svg import SVG
-        #     >>> from svgdigitizer.svgplot import SVGPlot
-        #     >>> from svgdigitizer.electrochemistry.cv import CV
-        #     >>> from io import StringIO
-        #     >>> svg = SVG(StringIO(r'''
-        #     ... <svg>
-        #     ...   <g>
-        #     ...     <path d="M 0 200 L 0 100" />
-        #     ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
-        #     ...   </g>
-        #     ...   <g>
-        #     ...     <path d="M 100 200 L 100 100" />
-        #     ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
-        #     ...   </g>
-        #     ...   <g>
-        #     ...     <path d="M -100 100 L 0 100" />
-        #     ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
-        #     ...   </g>
-        #     ...   <g>
-        #     ...     <path d="M -100 0 L 0 0" />
-        #     ...     <text x="-100" y="0">y2: 1  uA / cm2</text>
-        #     ...   </g>
-        #     ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-        #     ... </svg>'''))
-        #     >>> cv = CV(SVGPlot(svg))
-        #     >>> cv.axis_properties
-        #     {'x': {'dimension': 'E', 'unit': 'V'}, 'y': {'dimension': 'j', 'unit': 'A / m2'}}
-
-        """
-        pass
-
     @classmethod
     def get_axis_unit(cls, unit):
         r"""
@@ -409,64 +333,6 @@ class CV:
 
         """
         return u.Unit(unit)
-
-    @property
-    def x_label(self):
-        r"""
-        Return the label on the x-axis of the SVG plot.
-        Usually the label on an axis only consits of a unit.
-        In the case of electrochemical data the x-label
-        usually consists of a unit and a reference.
-        The unit and the reference are united in a single string,
-        which are separated by ``x_label`` providing access to
-        the unit and the reference.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">y1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">y2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.x_label
-            Label(label='V vs. RHE', unit='V', reference='RHE')
-
-        Label and unit can be obtained by::
-
-            >>> cv.x_label.unit
-            'V'
-            >>> cv.x_label.reference
-            'RHE'
-
-        """
-        pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
-        match = re.match(
-            pattern, self.svgplot.axis_labels[self.svgplot.xlabel], re.IGNORECASE
-        )
-
-        return namedtuple("Label", ["label", "unit", "reference"])(
-            match[0], match[1], match[2] or "unknown"
-        )
 
     @property
     @cache
