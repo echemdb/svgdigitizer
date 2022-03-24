@@ -303,7 +303,13 @@ class CV:
 
         schema.get_field(self.voltage_dimension)['unit'] = 'V'
         del schema.get_field(self.voltage_dimension)['orientation']
-        schema.get_field(self.current_dimension)['unit'] = 'A' if self.current_dimension == 'I' else 'A / m2'
+        if self.current_dimension == 'I':
+            schema.get_field(self.current_dimension)['unit'] = 'A'
+        if self.current_dimension == 'j':
+            schema.get_field(self.current_dimension)['unit'] = 'A / m2'
+        else:
+            raise Exception("None of the axis labels has a dimension current 'I' or current density 'j'.")
+
         del schema.get_field(self.current_dimension)['orientation']
         schema.add_field(name='t')
         schema.get_field('t')['unit'] = 's'
