@@ -48,8 +48,6 @@ For the documentation below, the path of a CV is presented simply as a line.
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 import logging
-import re
-from collections import namedtuple
 from functools import cache
 
 import matplotlib.pyplot as plt
@@ -75,25 +73,25 @@ class CV:
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
 
-    * that one of the axis is labeled with U or E (V) and another axis 
+    * that one of the axis is labeled with U or E (V) and another axis
       is labeld by I (A) or j (A / cm2)
-    * that the label of the second point (furthest from the origin) 
-      on the x- or y-axis contains a value and a unit 
-      such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.  
-      Optionally, this text of the E/U scale also indicates the 
+    * that the label of the second point (furthest from the origin)
+      on the x- or y-axis contains a value and a unit
+      such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.
+      Optionally, this text of the E/U scale also indicates the
       reference scale, e.g., ``<text>xE2: 1 mV vs. RHE</text>`` for RHE scale.
-    * that a scan rate is provided in a text field such as 
+    * that a scan rate is provided in a text field such as
       ``<text">scan rate: 50 mV / s</text>``, placed anywhere in the SVG file.
 
     In addition the following text fields are accessible with this class
     * A comment describing the data, i.e., ``<text>comment: noisy data</text>``
-    * Other measurements linked to this measurement or performed simultanouesly, i.e., 
+    * Other measurements linked to this measurement or performed simultanouesly, i.e.,
       ``<text>linked: SXRD, DEMS</text>``
-    * A list of tags describing the content of a plot, i.e., 
+    * A list of tags describing the content of a plot, i.e.,
       ``<text>tags: BCV, HER, OER</text>``
     * The figure label provided in the original plot, i.e.,
       ``<text>figure: 1b</text>``
-    
+
     A sample file looks as follows::
 
         >>> from svgdigitizer.svg import SVG
@@ -130,7 +128,7 @@ class CV:
         ... </svg>'''))
         >>> cv = CV(SVGPlot(svg))
 
-    The data of the CV can be returned as a dataframe 
+    The data of the CV can be returned as a dataframe
     with axis 't', 'E' or 'U', and 'I' (current) or 'j' (current density).
     The dimensions are in SI units 's', 'V' and 'A' or 'A / m2'.::
 
@@ -155,14 +153,14 @@ class CV:
           'simultaneous measurements': ['SXRD', 'SHG'],
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x', 
-                    'reference': 'RHE'}, 
+          'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x',
+                    'reference': 'RHE'},
                     {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
                     'comment': 'noisy data'},
-          'data description': {'version': 1, 'type': 'digitized', 
-                              'measurement type': 'CV', 'fields': 
-                              [{'name': 'E', 'unit': 'V', 'reference': 'RHE'}, 
-                              {'name': 'j', 'unit': 'A / m2'}, 
+          'data description': {'version': 1, 'type': 'digitized',
+                              'measurement type': 'CV', 'fields':
+                              [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                              {'name': 'j', 'unit': 'A / m2'},
                               {'name': 't', 'unit': 's'}]}}
 
     """
@@ -171,7 +169,7 @@ class CV:
         self.svgplot = svgplot
         self._metadata = metadata or {}
 
-    @property    
+    @property
     def voltage_dimension(self):
         r"""
         The dimension of the voltage axis given as ``U`` (voltage) or ``E`` (potential).
@@ -206,18 +204,20 @@ class CV:
             >>> cv.voltage_dimension
             'E'
 
-            """
-        if 'E' in self.svgplot.schema.field_names:
-            return 'E'
-        if 'U' in self.svgplot.schema.field_names:
-            return 'U'
-        else:
-            raise Exception("None of the axis labels has a dimension voltage 'U' or potential 'E'.")
+        """
+        if "E" in self.svgplot.schema.field_names:
+            return "E"
+        if "U" in self.svgplot.schema.field_names:
+            return "U"
 
-    @property    
+        raise Exception(
+            "None of the axis labels has a dimension voltage 'U' or potential 'E'."
+        )
+
+    @property
     def current_dimension(self):
         r"""
-        The dimension of the current axis given as 
+        The dimension of the current axis given as
         ``I`` (current) or ``j`` (current density).
 
         EXAMPLES::
@@ -250,21 +250,23 @@ class CV:
             >>> cv.current_dimension
             'j'
 
-            """
-        if 'I' in self.svgplot.schema.field_names:
-            return 'I'
-        if 'j' in self.svgplot.schema.field_names:
-            return 'j'
-        else:
-            raise Exception("None of the axis labels has a dimension current 'I' or current density 'j'.")
+        """
+        if "I" in self.svgplot.schema.field_names:
+            return "I"
+        if "j" in self.svgplot.schema.field_names:
+            return "j"
+
+        raise Exception(
+            "None of the axis labels has a dimension current 'I' or current density 'j'."
+        )
 
     @property
     def data_schema(self):
         """A frictionless `Schema` object, including a field object
-        describing the data generated with :meth:`df`. 
+        describing the data generated with :meth:`df`.
         Compared to :meth:`figure_schema` all fields are given in SI units
-        A time axis is also included.  
-        
+        A time axis is also included.
+
         EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
@@ -294,25 +296,27 @@ class CV:
             >>> cv = CV(SVGPlot(svg))
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
-                        {'name': 'j', 'unit': 'A / m2'}, 
+                        {'name': 'j', 'unit': 'A / m2'},
                         {'name': 't', 'unit': 's'}]}
 
         """
 
         schema = self.figure_schema
 
-        schema.get_field(self.voltage_dimension)['unit'] = 'V'
-        del schema.get_field(self.voltage_dimension)['orientation']
-        if self.current_dimension == 'I':
-            schema.get_field(self.current_dimension)['unit'] = 'A'
-        if self.current_dimension == 'j':
-            schema.get_field(self.current_dimension)['unit'] = 'A / m2'
+        schema.get_field(self.voltage_dimension)["unit"] = "V"
+        del schema.get_field(self.voltage_dimension)["orientation"]
+        if self.current_dimension == "I":
+            schema.get_field(self.current_dimension)["unit"] = "A"
+        if self.current_dimension == "j":
+            schema.get_field(self.current_dimension)["unit"] = "A / m2"
         else:
-            raise Exception("None of the axis labels has a dimension current 'I' or current density 'j'.")
+            raise Exception(
+                "None of the axis labels has a dimension current 'I' or current density 'j'."
+            )
 
-        del schema.get_field(self.current_dimension)['orientation']
-        schema.add_field(name='t')
-        schema.get_field('t')['unit'] = 's'
+        del schema.get_field(self.current_dimension)["orientation"]
+        schema.add_field(name="t")
+        schema.get_field("t")["unit"] = "s"
 
         return schema
 
@@ -320,9 +324,9 @@ class CV:
     def figure_schema(self):
         """A frictionless `Schema` object, including a `Fields` object
         describing the voltage and current axis of the originlal plot
-        including original units. The reference electrode of the 
+        including original units. The reference electrode of the
         potential/voltage axis is also given (if available).
-        
+
         EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
@@ -361,11 +365,11 @@ class CV:
 
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
         match = re.match(
-            pattern, schema.get_field(self.voltage_dimension)['unit'], re.IGNORECASE
+            pattern, schema.get_field(self.voltage_dimension)["unit"], re.IGNORECASE
         )
 
-        schema.get_field(self.voltage_dimension)['unit'] = match[1]
-        schema.get_field(self.voltage_dimension)['reference'] = match[2] or 'unknown'
+        schema.get_field(self.voltage_dimension)["unit"] = match[1]
+        schema.get_field(self.voltage_dimension)["reference"] = match[2] or "unknown"
 
         return schema
 
@@ -374,7 +378,7 @@ class CV:
         r"""
         Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
 
-        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2' 
+        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2'
         which astropy understands.
 
         EXAMPLES::
@@ -508,7 +512,7 @@ class CV:
         r"""
         Return the scan rate of the plot.
 
-        The scan rate is read from a ``<text>`` in the SVG file such as 
+        The scan rate is read from a ``<text>`` in the SVG file such as
         ``<text>scan rate: 50 V / s</text>``.
 
         EXAMPLES::
@@ -570,10 +574,10 @@ class CV:
         The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
 
         The dataframe is constructed based on the units and values,
-        determined from ``svplot``. These are usually not in SI units 
+        determined from ``svplot``. These are usually not in SI units
         and will be converted in the process of creating the df.
 
-        The time axis can only be created when a scan rate is given 
+        The time axis can only be created when a scan rate is given
         in the plot, i.e., '50 mV /s'.
 
         EXAMPLES::
@@ -642,7 +646,7 @@ class CV:
 
     def _add_voltage_axis(self, df):
         r"""
-        Add a voltage column to the dataframe `df`, based on 
+        Add a voltage column to the dataframe `df`, based on
         the :meth:`get_axis_unit` of the x axis.
 
         EXAMPLES::
@@ -679,7 +683,9 @@ class CV:
             >>> cv._add_voltage_axis(df = cv.svgplot.df.copy())
 
         """
-        voltage = 1 * CV.get_axis_unit(self.figure_schema.get_field(self.voltage_dimension)['unit'])
+        voltage = 1 * CV.get_axis_unit(
+            self.figure_schema.get_field(self.voltage_dimension)["unit"]
+        )
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df[self.voltage_dimension] = df[self.voltage_dimension] * voltage.si
@@ -723,7 +729,9 @@ class CV:
             >>> cv._add_current_axis(df = cv.svgplot.df.copy())
 
         """
-        current = 1 * CV.get_axis_unit(self.figure_schema.get_field(self.current_dimension)['unit'])
+        current = 1 * CV.get_axis_unit(
+            self.figure_schema.get_field(self.current_dimension)["unit"]
+        )
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
         if "m2" in str(current.unit):
@@ -823,15 +831,15 @@ class CV:
         plt.xlabel(
             self.voltage_dimension
             + " ["
-            + str(self.data_schema.get_field(self.voltage_dimension)['unit'])
+            + str(self.data_schema.get_field(self.voltage_dimension)["unit"])
             + " vs. "
-            + self.data_schema.get_field(self.voltage_dimension)['reference']
+            + self.data_schema.get_field(self.voltage_dimension)["reference"]
             + "]"
         )
         plt.ylabel(
             self.current_dimension
             + " ["
-            + str(self.data_schema.get_field(self.current_dimension)['unit'])
+            + str(self.data_schema.get_field(self.current_dimension)["unit"])
             + "]"
         )
 
@@ -1077,14 +1085,14 @@ class CV:
              'simultaneous measurements': ['SXRD', 'SHG'],
              'measurement type': 'CV',
              'scan rate': {'value': 50.0, 'unit': 'V / s'},
-             'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x', 
-                        'reference': 'RHE'}, 
+             'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x',
+                        'reference': 'RHE'},
                         {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
                         'comment': 'noisy data'},
-             'data description': {'version': 1, 'type': 'digitized', 
-                                  'measurement type': 'CV', 'fields': 
-                                  [{'name': 'E', 'unit': 'V', 'reference': 'RHE'}, 
-                                  {'name': 'j', 'unit': 'A / m2'}, 
+             'data description': {'version': 1, 'type': 'digitized',
+                                  'measurement type': 'CV', 'fields':
+                                  [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                                  {'name': 'j', 'unit': 'A / m2'},
                                   {'name': 't', 'unit': 's'}]}}
 
         """

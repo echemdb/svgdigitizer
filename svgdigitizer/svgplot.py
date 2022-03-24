@@ -1658,20 +1658,61 @@ class SVGPlot:
 
     @property
     def schema(self):
+        """A frictionless `Schema` object, including a `Fields` object
+        describing the voltage and current axis of the originlal plot
+        including original units. The reference electrode of the
+        potential/voltage axis is also given (if available).
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 't', 'unit': None, 'orientation': 'x'},
+                        {'name': 'y', 'unit': None, 'orientation': 'y'}]}
+
+
+        """
 
         def orientation(axis):
-            if axis == 'vertical':
-                return 'y'
-            if axis == 'horizontal':
-                return 'x'
-            else:
-                raise Exception("The axis must be either 'vertical' or 'horizontal")
-        
-        fields = [] 
+            if axis == "vertical":
+                return "y"
+            if axis == "horizontal":
+                return "x"
+
+            raise Exception("The axis must be either 'vertical' or 'horizontal")
+
+        fields = []
         for key, label in self.axis_orientations.items():
-            field = {'name': label,
-                     'unit': self.axis_labels[label],
-                     'orientation': orientation(key.value),}
+            field = {
+                "name": label,
+                "unit": self.axis_labels[label],
+                "orientation": orientation(key.value),
+            }
             fields.append(field)
 
         from frictionless import Schema
