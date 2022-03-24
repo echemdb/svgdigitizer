@@ -73,7 +73,7 @@ class CV:
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
 
-    * | that one of the axis is labeled with U or E (V) and another 
+    * | that one of the axis is labeled with U or E (V) and another
       | axis is labeld by I (A) or j (A / cm2)
     * | that the label of the second point (furthest from the origin)
       | on the x- or y-axis contains a value and a unit
@@ -85,7 +85,7 @@ class CV:
 
     In addition the following text fields are accessible with this class
 
-    * | A comment describing the data, i.e., 
+    * | A comment describing the data, i.e.,
       | ``<text>comment: noisy data</text>``
     * | Other measurements linked to this measurement or performed simultanouesly, i.e.,
       | ``<text>linked: SXRD, DEMS</text>``
