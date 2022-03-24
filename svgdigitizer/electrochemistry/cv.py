@@ -73,24 +73,26 @@ class CV:
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
 
-    * that one of the axis is labeled with U or E (V) and another axis
-      is labeld by I (A) or j (A / cm2)
-    * that the label of the second point (furthest from the origin)
-      on the x- or y-axis contains a value and a unit
-      such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.
-      Optionally, this text of the E/U scale also indicates the
-      reference scale, e.g., ``<text>xE2: 1 mV vs. RHE</text>`` for RHE scale.
-    * that a scan rate is provided in a text field such as
-      ``<text">scan rate: 50 mV / s</text>``, placed anywhere in the SVG file.
+    * | that one of the axis is labeled with U or E (V) and another 
+      | axis is labeld by I (A) or j (A / cm2)
+    * | that the label of the second point (furthest from the origin)
+      | on the x- or y-axis contains a value and a unit
+      | such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.
+      | Optionally, this text of the E/U scale also indicates the
+      | reference scale, e.g., ``<text>xE2: 1 mV vs. RHE</text>`` for RHE scale.
+    * | that a scan rate is provided in a text field such as
+      | ``<text">scan rate: 50 mV / s</text>``, placed anywhere in the SVG file.
 
     In addition the following text fields are accessible with this class
-    * A comment describing the data, i.e., ``<text>comment: noisy data</text>``
-    * Other measurements linked to this measurement or performed simultanouesly, i.e.,
-      ``<text>linked: SXRD, DEMS</text>``
-    * A list of tags describing the content of a plot, i.e.,
-      ``<text>tags: BCV, HER, OER</text>``
-    * The figure label provided in the original plot, i.e.,
-      ``<text>figure: 1b</text>``
+
+    * | A comment describing the data, i.e., 
+      | ``<text>comment: noisy data</text>``
+    * | Other measurements linked to this measurement or performed simultanouesly, i.e.,
+      | ``<text>linked: SXRD, DEMS</text>``
+    * | A list of tags describing the content of a plot, i.e.,
+      | ``<text>tags: BCV, HER, OER</text>``
+    * | The figure label provided in the original plot, i.e.,
+      | ``<text>figure: 1b</text>``
 
     A sample file looks as follows::
 
