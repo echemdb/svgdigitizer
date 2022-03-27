@@ -1659,9 +1659,8 @@ class SVGPlot:
     @property
     def schema(self):
         """A frictionless `Schema` object, including a `Fields` object
-        describing the voltage and current axis of the originlal plot
-        including original units. The reference electrode of the
-        potential/voltage axis is also given (if available).
+        describing the voltage and current axis of the original plot
+        including original units.
 
         EXAMPLES::
 
