@@ -73,13 +73,13 @@ class CV:
     An instance of this class can be created from a specially prepared SVG file.
     It requires:
 
-    * | that one of the axis is labeled with U or E (V) and another
-      | axis is labeld by I (A) or j (A / cm2)
+    * | that the x-axis is labeled with U or E (V) and the y-axis
+      | is labeld by I (A) or j (A / cm2)
     * | that the label of the second point (furthest from the origin)
       | on the x- or y-axis contains a value and a unit
       | such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.
       | Optionally, this text of the E/U scale also indicates the
-      | reference scale, e.g., ``<text>xE2: 1 mV vs. RHE</text>`` for RHE scale.
+      | reference scale, e.g., ``<text>E2: 1 mV vs. RHE</text>`` for RHE scale.
     * | that a scan rate is provided in a text field such as
       | ``<text">scan rate: 50 mV / s</text>``, placed anywhere in the SVG file.
 
@@ -206,15 +206,58 @@ class CV:
             >>> cv.voltage_dimension
             'E'
 
-        """
-        if "E" in self.svgplot.schema.field_names:
-            return "E"
-        if "U" in self.svgplot.schema.field_names:
-            return "U"
+        The following example is not valid, since the voltage is on the y-axis 
+        and current on the x-axis.
 
-        raise Exception(
-            "None of the axis labels has a dimension voltage 'U' or potential 'E'."
-        )
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">j2: 1 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">E1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">E2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.voltage_dimension
+            Traceback (most recent call last):
+            ...
+            Exception: The voltage must be on the x-axis.
+
+        """
+        dimensions = list(set(['E', 'U']).intersection(self.svgplot.schema.field_names))
+        
+        if len(dimensions) == 1:
+            if self.svgplot.schema.get_field(dimensions[0])['orientation'] == 'x':
+                return dimensions[0]
+            else:
+                raise Exception(
+                    f"The voltage must be on the x-axis."
+                )
+
+        if len(dimensions) > 1:
+            raise Exception(
+                f"More than one voltage axis found, i.e., {dimensions}."
+            )
+        if len(dimensions) == 0:
+            raise Exception(
+                f"No voltage axis found."
+            )
 
     @property
     def current_dimension(self):
@@ -253,14 +296,24 @@ class CV:
             'j'
 
         """
-        if "I" in self.svgplot.schema.field_names:
-            return "I"
-        if "j" in self.svgplot.schema.field_names:
-            return "j"
+        dimensions = list(set(['I', 'j']).intersection(self.svgplot.schema.field_names))
+        
+        if len(dimensions) == 1:
+            if self.svgplot.schema.get_field(dimensions[0])['orientation'] == 'y':
+                return dimensions[0]
+            else:
+                raise Exception(
+                    f"The current must be on the x-axis."
+                )
 
-        raise Exception(
-            "None of the axis labels has a dimension current 'I' or current density 'j'."
-        )
+        if len(dimensions) > 1:
+            raise Exception(
+                f"More than one current axis found, i.e., {dimensions}."
+            )
+        if len(dimensions) == 0:
+            raise Exception(
+                f"No current axis found."
+            )
 
     @property
     def data_schema(self):
