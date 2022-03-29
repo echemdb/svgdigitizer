@@ -206,7 +206,7 @@ class CV:
             >>> cv.voltage_dimension
             'E'
 
-        The following example is not valid, since the voltage is on the y-axis 
+        The following example is not valid, since the voltage is on the y-axis
         and current on the x-axis.
 
             >>> from svgdigitizer.svg import SVG
@@ -240,24 +240,14 @@ class CV:
             Exception: The voltage must be on the x-axis.
 
         """
-        dimensions = list(set(['E', 'U']).intersection(self.svgplot.schema.field_names))
-        
-        if len(dimensions) == 1:
-            if self.svgplot.schema.get_field(dimensions[0])['orientation'] == 'x':
-                return dimensions[0]
-            else:
-                raise Exception(
-                    f"The voltage must be on the x-axis."
-                )
+        dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))
 
-        if len(dimensions) > 1:
-            raise Exception(
-                f"More than one voltage axis found, i.e., {dimensions}."
-            )
-        if len(dimensions) == 0:
-            raise Exception(
-                f"No voltage axis found."
-            )
+        if len(dimensions) == 1:
+            if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "x":
+                return dimensions[0]
+            raise Exception("The voltage must be on the x-axis.")
+
+        raise Exception("No voltage axis or more than one voltage axis found.")
 
     @property
     def current_dimension(self):
@@ -296,24 +286,14 @@ class CV:
             'j'
 
         """
-        dimensions = list(set(['I', 'j']).intersection(self.svgplot.schema.field_names))
-        
-        if len(dimensions) == 1:
-            if self.svgplot.schema.get_field(dimensions[0])['orientation'] == 'y':
-                return dimensions[0]
-            else:
-                raise Exception(
-                    f"The current must be on the x-axis."
-                )
+        dimensions = list(set(["I", "j"]).intersection(self.svgplot.schema.field_names))
 
-        if len(dimensions) > 1:
-            raise Exception(
-                f"More than one current axis found, i.e., {dimensions}."
-            )
-        if len(dimensions) == 0:
-            raise Exception(
-                f"No current axis found."
-            )
+        if len(dimensions) == 1:
+            if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "y":
+                return dimensions[0]
+            raise Exception("The current must be on the x-axis.")
+
+        raise Exception("No current axis or more than one current axis found.")
 
     @property
     def data_schema(self):
