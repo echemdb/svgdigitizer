@@ -94,7 +94,7 @@ corresponding to the original measured values.</p>
 <p>A more detailed description on preparing the SVG files is provieded in the <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV" title="svgdigitizer.electrochemistry.cv.CV"><code class="xref py py-class docutils literal notranslate"><span class="pre">CV</span></code></a>
 or …</p>
 <p>TODO:: Link to workflow.md (see issue #73)</p>
-<p>For the documentation below, the path of a CV is presented simply as line.</p>
+<p>For the documentation below, the path of a CV is presented simply as a line.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.electrochemistry.cv.</span></span><span class="sig-name descname"><span class="pre">CV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV" title="Permalink to this definition"></a></dt>
@@ -108,13 +108,50 @@ corresponding to the original measured values.</p>
 <p>EXAMPLES:</p>
 <p>An instance of this class can be created from a specially prepared SVG file.
 It requires:</p>
-<ul class="simple">
-<li><p>that the label of the point x2 on the x-axis contains a value and a unit such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;x2:</span> <span class="pre">1</span> <span class="pre">mV&lt;/text&gt;</span></code>.  Optionally, this text also indicates the reference scale, e.g. <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;x2:</span> <span class="pre">1</span> <span class="pre">mV</span> <span class="pre">vs.</span> <span class="pre">RHE&lt;/text&gt;</span></code> for RHE scale.</p></li>
-<li><p>that the label of the point x2 on the y-axis contains a value and a unit such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;y2:</span> <span class="pre">1</span> <span class="pre">uA</span> <span class="pre">/</span> <span class="pre">cm2&lt;/text&gt;</span></code>.</p></li>
-<li><p>that a scan rate is provided in a text field such as <code class="docutils literal notranslate"><span class="pre">&lt;text&quot;&gt;scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">V</span> <span class="pre">/</span> <span class="pre">s&lt;/text&gt;</span></code> placed anywhere in the SVG file.</p></li>
+<ul>
+<li><div class="line-block">
+<div class="line">that the x-axis is labeled with U or E (V) and the y-axis</div>
+<div class="line">is labeld by I (A) or j (A / cm2)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">that the label of the second point (furthest from the origin)</div>
+<div class="line">on the x- or y-axis contains a value and a unit</div>
+<div class="line">such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;j2:</span> <span class="pre">1</span> <span class="pre">mA</span> <span class="pre">/</span> <span class="pre">cm2&lt;/text&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;E2:</span> <span class="pre">1</span> <span class="pre">mV&lt;/text&gt;</span></code>.</div>
+<div class="line">Optionally, this text of the E/U scale also indicates the</div>
+<div class="line">reference scale, e.g., <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;E2:</span> <span class="pre">1</span> <span class="pre">mV</span> <span class="pre">vs.</span> <span class="pre">RHE&lt;/text&gt;</span></code> for RHE scale.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">that a scan rate is provided in a text field such as</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;text&quot;&gt;scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s&lt;/text&gt;</span></code>, placed anywhere in the SVG file.</div>
+</div>
+</li>
 </ul>
-<p>The data of the CV can be returned as a dataframe with axis ‘t’, ‘E’, and ‘I’ (current) or ‘j’ (current density).
-The dimensions are in SI units ‘s’, ‘V’ and ‘A’ or ‘A / m2’:</p>
+<p>In addition the following text fields are accessible with this class</p>
+<ul>
+<li><div class="line-block">
+<div class="line">A comment describing the data, i.e.,</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;text&gt;comment:</span> <span class="pre">noisy</span> <span class="pre">data&lt;/text&gt;</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Other measurements linked to this measurement or performed simultanouesly, i.e.,</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;text&gt;linked:</span> <span class="pre">SXRD,</span> <span class="pre">DEMS&lt;/text&gt;</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">A list of tags describing the content of a plot, i.e.,</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;text&gt;tags:</span> <span class="pre">BCV,</span> <span class="pre">HER,</span> <span class="pre">OER&lt;/text&gt;</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The figure label provided in the original plot, i.e.,</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">&lt;text&gt;figure:</span> <span class="pre">1b&lt;/text&gt;</span></code></div>
+</div>
+</li>
+</ul>
+<p>A sample file looks as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
@@ -127,19 +164,19 @@ The dimensions are in SI units ‘s’, ‘V’ and ‘A’ or ‘A / m2’:</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 mV vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 mV vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 mV vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 mV vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-300&quot; y=&quot;330&quot;&gt;comment: noisy data&lt;/text&gt;</span>
@@ -148,7 +185,12 @@ The dimensions are in SI units ‘s’, ‘V’ and ‘A’ or ‘A / m2’:</p>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-400&quot; y=&quot;330&quot;&gt;tags: BCV, HER, OER&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">df</span>
+</pre></div>
+</div>
+<p>The data of the CV can be returned as a dataframe
+with axis ‘t’, ‘E’ or ‘U’, and ‘I’ (current) or ‘j’ (current density).
+The dimensions are in SI units ‘s’, ‘V’ and ‘A’ or ‘A / m2’.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">df</span>
 <span class="go">         t      E     j</span>
 <span class="go">0  0.00000  0.000  0.00</span>
 <span class="go">1  0.00002  0.001  0.01</span>
@@ -169,91 +211,17 @@ where the axis labels and the data are provided in SI units
 <span class="go">  &#39;simultaneous measurements&#39;: [&#39;SXRD&#39;, &#39;SHG&#39;],</span>
 <span class="go">  &#39;measurement type&#39;: &#39;CV&#39;,</span>
 <span class="go">  &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;},</span>
-<span class="go">  &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;mV&#39;,</span>
-<span class="go">            &#39;reference&#39;: &#39;RHE&#39;, &#39;orientation&#39;: &#39;x&#39;},</span>
-<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;,</span>
-<span class="go">            &#39;orientation&#39;: &#39;y&#39;}],</span>
+<span class="go">  &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;mV&#39;, &#39;orientation&#39;: &#39;x&#39;,</span>
+<span class="go">            &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;}],</span>
 <span class="go">            &#39;comment&#39;: &#39;noisy data&#39;},</span>
 <span class="go">  &#39;data description&#39;: {&#39;version&#39;: 1, &#39;type&#39;: &#39;digitized&#39;,</span>
-<span class="go">                        &#39;measurement type&#39;: &#39;CV&#39;,</span>
-<span class="go">                        &#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;},</span>
-<span class="go">                        {&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
-<span class="go">                        {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;}]}}</span>
+<span class="go">                      &#39;measurement type&#39;: &#39;CV&#39;, &#39;fields&#39;:</span>
+<span class="go">                      [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">                      {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
+<span class="go">                      {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}}</span>
 </pre></div>
 </div>
-<dl class="py property">
-<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.axis_properties">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axis_properties</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.axis_properties" title="Permalink to this definition"></a></dt>
-<dd><p>Return the dimension and the SI units of the x- and y-axis.</p>
-<ul class="simple">
-<li><p>The x-axis dimension ‘E’ is given in ‘V’.</p></li>
-<li><p>The y-axis dimension can either be ‘I’ (current) or ‘j’ (current density), given in ‘A’ or ‘A / m²’, respectively.</p></li>
-<li><p>The latter dimension and unit are derived from the <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> associated with the y-axis labels in the SVG file such as <code class="docutils literal notranslate"><span class="pre">&lt;text</span> <span class="pre">x=&quot;-100&quot;</span> <span class="pre">y=&quot;0&quot;&gt;y2:</span> <span class="pre">1</span> <span class="pre">A&lt;/text&gt;</span></code>.</p></li>
-<li><p>Labels in <cite>x1</cite> and <cite>y1</cite> position are ignored.</p></li>
-</ul>
-<p>EXAMPLES:</p>
-<p>In this first example a current I is plotted on the y-axis in <cite>mA</cite>.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V vs. RHE&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V vs. RHE&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0 mA&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 mA&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">axis_properties</span>
-<span class="go">{&#39;x&#39;: {&#39;dimension&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;}, &#39;y&#39;: {&#39;dimension&#39;: &#39;I&#39;, &#39;unit&#39;: &#39;A&#39;}}</span>
-</pre></div>
-</div>
-<p>In this second example a current density ‘j’ is plotted on the y-axis in <cite>uA / cm2</cite>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V vs. RHE&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V vs. RHE&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0 uA / cm2&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1  uA / cm2&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">axis_properties</span>
-<span class="go">{&#39;x&#39;: {&#39;dimension&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;}, &#39;y&#39;: {&#39;dimension&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;}}</span>
-</pre></div>
-</div>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.comment">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.comment" title="Permalink to this definition"></a></dt>
@@ -268,19 +236,19 @@ where the axis labels and the data are provided in SI units
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-400&quot; y=&quot;430&quot;&gt;comment: noisy data&lt;/text&gt;</span>
@@ -298,25 +266,62 @@ where the axis labels and the data are provided in SI units
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">comment</span>
 <span class="go">&#39;&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.current_dimension">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_dimension</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.current_dimension" title="Permalink to this definition"></a></dt>
+<dd><p>The dimension of the current axis given as
+<code class="docutils literal notranslate"><span class="pre">I</span></code> (current) or <code class="docutils literal notranslate"><span class="pre">j</span></code> (current density).</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">current_dimension</span>
+<span class="go">&#39;j&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -339,19 +344,19 @@ where the axis labels and the data are provided in SI units
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
@@ -362,13 +367,89 @@ where the axis labels and the data are provided in SI units
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.data_schema">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.data_schema" title="Permalink to this definition"></a></dt>
+<dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Field</cite> object
+describing the data generated with <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.df" title="svgdigitizer.electrochemistry.cv.CV.df"><code class="xref py py-meth docutils literal notranslate"><span class="pre">df()</span></code></a>.
+Compared to <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="svgdigitizer.electrochemistry.cv.CV.figure_schema"><code class="xref py py-meth docutils literal notranslate"><span class="pre">figure_schema()</span></code></a> all fields are given in SI units.
+A time axis is also included.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
+</pre></div>
+</div>
+<p>An SVG with a current axis with dimension I and
+a voltage axis with dimension U.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;U1: 0 V&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;U2: 1 V&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;I1: 0 uA&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;I2: 1 uA&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;U&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;unknown&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;I&#39;, &#39;unit&#39;: &#39;A&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.df">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.df" title="Permalink to this definition"></a></dt>
-<dd><p>Return a dataframe with axis ‘t’, ‘E’, and ‘I’ (or ‘j).
+<dd><p>Return a dataframe with axis ‘t’, ‘E’ (or ‘U’), and ‘I’ (or ‘j).
 The dimensions are in SI units ‘s’, ‘V’ and ‘A’ (or ‘A / m2’).</p>
-<p>The dataframe is constructed from the ‘x’ and ‘y’ axis of ‘svgplot.df’,
-which are usually not in SI units.</p>
-<p>The time axis can only be created when a (scan) rate is given in the plot, i.e., ‘50 mV /s’.</p>
+<p>The dataframe is constructed based on the units and values,
+determined from <code class="docutils literal notranslate"><span class="pre">svgplot</span></code>. These are usually not in SI units
+and will be converted in the process of creating the df.</p>
+<p>The time axis can only be created when a scan rate is given
+in the plot, i.e., ‘50 mV /s’.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
@@ -382,19 +463,19 @@ which are usually not in SI units.</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1  uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 mV/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
@@ -439,19 +520,19 @@ such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;Figure: 2b&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
@@ -462,11 +543,50 @@ such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt
 </div>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.figure_schema">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="Permalink to this definition"></a></dt>
+<dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Fields</cite> object
+describing the voltage and current axis of the originlal plot
+including original units. The reference electrode of the
+potential/voltage axis is also given (if available).</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">figure_schema</span>  
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;orientation&#39;: &#39;x&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;}]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.get_axis_unit">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_axis_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.get_axis_unit" title="Permalink to this definition"></a></dt>
 <dd><p>Return <cite>unit</cite> as an <a class="reference external" href="https://docs.astropy.org/en/stable/units/">astropy</a> unit.</p>
-<p>This method normalizes unit names, e.g., it rewrites ‘uA cm-2’ to ‘uA / cm2’ which astropy understands.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;uA cm-2&#39;</span>
@@ -499,19 +619,19 @@ created with <a class="reference internal" href="#svgdigitizer.electrochemistry.
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 mV vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 mV vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 mV vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 mV vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-400&quot; y=&quot;430&quot;&gt;comment: noisy data&lt;/text&gt;</span>
@@ -528,16 +648,15 @@ created with <a class="reference internal" href="#svgdigitizer.electrochemistry.
 <span class="go"> &#39;simultaneous measurements&#39;: [&#39;SXRD&#39;, &#39;SHG&#39;],</span>
 <span class="go"> &#39;measurement type&#39;: &#39;CV&#39;,</span>
 <span class="go"> &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;},</span>
-<span class="go"> &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;mV&#39;,</span>
-<span class="go">            &#39;reference&#39;: &#39;RHE&#39;, &#39;orientation&#39;: &#39;x&#39;},</span>
-<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;,</span>
-<span class="go">            &#39;orientation&#39;: &#39;y&#39;}],</span>
+<span class="go"> &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;mV&#39;, &#39;orientation&#39;: &#39;x&#39;,</span>
+<span class="go">            &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;}],</span>
 <span class="go">            &#39;comment&#39;: &#39;noisy data&#39;},</span>
 <span class="go"> &#39;data description&#39;: {&#39;version&#39;: 1, &#39;type&#39;: &#39;digitized&#39;,</span>
-<span class="go">                      &#39;measurement type&#39;: &#39;CV&#39;,</span>
-<span class="go">                      &#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;},</span>
-<span class="go">                      {&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
-<span class="go">                      {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;}]}}</span>
+<span class="go">                      &#39;measurement type&#39;: &#39;CV&#39;, &#39;fields&#39;:</span>
+<span class="go">                      [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">                      {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
+<span class="go">                      {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -559,19 +678,19 @@ created with <a class="reference internal" href="#svgdigitizer.electrochemistry.
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 mV&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 mV&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 mV&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 uA/cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
@@ -582,10 +701,11 @@ created with <a class="reference internal" href="#svgdigitizer.electrochemistry.
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.rate">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rate</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.rate" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.scan_rate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scan_rate</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.scan_rate" title="Permalink to this definition"></a></dt>
 <dd><p>Return the scan rate of the plot.</p>
-<p>The scan rate is read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">V</span> <span class="pre">/</span> <span class="pre">s&lt;/text&gt;</span></code>.</p>
+<p>The scan rate is read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as
+<code class="docutils literal notranslate"><span class="pre">&lt;text&gt;scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">V</span> <span class="pre">/</span> <span class="pre">s&lt;/text&gt;</span></code>.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
@@ -595,24 +715,24 @@ created with <a class="reference internal" href="#svgdigitizer.electrochemistry.
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V / s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">rate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">scan_rate</span>
 <span class="go">&lt;Quantity 50. V / s&gt;</span>
 </pre></div>
 </div>
@@ -635,19 +755,19 @@ or simply <cite>linked</cite> are acceptable in the text field.</p>
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-400&quot; y=&quot;430&quot;&gt;linked: SXRD, SHG&lt;/text&gt;</span>
@@ -674,19 +794,19 @@ the measurement.</p>
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1cm&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1 A&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-300&quot; y=&quot;330&quot;&gt;tags: BCV, HER, OER&lt;/text&gt;</span>
@@ -699,15 +819,9 @@ the measurement.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.x_label">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_label</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.x_label" title="Permalink to this definition"></a></dt>
-<dd><p>Return the label on the x-axis of the SVG plot.
-Usually the label on an axis only consits of a unit.
-In the case of electrochemical data the x-label
-usually consists of a unit and a reference.
-The unit and the reference are united in a single string,
-which are separated by <code class="docutils literal notranslate"><span class="pre">x_label</span></code> providing access to
-the unit and the reference.</p>
+<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.voltage_dimension">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voltage_dimension</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.voltage_dimension" title="Permalink to this definition"></a></dt>
+<dd><p>The dimension of the voltage axis given as <code class="docutils literal notranslate"><span class="pre">U</span></code> (voltage) or <code class="docutils literal notranslate"><span class="pre">E</span></code> (potential).</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
@@ -717,32 +831,58 @@ the unit and the reference.</p>
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V vs. RHE&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1  uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">x_label</span>
-<span class="go">Label(label=&#39;V vs. RHE&#39;, unit=&#39;V&#39;, reference=&#39;RHE&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">voltage_dimension</span>
+<span class="go">&#39;E&#39;</span>
 </pre></div>
 </div>
-<p>Label and unit can be obtained by:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">x_label</span><span class="o">.</span><span class="n">unit</span>
-<span class="go">&#39;V&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">x_label</span><span class="o">.</span><span class="n">reference</span>
-<span class="go">&#39;RHE&#39;</span>
+<p>The following example is not valid, since the voltage is on the y-axis
+and current on the x-axis.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;E1: 0 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;E2: 1 V vs. RHE&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">voltage_dimension</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">Exception</span>: <span class="n">The voltage must be on the x-axis.</span>
 </pre></div>
 </div>
 </dd></dl>
