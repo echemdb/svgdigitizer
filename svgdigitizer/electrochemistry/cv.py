@@ -297,9 +297,10 @@ class CV:
 
     @property
     def data_schema(self):
-        """A frictionless `Schema` object, including a field object
+        r"""
+        A frictionless `Schema` object, including a field object
         describing the data generated with :meth:`df`.
-        Compared to :meth:`figure_schema` all fields are given in SI units
+        Compared to :meth:`figure_schema` all fields are given in SI units.
         A time axis is also included.
 
         EXAMPLES::
@@ -342,7 +343,7 @@ class CV:
         del schema.get_field(self.voltage_dimension)["orientation"]
         if self.current_dimension == "I":
             schema.get_field(self.current_dimension)["unit"] = "A"
-        if self.current_dimension == "j":
+        elif self.current_dimension == "j":
             schema.get_field(self.current_dimension)["unit"] = "A / m2"
         else:
             raise Exception(
@@ -357,7 +358,8 @@ class CV:
 
     @property
     def figure_schema(self):
-        """A frictionless `Schema` object, including a `Fields` object
+        r"""
+        A frictionless `Schema` object, including a `Fields` object
         describing the voltage and current axis of the originlal plot
         including original units. The reference electrode of the
         potential/voltage axis is also given (if available).
@@ -412,9 +414,6 @@ class CV:
     def get_axis_unit(cls, unit):
         r"""
         Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
-
-        This method normalizes unit names, e.g., it rewrites 'uA cm-2' to 'uA / cm2'
-        which astropy understands.
 
         EXAMPLES::
 
@@ -609,7 +608,7 @@ class CV:
         The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
 
         The dataframe is constructed based on the units and values,
-        determined from ``svplot``. These are usually not in SI units
+        determined from ``svgplot``. These are usually not in SI units
         and will be converted in the process of creating the df.
 
         The time axis can only be created when a scan rate is given

@@ -1696,27 +1696,18 @@ class SVGPlot:
 
 
         """
-
-        def orientation(axis):
-            if axis == "vertical":
-                return "y"
-            if axis == "horizontal":
-                return "x"
-
-            raise Exception("The axis must be either 'vertical' or 'horizontal")
-
-        fields = []
-        for key, label in self.axis_orientations.items():
-            field = {
-                "name": label,
-                "unit": self.axis_labels[label],
-                "orientation": orientation(key.value),
-            }
-            fields.append(field)
-
         from frictionless import Schema
 
-        return Schema(fields=fields)
+        orientations = {
+            "vertical": "y",
+            "horizontal": "x",
+        }
+
+        return Schema(fields={
+            "name": label,
+            "unit": self.axis_labels[label],
+            "orientation": orientations[key.value],
+        } for key, label in self.axis_orientations.items())
 
     @property
     @cache
