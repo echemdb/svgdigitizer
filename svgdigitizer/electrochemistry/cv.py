@@ -336,8 +336,8 @@ class CV:
                         {'name': 'j', 'unit': 'A / m2'},
                         {'name': 't', 'unit': 's'}]}
 
-        An SVG with a current axis with dimension I and 
-        a voltage axis with dimension U.:: 
+        An SVG with a current axis with dimension I and
+        a voltage axis with dimension U.::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
