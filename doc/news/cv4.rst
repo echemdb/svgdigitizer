@@ -8,7 +8,7 @@
 **Changed:**
 
 * Changed `electrochemistry.cv.CV` such that it only accepts SVGs where the labels on one axis are either `U` or `E` (V, mV, ...) and another axis are `I` (A, mA, ...) or `j` (A / cm2, uA / m2, ...).
-* Changed `rate`` to `scan_rate`` in `electrochemistry.cv.CV`.
+* Changed `rate` to `scan_rate` in `electrochemistry.cv.CV`.
 
 **Removed:**
 
