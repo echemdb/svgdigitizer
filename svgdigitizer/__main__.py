@@ -233,7 +233,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).x_label.unit)
+        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).figure_schema.get_field("E")["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
@@ -248,7 +248,9 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
             from astropy import units as u
 
-            sampling_interval /= CV.get_axis_unit(cv.x_label.unit).to(u.V)
+            sampling_interval /= CV.get_axis_unit(
+                cv.figure_schema.get_field(cv.voltage_dimension)["unit"]
+            ).to(u.V)
 
     if metadata:
         import yaml
