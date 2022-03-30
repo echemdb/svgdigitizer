@@ -297,8 +297,9 @@ class CV:
 
     @property
     def data_schema(self):
+        # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
-        A frictionless `Schema` object, including a field object
+        A frictionless `Schema` object, including a `Field` object
         describing the data generated with :meth:`df`.
         Compared to :meth:`figure_schema` all fields are given in SI units.
         A time axis is also included.
@@ -358,6 +359,7 @@ class CV:
 
     @property
     def figure_schema(self):
+        # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
         A frictionless `Schema` object, including a `Fields` object
         describing the voltage and current axis of the originlal plot
@@ -412,6 +414,7 @@ class CV:
 
     @classmethod
     def get_axis_unit(cls, unit):
+        # TODO: use intersphinx to link to the astropy docu (see #151).
         r"""
         Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
 

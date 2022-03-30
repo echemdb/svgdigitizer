@@ -1658,9 +1658,10 @@ class SVGPlot:
 
     @property
     def schema(self):
+        # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         """A frictionless `Schema` object, including a `Fields` object
-        describing the voltage and current axis of the original plot
-        including original units.
+        describing the dimensions, units and orientation of the original
+        plot axes.
 
         EXAMPLES::
 
@@ -1703,11 +1704,16 @@ class SVGPlot:
             "horizontal": "x",
         }
 
-        return Schema(fields={
-            "name": label,
-            "unit": self.axis_labels[label],
-            "orientation": orientations[key.value],
-        } for key, label in self.axis_orientations.items())
+        return Schema(
+            fields=[
+                {
+                    "name": label,
+                    "unit": self.axis_labels[label],
+                    "orientation": orientations[key.value],
+                }
+                for key, label in self.axis_orientations.items()
+            ]
+        )
 
     @property
     @cache
