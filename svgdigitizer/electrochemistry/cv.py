@@ -336,6 +336,39 @@ class CV:
                         {'name': 'j', 'unit': 'A / m2'},
                         {'name': 't', 'unit': 's'}]}
 
+        An SVG with a current axis with dimension I and 
+        a voltage axis with dimension U.:: 
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">U1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">U2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">I1: 0 uA</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">I2: 1 uA</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'U', 'unit': 'V', 'reference': 'unknown'},
+                        {'name': 'I', 'unit': 'A'},
+                        {'name': 't', 'unit': 's'}]}
+
         """
 
         schema = self.figure_schema
