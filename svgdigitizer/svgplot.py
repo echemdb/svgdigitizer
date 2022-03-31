@@ -347,10 +347,10 @@ class SVGPlot:
             from numpy.linalg import qr
 
             A = self._transformation(
-                self.marked_points[f"{horizontal}1"],
-                self.marked_points[f"{horizontal}2"],
-                self.marked_points[f"{vertical}1"],
-                self.marked_points[f"{vertical}2"],
+                (self.marked_points[f"{horizontal}1"][0], 0),
+                (self.marked_points[f"{horizontal}2"][0], 1),
+                (self.marked_points[f"{vertical}1"][0], 0),
+                (self.marked_points[f"{vertical}2"][0], 1),
                 # We use marked aligned here to get a rotational portion in the
                 # transformation even if the user asked for axis-aligned for
                 # the eventual transformation.
