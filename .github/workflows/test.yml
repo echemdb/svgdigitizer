@@ -115,4 +115,10 @@ jobs:
           svgdigitizer cv test/data/xy_rate_without_metadata_skewed.svg --skewed
           git diff --no-index --word-diff -- test/data/xy_rate_without_metadata_skewed.json test/data/xy_rate_without_metadata_skewed.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv"), pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv.expected"))'
+      - name: cli-cv-axes-orientation
+        shell: bash -l {0}
+        run: |
+          svgdigitizer cv test/data/axes_orientation.svg --package
+          git diff --no-index --word-diff -- test/data/axes_orientation.json test/data/axes_orientation.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/axes_orientation.csv"), pandas.read_csv("test/data/axes_orientation.csv.expected"))'
 
