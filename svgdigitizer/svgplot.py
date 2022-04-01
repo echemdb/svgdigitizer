@@ -349,7 +349,7 @@ class SVGPlot:
             A = self._transformation(
                 # We do not use the actual label values here but pretend that the marks delimit the unit square [0, 1]×[0, 1].
                 # The actual values might be scaled very differently, e.g., one axis being in hundreds of μA and one axis in fractions of V.
-                # This leads to one axis (and its errors) being rescaled very heavily which can lead to problems in the QR decomposition, see #149.
+                # This leads to one axis (and its errors) influencing the transformation matrix too much which can lead to problems in the QR decomposition, see #149.
                 (self.marked_points[f"{horizontal}1"][0], 0),
                 (self.marked_points[f"{horizontal}2"][0], 1),
                 (self.marked_points[f"{vertical}1"][0], 0),
