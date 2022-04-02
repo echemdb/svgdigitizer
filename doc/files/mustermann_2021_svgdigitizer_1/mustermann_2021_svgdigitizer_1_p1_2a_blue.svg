@@ -40,7 +40,7 @@
      showgrid="false"
      inkscape:zoom="0.28601727"
      inkscape:cx="2905.419"
-     inkscape:cy="3062.7521"
+     inkscape:cy="3901.8623"
      inkscape:window-x="-8"
      inkscape:window-y="32"
      inkscape:window-maximized="1"
@@ -139,7 +139,7 @@
          y="4831.876"
          x="3122.1892"
          id="tspan4506"
-         sodipodi:role="line">x1: 0.0 V vs RHE</tspan></text>
+         sodipodi:role="line">E1: 0.0 V vs RHE</tspan></text>
     <path
        inkscape:original-d="m 3123.0552,4815.269 c 17.7791,-79.542 35.5572,-159.0829 53.3344,-238.6229"
        inkscape:path-effect="#path-effect4566"
@@ -160,7 +160,7 @@
          y="4850.5083"
          x="4161.8369"
          id="tspan4506-5"
-         sodipodi:role="line">x2: 0.8 V vs RHE</tspan></text>
+         sodipodi:role="line">E2: 0.8 V vs RHE</tspan></text>
     <path
        inkscape:original-d="m 4153.5953,4836.2464 c 80.1244,-86.8256 160.2478,-173.6502 240.3702,-260.4738"
        inkscape:path-effect="#path-effect4575"
@@ -181,7 +181,7 @@
          y="3829.5908"
          x="2113.01"
          id="tspan4506-5-7"
-         sodipodi:role="line">y1: -300 uA / cm2</tspan></text>
+         sodipodi:role="line">j1: -300 uA / cm2</tspan></text>
     <path
        inkscape:original-d="m 2945.6263,3519.0183 c -279.1196,95.5643 -558.2403,191.1296 -837.362,286.6959"
        inkscape:path-effect="#path-effect4584"
@@ -202,7 +202,7 @@
          y="2493.2461"
          x="2731.1504"
          id="tspan4506-5-7-4"
-         sodipodi:role="line">y2: 100 uA / cm2</tspan></text>
+         sodipodi:role="line">j2: 100 uA / cm2</tspan></text>
     <path
        inkscape:original-d="m 2730.6043,2464.8861 c 72.2578,82.7446 144.5145,165.4902 216.7702,248.2368"
        inkscape:path-effect="#path-effect4593"

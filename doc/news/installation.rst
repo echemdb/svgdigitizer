@@ -1,3 +1,0 @@
-**Added:**
-
-* Added installation instructions.

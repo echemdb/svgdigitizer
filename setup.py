@@ -20,11 +20,12 @@
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # *********************************************************************
 import os
+import setuptools
 from distutils.core import setup
 
 setup(
     name="svgdigitizer",
-    version="0.3.0",
+    version="0.5.0",
     packages=["svgdigitizer", "svgdigitizer.electrochemistry", "svgdigitizer.test"],
     license="GPL 3.0+",
     description="svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications.",
@@ -34,7 +35,7 @@ setup(
     install_requires=[
         "astropy>=5,<6",
         "click>=8,<9",
-        "datapackage>=1.15,<2",
+        "frictionless>=4,<5",
         "matplotlib>=3.5,<4",
         "mergedeep>=1.3.4,<2",
         "pandas>=1.3,<2",
