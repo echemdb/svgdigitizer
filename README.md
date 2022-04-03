@@ -59,8 +59,8 @@ test/data/mustermann_2021_svgdigitizer_1_p2.svg
 test/data/mustermann_2021_svgdigitizer_1_p3.png
 test/data/mustermann_2021_svgdigitizer_1_p3.svg
 
-$ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.svg
-$ head doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.csv  # byexample: +pass
+$ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_2a_blue.svg
+$ head doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_2a_blue.csv  # byexample: +pass
 t,E,j
 0.0,-0.0960124785649914,-2.080260291844327
 0.7905675531192768,-0.05648410090902756,-1.0308948282866481
