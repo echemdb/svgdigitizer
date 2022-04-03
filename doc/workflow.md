@@ -109,7 +109,9 @@ When all axes have been marked, the plot looks as follows:
 
 **3: Trace the curve**
 
-1. Roughly trace the blue curve by selecting the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png). Try using as few nodes as possible. It is desired that a node is placed at peak maxima. This way these features are not missed when using low sampling rates.
+1. Roughly trace the blue curve
+
+Select the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png). Try using as few nodes as possible. It is desired that a node is placed at peak maxima. This way these features are not missed when using low sampling rates.
 
 
 
