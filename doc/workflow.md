@@ -4,17 +4,15 @@ This step by step tutorial explains how to digitize plots commonly found in elec
 
 ![files/images/sample_data_2.png](files/images/sample_data_2.png) 
 
-To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) (Link to Installation instructions). 
+To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) ([installation instructions](installation.md)). 
 
-**TODO #86:** Add link to installation instructions.
-
-Furthermore, the manipulation of SVG files is done with [Inkscape](https://inkscape.org/) (tested with V. 0.92).
+Furthermore, the manipulation of SVG files is done with [Inkscape](https://inkscape.org/) (tested with V. 0.92 and V. 1.1).
 
 ## Step 1: Prepare PDF and BIB files
 
 **1: Create a new directory:**
 
-The directory should be named `FirstAuthorName_Year_FirstTitleWord_FirstPageNr`
+The directory should be named `FirstAuthorName_Year_FirstTitleWord_FirstPageNr`.
 
 **Do not use capital letters.** For the example PDF this comes down to
 
@@ -40,7 +38,7 @@ Choose Settings
 
 ![./files/images/scholar_options_selection.png](files/images/scholar_options_selection.png)
 
-Select `Show links to import citations into BibTeX"
+Select `Show links to import citations into BibTeX`
 
 ![./files/images/scholar_options_bibtex.png](files/images/scholar_options_bibtex.png)
 
@@ -80,39 +78,40 @@ The filenames are of the form:
 
 **1: Select an svg file with a plot to be digitized**
 
-For this example, we use inkscape to digitize some data in plot 2a in the PDF, which is located on page two of the manuscript (filename containing `_p1`). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single SVG file. Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_p1_f2a_blue.svg`. Here, `_f2a_blue` indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.
+For this example, we use Inkscape to digitize some data in plot 2a in the PDF, which is located on page two of the manuscript (filename containing `_p1`). The plot contains three curves, which can be identified by their colors. Preferably each digitized curve should be placed in a single SVG file. Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_f2a_blue.svg` (`_p1` can be ommited since the figure can unambigusouly be identified by the figure label, e.g., `_f2a`). Here, `_f2a_blue` indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.
 
  **2: Mark axis positions and labels**
 
 In the SVG file, by marking two positions on each axis, both the units and the scale of the axis will be extracted.
 
-In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label that contains `x1: 0.0 V vs RHE`. Draw a line connecting the text label and the position on the x-axis. Finally **group** the **line** and the **text label**. 
+In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label that contains `E1: 0.0 V vs RHE`. Draw a line connecting the text label and the position on the x-axis. Finally **group** the **line** and the **text label**. 
 
-Repeat this for positions `x2`, `y1` and `y2`.
+Repeat this for positions `E2`, `j1` and `j2`.
 
 **Some notes on units and labels:**
 
+* The `svgdigitizer.electrochemistry.cv.CV` module also accepts `U` (in units of V) on the x-axis and `I` (in units of A) on the y-axis.
 * Units should be provided in the [astropy format](https://docs.astropy.org/en/stable/units/index.html). In brief:
-  * [Standard units](https://docs.astropy.org/en/stable/units/standard_units.html) simply read: `V`, `A` or `m`
+  * [Standard units](https://docs.astropy.org/en/stable/units/standard_units.html) simply read: `V`, `A` or `m`.
   * Units can be preceeded by common prefixes, i.e., `mV`, `kV` or `uV`.
-  * Note that $\mu$ is `u`
-  * fractions read as follows (note the spaces between the dashes): `mV / s`, `mA / cm2`
-  * For square, cubic, etc units simply add `2`, `3`, etc. to the unit (see above)
+  * Note that $\mu$ is `u`.
+  * fractions read as follows (note the spaces between the dashes): `mV / s`, `mA / cm2`.
+  * For square, cubic, etc units simply add `2`, `3`, ... to the unit (see above).
   * Use parentheses if more than one unit is in the numerator or denominator, i.e., `(kg m) / s2`
 * If the reference on the voltage axis is not given in the plot, extract this information from the manuscript text. Note that the reference scale given in the experimental section can be different to that in the main text of the manuscript.
-* `svgdigitizer` only considers units in the labels for positions`x2` and `y2`. 
+* `svgdigitizer` only considers units in the labels for positions`E2`/`U2` and `j2`/`I`. 
 
 ![inkscape_x1_label](files/images/inkscape_x1_label.png)
 
-When all axes have been marked, the plot looks like the following:
+When all axes have been marked, the plot looks as follows:
 
 ![inkscape_all_labels](files/images/inkscape_all_labels.png)
 
 **3: Trace the curve**
 
-1. Roughly trace the blue curve by selecting the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png).
+1. Roughly trace the blue curve by selecting the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png). Try using as few nodes as possible. It is desired that a node is placed at peak maxima. This way these features are not missed when using low sampling rates.
 
-   
+
 
    ![inkscape_rough_select](./files/images/inkscape_rough_select.png)
 
@@ -128,9 +127,11 @@ When all axes have been marked, the plot looks like the following:
 
 ![inkscape_smoothed_path_curve](files/images/inkscape_smoothed_path_curve.png)
 
-7. Add a text field to the plot containing the scan rate with which the data was acquired. This value is not necessarily given in the plot or figure description and might have to be extracted from the text of the manuscript. Here, `scan rate: 50 mV / s`.
-8. Feel free to add a comment to the plot. This comment will later be included in the metadata file and will be shown on the website. Use a full sentence, for example, `comment: The curve is a bit noisy.` 
-7. Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by `linked: DEMS`. The field can contain multiple types of measurements if applicable. Also use acronyms commonly used in the community.
+7. Add a text field to the plot containing the scan rate with which the data was acquired. This value is not necessarily given in the plot or figure description and might have to be extracted from the text of the manuscript. Here, `scan rate: 50 mV / s`. (mandatory for `svgdigitizer.electrochemistry.cv.CV`)
+8. Add a figure identifier such as `figure: 2a` (mandatory for submission to [echemdb](https://github.com/echemdb/website))
+9. Add tags describing the data with commonly used acronyms. In this case: `tags: BCV, HER`. (mandatory for submission to [echemdb](https://github.com/echemdb/website))
+10. Feel free to add a comment to the plot. This comment will later be included in the metadata file and will be shown on the [echemdb website](https://echemdb.github.io/website/). Use a full sentence, for example, `comment: The curve is a bit noisy.` 
+11. Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by `linked: DEMS`. The field can contain multiple types of measurements if applicable. Also use acronyms commonly used in the community.
 
 The final file should look like this:
 
@@ -138,11 +139,11 @@ The final file should look like this:
 
 ## Step 4: Create a metadata file for each digitized curve
 
-Create a YAML file with the same name as the SVG file: `mustermann_2021_svgdigitizer_1_p0_f2b_blue.yaml`
+Create a YAML file with the same name as the SVG file: `mustermann_2021_svgdigitizer_1_f2a_blue.yaml`
 
 The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema/blob/main/examples/Author_YYYY_FirstTitleWord_Page_fignr_identifier.yaml)
 
-**TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located {download}`here <./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_p1_2a_blue.yaml>`.
+**TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located {download}`here <./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.yaml>`.
 
 Adjust all keys in the file according to the content of the research article.
 
@@ -154,6 +155,10 @@ Propose a pull request that adds your directory to `website/literature`, e.g., b
 
 If you want to test whether your files were prepared correctly for echemdb, run:
 
-`svgdigitize cv mustermann_2021_svgdigitizer_1_p0_2b_blue.svg --metadata mustermann_2021_svgdigitizer_1_p0_2b_blue.yaml --sampling 0.001 --package`
+`svgdigitize cv mustermann_2021_svgdigitizer_1_2a_blue.svg --metadata mustermann_2021_svgdigitizer_1_2a_blue.yaml --sampling 0.001 --package`
 
 This creates a CSV with the data of the plot and a JSON package file that you can inspect to verify that the data has been correctly extracted.
+
+```python
+
+```

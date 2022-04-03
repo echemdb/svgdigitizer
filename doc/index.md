@@ -42,7 +42,7 @@ are created and grouped for each axis to define the coordinate system.
 The curve should be assigned a text label. Additional labels describing the data 
 can be provided anywhere in the SVG file. The resulting file looks as follows.
 
-![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png) 
+![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png)
 
 +++
 
