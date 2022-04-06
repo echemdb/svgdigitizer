@@ -99,7 +99,7 @@ Repeat this for positions `E2`, `j1` and `j2`.
   * For square, cubic, etc units simply add `2`, `3`, ... to the unit (see above).
   * Use parentheses if more than one unit is in the numerator or denominator, i.e., `(kg m) / s2`
 * If the reference on the voltage axis is not given in the plot, extract this information from the manuscript text. Note that the reference scale given in the experimental section can be different to that in the main text of the manuscript.
-* `svgdigitizer` only considers units in the labels for positions`E2`/`U2` and `j2`/`I`. 
+* `svgdigitizer` only considers units in the labels for positions`E2`/`U2` and `j2`/`I2`. 
 
 ![inkscape_x1_label](files/images/inkscape_x1_label.png)
 
@@ -111,7 +111,7 @@ When all axes have been marked, the plot looks as follows:
 
 1. Roughly trace the blue curve
 
-Select the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png). Try using as few nodes as possible. It is desired that a node is placed at peak maxima. This way these features are not missed when using low sampling rates.
+Select the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png). Try using as few nodes as possible. It is desired that a node is placed at maxima of sharp peaks. This way these features are not missed when using low sampling rates.
 
 
 

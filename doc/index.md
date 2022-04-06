@@ -28,14 +28,14 @@ Welcome to svgdigitizer's documentation!
 The `svgdigitizer` allows recovering data from a curve in a figure, 
 plotted in a 2D coordinate system.
 Such plots are often found in scientific publications, where
-in many cases, especially for old puplications, the underlying data 
+in many cases, especially for old puplications, the source data 
 is not accessible anymore. 
 In some cases, the axes of the plot can be skewed, e.g., in scanned
 documents. An extreme case for such a plot is depicted in the following figure.
 
 ![files/images/example_plot_p0.png](files/images/example_plot_p0.png) 
 
-In order to recover the underlying data, first the plot is imported in a 
+In order to recover the source data, first the plot is imported in a 
 vector graphics program, such as [Inkscape](https://inkscape.org/).
 The curve is traced with *regular bezier paths* and two points and text labels
 are created and grouped for each axis to define the coordinate system.
@@ -48,7 +48,7 @@ can be provided anywhere in the SVG file. The resulting file looks as follows.
 
 ## [Command line interface](cli.md)
 This SVG can be digitized from the [command line interface](cli.md), which creates a {download}`CSV <./files/others/example_plot_p0_demo.csv>` file of the x and y data (here U and v). 
-The resolution can be specified by `--sampling-interval`. In this specifc case also indicate that the axes are `--skewed`.  
+The sampling of the bezier paths can be set by `--sampling-interval` which specifies the sampling interval in x units. In this specific case also indicate that the axes are `--skewed`.  
 
 
 ```sh .noeval
