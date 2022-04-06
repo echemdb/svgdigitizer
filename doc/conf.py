@@ -5,13 +5,17 @@ author = 'the svgdigitizer authors'
 release = '0.5.0'
 
 
-extensions = ["myst_parser", "sphinx.ext.autodoc", "sphinx.ext.todo"]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.todo", "myst_nb"]
 
-source_suffix = [".rst", ".md"]
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.ipynb': 'myst-nb',
+    '.myst': 'myst-nb',
+}
 
 templates_path = ['_templates']
 
-exclude_patterns = ['generated', 'Thumbs.db', '.DS_Store', 'README.md', 'news']
+exclude_patterns = ['generated', 'Thumbs.db', '.DS_Store', 'README.md', 'news', '.ipynb_checkpoints', '*.ipynb']
 
 todo_include_todos = True
 
