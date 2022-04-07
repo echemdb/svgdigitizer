@@ -445,26 +445,6 @@ class CV:
 
         return schema
 
-    @classmethod
-    def get_axis_unit(cls, unit):
-        # TODO: use intersphinx to link to the astropy docu (see #151).
-        r"""
-        Return `unit` as an `astropy <https://docs.astropy.org/en/stable/units/>`_ unit.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> unit = 'uA cm-2'
-            >>> CV.get_axis_unit(unit)
-            Unit("uA / cm2")
-
-            >>> unit = 'uA cm⁻²'
-            >>> CV.get_axis_unit(unit)
-            Unit("uA / cm2")
-
-        """
-        return u.Unit(unit)
-
     @property
     @cache
     def figure_label(self):
@@ -633,7 +613,7 @@ class CV:
 
             return float(rate["value"]) * u.Unit(str(rate["unit"]))
 
-        return float(rates[0].value) * CV.get_axis_unit(rates[0].unit)
+        return float(rates[0].value) * u.Unit(rates[0].unit)
 
     @property
     @cache
@@ -716,8 +696,7 @@ class CV:
 
     def _add_voltage_axis(self, df):
         r"""
-        Add a voltage column to the dataframe `df`, based on
-        the :meth:`get_axis_unit` of the x axis.
+        Add a voltage column to the dataframe `df`.
 
         EXAMPLES::
 
@@ -753,7 +732,7 @@ class CV:
             >>> cv._add_voltage_axis(df = cv.svgplot.df.copy())
 
         """
-        voltage = 1 * CV.get_axis_unit(
+        voltage = 1 * u.Unit(
             self.figure_schema.get_field(self.voltage_dimension)["unit"]
         )
         # Convert the axis unit to SI unit V and use the value
@@ -762,8 +741,7 @@ class CV:
 
     def _add_current_axis(self, df):
         r"""
-        Add a current 'I' or current density 'j' column to the dataframe `df`,
-        based on the :meth:`get_axis_unit` of the y axis.
+        Add a current 'I' or current density 'j' column to the dataframe `df`.
 
         EXAMPLES::
 
@@ -799,7 +777,7 @@ class CV:
             >>> cv._add_current_axis(df = cv.svgplot.df.copy())
 
         """
-        current = 1 * CV.get_axis_unit(
+        current = 1 * u.Unit(
             self.figure_schema.get_field(self.current_dimension)["unit"]
         )
 
