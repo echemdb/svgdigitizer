@@ -587,23 +587,6 @@ potential/voltage axis is also given (if available).</p>
 </div>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.get_axis_unit">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_axis_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.get_axis_unit" title="Permalink to this definition"></a></dt>
-<dd><p>Return <cite>unit</cite> as an <a class="reference external" href="https://docs.astropy.org/en/stable/units/">astropy</a> unit.</p>
-<p>EXAMPLES:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.electrochemistry.cv</span> <span class="kn">import</span> <span class="n">CV</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;uA cm-2&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CV</span><span class="o">.</span><span class="n">get_axis_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
-<span class="go">Unit(&quot;uA / cm2&quot;)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;uA cm⁻²&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CV</span><span class="o">.</span><span class="n">get_axis_unit</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
-<span class="go">Unit(&quot;uA / cm2&quot;)</span>
-</pre></div>
-</div>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.metadata">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.metadata" title="Permalink to this definition"></a></dt>
