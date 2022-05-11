@@ -42,6 +42,7 @@ setup(
         "pdf2image>=1.16,<2",
         "pillow>=9,<10",
         "pyyaml>=6,<7",
+        "python>=3.9,<4",
         "scipy>=1.7,<2",
         "svg.path>=4.1,<5",
         "svgpathtools>=1.4,<2",
