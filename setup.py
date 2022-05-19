@@ -50,4 +50,5 @@ setup(
     entry_points={
         "console_scripts": ["svgdigitizer=svgdigitizer.__main__:cli"],
     },
+    python_requires=">=3.9",
 )
