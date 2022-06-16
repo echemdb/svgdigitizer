@@ -335,7 +335,7 @@ def _write_metadata(out, metadata):
         # in the metadata. However, standard JSON does not know about these so
         # we need to serialize them as strings explicitly.
         if isinstance(item, (datetime, date)):
-            return item.__str__()
+            return str(item)
 
         raise TypeError(f"Cannot serialize ${item} of type ${type(item)} to JSON.")
 
