@@ -35,7 +35,7 @@ setup(
     install_requires=[
         "astropy>=5,<6",
         "click>=8,<9",
-        "frictionless>=4,<5",
+        "frictionless>=4.28.2,<5",
         "matplotlib>=3.5,<4",
         "mergedeep>=1.3.4,<2",
         "pandas>=1.3,<2",
