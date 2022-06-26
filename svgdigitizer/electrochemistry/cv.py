@@ -53,8 +53,6 @@ from functools import cache
 import matplotlib.pyplot as plt
 from astropy import units as u
 
-from svgdigitizer.electrochemistry.normalization import normalize_unit
-
 logger = logging.getLogger("cv")
 
 

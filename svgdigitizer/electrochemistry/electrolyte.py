@@ -28,7 +28,6 @@ a database of chemicals identified by InChI with their respective pKa values.
 
 import copy
 import logging
-import re
 from functools import cache
 
 from astropy import units as u
@@ -158,3 +157,7 @@ class Electrolyte:
         system = System(*acids_bases)
         system.pHsolve()
         return system.pH
+
+    def number_of_components(self):
+        """Return number of components"""
+        return len(self.electrolyte["components"])
