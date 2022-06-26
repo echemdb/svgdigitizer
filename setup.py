@@ -40,7 +40,7 @@ setup(
         "mergedeep>=1.3.4,<2",
         "pandas>=1.3,<2",
         "pdf2image>=1.16,<2",
-        "pHcalc=0.1.2",
+        "pHcalc>=0.1.2",
         "pillow>=9,<10",
         "pyyaml>=6,<7",
         "scipy>=1.7,<2",
