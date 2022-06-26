@@ -262,12 +262,11 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         # enrich metadata with estimated pH from electrolyte composition
         if "ph" not in metadata["electrochemical system"]["electrolyte"].keys():
             metadata["electrochemical system"]["electrolyte"]["pH"] = {
-                "value": Electrolyte(
-                    metadata["electrochemical system"]["electrolyte"]
-                ).pH,
-                "comment": "estimated",
+                "estimation": {
+                    "value": Electrolyte(metadata["electrochemical system"]["electrolyte"]).pH,
+                    "calculation": "pHcalc"
+                }
             }
-
     with open(svg, "rb") as infile:
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
