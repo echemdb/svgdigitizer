@@ -20,7 +20,6 @@ dependencies:
   - pdf2image>=1.16,<2
   - pillow>=9,<10
   - poppler>=22,<23
-  - pubchempy>=1.0,<1.1
   - pylint>=2.12,<3
   - pytest>=6.2,<7
   - pyyaml>=6,<7
