@@ -4,6 +4,65 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.6.0
+====================
+
+**Added:**
+
+* Added a short documentation to the package svgdigitizer with some very basic usage examples with the CLI and API.
+* Added Python version 3.9 as a requirement to setup.py and environment.yaml.
+
+**Removed:**
+
+* Removed class method `svgdigitizer.electrochemistry.cv.CV.get_axis_unit`.
+
+
+
+v0.5.0
+====================
+
+**Added:**
+
+* Added a property `schema` to `svgplot.SVGPlot`, describing the data extracted from the plot.
+* Added a property `figure_schema`to `electrochemistry.cv.CV`, containing the original figure axis properties.
+* Added a property `data_schema`to `electrochemistry.cv.CV`, containing the axis properties of the property `electrochemistry.cv.CV.df`.
+* Added `voltage_dimension` and `current_dimension` to `electrochemistry.cv.CV`, providing the dimension of the voltage and the current.
+
+**Changed:**
+
+* Changed `electrochemistry.cv.CV` such that it only accepts SVGs where the labels on one axis are either `U` or `E` (V, mV, ...) and another axis are `I` (A, mA, ...) or `j` (A / cm2, uA / m2, ...).
+* Changed `rate` to `scan_rate` in `electrochemistry.cv.CV`.
+
+**Removed:**
+
+* Removed `axis_properties` and `x_label` from `electrochemistry.cv.CV`.
+
+
+
+v0.4.0
+====================
+
+**Added:**
+
+* Added property `CV.tags`, `CV.figure_label`, and `CV.curve_label` which are extracted from `<text>` elements in the SVG. The extracted values are stored in `CV.metadata`.
+* Added installation instructions.
+* Added automatic symbol and orientation detection of axes.
+
+**Changed:**
+
+* Changed entry `axes` in `figure description` and `data description` to `field` according to `Frictionless Table Schema <https://specs.frictionlessdata.io/table-schema>`_.
+* Replaced module `datapackage` with `frictionless`.
+
+**Removed:**
+
+* Removed `data description` in datapackage created with `digitize_cv`.
+
+**Fixed:**
+
+* Fixed data package creation in `__main__.digitize_cv`, where `data_description` was removed instead of `data_description.fields`.
+
+
+
 v0.3.0
 ====================
 

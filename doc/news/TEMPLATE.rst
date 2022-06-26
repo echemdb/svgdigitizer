@@ -1,23 +1,3 @@
-**Added:**
-
-* Added <news item>.
-
-**Changed:**
-
-* Changed <news item>.
-
-**Removed:**
-
-* Removed <news item>.
-
 **Fixed:**
 
-* Fixed <news item>.
-
-**Deprecated:**
-
-* Deprecated <news item>.
-
-**Performance:**
-
-* Improved <news item>.
+* Fixed typo in a command line in workflow.md.

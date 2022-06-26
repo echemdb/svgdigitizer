@@ -114,7 +114,7 @@ specifying a `sampling_interval`::
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C)      2021 Albert Engstfeld
+#        Copyright (C) 2021-2022 Albert Engstfeld
 #        Copyright (C) 2021-2022 Johannes Hermann
 #        Copyright (C) 2021-2022 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
@@ -347,10 +347,13 @@ class SVGPlot:
             from numpy.linalg import qr
 
             A = self._transformation(
-                self.marked_points[f"{horizontal}1"],
-                self.marked_points[f"{horizontal}2"],
-                self.marked_points[f"{vertical}1"],
-                self.marked_points[f"{vertical}2"],
+                # We do not use the actual label values here but pretend that the marks delimit the unit square [0, 1]×[0, 1].
+                # The actual values might be scaled very differently, e.g., one axis being in hundreds of μA and one axis in fractions of V.
+                # This leads to one axis (and its errors) influencing the transformation matrix too much which can lead to problems in the QR decomposition, see #149.
+                (self.marked_points[f"{horizontal}1"][0], 0),
+                (self.marked_points[f"{horizontal}2"][0], 1),
+                (self.marked_points[f"{vertical}1"][0], 0),
+                (self.marked_points[f"{vertical}2"][0], 1),
                 # We use marked aligned here to get a rotational portion in the
                 # transformation even if the user asked for axis-aligned for
                 # the eventual transformation.
@@ -1655,6 +1658,65 @@ class SVGPlot:
             )
 
         return min(eligible_roots)
+
+    @property
+    def schema(self):
+        # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
+        """A frictionless `Schema` object, including a `Fields` object
+        describing the dimensions, units and orientation of the original
+        plot axes.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 't', 'unit': None, 'orientation': 'x'},
+                        {'name': 'y', 'unit': None, 'orientation': 'y'}]}
+
+
+        """
+        from frictionless import Schema
+
+        orientations = {
+            "vertical": "y",
+            "horizontal": "x",
+        }
+
+        return Schema(
+            fields=[
+                {
+                    "name": label,
+                    "unit": self.axis_labels[label],
+                    "orientation": orientations[key.value],
+                }
+                for key, label in self.axis_orientations.items()
+            ]
+        )
 
     @property
     @cache
