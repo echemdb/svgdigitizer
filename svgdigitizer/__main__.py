@@ -240,6 +240,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     """
     from svgdigitizer.electrochemistry.cv import CV
+    from svgdigitizer.electrochemistry.electrolyte import Electrolyte
 
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
@@ -257,6 +258,16 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
+        # enrich metadata with estimated pH from electrolyte composition
+        if "ph" not in metadata["electrochemical system"]["electrolyte"].keys():
+            metadata["electrochemical system"]["electrolyte"]["pH"] = {
+                "estimation": {
+                    "value": Electrolyte(
+                        metadata["electrochemical system"]["electrolyte"]
+                    ).pH,
+                    "calculation": "pHcalc",
+                }
+            }
     with open(svg, "rb") as infile:
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
