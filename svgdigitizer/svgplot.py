@@ -135,7 +135,7 @@ specifying a `sampling_interval`::
 
 import logging
 from enum import Enum
-from functools import cache
+from functools import cached_property
 
 import pandas as pd
 
@@ -224,8 +224,7 @@ class SVGPlot:
         self._curve = curve
         self._algorithm = algorithm
 
-    @property
-    @cache
+    @cached_property
     def xlabel(self):
         r"""
         Return the label of the x axis.
@@ -260,8 +259,7 @@ class SVGPlot:
         """
         return self.axis_orientations[AxisOrientation.HORIZONTAL]
 
-    @property
-    @cache
+    @cached_property
     def ylabel(self):
         r"""
         Return the label of the y axis.
@@ -296,8 +294,7 @@ class SVGPlot:
         """
         return self.axis_orientations[AxisOrientation.VERTICAL]
 
-    @property
-    @cache
+    @cached_property
     def axis_orientations(self):
         r"""
         Return the :class:`Orientation` for each axis.
@@ -390,8 +387,7 @@ class SVGPlot:
             }
         )
 
-    @property
-    @cache
+    @cached_property
     def axis_variables(self):
         r"""
         Return the label for each axis.
@@ -449,8 +445,7 @@ class SVGPlot:
         """
         return list(self._grouped_ref_points.keys())
 
-    @property
-    @cache
+    @cached_property
     def axis_labels(self):
         r"""
         Return the label for each axis as dict with variable as key and unit as value.
@@ -572,8 +567,7 @@ class SVGPlot:
             for axis_variable in self.axis_variables
         }
 
-    @property
-    @cache
+    @cached_property
     def _grouped_ref_points(self):
         r"""
         Return the reference points grouped by axis variable.
@@ -689,8 +683,7 @@ class SVGPlot:
 
         return points
 
-    @property
-    @cache
+    @cached_property
     def marked_points(self):
         r"""
         Return the points that have been marked on the axes of the plot.
@@ -771,8 +764,7 @@ class SVGPlot:
 
         return points
 
-    @property
-    @cache
+    @cached_property
     def scaling_factors(self):
         r"""
         Return the scaling factors for each axis.
@@ -928,8 +920,7 @@ class SVGPlot:
 
         return tuple(dot(self.transformation, [x, y, 1])[:2])
 
-    @property
-    @cache
+    @cached_property
     def transformation(self):
         r"""
         Return the affine map from the SVG coordinate system to the plot
@@ -1163,8 +1154,7 @@ class SVGPlot:
 
         return A
 
-    @property
-    @cache
+    @cached_property
     def curve(self):
         r"""
         Return the path that is tracing the plot in the SVG.
@@ -1246,8 +1236,7 @@ class SVGPlot:
 
         return transform(path.path, self.transformation)
 
-    @property
-    @cache
+    @cached_property
     def labeled_paths(self):
         r"""
         All paths with their corresponding label.
@@ -1718,8 +1707,7 @@ class SVGPlot:
             ]
         )
 
-    @property
-    @cache
+    @cached_property
     def df(self):
         r"""
         Return the plot data as a dataframe of pairs (x, y).
@@ -1874,3 +1862,21 @@ class SVGPlot:
             ylabel=f"{self.ylabel} [{self.axis_labels[self.ylabel]}]",
             legend=False,
         )
+
+
+# Ensure that cached properties are tested, see
+# https://stackoverflow.com/questions/69178071/cached-property-doctest-is-not-detected/72500890#72500890
+__test__ = {
+    "SVGPlot.xlabel": SVGPlot.xlabel,
+    "SVGPlot.ylabel": SVGPlot.ylabel,
+    "SVGPlot.axis_orientations": SVGPlot.axis_orientations,
+    "SVGPlot.axis_variables": SVGPlot.axis_variables,
+    "SVGPlot.axis_labels": SVGPlot.axis_labels,
+    "SVGPlot.grouped_ref_points": SVGPlot._grouped_ref_points,  # pylint: disable=protected-access
+    "SVGPlot.marked_points": SVGPlot.marked_points,
+    "SVGPlot.scaling_factors": SVGPlot.scaling_factors,
+    "SVGPlot.transformation": SVGPlot.transformation,
+    "SVGPlot.curve": SVGPlot.curve,
+    "SVGPlot.labeled_paths": SVGPlot.labeled_paths,
+    "SVGPlot.df": SVGPlot.df,
+}
