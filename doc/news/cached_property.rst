@@ -1,3 +1,3 @@
-**Changed:**
+**Fixed:**
 
-* Changed all instances of `@property;@cache` to `@cached_property`.
+* Fixed garbage collection of instances with cached properties.

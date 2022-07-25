@@ -1862,3 +1862,21 @@ class SVGPlot:
             ylabel=f"{self.ylabel} [{self.axis_labels[self.ylabel]}]",
             legend=False,
         )
+
+
+# Ensure that cached properties are tested, see
+# https://stackoverflow.com/questions/69178071/cached-property-doctest-is-not-detected/72500890#72500890
+__test__ = {
+    "SVGPlot.xlabel": SVGPlot.xlabel,
+    "SVGPlot.ylabel": SVGPlot.ylabel,
+    "SVGPlot.axis_orientations": SVGPlot.axis_orientations,
+    "SVGPlot.axis_variables": SVGPlot.axis_variables,
+    "SVGPlot.axis_labels": SVGPlot.axis_labels,
+    "SVGPlot.grouped_ref_points": SVGPlot._grouped_ref_points,  # pylint: disable=protected-access
+    "SVGPlot.marked_points": SVGPlot.marked_points,
+    "SVGPlot.scaling_factors": SVGPlot.scaling_factors,
+    "SVGPlot.transformation": SVGPlot.transformation,
+    "SVGPlot.curve": SVGPlot.curve,
+    "SVGPlot.labeled_paths": SVGPlot.labeled_paths,
+    "SVGPlot.df": SVGPlot.df,
+}
