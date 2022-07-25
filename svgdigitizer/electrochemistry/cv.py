@@ -1175,9 +1175,9 @@ class CV:
 # Ensure that cached properties are tested, see
 # https://stackoverflow.com/questions/69178071/cached-property-doctest-is-not-detected/72500890#72500890
 __test__ = {
-    "CV.figure_label", CV.figure_label,
-    "CV.curve_label", CV.curve_label,
-    "CV.scan_rate", CV.scan_rate,
-    "CV.df", CV.df,
-    "CV.comment", CV.comment,
+    "CV.figure_label": CV.figure_label,
+    "CV.curve_label": CV.curve_label,
+    "CV.scan_rate": CV.scan_rate,
+    "CV.df": CV.df,
+    "CV.comment": CV.comment,
 }
