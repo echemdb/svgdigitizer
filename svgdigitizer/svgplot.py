@@ -1872,7 +1872,7 @@ __test__ = {
     "SVGPlot.axis_orientations": SVGPlot.axis_orientations,
     "SVGPlot.axis_variables": SVGPlot.axis_variables,
     "SVGPlot.axis_labels": SVGPlot.axis_labels,
-    "SVGPlot.grouped_ref_points": SVGPlot.grouped_ref_points,
+    "SVGPlot.grouped_ref_points": SVGPlot._grouped_ref_points, # pylint: disable=protected-access
     "SVGPlot.marked_points": SVGPlot.marked_points,
     "SVGPlot.scaling_factors": SVGPlot.scaling_factors,
     "SVGPlot.transformation": SVGPlot.transformation,
