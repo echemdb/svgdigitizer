@@ -48,7 +48,7 @@ For the documentation below, the path of a CV is presented simply as a line.
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
 import logging
-from functools import cache
+from functools import cached_property
 
 import matplotlib.pyplot as plt
 from astropy import units as u
@@ -445,8 +445,7 @@ class CV:
 
         return schema
 
-    @property
-    @cache
+    @cached_property
     def figure_label(self):
         r"""
         An identifier of the plot to distinguish it from other figures on the same page.
@@ -502,8 +501,7 @@ class CV:
 
         return figure_labels[0].label
 
-    @property
-    @cache
+    @cached_property
     def curve_label(self):
         r"""
         A descriptive label for this curve to distinguish it from other curves in the same plot.
@@ -556,8 +554,7 @@ class CV:
 
         return curve_labels[0].label
 
-    @property
-    @cache
+    @cached_property
     def scan_rate(self):
         r"""
         Return the scan rate of the plot.
@@ -615,8 +612,7 @@ class CV:
 
         return float(rates[0].value) * u.Unit(rates[0].unit)
 
-    @property
-    @cache
+    @cached_property
     def df(self):
         # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltammogram and which is displayed in the documentation (see issue #73).
         r"""
@@ -891,8 +887,7 @@ class CV:
             + "]"
         )
 
-    @property
-    @cache
+    @cached_property
     def comment(self):
         r"""
         Return a comment describing the plot.
