@@ -133,20 +133,20 @@ def _create_svgplot(svg, sampling_interval, skewed):
 
 def _create_citation(svg, metadata):
     r"""
-    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['bib']`.
+    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`.
 
     This is a helper method for :meth:`digitize_cv`.
     """
     from pybtex.database import parse_file
 
     try:
-        metadata["source"]["bib"]
+        metadata["source"]["citation key"]
     except KeyError as exc:
         raise KeyError(
-            "The name of the bibfile must be specified in the metadata in `metadata['source']['bib']`."
+            "The name of the bibfile must be specified in the metadata in `metadata['source']['citation key']`."
         ) from exc
 
-    bibfile = metadata["source"]["bib"]
+    bibfile = metadata["source"]["citation key"]
 
     bib_directory = os.path.dirname(svg)
 
