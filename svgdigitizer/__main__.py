@@ -131,7 +131,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
     )
 
 
-def _create_citation(metadata):
+def _create_citation(svg, metadata):
     r"""
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['bib']`.
 
@@ -147,7 +147,10 @@ def _create_citation(metadata):
         ) from exc
 
     bibfile = metadata["source"]["bib"]
-    bibliography = parse_file(f"{bibfile}.bib", bib_format="bibtex")
+
+    bib_directory = os.path.dirname(svg)
+
+    bibliography = parse_file(f"{os.path.join(bib_directory, bibfile)}.bib", bib_format="bibtex")
     return bibliography.entries[bibfile].to_string("bibtex")
 
 
@@ -305,7 +308,8 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, citat
             logger.warning(
                 "The key with name `citation` in the metadata will be overwritten with the new bibliography data."
             )
-        metadata["citation"] = _create_citation(metadata)
+
+        metadata["citation"] = _create_citation(svg, metadata)
 
     if package:
         package = _create_package(metadata, csvname, outdir)
