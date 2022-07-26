@@ -58,6 +58,7 @@ skewed_option = click.option(
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
 )
 
+citation_option = click.option("--citation", is_flag=True, help="Adds bibliography data from a bibfile as descriptor to the datapackage.")
 
 def _outfile(template, suffix=None, outdir=None):
     r"""
@@ -120,6 +121,23 @@ def _create_svgplot(svg, sampling_interval, skewed):
         sampling_interval=sampling_interval,
         algorithm="mark-aligned" if skewed else "axis-aligned",
     )
+
+
+def _create_citation(metadata):
+    r"""
+    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['bib']`.
+
+    This is a helper method for :meth:`digitize_cv`.
+    """
+    from pybtex.database import parse_file
+    try:
+        metadata['source']['bib']
+    except KeyError:
+        raise "The name of the bibfile must be specified in the metadata in `metadata['source']['bib']`."
+
+    bibfile = metadata['source']['bib']
+    bibliography = parse_file(f'{bibfile}.bib', bib_format='bibtex')
+    return bibliography.entries[bibfile].to_string('bibtex')
 
 
 @click.command()
@@ -201,7 +219,8 @@ def digitize(svg, sampling_interval, outdir, skewed):
 )
 @click.argument("svg", type=click.Path(exists=True))
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
+@citation_option
+def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, citation):
     r"""
     Digitize a cylic voltammogram.
 
@@ -266,8 +285,18 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
     cv.df.to_csv(csvname, index=False)
 
+    metadata = cv.metadata
+
+    if citation:
+        metadata.setdefault('citation', {})
+
+        if metadata['citation']:
+            logger.warning("The key with name `citation` in the metadata will be overwritten with the new bibliography data.")
+        metadata['citation'] = _create_citation(metadata)
+
+
     if package:
-        package = _create_package(cv.metadata, csvname, outdir)
+        package = _create_package(metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
