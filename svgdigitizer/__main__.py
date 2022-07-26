@@ -61,8 +61,8 @@ skewed_option = click.option(
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
 )
 
-citation_option = click.option(
-    "--citation",
+bibliography_option = click.option(
+    "--bibliography",
     is_flag=True,
     help="Adds bibliography data from a bibfile as descriptor to the datapackage.",
 )
@@ -131,7 +131,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
     )
 
 
-def _create_citation(svg, metadata):
+def _create_bibliography(svg, metadata):
     r"""
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`.
 
@@ -235,8 +235,10 @@ def digitize(svg, sampling_interval, outdir, skewed):
 )
 @click.argument("svg", type=click.Path(exists=True))
 @skewed_option
-@citation_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, citation):
+@bibliography_option
+def digitize_cv(
+    svg, sampling_interval, metadata, package, outdir, skewed, bibliography
+):
     r"""
     Digitize a cylic voltammogram.
 
@@ -303,15 +305,15 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, citat
 
     metadata = cv.metadata
 
-    if citation:
-        metadata.setdefault("citation", {})
+    if bibliography:
+        metadata.setdefault("bibliography", {})
 
-        if metadata["citation"]:
+        if metadata["bibliography"]:
             logger.warning(
-                "The key with name `citation` in the metadata will be overwritten with the new bibliography data."
+                "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        metadata["citation"] = _create_citation(svg, metadata)
+        metadata["bibliography"] = _create_bibliography(svg, metadata)
 
     if package:
         package = _create_package(metadata, csvname, outdir)
