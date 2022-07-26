@@ -150,7 +150,9 @@ def _create_citation(svg, metadata):
 
     bib_directory = os.path.dirname(svg)
 
-    bibliography = parse_file(f"{os.path.join(bib_directory, bibfile)}.bib", bib_format="bibtex")
+    bibliography = parse_file(
+        f"{os.path.join(bib_directory, bibfile)}.bib", bib_format="bibtex"
+    )
     return bibliography.entries[bibfile].to_string("bibtex")
 
 
