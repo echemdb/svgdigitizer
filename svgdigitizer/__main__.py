@@ -37,9 +37,12 @@ EXAMPLES::
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import logging
 import os
 
 import click
+
+logger = logging.getLogger("svgdigitizer")
 
 
 @click.group(help=__doc__.split("EXAMPLES")[0])
@@ -58,7 +61,12 @@ skewed_option = click.option(
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
 )
 
-citation_option = click.option("--citation", is_flag=True, help="Adds bibliography data from a bibfile as descriptor to the datapackage.")
+citation_option = click.option(
+    "--citation",
+    is_flag=True,
+    help="Adds bibliography data from a bibfile as descriptor to the datapackage.",
+)
+
 
 def _outfile(template, suffix=None, outdir=None):
     r"""
@@ -130,14 +138,17 @@ def _create_citation(metadata):
     This is a helper method for :meth:`digitize_cv`.
     """
     from pybtex.database import parse_file
-    try:
-        metadata['source']['bib']
-    except KeyError:
-        raise "The name of the bibfile must be specified in the metadata in `metadata['source']['bib']`."
 
-    bibfile = metadata['source']['bib']
-    bibliography = parse_file(f'{bibfile}.bib', bib_format='bibtex')
-    return bibliography.entries[bibfile].to_string('bibtex')
+    try:
+        metadata["source"]["bib"]
+    except KeyError as exc:
+        raise KeyError(
+            "The name of the bibfile must be specified in the metadata in `metadata['source']['bib']`."
+        ) from exc
+
+    bibfile = metadata["source"]["bib"]
+    bibliography = parse_file(f"{bibfile}.bib", bib_format="bibtex")
+    return bibliography.entries[bibfile].to_string("bibtex")
 
 
 @click.command()
@@ -288,12 +299,13 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, citat
     metadata = cv.metadata
 
     if citation:
-        metadata.setdefault('citation', {})
+        metadata.setdefault("citation", {})
 
-        if metadata['citation']:
-            logger.warning("The key with name `citation` in the metadata will be overwritten with the new bibliography data.")
-        metadata['citation'] = _create_citation(metadata)
-
+        if metadata["citation"]:
+            logger.warning(
+                "The key with name `citation` in the metadata will be overwritten with the new bibliography data."
+            )
+        metadata["citation"] = _create_citation(metadata)
 
     if package:
         package = _create_package(metadata, csvname, outdir)
