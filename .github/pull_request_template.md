@@ -5,6 +5,7 @@ Below are a few things we ask you kindly to self-check. Remove checks that are n
 Checklist
 * [ ] Added an entry in `doc/news/`. <!-- Copy the TEMPLATE.rst to mybranch.rst, fill in the relevant sections, delete the others. -->
 * [ ] Added a test for this change.
+* [ ] Updated the documentation.
 
 <!--
 Please add any other relevant info below:
