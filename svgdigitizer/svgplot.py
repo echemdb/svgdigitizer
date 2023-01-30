@@ -1712,8 +1712,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 't', 'unit': None, 'orientation': 'x'},
-                        {'name': 'y', 'unit': None, 'orientation': 'y'}]}
+            {'fields': [{'name': 't', 'orientation': 'x', 'unit': None},
+                        {'name': 'y', 'orientation': 'y', 'unit': None}]}
 
 
         """
