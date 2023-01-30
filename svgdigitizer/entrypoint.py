@@ -1,7 +1,5 @@
 r"""
-Contains the functions for svgdigitizers' CLI,
-which would net be tested properly by pytest in `__main__.py`.
-
+The svgdigitizer suite.
 
 EXAMPLES::
 
