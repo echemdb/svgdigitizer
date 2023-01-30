@@ -433,6 +433,3 @@ cli.add_command(paginate)
 __test__ = {
     name: command.__doc__ for (name, command) in cli.commands.items() if command.__doc__
 }
-
-# if __name__ == "__main__":
-#     cli()

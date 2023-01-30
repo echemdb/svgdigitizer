@@ -19,7 +19,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # *********************************************************************
-import setuptools
 from distutils.core import setup
 
 setup(
