@@ -830,7 +830,7 @@ class SVGPlot:
 
         for key in scaling_factors.keys():
             for label in self.svg.get_texts(
-                f"^(?P<axis>{key})(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)"
+                fr"^(?P<axis>{key})(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)"
             ):
                 scaling_factors[label.axis] = float(label.value)
 
