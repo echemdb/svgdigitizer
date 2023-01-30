@@ -11,10 +11,14 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v3
         with: { submodules: recursive }
-      - uses: conda-incubator/setup-miniconda@v2
-        with: { mamba-version: "*", channels: "conda-forge", channel-priority: true }
+      - name: setup conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: "${{ matrix.python }}"
+          miniforge-variant: Mambaforge
       - name: install dependencies
         shell: bash -l {0}
         run: |
