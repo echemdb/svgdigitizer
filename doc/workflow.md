@@ -2,9 +2,9 @@
 
 This step by step tutorial explains how to digitize plots commonly found in electrochemical research papers, e.g., cyclic voltammograms, for the [echemdb/website](https://github.com/echemdb/website) project. In this example a cyclic voltammogram is digitized. A plot is provided in Figure 2a in the {download}`publication example <./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf>`.
 
-![files/images/sample_data_2.png](files/images/sample_data_2.png) 
+![files/images/sample_data_2.png](files/images/sample_data_2.png)
 
-To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) ([installation instructions](installation.md)). 
+To follow the step by step tutorial, some steps require an installation of the recent version of [svgdigitizer](https://github.com/echemdb/svgdigitizer) ([installation instructions](installation.md)).
 
 Furthermore, the manipulation of SVG files is done with [Inkscape](https://inkscape.org/) (tested with V. 0.92 and V. 1.1).
 
@@ -52,7 +52,7 @@ Download the bib file or save the content to a file named:
 
 Open the file and change the key, such that it matches the folder name:
 
-![./files/images/bibtex_key.png](./files/images/bibtex_key.png)  
+![./files/images/bibtex_key.png](./files/images/bibtex_key.png)
 
 Also fix any typos in the title.
 
@@ -84,7 +84,7 @@ For this example, we use Inkscape to digitize some data in plot 2a in the PDF, w
 
 In the SVG file, by marking two positions on each axis, both the units and the scale of the axis will be extracted.
 
-In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label that contains `E1: 0.0 V vs RHE`. Draw a line connecting the text label and the position on the x-axis. Finally **group** the **line** and the **text label**. 
+In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label that contains `E1: 0.0 V vs RHE`. Draw a line connecting the text label and the position on the x-axis. Finally **group** the **line** and the **text label**.
 
 Repeat this for positions `E2`, `j1` and `j2`.
 
@@ -99,7 +99,7 @@ Repeat this for positions `E2`, `j1` and `j2`.
   * For square, cubic, etc units simply add `2`, `3`, ... to the unit (see above).
   * Use parentheses if more than one unit is in the numerator or denominator, i.e., `(kg m) / s2`
 * If the reference on the voltage axis is not given in the plot, extract this information from the manuscript text. Note that the reference scale given in the experimental section can be different to that in the main text of the manuscript.
-* `svgdigitizer` only considers units in the labels for positions`E2`/`U2` and `j2`/`I2`. 
+* `svgdigitizer` only considers units in the labels for positions`E2`/`U2` and `j2`/`I2`.
 
 ![inkscape_x1_label](files/images/inkscape_x1_label.png)
 
@@ -132,7 +132,7 @@ Select the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/
 7. Add a text field to the plot containing the scan rate with which the data was acquired. This value is not necessarily given in the plot or figure description and might have to be extracted from the text of the manuscript. Here, `scan rate: 50 mV / s`. (mandatory for `svgdigitizer.electrochemistry.cv.CV`)
 8. Add a figure identifier such as `figure: 2a` (mandatory for submission to [echemdb](https://github.com/echemdb/website))
 9. Add tags describing the data with commonly used acronyms. In this case: `tags: BCV, HER`. (mandatory for submission to [echemdb](https://github.com/echemdb/website))
-10. Feel free to add a comment to the plot. This comment will later be included in the metadata file and will be shown on the [echemdb website](https://echemdb.github.io/website/). Use a full sentence, for example, `comment: The curve is a bit noisy.` 
+10. Feel free to add a comment to the plot. This comment will later be included in the metadata file and will be shown on the [echemdb website](https://echemdb.github.io/website/). Use a full sentence, for example, `comment: The curve is a bit noisy.`
 11. Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by `linked: DEMS`. The field can contain multiple types of measurements if applicable. Also use acronyms commonly used in the community.
 
 The final file should look like this:
@@ -143,7 +143,7 @@ The final file should look like this:
 
 Create a YAML file with the same name as the SVG file: `mustermann_2021_svgdigitizer_1_f2a_blue.yaml`
 
-The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema/blob/main/examples/Author_YYYY_FirstTitleWord_Page_fignr_identifier.yaml)
+The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml)
 
 **TODO #86:** Templates for various systems can be found in the examples section of the [electrochemistry-metdadata-schema](https://github.com/echemdb/electrochemistry-metadata-schema). The example yaml file for the example plot is located {download}`here <./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.yaml>`.
 
