@@ -47,7 +47,7 @@ jobs:
         run: |
           python -m http.server 8880 --directory doc/generated/html &
           sleep 1
-          linkchecker --check-extern http://localhost:8880/svgdigitizer/
+          linkchecker --check-extern http://localhost:8880/svgdigitizer/ --ignore-url="https://repology.org/*"
       - uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
