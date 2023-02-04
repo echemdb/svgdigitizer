@@ -65,8 +65,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Welcome to svgdigitizer’s documentation!</li>
+      <li><a href="#" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Welcome to svgdigitizer’s documentation!</li>
   
   
     
@@ -102,7 +102,7 @@ can be provided anywhere in the SVG file. The resulting file looks as follows.</
 <h2><a class="reference internal" href="cli.html"><span class="doc std std-doc">Command line interface</span></a><a class="headerlink" href="#command-line-interface" title="Permalink to this headline"></a></h2>
 <p>This SVG can be digitized from the <a class="reference internal" href="cli.html"><span class="doc std std-doc">command line interface</span></a>, which creates a <a class="reference download internal" download="" href="_downloads/f3edd92abfa46114c05eee661d38ff8d/example_plot_p0_demo.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span></code></a> file of the x and y data (here U and v).
 The sampling of the bezier paths can be set by <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> which specifies the sampling interval in x units. In this specific case also indicate that the axes are <code class="docutils literal notranslate"><span class="pre">--skewed</span></code>.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval <span class="m">0</span>.01 --skewed
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>svgdigitizer<span class="w"> </span>digitize<span class="w"> </span>example_plot_p0_demo.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01<span class="w"> </span>--skewed
 </pre></div>
 </div>
 </section>
@@ -257,7 +257,7 @@ The sampling of the bezier paths can be set by <code class="docutils literal not
 <section class="tex2jax_ignore mathjax_ignore" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
 <p>The package is hosted on <a class="reference external" href="https://pypi.org/project/svgdigitizer/">PiPY</a> and can be installed via</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install svgdigitizer
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
 <p>Read the <a class="reference internal" href="installation.html"><span class="doc std std-doc">installation instructions</span></a> on further details if you want to contribute to the project.</p>

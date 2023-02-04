@@ -66,8 +66,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Cyclic Voltammograms</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Cyclic Voltammograms</li>
   
   
     
@@ -218,13 +218,13 @@ where the axis labels and the data are provided in SI units
 <span class="go">  &#39;simultaneous measurements&#39;: [&#39;SXRD&#39;, &#39;SHG&#39;],</span>
 <span class="go">  &#39;measurement type&#39;: &#39;CV&#39;,</span>
 <span class="go">  &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;},</span>
-<span class="go">  &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;mV&#39;, &#39;orientation&#39;: &#39;x&#39;,</span>
-<span class="go">            &#39;reference&#39;: &#39;RHE&#39;},</span>
-<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;}],</span>
+<span class="go">  &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;orientation&#39;: &#39;x&#39;,</span>
+<span class="go">            &#39;reference&#39;: &#39;RHE&#39;, &#39;unit&#39;: &#39;mV&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;orientation&#39;: &#39;y&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;}],</span>
 <span class="go">            &#39;comment&#39;: &#39;noisy data&#39;},</span>
 <span class="go">  &#39;data description&#39;: {&#39;version&#39;: 1, &#39;type&#39;: &#39;digitized&#39;,</span>
 <span class="go">                      &#39;measurement type&#39;: &#39;CV&#39;, &#39;fields&#39;:</span>
-<span class="go">                      [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">                      [{&#39;name&#39;: &#39;E&#39;, &#39;reference&#39;: &#39;RHE&#39;, &#39;unit&#39;: &#39;V&#39;},</span>
 <span class="go">                      {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
 <span class="go">                      {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}}</span>
 </pre></div>
@@ -407,7 +407,7 @@ A time axis is also included.</p>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>  
-<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;reference&#39;: &#39;RHE&#39;, &#39;unit&#39;: &#39;V&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
 </pre></div>
@@ -440,7 +440,7 @@ a voltage axis with dimension U.:</p>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>  
-<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;U&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;unknown&#39;},</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;U&#39;, &#39;reference&#39;: &#39;unknown&#39;, &#39;unit&#39;: &#39;V&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;I&#39;, &#39;unit&#39;: &#39;A&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
 </pre></div>
@@ -584,8 +584,8 @@ potential/voltage axis is also given (if available).</p>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">figure_schema</span>  
-<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;orientation&#39;: &#39;x&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
-<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;}]}</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;orientation&#39;: &#39;x&#39;, &#39;reference&#39;: &#39;RHE&#39;, &#39;unit&#39;: &#39;V&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;orientation&#39;: &#39;y&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;}]}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -638,13 +638,13 @@ created with <a class="reference internal" href="#svgdigitizer.electrochemistry.
 <span class="go"> &#39;simultaneous measurements&#39;: [&#39;SXRD&#39;, &#39;SHG&#39;],</span>
 <span class="go"> &#39;measurement type&#39;: &#39;CV&#39;,</span>
 <span class="go"> &#39;scan rate&#39;: {&#39;value&#39;: 50.0, &#39;unit&#39;: &#39;V / s&#39;},</span>
-<span class="go"> &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;mV&#39;, &#39;orientation&#39;: &#39;x&#39;,</span>
-<span class="go">            &#39;reference&#39;: &#39;RHE&#39;},</span>
-<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;y&#39;}],</span>
+<span class="go"> &#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;orientation&#39;: &#39;x&#39;,</span>
+<span class="go">            &#39;reference&#39;: &#39;RHE&#39;, &#39;unit&#39;: &#39;mV&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;orientation&#39;: &#39;y&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;}],</span>
 <span class="go">            &#39;comment&#39;: &#39;noisy data&#39;},</span>
 <span class="go"> &#39;data description&#39;: {&#39;version&#39;: 1, &#39;type&#39;: &#39;digitized&#39;,</span>
 <span class="go">                      &#39;measurement type&#39;: &#39;CV&#39;, &#39;fields&#39;:</span>
-<span class="go">                      [{&#39;name&#39;: &#39;E&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
+<span class="go">                      [{&#39;name&#39;: &#39;E&#39;, &#39;reference&#39;: &#39;RHE&#39;, &#39;unit&#39;: &#39;V&#39;},</span>
 <span class="go">                      {&#39;name&#39;: &#39;j&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
 <span class="go">                      {&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: &#39;s&#39;}]}}</span>
 </pre></div>

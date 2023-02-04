@@ -70,9 +70,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../api.html">API</a> &raquo;</li>
-      <li><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></li>
   
   
     
@@ -108,7 +108,7 @@ matter in this example.  It is only relevant when there are multiple curves in
 the same SVG:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">curve</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="s1">    &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">curve</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span><span class="w"> </span><span class="n">curve</span><span class="w"> </span><span class="si">}</span>
 <span class="gp">... </span><span class="s1">      &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">    &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
@@ -129,7 +129,7 @@ label:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="s1">    &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">      &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">y1</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="si">}</span>
 <span class="gp">... </span><span class="s1">    &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
 </pre></div>
@@ -140,7 +140,7 @@ that we added some units, so the x-axis is the time in seconds, and the y-axis
 is a voltage in volts.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="s1">    &lt;svg&gt;</span>
-<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">curve</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span><span class="w"> </span><span class="n">curve</span><span class="w"> </span><span class="si">}</span>
 <span class="gp">... </span><span class="s1">      &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">        &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
 <span class="gp">... </span><span class="s1">        &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
@@ -149,7 +149,7 @@ is a voltage in volts.</p>
 <span class="gp">... </span><span class="s1">        &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
 <span class="gp">... </span><span class="s1">        &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">      &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">      </span><span class="si">{</span> <span class="n">y1</span> <span class="si">}</span><span class="s1"></span>
+<span class="gp">... </span><span class="s1">      </span><span class="si">{</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="si">}</span>
 <span class="gp">... </span><span class="s1">      &lt;g&gt;</span>
 <span class="gp">... </span><span class="s1">        &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
 <span class="gp">... </span><span class="s1">        &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1V&lt;/text&gt;</span>
@@ -1012,8 +1012,8 @@ plot axes.</p>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">schema</span>  
-<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;x&#39;},</span>
-<span class="go">            {&#39;name&#39;: &#39;y&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;y&#39;}]}</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;orientation&#39;: &#39;x&#39;, &#39;unit&#39;: None},</span>
+<span class="go">            {&#39;name&#39;: &#39;y&#39;, &#39;orientation&#39;: &#39;y&#39;, &#39;unit&#39;: None}]}</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -71,8 +71,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Installation</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
   
   
     
@@ -100,19 +100,19 @@ methods.</p>
 <p>The latest stable version of the svgdigitizer is available on
 <a class="reference external" href="https://pypi.org/project/svgdigitizer/">PyPI</a> for all platforms and can be
 installed if you have Python and pip installed already:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install svgdigitizer
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
 <p>This command downloads and installs the svgdigitizer and its dependencies into
 your local Python installation.</p>
 <p>If the above command fails because you do not have permission to modify your
 Python installation, you can install the svgdigitizer into your user account:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install --user svgdigitizer
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
 <p>You can instead also install the latest unreleased version of the svgdigitizer
 from our <a class="reference external" href="https://github.com/echemdb/svgdigitizer">GitHub Repository</a> with</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/echemdb/svgdigitizer@master
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/echemdb/svgdigitizer@master
 </pre></div>
 </div>
 </section>
@@ -128,16 +128,16 @@ release of conda installed, make sure the conda-forge channel is
 <a class="reference external" href="https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge">configured correctly</a></p>
 <p>Once your conda setup is ready, create a new <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> environment with
 the latest stable version of the svgdigitizer:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda create -n svgdigitizer svgdigitizer
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>svgdigitizer<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
 <p>To use the svgdigitizer, activate the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> environment:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda activate svgdigitizer
-svgdigitizer --help
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>svgdigitizer
+svgdigitizer<span class="w"> </span>--help
 </pre></div>
 </div>
 <p>To install the svgdigitizer into an existing environment, activate that environment and then</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda install svgdigitizer
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
 </section>
@@ -145,11 +145,11 @@ svgdigitizer --help
 <h2>Install with pip for development<a class="headerlink" href="#install-with-pip-for-development" title="Permalink to this headline"></a></h2>
 <p>If you want to work on the svgdigitizer itself, get a copy of the latest
 unreleased version of the svgdigitizer:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/echemdb/svgdigitizer.git
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/echemdb/svgdigitizer.git
 </pre></div>
 </div>
 <p>Create an <a class="reference external" href="https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs">editable</a> install of the svgdigitizer:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install -e svgdigitizer
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
 <p>Any changes you make to the files in your local copy of the svgdigitizer should
