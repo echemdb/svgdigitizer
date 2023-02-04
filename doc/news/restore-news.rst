@@ -1,3 +1,0 @@
-**Fixed:**
-
-* Restored changelog template.
