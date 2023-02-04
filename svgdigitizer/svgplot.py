@@ -616,7 +616,6 @@ class SVGPlot:
         # Process explicitly marked point on the axes.
 
         for grouped_paths in self._grouped_ref_points.values():
-
             for labeled_path in grouped_paths:
                 label = labeled_path.label
                 point = label.point
