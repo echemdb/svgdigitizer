@@ -974,6 +974,33 @@ a sharp peak at (1, 1):</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">scaling_factors</span>
 <span class="go">{&#39;x&#39;: 50.6, &#39;y&#39;: 50.6}</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;j_scaling_factor: 24.5&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;Esf: 18.3&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">scaling_factors</span>
+<span class="go">{&#39;E&#39;: 18.3, &#39;j&#39;: 24.5}</span>
 </pre></div>
 </div>
 </dd></dl>
