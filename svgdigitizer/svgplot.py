@@ -1711,28 +1711,35 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 't', 'orientation': 'x', 'unit': None},
-                        {'name': 'y', 'orientation': 'y', 'unit': None}]}
-
+            {'fields': [{'name': 't', 'type': 'number', 'unit': None, 'orientation': 'x'},
+                        {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'y'}]}
 
         """
-        from frictionless import Schema
+        from frictionless import Resource, Pipeline, steps
+
+        # infer the type of the fields from self.df
+        resource = Resource(self.df)
+        resource.infer()
 
         orientations = {
-            "vertical": "y",
             "horizontal": "x",
+            "vertical": "y",
         }
 
-        return Schema(
-            fields=[
-                {
-                    "name": label,
-                    "unit": self.axis_labels[label],
-                    "orientation": orientations[key.value],
-                }
+        pipeline = Pipeline(
+            steps=[
+                steps.field_update(
+                    name=label,
+                    descriptor={
+                        "unit": self.axis_labels[label],
+                        "orientation": orientations[key.value],
+                    },
+                )
                 for key, label in self.axis_orientations.items()
             ]
         )
+
+        return resource.transform(pipeline).schema
 
     @cached_property
     def df(self):
