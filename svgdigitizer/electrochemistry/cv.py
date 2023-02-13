@@ -237,7 +237,7 @@ class CV:
             >>> cv.voltage_dimension
             Traceback (most recent call last):
             ...
-            Exception: The voltage must be on the x-axis.
+            ValueError: The voltage must be on the x-axis.
 
         """
         dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))

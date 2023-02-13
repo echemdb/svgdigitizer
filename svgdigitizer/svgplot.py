@@ -1231,13 +1231,13 @@ class SVGPlot:
             >>> plot.curve
             Traceback (most recent call last):
             ...
-            Exception: No curve main curve found in SVG.
+            ValueError: No curve main curve found in the SVG.
 
         """
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
-            raise ValueError("No curve found in SVG.")
+            raise ValueError("No curve found in the SVG.")
 
         curves = [
             curve
