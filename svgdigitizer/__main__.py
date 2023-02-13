@@ -298,7 +298,9 @@ def _create_package(metadata, csvname, outdir):
     package.infer()
     # Update fields in the datapackage describing the data in the CSV
     package_schema = package.resources[0].schema
-    data_description_schema = Schema(fields=package["data description"]["fields"]) #######!!!!! This might be an issue
+    data_description_schema = Schema(
+        fields=package["data description"]["fields"]
+    )  #######!!!!! This might be an issue
 
     new_fields = []
     for name in package_schema.field_names:

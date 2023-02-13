@@ -424,7 +424,7 @@ class CV:
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
         A frictionless `Schema` object, including a `Fields` object
-        describing the voltage and current axis of the originlal plot
+        describing the voltage and current axis of the original plot
         including original units. The reference electrode of the
         potential/voltage axis is also given (if available).
 
@@ -485,7 +485,8 @@ class CV:
     @cached_property
     def figure_label(self):
         r"""
-        An identifier of the plot to distinguish it from other figures on the same page.
+        An identifier of the plot to distinguish it from other
+        figures on the same page.
 
         The figure name is read from a ``<text>`` in the SVG file
         such as ``<text>figure: 2b</text>``.
@@ -541,9 +542,11 @@ class CV:
     @cached_property
     def curve_label(self):
         r"""
-        A descriptive label for this curve to distinguish it from other curves in the same plot.
+        A descriptive label for this curve to distinguish it
+        from other curves in the same plot.
 
-        The curve label read from a ``<text>`` in the SVG file such as ``<text>curve: solid line</text>``.
+        The curve label read from a ``<text>`` in the SVG file
+        such as ``<text>curve: solid line</text>``.
 
         EXAMPLES::
 
