@@ -616,7 +616,6 @@ class SVGPlot:
         # Process explicitly marked point on the axes.
 
         for grouped_paths in self._grouped_ref_points.values():
-
             for labeled_path in grouped_paths:
                 label = labeled_path.label
                 point = label.point
@@ -624,7 +623,7 @@ class SVGPlot:
                 unit = label.unit or None
 
                 if point in points:
-                    raise Exception(f"Found axis label {label} more than once.")
+                    raise ValueError(f"Found axis label {label} more than once.")
 
                 points[point] = (labeled_path.far, value, unit)
 
@@ -654,7 +653,7 @@ class SVGPlot:
             unit = label.unit or None
 
             if axis not in self.axis_variables:
-                raise Exception(
+                raise ValueError(
                     f"Expected label on scalebar to be one of {*self.axis_variables,} but found {axis}."
                 )
 
@@ -758,7 +757,7 @@ class SVGPlot:
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
-                raise Exception(f"Found an axis label and scale bar for {label}.")
+                raise ValueError(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
 
@@ -798,13 +797,41 @@ class SVGPlot:
             >>> plot.scaling_factors
             {'x': 50.6, 'y': 50.6}
 
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <text x="0" y="0">j_scaling_factor: 24.5</text>
+            ...   <text x="0" y="0">Esf: 18.3</text>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.scaling_factors
+            {'E': 18.3, 'j': 24.5}
+
         """
         scaling_factors = {axis: 1 for axis in self.axis_variables}
 
-        for label in self.svg.get_texts(
-            r"^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)"
-        ):
-            scaling_factors[label.axis] = float(label.value)
+        for key in scaling_factors.keys():
+            for label in self.svg.get_texts(
+                rf"^(?P<axis>{key})(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)"
+            ):
+                scaling_factors[label.axis] = float(label.value)
 
         return scaling_factors
 
@@ -1204,13 +1231,13 @@ class SVGPlot:
             >>> plot.curve
             Traceback (most recent call last):
             ...
-            Exception: No curve main curve found in SVG.
+            ValueError: No curve main curve found in the SVG.
 
         """
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
-            raise Exception("No curve found in SVG.")
+            raise ValueError("No curve found in the SVG.")
 
         curves = [
             curve
@@ -1219,14 +1246,14 @@ class SVGPlot:
         ]
 
         if len(curves) == 0:
-            raise Exception(f"No curve {self._curve} found in SVG.")
+            raise ValueError(f"No curve {self._curve} found in the SVG.")
         if len(curves) > 1:
-            raise Exception(f"More than one curve {self._curve} fonud in SVG.")
+            raise ValueError(f"More than one curve {self._curve} found in the SVG.")
 
         paths = curves[0]
 
         if len(paths) == 0:
-            raise Exception("Curve has not a single <path>.")
+            raise ValueError("Curve has not a single <path>.")
         if len(paths) > 1:
             raise NotImplementedError("Cannot handle curve with more than one <path>.")
 
