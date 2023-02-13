@@ -299,9 +299,7 @@ def _create_package(metadata, csvname, outdir):
 
     # Update fields in the datapackage describing the data in the CSV
     package_schema = package.resources[0].schema
-    data_description_schema = Schema.from_descriptor(
-        package.custom["data description"]
-    )
+    data_description_schema = Schema.from_descriptor(package.custom["data description"])
 
     new_fields = []
     for name in package_schema.field_names:
