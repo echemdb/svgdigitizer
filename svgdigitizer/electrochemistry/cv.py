@@ -74,7 +74,7 @@ class CV:
     It requires:
 
     * | that the x-axis is labeled with U or E (V) and the y-axis
-      | is labeld by I (A) or j (A / cm2)
+      | is labeled by I (A) or j (A / cm2)
     * | that the label of the second point (furthest from the origin)
       | on the x- or y-axis contains a value and a unit
       | such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.
@@ -87,7 +87,7 @@ class CV:
 
     * | A comment describing the data, i.e.,
       | ``<text>comment: noisy data</text>``
-    * | Other measurements linked to this measurement or performed simultanouesly, i.e.,
+    * | Other measurements linked to this measurement or performed simultaneously, i.e.,
       | ``<text>linked: SXRD, DEMS</text>``
     * | A list of tags describing the content of a plot, i.e.,
       | ``<text>tags: BCV, HER, OER</text>``
@@ -185,6 +185,10 @@ class CV:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
@@ -216,6 +220,10 @@ class CV:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">j1: 0 uA / cm2</text>
             ...   </g>
@@ -243,7 +251,10 @@ class CV:
         dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))
 
         if len(dimensions) == 1:
-            if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "x":
+            if (
+                self.svgplot.schema.get_field(dimensions[0]).custom["orientation"]
+                == "x"
+            ):
                 return dimensions[0]
             raise Exception("The voltage must be on the x-axis.")
 
@@ -263,6 +274,10 @@ class CV:
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
@@ -289,7 +304,10 @@ class CV:
         dimensions = list(set(["I", "j"]).intersection(self.svgplot.schema.field_names))
 
         if len(dimensions) == 1:
-            if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "y":
+            if (
+                self.svgplot.schema.get_field(dimensions[0]).custom["orientation"]
+                == "y"
+            ):
                 return dimensions[0]
             raise Exception("The current must be on the x-axis.")
 
@@ -313,6 +331,10 @@ class CV:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
@@ -332,9 +354,9 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-                        {'name': 'j', 'unit': 'A / m2'},
-                        {'name': 't', 'unit': 's'}]}
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+                        {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         An SVG with a current axis with dimension I and
         a voltage axis with dimension U.::
@@ -345,6 +367,10 @@ class CV:
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">U1: 0 V</text>
@@ -365,28 +391,30 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'U', 'reference': 'unknown', 'unit': 'V'},
-                        {'name': 'I', 'unit': 'A'},
-                        {'name': 't', 'unit': 's'}]}
+            {'fields': [{'name': 'U', 'type': 'number', 'unit': 'V', 'reference': 'unknown'},
+                        {'name': 'I', 'type': 'number', 'unit': 'A'},
+                        {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         """
+        from frictionless import fields
 
         schema = self.figure_schema
 
-        schema.get_field(self.voltage_dimension)["unit"] = "V"
-        del schema.get_field(self.voltage_dimension)["orientation"]
+        schema.get_field(self.voltage_dimension).custom["unit"] = "V"
+        del schema.get_field(self.voltage_dimension).custom["orientation"]
         if self.current_dimension == "I":
-            schema.get_field(self.current_dimension)["unit"] = "A"
+            schema.get_field(self.current_dimension).custom["unit"] = "A"
         elif self.current_dimension == "j":
-            schema.get_field(self.current_dimension)["unit"] = "A / m2"
+            schema.get_field(self.current_dimension).custom["unit"] = "A / m2"
         else:
             raise Exception(
                 "None of the axis labels has a dimension current 'I' or current density 'j'."
             )
 
-        del schema.get_field(self.current_dimension)["orientation"]
-        schema.add_field(name="t")
-        schema.get_field("t")["unit"] = "s"
+        del schema.get_field(self.current_dimension).custom["orientation"]
+
+        schema.add_field(fields.NumberField(name="t"))
+        schema.update_field("t", {"unit": "s"})
 
         return schema
 
@@ -408,6 +436,10 @@ class CV:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
@@ -427,8 +459,8 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.figure_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'orientation': 'x', 'reference': 'RHE', 'unit': 'V'},
-                        {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}]}
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'x', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
 
         """
         import re
@@ -437,11 +469,15 @@ class CV:
 
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
         match = re.match(
-            pattern, schema.get_field(self.voltage_dimension)["unit"], re.IGNORECASE
+            pattern,
+            schema.get_field(self.voltage_dimension).custom["unit"],
+            re.IGNORECASE,
         )
 
-        schema.get_field(self.voltage_dimension)["unit"] = match[1]
-        schema.get_field(self.voltage_dimension)["reference"] = match[2] or "unknown"
+        schema.update_field(
+            self.voltage_dimension,
+            {"unit": match[1], "reference": match[2] or "unknown"},
+        )
 
         return schema
 
@@ -729,7 +765,7 @@ class CV:
 
         """
         voltage = 1 * u.Unit(
-            self.figure_schema.get_field(self.voltage_dimension)["unit"]
+            self.figure_schema.get_field(self.voltage_dimension).custom["unit"]
         )
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
@@ -774,7 +810,7 @@ class CV:
 
         """
         current = 1 * u.Unit(
-            self.figure_schema.get_field(self.current_dimension)["unit"]
+            self.figure_schema.get_field(self.current_dimension).custom["unit"]
         )
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
@@ -875,15 +911,15 @@ class CV:
         plt.xlabel(
             self.voltage_dimension
             + " ["
-            + str(self.data_schema.get_field(self.voltage_dimension)["unit"])
+            + str(self.data_schema.get_field(self.voltage_dimension).custom["unit"])
             + " vs. "
-            + self.data_schema.get_field(self.voltage_dimension)["reference"]
+            + self.data_schema.get_field(self.voltage_dimension).custom["reference"]
             + "]"
         )
         plt.ylabel(
             self.current_dimension
             + " ["
-            + str(self.data_schema.get_field(self.current_dimension)["unit"])
+            + str(self.data_schema.get_field(self.current_dimension).custom["unit"])
             + "]"
         )
 
