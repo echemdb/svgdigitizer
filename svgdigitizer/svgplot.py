@@ -1715,7 +1715,7 @@ class SVGPlot:
                         {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'y'}]}
 
         """
-        from frictionless import Resource, Pipeline, steps
+        from frictionless import Pipeline, Resource, steps
 
         # infer the type of the fields from self.df
         resource = Resource(self.df)

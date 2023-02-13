@@ -149,21 +149,22 @@ class CV:
 
         >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
         {'experimental': {'tags': ['BCV', 'HER', 'OER']},
-         'source': {'figure': '2b', 'curve': '0'},
-         'figure description': {'version': 1,
-          'type': 'digitized',
-          'simultaneous measurements': ['SXRD', 'SHG'],
-          'measurement type': 'CV',
-          'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'fields': [{'name': 'E', 'orientation': 'x',
-                    'reference': 'RHE', 'unit': 'mV'},
-                    {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
-                    'comment': 'noisy data'},
-          'data description': {'version': 1, 'type': 'digitized',
-                              'measurement type': 'CV', 'fields':
-                              [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-                              {'name': 'j', 'unit': 'A / m2'},
-                              {'name': 't', 'unit': 's'}]}}
+             'source': {'figure': '2b', 'curve': '0'},
+             'figure description': {'version': 1,
+             'type': 'digitized',
+             'simultaneous measurements': ['SXRD', 'SHG'],
+             'measurement type': 'CV',
+             'scan rate': {'value': 50.0, 'unit': 'V / s'},
+             'fields': [{'name': 'E', 'type': 'number', 'unit': 'mV',
+                        'orientation': 'x', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2',
+                        'orientation': 'y'}],
+                        'comment': 'noisy data'},
+             'data description': {'version': 1, 'type': 'digitized',
+                                  'measurement type': 'CV', 'fields':
+                                  [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
+                                   {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+                                   {'name': 't', 'type': 'number', 'unit': 's'}]}}
 
     """
 
@@ -1164,15 +1165,16 @@ class CV:
              'simultaneous measurements': ['SXRD', 'SHG'],
              'measurement type': 'CV',
              'scan rate': {'value': 50.0, 'unit': 'V / s'},
-             'fields': [{'name': 'E', 'orientation': 'x',
-                        'reference': 'RHE', 'unit': 'mV'},
-                        {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
+             'fields': [{'name': 'E', 'type': 'number', 'unit': 'mV',
+                        'orientation': 'x', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2',
+                        'orientation': 'y'}],
                         'comment': 'noisy data'},
              'data description': {'version': 1, 'type': 'digitized',
                                   'measurement type': 'CV', 'fields':
-                                  [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-                                  {'name': 'j', 'unit': 'A / m2'},
-                                  {'name': 't', 'unit': 's'}]}}
+                                  [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
+                                   {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+                                   {'name': 't', 'type': 'number', 'unit': 's'}]}}
 
         """
         metadata = {
@@ -1192,14 +1194,14 @@ class CV:
                     "value": float(self.scan_rate.value),
                     "unit": str(self.scan_rate.unit),
                 },
-                "fields": self.figure_schema.fields,
+                "fields": self.figure_schema.to_dict()["fields"],
                 "comment": self.comment,
             },
             "data description": {
                 "version": 1,
                 "type": "digitized",
                 "measurement type": "CV",
-                "fields": self.data_schema.fields,
+                "fields": self.data_schema.to_dict()["fields"],
             },
         }
 

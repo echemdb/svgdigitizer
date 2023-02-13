@@ -233,7 +233,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).figure_schema.get_field("E")["unit"])
+        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
@@ -249,7 +249,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
             from astropy import units as u
 
             sampling_interval /= u.Unit(
-                cv.figure_schema.get_field(cv.voltage_dimension)["unit"]
+                cv.figure_schema.get_field(cv.voltage_dimension).custom["unit"]
             ).to(u.V)
 
     if metadata:
@@ -297,8 +297,8 @@ def _create_package(metadata, csvname, outdir):
     )
     package.infer()
     # Update fields in the datapackage describing the data in the CSV
-    package_schema = package["resources"][0]["schema"]
-    data_description_schema = Schema(fields=package["data description"]["fields"])
+    package_schema = package.resources[0].schema
+    data_description_schema = Schema(fields=package["data description"]["fields"]) #######!!!!! This might be an issue
 
     new_fields = []
     for name in package_schema.field_names:
@@ -311,7 +311,7 @@ def _create_package(metadata, csvname, outdir):
             | package_schema.get_field(name).to_dict()
         )
 
-    package["resources"][0]["schema"]["fields"] = new_fields
+    package.resources[0].schema.fields = new_fields
     del package["data description"]["fields"]
 
     return package
