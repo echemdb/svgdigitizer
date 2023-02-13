@@ -306,7 +306,7 @@ def _create_package(metadata, csvname, outdir):
     for name in package_schema.field_names:
         if not name in data_description_schema.field_names:
             raise KeyError(
-                f"Field with name {name} is not specified in `data_descripton.fields`."
+                f"Field with name {name} is not specified in `data_description.fields`."
             )
         new_fields.append(
             data_description_schema.get_field(name).to_dict()
