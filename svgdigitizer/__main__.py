@@ -343,6 +343,8 @@ def _write_metadata(out, metadata):
     import json
 
     json.dump(metadata, out, default=defaultconverter)
+    # json.dump does not save files with a newline, which compromises the tests
+    # where the output files are compared to an expected json.
     out.write("\n")
 
 
