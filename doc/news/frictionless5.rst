@@ -1,23 +1,4 @@
-**Added:**
-
-* Added <news item>.
-
 **Changed:**
 
-* Changed <news item>.
-
-**Removed:**
-
-* Removed <news item>.
-
-**Fixed:**
-
-* Fixed <news item>.
-
-**Deprecated:**
-
-* Deprecated <news item>.
-
-**Performance:**
-
-* Improved <news item>.
+* Upgraded to frictionless >5.5.
+* JSON metadata files are saved with a newline at the end of the file.
