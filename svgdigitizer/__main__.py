@@ -344,6 +344,7 @@ def _write_metadata(out, metadata):
     import json
 
     json.dump(metadata, out, default=defaultconverter)
+    json.write("\n")
 
 
 def _create_linked_svg(svg, png):
