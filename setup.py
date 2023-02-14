@@ -1,7 +1,7 @@
 # *********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C)      2021 Albert Engstfeld
+#        Copyright (C) 2021-2023 Albert Engstfeld
 #        Copyright (C)      2021 Johannes Hermann
 #        Copyright (C) 2021-2022 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
@@ -25,7 +25,7 @@ from distutils.core import setup
 setup(
     name="svgdigitizer",
     version="0.6.1",
-    packages=["svgdigitizer", "svgdigitizer.electrochemistry", "svgdigitizer.test"],
+    packages=["svgdigitizer", "svgdigitizer.electrochemistry", "svgdigitizer.test", "svgdigitizer.models"],
     license="GPL 3.0+",
     description="svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications.",
     long_description=open("README.md", encoding="UTF-8").read(),

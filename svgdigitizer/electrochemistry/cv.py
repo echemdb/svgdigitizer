@@ -18,7 +18,7 @@ where the curve is traced, the axes are labeled and the scan rate is provided.
 This SVG file can then be analyzed by this class to produce the coordinates
 corresponding to the original measured values.
 
-A more detailed description on preparing the SVG files is provieded in the :class:`CV`
+A more detailed description on preparing the SVG files is provided in the :class:`CV`
 or ...
 
 TODO:: Link to workflow.md (see issue #73)
@@ -29,7 +29,7 @@ For the documentation below, the path of a CV is presented simply as a line.
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021-2022 Albert Engstfeld
+#        Copyright (C) 2021-2023 Albert Engstfeld
 #        Copyright (C) 2021      Johannes Hermann
 #        Copyright (C) 2021-2022 Julian Rüth
 #        Copyright (C) 2021      Nicolas Hörmann
@@ -74,7 +74,7 @@ class CV:
     It requires:
 
     * | that the x-axis is labeled with U or E (V) and the y-axis
-      | is labeld by I (A) or j (A / cm2)
+      | is labeled by I (A) or j (A / cm2)
     * | that the label of the second point (furthest from the origin)
       | on the x- or y-axis contains a value and a unit
       | such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.
@@ -104,7 +104,7 @@ class CV:
         ... <svg>
         ...   <g>
         ...     <path d="M 0 100 L 100 0" />
-        ...     <text x="0" y="0">curve: 0</text>
+        ...     <text x="0" y="0">curve: solid</text>
         ...   </g>
         ...   <g>
         ...     <path d="M 0 200 L 0 100" />
@@ -149,7 +149,7 @@ class CV:
 
         >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
         {'experimental': {'tags': ['BCV', 'HER', 'OER']},
-         'source': {'figure': '2b', 'curve': '0'},
+         'source': {'figure': '2b', 'curve': 'solid'},
          'figure description': {'version': 1,
           'type': 'digitized',
           'simultaneous measurements': ['SXRD', 'SHG'],
@@ -843,7 +843,7 @@ class CV:
             ... <svg>
             ...   <g>
             ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
+            ...     <text x="0" y="0">curve: solid</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
