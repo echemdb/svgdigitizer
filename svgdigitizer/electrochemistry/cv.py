@@ -246,7 +246,7 @@ class CV:
             >>> cv.voltage_dimension
             Traceback (most recent call last):
             ...
-            Exception: The voltage must be on the x-axis.
+            ValueError: The voltage must be on the x-axis.
 
         """
         dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))
@@ -257,9 +257,9 @@ class CV:
                 == "x"
             ):
                 return dimensions[0]
-            raise Exception("The voltage must be on the x-axis.")
+            raise ValueError("The voltage must be on the x-axis.")
 
-        raise Exception("No voltage axis or more than one voltage axis found.")
+        raise ValueError("No voltage axis or more than one voltage axis found.")
 
     @property
     def current_dimension(self):
@@ -310,9 +310,9 @@ class CV:
                 == "y"
             ):
                 return dimensions[0]
-            raise Exception("The current must be on the x-axis.")
+            raise ValueError("The current must be on the x-axis.")
 
-        raise Exception("No current axis or more than one current axis found.")
+        raise ValueError("No current axis or more than one current axis found.")
 
     @property
     def data_schema(self):
@@ -408,7 +408,7 @@ class CV:
         elif self.current_dimension == "j":
             schema.get_field(self.current_dimension).custom["unit"] = "A / m2"
         else:
-            raise Exception(
+            raise ValueError(
                 "None of the axis labels has a dimension current 'I' or current density 'j'."
             )
 

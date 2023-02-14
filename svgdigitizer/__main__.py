@@ -287,7 +287,6 @@ def _create_package(metadata, csvname, outdir):
     from frictionless import Package, Resource, Schema
 
     package = Package(
-        metadata,
         resources=[
             Resource(
                 path=os.path.basename(csvname),
@@ -296,11 +295,11 @@ def _create_package(metadata, csvname, outdir):
         ],
     )
     package.infer()
+    package.custom = metadata
+
     # Update fields in the datapackage describing the data in the CSV
     package_schema = package.resources[0].schema
-    data_description_schema = Schema(
-        fields=package["data description"]["fields"]
-    )  #######!!!!! This might be an issue
+    data_description_schema = Schema.from_descriptor(package.custom["data description"])
 
     new_fields = []
     for name in package_schema.field_names:
@@ -313,8 +312,8 @@ def _create_package(metadata, csvname, outdir):
             | package_schema.get_field(name).to_dict()
         )
 
-    package.resources[0].schema.fields = new_fields
-    del package["data description"]["fields"]
+    package.resources[0].schema.metadata_defaults["fields"] = new_fields
+    del package.custom["data description"]["fields"]
 
     return package
 

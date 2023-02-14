@@ -623,7 +623,7 @@ class SVGPlot:
                 unit = label.unit or None
 
                 if point in points:
-                    raise Exception(f"Found axis label {label} more than once.")
+                    raise ValueError(f"Found axis label {label} more than once.")
 
                 points[point] = (labeled_path.far, value, unit)
 
@@ -653,7 +653,7 @@ class SVGPlot:
             unit = label.unit or None
 
             if axis not in self.axis_variables:
-                raise Exception(
+                raise ValueError(
                     f"Expected label on scalebar to be one of {*self.axis_variables,} but found {axis}."
                 )
 
@@ -757,7 +757,7 @@ class SVGPlot:
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
-                raise Exception(f"Found an axis label and scale bar for {label}.")
+                raise ValueError(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
 
@@ -1231,13 +1231,13 @@ class SVGPlot:
             >>> plot.curve
             Traceback (most recent call last):
             ...
-            Exception: No curve main curve found in SVG.
+            ValueError: No curve main curve found in the SVG.
 
         """
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
-            raise Exception("No curve found in SVG.")
+            raise ValueError("No curve found in the SVG.")
 
         curves = [
             curve
@@ -1246,14 +1246,14 @@ class SVGPlot:
         ]
 
         if len(curves) == 0:
-            raise Exception(f"No curve {self._curve} found in SVG.")
+            raise ValueError(f"No curve {self._curve} found in the SVG.")
         if len(curves) > 1:
-            raise Exception(f"More than one curve {self._curve} fonud in SVG.")
+            raise ValueError(f"More than one curve {self._curve} found in the SVG.")
 
         paths = curves[0]
 
         if len(paths) == 0:
-            raise Exception("Curve has not a single <path>.")
+            raise ValueError("Curve has not a single <path>.")
         if len(paths) > 1:
             raise NotImplementedError("Cannot handle curve with more than one <path>.")
 
