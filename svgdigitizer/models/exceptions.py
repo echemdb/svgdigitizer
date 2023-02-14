@@ -28,64 +28,6 @@ class SVGContentError(RuntimeError):
 class AnnotationError(SVGContentError):
     """The annotations in the SVG are is missing or incorrect."""
 
-
-# class MissingCurveLabelError(SVGContentError):
-#     r"""
-#     Raised when no curve label is found in the SVG.
-
-#     EXAMPLES::
-
-#         >>> from svgdigitizer.svg import SVG
-#         >>> from svgdigitizer.svgplot import SVGPlot
-#         >>> from io import StringIO
-#         >>> svg = SVG(StringIO(r'''
-#         ... <svg>
-#         ...   <g>
-#         ...     <path d="M 0 100 L 100 0" />
-#         ...     <text x="0" y="0">kurve: 0</text>
-#         ...   </g>
-#         ...   <g>
-#         ...     <path d="M 0 200 L 0 100" />
-#         ...     <text x="0" y="200">x1: 0</text>
-#         ...   </g>
-#         ...   <g>
-#         ...     <path d="M 100 200 L 100 100" />
-#         ...     <text x="100" y="200">x2: 1</text>
-#         ...   </g>
-#         ...   <g>
-#         ...     <path d="M -100 100 L 0 100" />
-#         ...     <text x="-100" y="100">y1: 0</text>
-#         ...   </g>
-#         ...   <g>
-#         ...     <path d="M -100 0 L 0 0" />
-#         ...     <text x="-100" y="0">y2: 1</text>
-#         ...   </g>
-#         ... </svg>'''))
-#         >>> plot = SVGPlot(svg)
-#         >>> plot.curve
-#         Traceback (most recent call last):
-#         ...
-#         svgdigitizer.models.exceptions.MissingCurveLabelError: No curve label found in the SVG.
-
-#         >>> plot = SVGPlot(svg, curve="main curve")
-#         >>> plot.curve
-#         Traceback (most recent call last):
-#         ...
-#         svgdigitizer.models.exceptions.MissingCurveLabelError: No curve label with name 'main curve' found in the SVG.
-
-#     """
-
-#     def __init__(self, curve=None):
-#         self.msg = (
-#             f"No curve label with name '{curve}' found in the SVG."
-#             if curve
-#             else "No curve label found in the SVG."
-#         )
-
-#     def __str__(self):
-#         return self.msg
-
-
 class CurveError(SVGContentError):
     r"""
     In svgdigitizer a curve consists of a group with path and a textlabel.
@@ -93,8 +35,8 @@ class CurveError(SVGContentError):
 
     An error is raised when
     * no path is found in the SVG
-    * a path without a textlabel
-    * a curve label but no path
+    * a path without a textlabel is found
+    * a textlabel is present but no path
 
     EXAMPLES::
 
