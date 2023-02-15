@@ -28,59 +28,10 @@ class SVGContentError(RuntimeError):
 class AnnotationError(SVGContentError):
     """The annotations in the SVG are is missing or incorrect."""
 
+
 class CurveError(SVGContentError):
-    r"""
-    In svgdigitizer a curve consists of a group with path and a textlabel.
-    By default the textlabel must be of type ``<text x="0" y="0">curve: some generic name</text>``.
-
-    An error is raised when
-    * no path is found in the SVG
-    * a path without a textlabel is found
-    * a textlabel is present but no path
-
-    EXAMPLES::
-
-        >>> from svgdigitizer.svg import SVG
-        >>> from svgdigitizer.svgplot import SVGPlot
-        >>> from io import StringIO
-        >>> svg = SVG(StringIO(r'''
-        ... <svg>
-        ...   <g>
-        ...     <text x="0" y="0">curve: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 0 200 L 0 100" />
-        ...     <text x="0" y="200">x1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M 100 200 L 100 100" />
-        ...     <text x="100" y="200">x2: 1</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 100 L 0 100" />
-        ...     <text x="-100" y="100">y1: 0</text>
-        ...   </g>
-        ...   <g>
-        ...     <path d="M -100 0 L 0 0" />
-        ...     <text x="-100" y="0">y2: 1</text>
-        ...   </g>
-        ... </svg>'''))
-        >>> plot = SVGPlot(svg)
-        >>> plot.curve
-        Traceback (most recent call last):
-        ...
-        svgdigitizer.models.exceptions.CurveError: No path found in the SVG.
-
-
-    Curves with specific labels can be selected::
-
-        >>> plot = SVGPlot(svg, curve="main curve")
-        >>> plot.curve
-        Traceback (most recent call last):
-        ...
-        svgdigitizer.models.exceptions.CurveError: No path with label 'main curve' found in the SVG.
-
-    """
+    """Raised when paths are missing, paths without label were found,
+    path labels were found without a path, or multiple paths were found."""
 
     def __init__(self, curve=None):
         self.msg = (
@@ -93,9 +44,6 @@ class CurveError(SVGContentError):
         return self.msg
 
 
-class MultipleCurveLabelError(SVGContentError):
-    def __init__(self):
-        self.msg = "More than one curve label found in the SVG, but only a single labeled curve is supported."
-
-    def __str__(self):
-        return self.msg
+class AxisError(SVGContentError):
+    """Raised when axis are missing, too many axis are present,
+    or axis are not properly labeled."""

@@ -25,7 +25,7 @@ from distutils.core import setup
 setup(
     name="svgdigitizer",
     version="0.6.1",
-    packages=["svgdigitizer", "svgdigitizer.electrochemistry", "svgdigitizer.test", "svgdigitizer.models"],
+    packages=["svgdigitizer", "svgdigitizer.electrochemistry", "svgdigitizer.test"],
     license="GPL 3.0+",
     description="svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications.",
     long_description=open("README.md", encoding="UTF-8").read(),

@@ -53,6 +53,8 @@ from functools import cached_property
 import matplotlib.pyplot as plt
 from astropy import units as u
 
+from svgdigitizer.exceptions import AnnotationError, AxisError
+
 logger = logging.getLogger("cv")
 
 
@@ -237,7 +239,7 @@ class CV:
             >>> cv.voltage_dimension
             Traceback (most recent call last):
             ...
-            ValueError: The voltage must be on the x-axis.
+            svgdigitizer.exceptions.AxisError: The voltage must be on the x-axis in the SVG.
 
         """
         dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))
@@ -245,9 +247,11 @@ class CV:
         if len(dimensions) == 1:
             if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "x":
                 return dimensions[0]
-            raise ValueError("The voltage must be on the x-axis.")
+            raise AxisError("The voltage must be on the x-axis in the SVG.")
 
-        raise ValueError("No voltage axis or more than one voltage axis found.")
+        raise AxisError(
+            "No voltage axis or more than one voltage axis found in the SVG."
+        )
 
     @property
     def current_dimension(self):
@@ -291,9 +295,11 @@ class CV:
         if len(dimensions) == 1:
             if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "y":
                 return dimensions[0]
-            raise ValueError("The current must be on the x-axis.")
+            raise AxisError("The current must be on the x-axis in the SVG.")
 
-        raise ValueError("No current axis or more than one current axis found.")
+        raise AxisError(
+            "No current axis or more than one current axis found in the SVG."
+        )
 
     @property
     def data_schema(self):
@@ -380,8 +386,8 @@ class CV:
         elif self.current_dimension == "j":
             schema.get_field(self.current_dimension)["unit"] = "A / m2"
         else:
-            raise ValueError(
-                "None of the axis labels has a dimension current 'I' or current density 'j'."
+            raise AxisError(
+                "None of the axis labels in the SVG have a dimension current 'I' or current density 'j'."
             )
 
         del schema.get_field(self.current_dimension)["orientation"]
@@ -598,15 +604,15 @@ class CV:
         )
 
         if len(rates) > 1:
-            raise ValueError(
-                "Multiple text fields with a scan rate were provided in the SVG file. Remove all but one."
+            raise AnnotationError(
+                "Multiple text fields with a scan rate were provided in the SVG. Remove all but one."
             )
 
         if not rates:
             rate = self._metadata.get("figure description", {}).get("scan rate", {})
 
             if "value" not in rate or "unit" not in rate:
-                raise ValueError("No text with scan rate found in the SVG.")
+                raise AnnotationError("No text with scan rate found in the SVG.")
 
             return float(rate["value"]) * u.Unit(str(rate["unit"]))
 

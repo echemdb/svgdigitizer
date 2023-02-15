@@ -139,7 +139,7 @@ from functools import cached_property
 
 import pandas as pd
 
-from svgdigitizer.models.exceptions import CurveError, MultipleCurveLabelError
+from svgdigitizer.exceptions import CurveError
 
 logger = logging.getLogger("svgplot")
 
@@ -1233,7 +1233,7 @@ class SVGPlot:
             >>> plot.curve
             Traceback (most recent call last):
             ...
-            svgdigitizer.models.exceptions.CurveError: No path with label 'main curve' found in the SVG.
+            svgdigitizer.exceptions.CurveError: No path with label 'main curve' found in the SVG.
 
         """
         curves = self.labeled_paths["curve"]
@@ -1250,7 +1250,7 @@ class SVGPlot:
         if len(curves) == 0:
             raise CurveError(self._curve)
         if len(curves) > 1:
-            raise MultipleCurveLabelError
+            raise NotImplementedError("Cannot handle multiple curves in an SVG.")
 
         paths = curves[0]
 
