@@ -4,6 +4,22 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.6.1
+====================
+
+**Fixed:**
+
+* Fixed garbage collection of instances with cached properties.
+* Fixed an incompatibility of frictionless & click. (#152)
+* Declared dependency on Python 3.9 when installing from PyPI (we use functools.cache which is not available before.)
+* Restored changelog template.
+* Fixed `svgplot.scaling_factors` such that scaling factors are now determined for any kind of axis dimension (so far only for axis labeled `x` or `y`).
+* Fixed broken links in the documentation.
+* Fixed Github workflow files.
+* Fixed doctests according to module updates.
+
+
+
 v0.6.0
 ====================
 

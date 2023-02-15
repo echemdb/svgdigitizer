@@ -155,13 +155,13 @@ class CV:
           'simultaneous measurements': ['SXRD', 'SHG'],
           'measurement type': 'CV',
           'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x',
-                    'reference': 'RHE'},
-                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
+          'fields': [{'name': 'E', 'orientation': 'x',
+                    'reference': 'RHE', 'unit': 'mV'},
+                    {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
                     'comment': 'noisy data'},
           'data description': {'version': 1, 'type': 'digitized',
                               'measurement type': 'CV', 'fields':
-                              [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                              [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
                               {'name': 'j', 'unit': 'A / m2'},
                               {'name': 't', 'unit': 's'}]}}
 
@@ -332,7 +332,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+            {'fields': [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
                         {'name': 'j', 'unit': 'A / m2'},
                         {'name': 't', 'unit': 's'}]}
 
@@ -365,7 +365,7 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'U', 'unit': 'V', 'reference': 'unknown'},
+            {'fields': [{'name': 'U', 'reference': 'unknown', 'unit': 'V'},
                         {'name': 'I', 'unit': 'A'},
                         {'name': 't', 'unit': 's'}]}
 
@@ -427,8 +427,8 @@ class CV:
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.figure_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'unit': 'V', 'orientation': 'x', 'reference': 'RHE'},
-                        {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}]}
+            {'fields': [{'name': 'E', 'orientation': 'x', 'reference': 'RHE', 'unit': 'V'},
+                        {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}]}
 
         """
         import re
@@ -1011,7 +1011,7 @@ class CV:
 
         """
         linked = self.svgplot.svg.get_texts(
-            "(?:simultaneous measuerment|linked|linked measurement): (?P<value>.*)"
+            "(?:simultaneous measurement|linked|linked measurement): (?P<value>.*)"
         )
 
         if len(linked) > 1:
@@ -1128,13 +1128,13 @@ class CV:
              'simultaneous measurements': ['SXRD', 'SHG'],
              'measurement type': 'CV',
              'scan rate': {'value': 50.0, 'unit': 'V / s'},
-             'fields': [{'name': 'E', 'unit': 'mV', 'orientation': 'x',
-                        'reference': 'RHE'},
-                        {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
+             'fields': [{'name': 'E', 'orientation': 'x',
+                        'reference': 'RHE', 'unit': 'mV'},
+                        {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
                         'comment': 'noisy data'},
              'data description': {'version': 1, 'type': 'digitized',
                                   'measurement type': 'CV', 'fields':
-                                  [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+                                  [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
                                   {'name': 'j', 'unit': 'A / m2'},
                                   {'name': 't', 'unit': 's'}]}}
 

@@ -616,7 +616,6 @@ class SVGPlot:
         # Process explicitly marked point on the axes.
 
         for grouped_paths in self._grouped_ref_points.values():
-
             for labeled_path in grouped_paths:
                 label = labeled_path.label
                 point = label.point
@@ -798,13 +797,41 @@ class SVGPlot:
             >>> plot.scaling_factors
             {'x': 50.6, 'y': 50.6}
 
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <text x="0" y="0">j_scaling_factor: 24.5</text>
+            ...   <text x="0" y="0">Esf: 18.3</text>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot.scaling_factors
+            {'E': 18.3, 'j': 24.5}
+
         """
         scaling_factors = {axis: 1 for axis in self.axis_variables}
 
-        for label in self.svg.get_texts(
-            r"^(?P<axis>x|y)(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)"
-        ):
-            scaling_factors[label.axis] = float(label.value)
+        for key in scaling_factors.keys():
+            for label in self.svg.get_texts(
+                rf"^(?P<axis>{key})(_scaling_factor|sf)\: (?P<value>-?\d+\.?\d*)"
+            ):
+                scaling_factors[label.axis] = float(label.value)
 
         return scaling_factors
 
@@ -1684,8 +1711,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 't', 'unit': None, 'orientation': 'x'},
-                        {'name': 'y', 'unit': None, 'orientation': 'y'}]}
+            {'fields': [{'name': 't', 'orientation': 'x', 'unit': None},
+                        {'name': 'y', 'orientation': 'y', 'unit': None}]}
 
 
         """
