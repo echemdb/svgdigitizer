@@ -107,7 +107,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     svg = os.path.join(directory, "xy.svg")
-        ...     with open(svg, "rb") as infile:
+        ...     with open(svg, mode="rb") as infile:
         ...         _create_svgplot(infile, sampling_interval=None, skewed=False)
         <svgdigitizer.svgplot.SVGPlot object at 0x...>
 
@@ -174,7 +174,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
     """
-    with open(svg, "rb") as infile:
+    with open(svg, mode="rb") as infile:
         svg_plot = _create_svgplot(
             infile, sampling_interval=sampling_interval, skewed=skewed
         )
@@ -233,7 +233,8 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).figure_schema.get_field("E").custom["unit"])
+        ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") as svg:
+        ...         print(CV(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
@@ -243,7 +244,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
-        with open(svg, "rb") as infile:
+        with open(svg, mode="rb") as infile:
             cv = CV(_create_svgplot(infile, sampling_interval=None, skewed=skewed))
 
             from astropy import units as u
@@ -257,7 +258,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
 
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
-    with open(svg, "rb") as infile:
+    with open(svg, mode="rb") as infile:
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
@@ -342,7 +343,7 @@ def _write_metadata(out, metadata):
 
     import json
 
-    json.dump(metadata, out, default=defaultconverter)
+    json.dump(metadata, out, default=defaultconverter, ensure_ascii=False)
     # json.dump does not save files with a newline, which compromises the tests
     # where the output files are compared to an expected json.
     out.write("\n")
