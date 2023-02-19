@@ -39,7 +39,6 @@ setup(
         "pandas>=1.3,<2",
         "pdf2image>=1.16,<2",
         "pillow>=9,<10",
-        "poppler>=22,<23",
         "pyyaml>=6,<7",
         "scipy>=1.7,<2",
         "svg.path>=4.1,<5",
