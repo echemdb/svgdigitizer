@@ -574,6 +574,68 @@ class SVGPlot:
         r"""
         Return the reference points grouped by axis variable.
 
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._grouped_ref_points
+            {'t': [Path "t1: 0", Path "t2: 1"], 'y': [Path "y1: 0", Path "y2: 1"]}
+
+        TESTS:
+
+        Test that errors in the data are reported correctly::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._grouped_ref_points
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables ['t'] on the axes.
+
+        ::
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._grouped_ref_points
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Expected exactly one path to be grouped with t1: 0
+
         """
 
         def variable(point):
@@ -584,10 +646,11 @@ class SVGPlot:
             assert len(labeled_paths) != 0
 
             if len(labeled_paths) != 1:
-                raise AnnotationError(
+                raise SVGAnnotationError(
                     f"Expected exactly one path to be grouped with {labeled_paths.label}"
                 )
             ref_points.append(labeled_paths[0])
+
         # sort variables for simpler testing of dependent methods
         variables = sorted(set(variable(point) for point in ref_points))
 
@@ -595,6 +658,10 @@ class SVGPlot:
             v: [point for point in ref_points if variable(point) == v]
             for v in variables
         }
+
+        # sort paths by label (also simplifies doctesting)
+        for paths in grouped_ref_points.values():
+            paths.sort(key=lambda path: str(path.label))
 
         if len(variables) != 2:
             raise NotImplementedError(
