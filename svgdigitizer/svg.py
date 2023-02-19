@@ -409,7 +409,7 @@ class LabeledPaths(list):
 
     def __init__(self, label, paths, match):
         if not paths:
-            raise ValueError("LabeledPaths must consist of at least one path.")
+            raise ValueError("paths must consist of at least one path.")
 
         self._label = Text(label, match)
         super().__init__([LabeledPath(path, self._label) for path in paths])
