@@ -9,7 +9,7 @@ dependencies:
   - astropy>=5,<6
   - black
   - click=8.0.3
-  - frictionless>=4,<5
+  - frictionless>=5.5.0,<6
   - isort
   - jupytext
   - matplotlib-base>=3.5,<4
