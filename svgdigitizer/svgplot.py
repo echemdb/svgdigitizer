@@ -762,13 +762,108 @@ class SVGPlot:
         the SVG coordinate system to the point's coordinates in the plot
         coordinate system, or `None` if that point's coordinate is not known.
 
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <text x="-300" y="300">y_scale_bar: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+
+        The SVG has a scalebar that specifies that a y-translation of
+        100 in the SVG coordinate system, corresponds to 1 meter. The
+        orientation is always such that coordinates grow to the right and to
+        the top. Since `y1` at (0, 100) corresponds to y=0, we find that `y2`
+        at (0, 0) corresponds to 1 meter::
+
+            >>> base = {'y1': ((0, 100), 0, None)}
+            >>> plot._marked_points_from_scalebars(base)
+            {'y2': ((0.0, 0.0), 1.0, 'm')}
+
+        TESTS:
+
+        Verify that errors are reported correctly::
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <path d="M -300 300 L -200 100" />
+            ...     <text x="-300" y="300">y_scale_bar: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_scalebars(base)
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Expected exactly two paths to be grouped with the scalebar label y_scale_bar: 1m but found 3.
+
+        ::
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <text x="-300" y="300">z_scale_bar: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_scalebars(base)
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Expected label on scalebar to be one of ('x', 'y') but found z.
+
         """
         points = {}
 
         # Process scale bars.
         for labeled_paths in self.labeled_paths["scale_bar"]:
             if len(labeled_paths) != 2:
-                raise AnnotationError(
+                raise SVGAnnotationError(
                     f"Expected exactly two paths to be grouped with the scalebar label {labeled_paths.label} but found {len(labeled_paths)}."
                 )
 
@@ -778,7 +873,7 @@ class SVGPlot:
             unit = label.unit or None
 
             if axis not in self.axis_variables:
-                raise AnnotationError(
+                raise SVGAnnotationError(
                     f"Expected label on scalebar to be one of {*self.axis_variables,} but found {axis}."
                 )
 
@@ -792,7 +887,7 @@ class SVGPlot:
             # author of the scalebar was likely not aware.
             # We assume here that the scalebar was meant to be oriented like
             # the coordinate system in the SVG, i.e., x coordinates grow to the
-            # right, y coordinates grow to the bottom.
+            # right, y coordinates grow to the top.
             scalebar = (abs(scalebar[0]), -abs(scalebar[1]))
 
             # Construct the second marked point from the first marked point + scalebar.
