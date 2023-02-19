@@ -34,11 +34,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> svgdigitizer
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            svgdigitizer
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -70,7 +74,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API</a></li>
       <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></li>
   
@@ -500,7 +504,7 @@ in the plot coordinate system.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">curve</span>
 <span class="gt">Traceback (most recent call last):</span>
 <span class="c">...</span>
-<span class="gr">Exception</span>: <span class="n">No curve main curve found in SVG.</span>
+<span class="gr">svgdigitizer.exceptions.SVGAnnotationError</span>: <span class="n">No paths labeled &#39;curve: main curve&#39; found.</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1038,9 +1042,10 @@ plot axes.</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">schema</span>  
-<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;orientation&#39;: &#39;x&#39;, &#39;unit&#39;: None},</span>
-<span class="go">            {&#39;name&#39;: &#39;y&#39;, &#39;orientation&#39;: &#39;y&#39;, &#39;unit&#39;: None}]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">schema</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;fields&#39;</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">},</span>
+<span class="gp">... </span>     <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">}]}</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 </dd></dl>
