@@ -1918,6 +1918,7 @@ class SVGPlot:
         EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
@@ -1943,10 +1944,9 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.schema == {'fields':
-            ...     [{'name': 't', 'type': 'number', 'unit': None, 'orientation': 'x'},
-            ...      {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'y'}]}
-            True
+            >>> plot.schema
+            {'fields': [{'name': 't', 'type': 'number', 'unit': None, 'orientation': 'x'},
+                        {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'y'}]}
 
         """
         from frictionless import Pipeline, Resource, steps

@@ -360,11 +360,10 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.data_schema  == \
-            ... {'fields': [{'name': 'E', 'type': 'number', 'reference': 'RHE', 'unit': 'V'},
-            ...             {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
-            ...             {'name': 't', 'type': 'number', 'unit': 's'}]}
-            True
+            >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+                        {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         An SVG with a current axis with dimension I and
         a voltage axis with dimension U.::
@@ -398,11 +397,10 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.data_schema == \
-            ... {'fields': [{'name': 'U', 'type': 'number', 'reference': 'unknown', 'unit': 'V'},
-            ...             {'name': 'I', 'type': 'number', 'unit': 'A'},
-            ...             {'name': 't', 'type': 'number', 'unit': 's'}]}
-            True
+            >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'U', 'type': 'number', 'unit': 'V', 'reference': 'unknown'},
+                        {'name': 'I', 'type': 'number', 'unit': 'A'},
+                        {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         """
         from frictionless import fields
@@ -467,10 +465,9 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.figure_schema == \
-            ... {'fields': [{'name': 'E', 'type': 'number', 'orientation': 'x', 'reference': 'RHE', 'unit': 'V'},
-            ...             {'name': 'j', 'type': 'number', 'orientation': 'y', 'unit': 'uA / cm2'}]}
-            True
+            >>> cv.figure_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'x', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
 
         """
         import re
