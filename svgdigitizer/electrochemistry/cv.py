@@ -31,7 +31,7 @@ For the documentation below, the path of a CV is presented simply as a line.
 #
 #        Copyright (C) 2021-2023 Albert Engstfeld
 #        Copyright (C) 2021      Johannes Hermann
-#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C) 2021      Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
@@ -53,7 +53,7 @@ from functools import cached_property
 import matplotlib.pyplot as plt
 from astropy import units as u
 
-from svgdigitizer.exceptions import AnnotationError, AxisError
+from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("cv")
 
@@ -149,23 +149,24 @@ class CV:
 
     The properties of the original plot and the dataframe can be returned as a dict::
 
-        >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
-        {'experimental': {'tags': ['BCV', 'HER', 'OER']},
-         'source': {'figure': '2b', 'curve': 'solid'},
-         'figure description': {'version': 1,
-          'type': 'digitized',
-          'simultaneous measurements': ['SXRD', 'SHG'],
-          'measurement type': 'CV',
-          'scan rate': {'value': 50.0, 'unit': 'V / s'},
-          'fields': [{'name': 'E', 'orientation': 'x',
-                    'reference': 'RHE', 'unit': 'mV'},
-                    {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
-                    'comment': 'noisy data'},
-          'data description': {'version': 1, 'type': 'digitized',
-                              'measurement type': 'CV', 'fields':
-                              [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-                              {'name': 'j', 'unit': 'A / m2'},
-                              {'name': 't', 'unit': 's'}]}}
+        >>> cv.metadata  == \
+        ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
+        ...  'source': {'figure': '2b', 'curve': 'solid'},
+        ...  'figure description': {'version': 1,
+        ...                         'type': 'digitized',
+        ...                         'simultaneous measurements': ['SXRD', 'SHG'],
+        ...                         'measurement type': 'CV',
+        ...                         'scan rate': {'value': 50.0, 'unit': 'V / s'},
+        ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'x', 'reference': 'RHE'},
+        ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
+        ...                         'comment': 'noisy data'},
+        ...  'data description': {'version': 1,
+        ...                       'type': 'digitized',
+        ...                       'measurement type': 'CV',
+        ...                       'fields': [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
+        ...                                  {'name': 'j', 'unit': 'A / m2'},
+        ...                                  {'name': 't', 'unit': 's'}]}}
+        True
 
     """
 
@@ -239,7 +240,7 @@ class CV:
             >>> cv.voltage_dimension
             Traceback (most recent call last):
             ...
-            svgdigitizer.exceptions.AxisError: The voltage must be on the x-axis in the SVG.
+            svgdigitizer.exceptions.SVGAnnotationError: The voltage must be on the x-axis in the SVG.
 
         """
         dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))
@@ -247,9 +248,9 @@ class CV:
         if len(dimensions) == 1:
             if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "x":
                 return dimensions[0]
-            raise AxisError("The voltage must be on the x-axis in the SVG.")
+            raise SVGAnnotationError("The voltage must be on the x-axis in the SVG.")
 
-        raise AxisError(
+        raise SVGAnnotationError(
             "No voltage axis or more than one voltage axis found in the SVG."
         )
 
@@ -295,7 +296,7 @@ class CV:
         if len(dimensions) == 1:
             if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "y":
                 return dimensions[0]
-            raise AxisError("The current must be on the x-axis in the SVG.")
+            raise AxisError("The current must be on the y-axis in the SVG.")
 
         raise AxisError(
             "No current axis or more than one current axis found in the SVG."
@@ -337,10 +338,11 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-                        {'name': 'j', 'unit': 'A / m2'},
-                        {'name': 't', 'unit': 's'}]}
+            >>> cv.data_schema  == \
+            ... {'fields': [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
+            ...             {'name': 'j', 'unit': 'A / m2'},
+            ...             {'name': 't', 'unit': 's'}]}
+            True
 
         An SVG with a current axis with dimension I and
         a voltage axis with dimension U.::
@@ -370,10 +372,11 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'U', 'reference': 'unknown', 'unit': 'V'},
-                        {'name': 'I', 'unit': 'A'},
-                        {'name': 't', 'unit': 's'}]}
+            >>> cv.data_schema == \
+            ... {'fields': [{'name': 'U', 'reference': 'unknown', 'unit': 'V'},
+            ...             {'name': 'I', 'unit': 'A'},
+            ...             {'name': 't', 'unit': 's'}]}
+            True
 
         """
 
@@ -432,9 +435,10 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.figure_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'orientation': 'x', 'reference': 'RHE', 'unit': 'V'},
-                        {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}]}
+            >>> cv.figure_schema == \
+            ... {'fields': [{'name': 'E', 'orientation': 'x', 'reference': 'RHE', 'unit': 'V'},
+            ...             {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}]}
+            True
 
         """
         import re
@@ -604,7 +608,7 @@ class CV:
         )
 
         if len(rates) > 1:
-            raise AnnotationError(
+            raise SVGAnnotationError(
                 "Multiple text fields with a scan rate were provided in the SVG. Remove all but one."
             )
 
@@ -612,7 +616,7 @@ class CV:
             rate = self._metadata.get("figure description", {}).get("scan rate", {})
 
             if "value" not in rate or "unit" not in rate:
-                raise AnnotationError("No text with scan rate found in the SVG.")
+                raise SVGAnnotationError("No text with scan rate found in the SVG.")
 
             return float(rate["value"]) * u.Unit(str(rate["unit"]))
 
@@ -1126,23 +1130,24 @@ class CV:
             ...   <text x="-200" y="730">tags: BCV, HER, OER</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.metadata  # doctest: +NORMALIZE_WHITESPACE
-            {'experimental': {'tags': ['BCV', 'HER', 'OER']},
-             'source': {'figure': '2b', 'curve': '0'},
-             'figure description': {'version': 1,
-             'type': 'digitized',
-             'simultaneous measurements': ['SXRD', 'SHG'],
-             'measurement type': 'CV',
-             'scan rate': {'value': 50.0, 'unit': 'V / s'},
-             'fields': [{'name': 'E', 'orientation': 'x',
-                        'reference': 'RHE', 'unit': 'mV'},
-                        {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
-                        'comment': 'noisy data'},
-             'data description': {'version': 1, 'type': 'digitized',
-                                  'measurement type': 'CV', 'fields':
-                                  [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-                                  {'name': 'j', 'unit': 'A / m2'},
-                                  {'name': 't', 'unit': 's'}]}}
+            >>> cv.metadata == \
+            ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
+            ...  'source': {'figure': '2b', 'curve': '0'},
+            ...  'figure description': {'version': 1,
+            ...  'type': 'digitized',
+            ...  'simultaneous measurements': ['SXRD', 'SHG'],
+            ...  'measurement type': 'CV',
+            ...  'scan rate': {'value': 50.0, 'unit': 'V / s'},
+            ...  'fields': [{'name': 'E', 'orientation': 'x',
+            ...             'reference': 'RHE', 'unit': 'mV'},
+            ...             {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
+            ...             'comment': 'noisy data'},
+            ...  'data description': {'version': 1, 'type': 'digitized',
+            ...                       'measurement type': 'CV', 'fields':
+            ...                       [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
+            ...                       {'name': 'j', 'unit': 'A / m2'},
+            ...                       {'name': 't', 'unit': 's'}]}}
+            True
 
         """
         metadata = {

@@ -4,7 +4,8 @@ A collection of custom exceptions for svgdigitizer.
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021-2023 Albert Engstfeld
+#        Copyright (C) 2022-2023 Albert Engstfeld
+#        Copyright (C)      2023 Julian Rüth
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -21,29 +22,42 @@ A collection of custom exceptions for svgdigitizer.
 # ********************************************************************
 
 
-class SVGContentError(RuntimeError):
-    """Raised when facing issues with the structure of the SVG input."""
+class SVGAnnotationError(RuntimeError):
+    """
+    Raised when facing issues with the structure of the SVG input.
 
+    EXAMPLES::
 
-class AnnotationError(SVGContentError):
-    """The annotations in the SVG are is missing or incorrect."""
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">x1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">x2: 1</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">y1: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">y2: 1</text>
+        ...   </g>
+        ... </svg>'''))
+        >>> plot = SVGPlot(svg, curve="main curve")
+        >>> plot.curve
+        Traceback (most recent call last):
+        ...
+        svgdigitizer.exceptions.SVGAnnotationError: No paths labeled 'curve: main curve' found.
 
-
-class CurveError(SVGContentError):
-    """Raised when paths are missing, paths without label were found,
-    path labels were found without a path, or multiple paths were found."""
-
-    def __init__(self, curve=None):
-        self.msg = (
-            f"No path with label '{curve}' found in the SVG."
-            if curve
-            else "No path found in the SVG."
-        )
-
-    def __str__(self):
-        return self.msg
-
-
-class AxisError(SVGContentError):
-    """Raised when axis are missing, too many axis are present,
-    or axis are not properly labeled."""
+    """

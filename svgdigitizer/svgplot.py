@@ -116,7 +116,7 @@ specifying a `sampling_interval`::
 #
 #        Copyright (C) 2021-2022 Albert Engstfeld
 #        Copyright (C) 2021-2022 Johannes Hermann
-#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
@@ -139,7 +139,7 @@ from functools import cached_property
 
 import pandas as pd
 
-from svgdigitizer.exceptions import CurveError
+from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("svgplot")
 
@@ -584,7 +584,7 @@ class SVGPlot:
             assert len(labeled_paths) != 0
 
             if len(labeled_paths) != 1:
-                raise ValueError(
+                raise AnnotationError(
                     f"Expected exactly one path to be grouped with {labeled_paths.label}"
                 )
             ref_points.append(labeled_paths[0])
@@ -625,7 +625,7 @@ class SVGPlot:
                 unit = label.unit or None
 
                 if point in points:
-                    raise ValueError(f"Found axis label {label} more than once.")
+                    raise AxisError(f"Found axis label {label} more than once.")
 
                 points[point] = (labeled_path.far, value, unit)
 
@@ -645,7 +645,7 @@ class SVGPlot:
         # Process scale bars.
         for labeled_paths in self.labeled_paths["scale_bar"]:
             if len(labeled_paths) != 2:
-                raise NotImplementedError(
+                raise AnnotationError(
                     f"Expected exactly two paths to be grouped with the scalebar label {labeled_paths.label} but found {len(labeled_paths)}."
                 )
 
@@ -655,7 +655,7 @@ class SVGPlot:
             unit = label.unit or None
 
             if axis not in self.axis_variables:
-                raise ValueError(
+                raise AnnotationError(
                     f"Expected label on scalebar to be one of {*self.axis_variables,} but found {axis}."
                 )
 
@@ -759,7 +759,7 @@ class SVGPlot:
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
-                raise ValueError(f"Found an axis label and scale bar for {label}.")
+                raise AnnotationError(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
 
@@ -1233,13 +1233,13 @@ class SVGPlot:
             >>> plot.curve
             Traceback (most recent call last):
             ...
-            svgdigitizer.exceptions.CurveError: No path with label 'main curve' found in the SVG.
+            svgdigitizer.exceptions.SVGAnnotationError: No paths labeled 'curve: main curve' found.
 
         """
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
-            raise CurveError(self._curve)
+            raise SVGAnnotationError("No paths labeled 'curve:' found.")
 
         curves = [
             curve
@@ -1248,14 +1248,14 @@ class SVGPlot:
         ]
 
         if len(curves) == 0:
-            raise CurveError(self._curve)
+            raise SVGAnnotationError(f"No paths labeled 'curve: {self._curve}' found.")
         if len(curves) > 1:
             raise NotImplementedError("Cannot handle multiple curves in an SVG.")
 
         paths = curves[0]
 
         if len(paths) == 0:
-            raise CurveError(self._curve)
+            raise SVGAnnotationError(f"Found a label 'curve: {self._curve}' but no paths associated to it.")
         if len(paths) > 1:
             raise NotImplementedError("Cannot handle curve with more than one <path>.")
 
@@ -1713,8 +1713,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 't', 'orientation': 'x', 'unit': None},
-                        {'name': 'y', 'orientation': 'y', 'unit': None}]}
+            {'fields': [{'name': 't', 'unit': None, 'orientation': 'x'},
+                        {'name': 'y', 'unit': None, 'orientation': 'y'}]}
 
 
         """
