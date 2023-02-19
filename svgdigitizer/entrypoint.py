@@ -233,7 +233,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") is svg:
+        ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") as svg:
         ...         print(CV(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
