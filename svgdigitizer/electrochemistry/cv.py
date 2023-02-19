@@ -1011,7 +1011,7 @@ class CV:
 
         """
         linked = self.svgplot.svg.get_texts(
-            "(?:simultaneous measuerment|linked|linked measurement): (?P<value>.*)"
+            "(?:simultaneous measurement|linked|linked measurement): (?P<value>.*)"
         )
 
         if len(linked) > 1:
