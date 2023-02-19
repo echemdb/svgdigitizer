@@ -89,7 +89,7 @@ class CV:
 
     * | A comment describing the data, i.e.,
       | ``<text>comment: noisy data</text>``
-    * | Other measurements linked to this measurement or performed simultanouesly, i.e.,
+    * | Other measurements linked to this measurement or performed simultaneously, i.e.,
       | ``<text>linked: SXRD, DEMS</text>``
     * | A list of tags describing the content of a plot, i.e.,
       | ``<text>tags: BCV, HER, OER</text>``
@@ -157,15 +157,15 @@ class CV:
         ...                         'simultaneous measurements': ['SXRD', 'SHG'],
         ...                         'measurement type': 'CV',
         ...                         'scan rate': {'value': 50.0, 'unit': 'V / s'},
-        ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'x', 'reference': 'RHE'},
-        ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y'}],
+        ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'x', 'reference': 'RHE', 'type': 'number'},
+        ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y', 'type': 'number'}],
         ...                         'comment': 'noisy data'},
         ...  'data description': {'version': 1,
         ...                       'type': 'digitized',
         ...                       'measurement type': 'CV',
-        ...                       'fields': [{'name': 'E', 'unit': 'V', 'reference': 'RHE'},
-        ...                                  {'name': 'j', 'unit': 'A / m2'},
-        ...                                  {'name': 't', 'unit': 's'}]}}
+        ...                       'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
+        ...                                  {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+        ...                                  {'name': 't', 'type': 'number', 'unit': 's'}]}}
         True
 
     """
@@ -187,6 +187,10 @@ class CV:
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
@@ -219,6 +223,10 @@ class CV:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">j1: 0 uA / cm2</text>
             ...   </g>
@@ -246,7 +254,10 @@ class CV:
         dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))
 
         if len(dimensions) == 1:
-            if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "x":
+            if (
+                self.svgplot.schema.get_field(dimensions[0]).custom["orientation"]
+                == "x"
+            ):
                 return dimensions[0]
             raise SVGAnnotationError("The voltage must be on the x-axis in the SVG.")
 
@@ -268,6 +279,10 @@ class CV:
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
@@ -294,7 +309,10 @@ class CV:
         dimensions = list(set(["I", "j"]).intersection(self.svgplot.schema.field_names))
 
         if len(dimensions) == 1:
-            if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "y":
+            if (
+                self.svgplot.schema.get_field(dimensions[0]).custom["orientation"]
+                == "y"
+            ):
                 return dimensions[0]
             raise SVGAnnotationError("The current must be on the y-axis in the SVG.")
 
@@ -320,6 +338,10 @@ class CV:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
             ...   </g>
@@ -338,11 +360,10 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.data_schema  == \
-            ... {'fields': [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-            ...             {'name': 'j', 'unit': 'A / m2'},
-            ...             {'name': 't', 'unit': 's'}]}
-            True
+            >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+                        {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         An SVG with a current axis with dimension I and
         a voltage axis with dimension U.::
@@ -353,6 +374,10 @@ class CV:
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">U1: 0 V</text>
@@ -372,30 +397,31 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.data_schema == \
-            ... {'fields': [{'name': 'U', 'reference': 'unknown', 'unit': 'V'},
-            ...             {'name': 'I', 'unit': 'A'},
-            ...             {'name': 't', 'unit': 's'}]}
-            True
+            >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'U', 'type': 'number', 'unit': 'V', 'reference': 'unknown'},
+                        {'name': 'I', 'type': 'number', 'unit': 'A'},
+                        {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         """
+        from frictionless import fields
 
         schema = self.figure_schema
 
-        schema.get_field(self.voltage_dimension)["unit"] = "V"
-        del schema.get_field(self.voltage_dimension)["orientation"]
+        schema.get_field(self.voltage_dimension).custom["unit"] = "V"
+        del schema.get_field(self.voltage_dimension).custom["orientation"]
         if self.current_dimension == "I":
-            schema.get_field(self.current_dimension)["unit"] = "A"
+            schema.get_field(self.current_dimension).custom["unit"] = "A"
         elif self.current_dimension == "j":
-            schema.get_field(self.current_dimension)["unit"] = "A / m2"
+            schema.get_field(self.current_dimension).custom["unit"] = "A / m2"
         else:
             raise SVGAnnotationError(
                 "None of the axis labels in the SVG have a dimension current 'I' or current density 'j'."
             )
 
-        del schema.get_field(self.current_dimension)["orientation"]
-        schema.add_field(name="t")
-        schema.get_field("t")["unit"] = "s"
+        del schema.get_field(self.current_dimension).custom["orientation"]
+
+        schema.add_field(fields.NumberField(name="t"))
+        schema.update_field("t", {"unit": "s"})
 
         return schema
 
@@ -404,7 +430,7 @@ class CV:
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
         A frictionless `Schema` object, including a `Fields` object
-        describing the voltage and current axis of the originlal plot
+        describing the voltage and current axis of the original plot
         including original units. The reference electrode of the
         potential/voltage axis is also given (if available).
 
@@ -416,6 +442,10 @@ class CV:
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
             ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
@@ -435,10 +465,9 @@ class CV:
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
-            >>> cv.figure_schema == \
-            ... {'fields': [{'name': 'E', 'orientation': 'x', 'reference': 'RHE', 'unit': 'V'},
-            ...             {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}]}
-            True
+            >>> cv.figure_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'x', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
 
         """
         import re
@@ -447,18 +476,23 @@ class CV:
 
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
         match = re.match(
-            pattern, schema.get_field(self.voltage_dimension)["unit"], re.IGNORECASE
+            pattern,
+            schema.get_field(self.voltage_dimension).custom["unit"],
+            re.IGNORECASE,
         )
 
-        schema.get_field(self.voltage_dimension)["unit"] = match[1]
-        schema.get_field(self.voltage_dimension)["reference"] = match[2] or "unknown"
+        schema.update_field(
+            self.voltage_dimension,
+            {"unit": match[1], "reference": match[2] or "unknown"},
+        )
 
         return schema
 
     @cached_property
     def figure_label(self):
         r"""
-        An identifier of the plot to distinguish it from other figures on the same page.
+        An identifier of the plot to distinguish it from other
+        figures on the same page.
 
         The figure name is read from a ``<text>`` in the SVG file
         such as ``<text>figure: 2b</text>``.
@@ -514,9 +548,11 @@ class CV:
     @cached_property
     def curve_label(self):
         r"""
-        A descriptive label for this curve to distinguish it from other curves in the same plot.
+        A descriptive label for this curve to distinguish it
+        from other curves in the same plot.
 
-        The curve label read from a ``<text>`` in the SVG file such as ``<text>curve: solid line</text>``.
+        The curve label read from a ``<text>`` in the SVG file
+        such as ``<text>curve: solid line</text>``.
 
         EXAMPLES::
 
@@ -739,7 +775,7 @@ class CV:
 
         """
         voltage = 1 * u.Unit(
-            self.figure_schema.get_field(self.voltage_dimension)["unit"]
+            self.figure_schema.get_field(self.voltage_dimension).custom["unit"]
         )
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
@@ -784,7 +820,7 @@ class CV:
 
         """
         current = 1 * u.Unit(
-            self.figure_schema.get_field(self.current_dimension)["unit"]
+            self.figure_schema.get_field(self.current_dimension).custom["unit"]
         )
 
         # Distinguish whether the y data is current ('A') or current density ('A / cm2')
@@ -885,15 +921,15 @@ class CV:
         plt.xlabel(
             self.voltage_dimension
             + " ["
-            + str(self.data_schema.get_field(self.voltage_dimension)["unit"])
+            + str(self.data_schema.get_field(self.voltage_dimension).custom["unit"])
             + " vs. "
-            + self.data_schema.get_field(self.voltage_dimension)["reference"]
+            + self.data_schema.get_field(self.voltage_dimension).custom["reference"]
             + "]"
         )
         plt.ylabel(
             self.current_dimension
             + " ["
-            + str(self.data_schema.get_field(self.current_dimension)["unit"])
+            + str(self.data_schema.get_field(self.current_dimension).custom["unit"])
             + "]"
         )
 
@@ -1138,15 +1174,13 @@ class CV:
             ...  'simultaneous measurements': ['SXRD', 'SHG'],
             ...  'measurement type': 'CV',
             ...  'scan rate': {'value': 50.0, 'unit': 'V / s'},
-            ...  'fields': [{'name': 'E', 'orientation': 'x',
-            ...             'reference': 'RHE', 'unit': 'mV'},
-            ...             {'name': 'j', 'orientation': 'y', 'unit': 'uA / cm2'}],
-            ...             'comment': 'noisy data'},
-            ...  'data description': {'version': 1, 'type': 'digitized',
-            ...                       'measurement type': 'CV', 'fields':
-            ...                       [{'name': 'E', 'reference': 'RHE', 'unit': 'V'},
-            ...                       {'name': 'j', 'unit': 'A / m2'},
-            ...                       {'name': 't', 'unit': 's'}]}}
+            ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'x', 'reference': 'RHE', 'unit': 'mV'},
+            ...             {'name': 'j', 'type': 'number', 'orientation': 'y', 'unit': 'uA / cm2'}],
+            ...  'comment': 'noisy data'},
+            ...  'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'fields':
+            ...                       [{'name': 'E', 'type': 'number', 'reference': 'RHE', 'unit': 'V'},
+            ...                       {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+            ...                       {'name': 't', 'type': 'number', 'unit': 's'}]}}
             True
 
         """
@@ -1167,14 +1201,14 @@ class CV:
                     "value": float(self.scan_rate.value),
                     "unit": str(self.scan_rate.unit),
                 },
-                "fields": self.figure_schema.fields,
+                "fields": self.figure_schema.to_dict()["fields"],
                 "comment": self.comment,
             },
             "data description": {
                 "version": 1,
                 "type": "digitized",
                 "measurement type": "CV",
-                "fields": self.data_schema.fields,
+                "fields": self.data_schema.to_dict()["fields"],
             },
         }
 

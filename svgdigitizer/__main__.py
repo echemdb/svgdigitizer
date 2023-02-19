@@ -233,7 +233,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).figure_schema.get_field("E")["unit"])
+        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
@@ -249,7 +249,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
             from astropy import units as u
 
             sampling_interval /= u.Unit(
-                cv.figure_schema.get_field(cv.voltage_dimension)["unit"]
+                cv.figure_schema.get_field(cv.voltage_dimension).custom["unit"]
             ).to(u.V)
 
     if metadata:
@@ -287,7 +287,6 @@ def _create_package(metadata, csvname, outdir):
     from frictionless import Package, Resource, Schema
 
     package = Package(
-        metadata,
         resources=[
             Resource(
                 path=os.path.basename(csvname),
@@ -296,23 +295,25 @@ def _create_package(metadata, csvname, outdir):
         ],
     )
     package.infer()
+    package.custom = metadata
+
     # Update fields in the datapackage describing the data in the CSV
-    package_schema = package["resources"][0]["schema"]
-    data_description_schema = Schema(fields=package["data description"]["fields"])
+    package_schema = package.resources[0].schema
+    data_description_schema = Schema.from_descriptor(package.custom["data description"])
 
     new_fields = []
     for name in package_schema.field_names:
         if not name in data_description_schema.field_names:
             raise KeyError(
-                f"Field with name {name} is not specified in `data_descripton.fields`."
+                f"Field with name {name} is not specified in `data_description.fields`."
             )
         new_fields.append(
             data_description_schema.get_field(name).to_dict()
             | package_schema.get_field(name).to_dict()
         )
 
-    package["resources"][0]["schema"]["fields"] = new_fields
-    del package["data description"]["fields"]
+    package.resources[0].schema.metadata_defaults["fields"] = new_fields
+    del package.custom["data description"]["fields"]
 
     return package
 
@@ -342,6 +343,9 @@ def _write_metadata(out, metadata):
     import json
 
     json.dump(metadata, out, default=defaultconverter)
+    # json.dump does not save files with a newline, which compromises the tests
+    # where the output files are compared to an expected json.
+    out.write("\n")
 
 
 def _create_linked_svg(svg, png):
