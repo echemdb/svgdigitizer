@@ -1943,9 +1943,9 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.schema == \
-            ... {'fields': [{'name': 't', 'unit': None, 'orientation': 'x'},
-            ...             {'name': 'y', 'unit': None, 'orientation': 'y'}]}
+            >>> plot.schema == {'fields':
+            ...     [{'name': 't', 'unit': None, 'orientation': 'x'},
+            ...      {'name': 'y', 'unit': None, 'orientation': 'y'}]}
             True
 
 
