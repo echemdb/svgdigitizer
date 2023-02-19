@@ -296,11 +296,9 @@ class CV:
         if len(dimensions) == 1:
             if self.svgplot.schema.get_field(dimensions[0])["orientation"] == "y":
                 return dimensions[0]
-            raise AxisError("The current must be on the y-axis in the SVG.")
+            raise SVGAnnotationError("The current must be on the y-axis in the SVG.")
 
-        raise AxisError(
-            "No current axis or more than one current axis found in the SVG."
-        )
+        raise SVGAnnotationError("No current axis or more than one current axis found in the SVG.")
 
     @property
     def data_schema(self):
@@ -389,9 +387,7 @@ class CV:
         elif self.current_dimension == "j":
             schema.get_field(self.current_dimension)["unit"] = "A / m2"
         else:
-            raise AxisError(
-                "None of the axis labels in the SVG have a dimension current 'I' or current density 'j'."
-            )
+            raise SVGAnnotationError("None of the axis labels in the SVG have a dimension current 'I' or current density 'j'.")
 
         del schema.get_field(self.current_dimension)["orientation"]
         schema.add_field(name="t")
