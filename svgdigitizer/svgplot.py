@@ -986,7 +986,9 @@ class SVGPlot:
                 # Note that this cannot happen. The SVG module will filter out
                 # duplicate labels and print a warning when this happens
                 # instead.
-                raise SVGAnnotationError(f"Found an axis label and scale bar for {label}.")
+                raise SVGAnnotationError(
+                    f"Found an axis label and scale bar for {label}."
+                )
 
             points[label] = point
 
