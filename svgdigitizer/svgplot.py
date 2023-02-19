@@ -603,7 +603,7 @@ class SVGPlot:
 
         TESTS:
 
-        Test that errors in the data are reported correctly::
+        Verify that errors in the data are reported correctly::
 
             >>> from svgdigitizer.svg import SVG
             >>> from io import StringIO
@@ -679,6 +679,62 @@ class SVGPlot:
         the SVG coordinate system to the point's coordinates in the plot
         coordinate system, or `None` if that point's coordinate is not known.
 
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_axis_markers
+            {'t1': ((0.0, 100.0), 0.0, None), 't2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 0.0), 1.0, 'm')}
+
+        TESTS:
+
+        Verify that errors in the SVG are reported correctly::
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y1: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_axis_markers
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Found axis label y1 more than once.
+
         """
         points = {}
 
@@ -692,7 +748,7 @@ class SVGPlot:
                 unit = label.unit or None
 
                 if point in points:
-                    raise AxisError(f"Found axis label {label} more than once.")
+                    raise SVGAnnotationError(f"Found axis label {point} more than once.")
 
                 points[point] = (labeled_path.far, value, unit)
 
