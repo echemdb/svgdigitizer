@@ -19,7 +19,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # *********************************************************************
-import setuptools
 from distutils.core import setup
 
 setup(
@@ -47,7 +46,7 @@ setup(
         "svgwrite>=1.4,<2",
     ],
     entry_points={
-        "console_scripts": ["svgdigitizer=svgdigitizer.__main__:cli"],
+        "console_scripts": ["svgdigitizer=svgdigitizer.entrypoint:cli"],
     },
     python_requires=">=3.9",
 )

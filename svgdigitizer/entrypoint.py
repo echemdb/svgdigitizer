@@ -21,7 +21,7 @@ EXAMPLES::
 #
 #        Copyright (C) 2021-2022 Albert Engstfeld
 #        Copyright (C)      2021 Johannes Hermann
-#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
@@ -432,11 +432,8 @@ cli.add_command(digitize_cv)
 cli.add_command(paginate)
 
 # Register command docstrings for doctesting.
-# Since commands are not fnuctions anymore due to their decorator, their
+# Since commands are not functions anymore due to their decorator, their
 # docstrings would otherwise be ignored.
 __test__ = {
     name: command.__doc__ for (name, command) in cli.commands.items() if command.__doc__
 }
-
-if __name__ == "__main__":
-    cli()
