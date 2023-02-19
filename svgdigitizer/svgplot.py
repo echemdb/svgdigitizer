@@ -748,7 +748,9 @@ class SVGPlot:
                 unit = label.unit or None
 
                 if point in points:
-                    raise SVGAnnotationError(f"Found axis label {point} more than once.")
+                    raise SVGAnnotationError(
+                        f"Found axis label {point} more than once."
+                    )
 
                 points[point] = (labeled_path.far, value, unit)
 
@@ -1473,7 +1475,9 @@ class SVGPlot:
         paths = curves[0]
 
         if len(paths) == 0:
-            raise SVGAnnotationError(f"Found a label 'curve: {self._curve}' but no paths associated to it.")
+            raise SVGAnnotationError(
+                f"Found a label 'curve: {self._curve}' but no paths associated to it."
+            )
         if len(paths) > 1:
             raise NotImplementedError("Cannot handle curve with more than one <path>.")
 
