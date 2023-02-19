@@ -1,5 +1,5 @@
-**Changed:**
+**Fixed:**
 
-* Dump of json does not enforce conversion of utf-8 character to ascii notation.
+* Fixed handling of unicode characters when writing JSON files. Unicode characters are now written as UTF-8 characters without escaping.
 
 
