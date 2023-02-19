@@ -710,6 +710,8 @@ class SVGPlot:
 
         Verify that errors in the SVG are reported correctly::
 
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
@@ -804,6 +806,8 @@ class SVGPlot:
 
         Verify that errors are reported correctly::
 
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g>
@@ -979,6 +983,9 @@ class SVGPlot:
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
+                # Note that this cannot happen. The SVG module will filter out
+                # duplicate labels and print a warning when this happens
+                # instead.
                 raise AnnotationError(f"Found an axis label and scale bar for {label}.")
 
             points[label] = point
