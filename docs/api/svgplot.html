@@ -1017,6 +1017,7 @@ describing the dimensions, units and orientation of the original
 plot axes.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
@@ -1042,10 +1043,9 @@ plot axes.</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">schema</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;fields&#39;</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">},</span>
-<span class="gp">... </span>     <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;orientation&#39;</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">}]}</span>
-<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;x&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;y&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;y&#39;}]}</span>
 </pre></div>
 </div>
 </dd></dl>
