@@ -1,4 +1,4 @@
 **Changed:**
 
-* Upgraded to frictionless >5.5.
-* JSON metadata files are saved with a newline at the end of the file.
+* Upgraded to frictionless 5.5.
+* Changed formatting of JSON metadata files. A newline is now added automatically at the end of the file.
