@@ -21,7 +21,7 @@ EXAMPLES::
 #
 #        Copyright (C) 2021-2022 Albert Engstfeld
 #        Copyright (C)      2021 Johannes Hermann
-#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
@@ -116,7 +116,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy.svg") as directory:
         ...     svg = os.path.join(directory, "xy.svg")
-        ...     with open(svg, "rb") as infile:
+        ...     with open(svg, mode="rb") as infile:
         ...         _create_svgplot(infile, sampling_interval=None, skewed=False)
         <svgdigitizer.svgplot.SVGPlot object at 0x...>
 
@@ -208,7 +208,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
     """
-    with open(svg, "rb") as infile:
+    with open(svg, mode="rb") as infile:
         svg_plot = _create_svgplot(
             infile, sampling_interval=sampling_interval, skewed=skewed
         )
@@ -270,7 +270,8 @@ def digitize_cv(
         >>> from svgdigitizer.svgplot import SVGPlot
         >>> from svgdigitizer.electrochemistry.cv import CV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     print(CV(SVGPlot(SVG(open(os.path.join(directory, "xy_rate.svg"))))).figure_schema.get_field("E")["unit"])
+        ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") as svg:
+        ...         print(CV(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
@@ -280,13 +281,13 @@ def digitize_cv(
 
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
-        with open(svg, "rb") as infile:
+        with open(svg, mode="rb") as infile:
             cv = CV(_create_svgplot(infile, sampling_interval=None, skewed=skewed))
 
             from astropy import units as u
 
             sampling_interval /= u.Unit(
-                cv.figure_schema.get_field(cv.voltage_dimension)["unit"]
+                cv.figure_schema.get_field(cv.voltage_dimension).custom["unit"]
             ).to(u.V)
 
     if metadata:
@@ -294,7 +295,7 @@ def digitize_cv(
 
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
-    with open(svg, "rb") as infile:
+    with open(svg, mode="rb") as infile:
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
@@ -336,7 +337,6 @@ def _create_package(metadata, csvname, outdir):
     from frictionless import Package, Resource, Schema
 
     package = Package(
-        metadata,
         resources=[
             Resource(
                 path=os.path.basename(csvname),
@@ -345,23 +345,25 @@ def _create_package(metadata, csvname, outdir):
         ],
     )
     package.infer()
+    package.custom = metadata
+
     # Update fields in the datapackage describing the data in the CSV
-    package_schema = package["resources"][0]["schema"]
-    data_description_schema = Schema(fields=package["data description"]["fields"])
+    package_schema = package.resources[0].schema
+    data_description_schema = Schema.from_descriptor(package.custom["data description"])
 
     new_fields = []
     for name in package_schema.field_names:
         if not name in data_description_schema.field_names:
             raise KeyError(
-                f"Field with name {name} is not specified in `data_descripton.fields`."
+                f"Field with name {name} is not specified in `data_description.fields`."
             )
         new_fields.append(
             data_description_schema.get_field(name).to_dict()
             | package_schema.get_field(name).to_dict()
         )
 
-    package["resources"][0]["schema"]["fields"] = new_fields
-    del package["data description"]["fields"]
+    package.resources[0].schema.metadata_defaults["fields"] = new_fields
+    del package.custom["data description"]["fields"]
 
     return package
 
@@ -390,7 +392,10 @@ def _write_metadata(out, metadata):
 
     import json
 
-    json.dump(metadata, out, default=defaultconverter)
+    json.dump(metadata, out, default=defaultconverter, ensure_ascii=False)
+    # json.dump does not save files with a newline, which compromises the tests
+    # where the output files are compared to an expected json.
+    out.write("\n")
 
 
 def _create_linked_svg(svg, png):
@@ -477,11 +482,8 @@ cli.add_command(digitize_cv)
 cli.add_command(paginate)
 
 # Register command docstrings for doctesting.
-# Since commands are not fnuctions anymore due to their decorator, their
+# Since commands are not functions anymore due to their decorator, their
 # docstrings would otherwise be ignored.
 __test__ = {
     name: command.__doc__ for (name, command) in cli.commands.items() if command.__doc__
 }
-
-if __name__ == "__main__":
-    cli()
