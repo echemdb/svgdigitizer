@@ -116,7 +116,7 @@ specifying a `sampling_interval`::
 #
 #        Copyright (C) 2021-2022 Albert Engstfeld
 #        Copyright (C) 2021-2022 Johannes Hermann
-#        Copyright (C) 2021-2022 Julian Rüth
+#        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
@@ -138,6 +138,8 @@ from enum import Enum
 from functools import cached_property
 
 import pandas as pd
+
+from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("svgplot")
 
@@ -572,6 +574,68 @@ class SVGPlot:
         r"""
         Return the reference points grouped by axis variable.
 
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._grouped_ref_points
+            {'t': [Path "t1: 0", Path "t2: 1"], 'y': [Path "y1: 0", Path "y2: 1"]}
+
+        TESTS:
+
+        Verify that errors in the data are reported correctly::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._grouped_ref_points
+            Traceback (most recent call last):
+            ...
+            NotImplementedError: Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables ['t'] on the axes.
+
+        ::
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._grouped_ref_points
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Expected exactly one path to be grouped with t1: 0
+
         """
 
         def variable(point):
@@ -582,10 +646,11 @@ class SVGPlot:
             assert len(labeled_paths) != 0
 
             if len(labeled_paths) != 1:
-                raise ValueError(
+                raise SVGAnnotationError(
                     f"Expected exactly one path to be grouped with {labeled_paths.label}"
                 )
             ref_points.append(labeled_paths[0])
+
         # sort variables for simpler testing of dependent methods
         variables = sorted(set(variable(point) for point in ref_points))
 
@@ -593,6 +658,10 @@ class SVGPlot:
             v: [point for point in ref_points if variable(point) == v]
             for v in variables
         }
+
+        # sort paths by label (also simplifies doctesting)
+        for paths in grouped_ref_points.values():
+            paths.sort(key=lambda path: str(path.label))
 
         if len(variables) != 2:
             raise NotImplementedError(
@@ -610,6 +679,64 @@ class SVGPlot:
         the SVG coordinate system to the point's coordinates in the plot
         coordinate system, or `None` if that point's coordinate is not known.
 
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_axis_markers
+            {'t1': ((0.0, 100.0), 0.0, None), 't2': ((100.0, 100.0), 1.0, None), 'y1': ((0.0, 100.0), 0.0, None), 'y2': ((0.0, 0.0), 1.0, 'm')}
+
+        TESTS:
+
+        Verify that errors in the SVG are reported correctly::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">t1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">t2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y1: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_axis_markers
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Found axis label y1 more than once.
+
         """
         points = {}
 
@@ -623,7 +750,9 @@ class SVGPlot:
                 unit = label.unit or None
 
                 if point in points:
-                    raise ValueError(f"Found axis label {label} more than once.")
+                    raise SVGAnnotationError(
+                        f"Found axis label {point} more than once."
+                    )
 
                 points[point] = (labeled_path.far, value, unit)
 
@@ -637,13 +766,110 @@ class SVGPlot:
         the SVG coordinate system to the point's coordinates in the plot
         coordinate system, or `None` if that point's coordinate is not known.
 
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <text x="-300" y="300">y_scale_bar: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+
+        The SVG has a scalebar that specifies that a y-translation of
+        100 in the SVG coordinate system, corresponds to 1 meter. The
+        orientation is always such that coordinates grow to the right and to
+        the top. Since `y1` at (0, 100) corresponds to y=0, we find that `y2`
+        at (0, 0) corresponds to 1 meter::
+
+            >>> base = {'y1': ((0, 100), 0, None)}
+            >>> plot._marked_points_from_scalebars(base)
+            {'y2': ((0.0, 0.0), 1.0, 'm')}
+
+        TESTS:
+
+        Verify that errors are reported correctly::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <path d="M -300 300 L -200 100" />
+            ...     <text x="-300" y="300">y_scale_bar: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_scalebars(base)
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Expected exactly two paths to be grouped with the scalebar label y_scale_bar: 1m but found 3.
+
+        ::
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -300 300 L -200 300" />
+            ...     <path d="M -300 300 L -200 200" />
+            ...     <text x="-300" y="300">z_scale_bar: 1m</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> plot._marked_points_from_scalebars(base)
+            Traceback (most recent call last):
+            ...
+            svgdigitizer.exceptions.SVGAnnotationError: Expected label on scalebar to be one of ('x', 'y') but found z.
+
         """
         points = {}
 
         # Process scale bars.
         for labeled_paths in self.labeled_paths["scale_bar"]:
             if len(labeled_paths) != 2:
-                raise NotImplementedError(
+                raise SVGAnnotationError(
                     f"Expected exactly two paths to be grouped with the scalebar label {labeled_paths.label} but found {len(labeled_paths)}."
                 )
 
@@ -653,7 +879,7 @@ class SVGPlot:
             unit = label.unit or None
 
             if axis not in self.axis_variables:
-                raise ValueError(
+                raise SVGAnnotationError(
                     f"Expected label on scalebar to be one of {*self.axis_variables,} but found {axis}."
                 )
 
@@ -667,7 +893,7 @@ class SVGPlot:
             # author of the scalebar was likely not aware.
             # We assume here that the scalebar was meant to be oriented like
             # the coordinate system in the SVG, i.e., x coordinates grow to the
-            # right, y coordinates grow to the bottom.
+            # right, y coordinates grow to the top.
             scalebar = (abs(scalebar[0]), -abs(scalebar[1]))
 
             # Construct the second marked point from the first marked point + scalebar.
@@ -757,7 +983,12 @@ class SVGPlot:
 
         for label, point in self._marked_points_from_scalebars(points).items():
             if label in points:
-                raise ValueError(f"Found an axis label and scale bar for {label}.")
+                # Note that this cannot happen. The SVG module will filter out
+                # duplicate labels and print a warning when this happens
+                # instead.
+                raise SVGAnnotationError(
+                    f"Found an axis label and scale bar for {label}."
+                )
 
             points[label] = point
 
@@ -1231,13 +1462,13 @@ class SVGPlot:
             >>> plot.curve
             Traceback (most recent call last):
             ...
-            ValueError: No curve main curve found in the SVG.
+            svgdigitizer.exceptions.SVGAnnotationError: No paths labeled 'curve: main curve' found.
 
         """
         curves = self.labeled_paths["curve"]
 
         if len(curves) == 0:
-            raise ValueError("No curve found in the SVG.")
+            raise SVGAnnotationError("No paths labeled 'curve:' found.")
 
         curves = [
             curve
@@ -1246,14 +1477,16 @@ class SVGPlot:
         ]
 
         if len(curves) == 0:
-            raise ValueError(f"No curve {self._curve} found in the SVG.")
+            raise SVGAnnotationError(f"No paths labeled 'curve: {self._curve}' found.")
         if len(curves) > 1:
-            raise ValueError(f"More than one curve {self._curve} found in the SVG.")
+            raise NotImplementedError("Cannot handle multiple curves in an SVG.")
 
         paths = curves[0]
 
         if len(paths) == 0:
-            raise ValueError("Curve has not a single <path>.")
+            raise SVGAnnotationError(
+                f"Found a label 'curve: {self._curve}' but no paths associated to it."
+            )
         if len(paths) > 1:
             raise NotImplementedError("Cannot handle curve with more than one <path>.")
 
@@ -1710,9 +1943,10 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 't', 'orientation': 'x', 'unit': None},
-                        {'name': 'y', 'orientation': 'y', 'unit': None}]}
+            >>> plot.schema == {'fields':
+            ...     [{'name': 't', 'unit': None, 'orientation': 'x'},
+            ...      {'name': 'y', 'unit': None, 'orientation': 'y'}]}
+            True
 
 
         """
