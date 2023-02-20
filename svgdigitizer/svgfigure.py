@@ -284,8 +284,9 @@ class SVGFigure:
                         {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
 
         """
+        from frictionless import Schema
 
-        return self.svgplot.figure_schema
+        return Schema.from_descriptor(self.svgplot.figure_schema.to_dict())
 
     @property
     def tags(self):

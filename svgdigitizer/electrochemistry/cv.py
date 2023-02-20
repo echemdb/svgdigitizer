@@ -400,9 +400,9 @@ class CV(SVGFigure):
                         {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         """
-        from frictionless import fields
+        from frictionless import fields, Schema
 
-        schema = self.figure_schema
+        schema = Schema.from_descriptor(self.figure_schema.to_dict())
 
         schema.get_field(self.voltage_dimension).custom["unit"] = "V"
         del schema.get_field(self.voltage_dimension).custom["orientation"]
@@ -469,7 +469,9 @@ class CV(SVGFigure):
         """
         import re
 
-        schema = super().figure_schema
+        from frictionless import Schema
+
+        schema = Schema.from_descriptor(super().figure_schema.to_dict())
 
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
         match = re.match(
@@ -918,4 +920,6 @@ __test__ = {
     "CV.curve_label": CV.curve_label,
     "CV.scan_rate": CV.scan_rate,
     "CV.df": CV.df,
+    # "CV.data_schema": CV.data_schema,
+    # "CV.figure_schema": CV.figure_schema,
 }
