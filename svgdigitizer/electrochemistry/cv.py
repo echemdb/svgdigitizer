@@ -53,12 +53,13 @@ from functools import cached_property
 import matplotlib.pyplot as plt
 from astropy import units as u
 
+from svgdigitizer.svgfigure import SVGFigure
 from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("cv")
 
 
-class CV:
+class CV(SVGFigure):
     r"""
     A digitized cyclic voltammogram (CV) derived from an SVG file,
     which provides access to the objects of the CV.
@@ -169,10 +170,6 @@ class CV:
         True
 
     """
-
-    def __init__(self, svgplot, metadata=None):
-        self.svgplot = svgplot
-        self._metadata = metadata or {}
 
     @property
     def voltage_dimension(self):
@@ -487,118 +484,6 @@ class CV:
         )
 
         return schema
-
-    @cached_property
-    def figure_label(self):
-        r"""
-        An identifier of the plot to distinguish it from other
-        figures on the same page.
-
-        The figure name is read from a ``<text>`` in the SVG file
-        such as ``<text>figure: 2b</text>``.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">Figure: 2b</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.figure_label
-            '2b'
-
-        """
-        figure_labels = self.svgplot.svg.get_texts("(?:figure): (?P<label>.+)")
-
-        if len(figure_labels) > 1:
-            logger.warning(
-                f"More than one text field with figure labels. Ignoring all text fields except for the first: {figure_labels[0]}."
-            )
-
-        if not figure_labels:
-            figure_label = self._metadata.get("source", {}).get("figure", "")
-            if not figure_label:
-                logger.warning(
-                    "No text with `figure` containing a label such as `figure: 1a` found in the SVG."
-                )
-            return figure_label
-
-        return figure_labels[0].label
-
-    @cached_property
-    def curve_label(self):
-        r"""
-        A descriptive label for this curve to distinguish it
-        from other curves in the same plot.
-
-        The curve label read from a ``<text>`` in the SVG file
-        such as ``<text>curve: solid line</text>``.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: solid line</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.curve_label
-            'solid line'
-
-        """
-        curve_labels = self.svgplot.svg.get_texts("(?:curve): (?P<label>.+)")
-
-        if len(curve_labels) > 1:
-            logger.warning(
-                f"More than one text field with curve labels. Ignoring all text fields except for the first: {curve_labels[0]}."
-            )
-
-        if not curve_labels:
-            return self._metadata.get("source", {}).get("curve", "")
-
-        return curve_labels[0].label
 
     @cached_property
     def scan_rate(self):
@@ -933,197 +818,6 @@ class CV:
             + "]"
         )
 
-    @cached_property
-    def comment(self):
-        r"""
-        Return a comment describing the plot.
-
-        The comment is read from a ``<text>`` field in the SVG file such as ``<text>comment: noisy data</text>``.
-
-        EXAMPLES:
-
-        This example contains a comment::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ...   <text x="-400" y="430">comment: noisy data</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.comment
-            'noisy data'
-
-        This example does not contain a comment::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.comment
-            ''
-
-        """
-        comments = self.svgplot.svg.get_texts("(?:comment): (?P<value>.*)")
-
-        if len(comments) > 1:
-            logger.warning(
-                f"More than one comment. Ignoring all comments except for the first: {comments[0]}."
-            )
-
-        if not comments:
-            return self._metadata.get("figure description", {}).get("comment", "")
-
-        return comments[0].value
-
-    @property
-    def simultaneous_measurements(self):
-        r"""
-        A list of names of additional measurements which are plotted
-        along with the digitized data in the same figure or subplot.
-
-        The names are read from a ``<text>`` in the SVG file such as
-        ``<text>simultaneous measurements: SXRD, SHG</text>``.
-        Besides `simultaneous measurements`, also `linked measurement`
-        or simply `linked` are acceptable in the text field.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ...   <text x="-400" y="430">linked: SXRD, SHG</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.simultaneous_measurements
-            ['SXRD', 'SHG']
-
-        """
-        linked = self.svgplot.svg.get_texts(
-            "(?:simultaneous measurement|linked|linked measurement): (?P<value>.*)"
-        )
-
-        if len(linked) > 1:
-            logger.warning(
-                f"More than one text field with linked measurements. Ignoring all text fields except for the first: {linked[0]}."
-            )
-
-        if not linked:
-            return self._metadata.get("figure description", {}).get(
-                "simultaneous measurements", []
-            )
-
-        return [i.strip() for i in linked[0].value.split(",")]
-
-    @property
-    def tags(self):
-        r"""
-        A list of acronyms commonly used in the community to describe
-        the measurement.
-
-        The names are read from a ``<text>`` in the SVG file such as
-        ``<text>tags: BCV, HER, OER </text>``.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">x1: 0 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">x2: 1 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ...   <text x="-300" y="330">tags: BCV, HER, OER</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.tags
-            ['BCV', 'HER', 'OER']
-
-        """
-        tags = self.svgplot.svg.get_texts("(?:tags): (?P<value>.*)")
-
-        if len(tags) > 1:
-            logger.warning(
-                f"More than one text field with tags. Ignoring all text fields except for the first: {tags[0]}."
-            )
-
-        if not tags:
-            return self._metadata.get("experimental", {}).get("tags", [])
-
-        return [i.strip() for i in tags[0].value.split(",")]
-
     @property
     def metadata(self):
         r"""
@@ -1224,5 +918,4 @@ __test__ = {
     "CV.curve_label": CV.curve_label,
     "CV.scan_rate": CV.scan_rate,
     "CV.df": CV.df,
-    "CV.comment": CV.comment,
 }
