@@ -27,22 +27,41 @@ labels and (optionally) additional metadata provided as text fields in the SVG.
 import logging
 from functools import cached_property
 
-import matplotlib.pyplot as plt
-from astropy import units as u
+import astropy.units as u
 
 from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("figureplot")
 
-class SVGFigure:
 
-    def __init__(self, svgplot, plot_type=None, metadata=None):
+class SVGFigure:
+    """
+    TODO:: Add description and docstring (see issue #177)
+    """
+
+    def __init__(self, svgplot, metadata=None):
         self.svgplot = svgplot
         self._metadata = metadata or {}
 
-    def create_figure(self, figure_type=None):
-        """Creates plots for specific data such as cyclic voltammograms (CV)."""
+    @staticmethod
+    def create_figure(measurement_type=None):
+        """
+        Creates plots for specific data such as cyclic voltammograms (CV).
+        TODO:: Add description and docstring (see issue #177)
+        """
+        from svgdigitizer.electrochemistry.cv import CV
+
+        if measurement_type == "CV":
+            return CV
+
         raise NotImplementedError
+
+    @cached_property
+    def measurement_type(self):
+        """
+        TODO:: Add description and docstring (see issue #177)
+        """
+        return "custom"
 
     @cached_property
     def figure_label(self):
@@ -240,6 +259,53 @@ class SVGFigure:
         return comments[0].value
 
     @cached_property
+    def df(self):
+        r"""
+        Return the figure as a dataframe.
+
+        TODO:: If a scan rate is given, add a time axis `t` (see issue #177)
+        TODO:: If units are supposed to be in SI, modify the df (see issue #177)
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.df
+                 E    j
+            0  0.0  0.0
+            1  1.0  1.0
+
+        """
+        return self.svgplot.df.copy()
+
+    @cached_property
     def scan_rate(self):
         r"""
         Return the scan rate of the plot.
@@ -348,7 +414,7 @@ class SVGFigure:
 
         schema = Schema.from_descriptor(self.figure_schema.to_dict())
         for name in schema.field_names:
-            if 'orientation' in schema.get_field(name).to_dict():
+            if "orientation" in schema.get_field(name).to_dict():
                 del schema.get_field(name).custom["orientation"]
 
         return schema
@@ -514,6 +580,56 @@ class SVGFigure:
 
         return [i.strip() for i in linked[0].value.split(",")]
 
+    # @property
+    # def metadata(self):
+    #     r"""
+    #     A dict with properties of the original figure derived from
+    #     textlabels in the SVG file, as well as properties of the dataframe
+    #     created with :meth:`df`.
+
+    #     EXAMPLES::
+
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.svgfigure import SVGFigure
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: 0</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 mV vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 mV vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+    #         ...   <text x="-400" y="430">comment: noisy data</text>
+    #         ...   <text x="-400" y="530">linked: SXRD, SHG</text>
+    #         ...   <text x="-200" y="630">Figure: 2b</text>
+    #         ...   <text x="-200" y="730">tags: BCV, HER, OER</text>
+    #         ... </svg>'''))
+    #         >>> figure = SVGFigure(SVGPlot(svg))
+    #         >>> figure.metadata
+    #         {}
+
+    #     """
+    #     from mergedeep import merge
+
+    #     return merge({}, self._metadata)
+
     @property
     def metadata(self):
         r"""
@@ -556,13 +672,61 @@ class SVGFigure:
             ...   <text x="-200" y="730">tags: BCV, HER, OER</text>
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.metadata
-            {}
+            >>> figure.metadata == \
+            ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
+            ...  'source': {'figure': '2b', 'curve': '0'},
+            ...  'figure description': {'version': 1,
+            ...  'type': 'digitized',
+            ...  'simultaneous measurements': ['SXRD', 'SHG'],
+            ...  'measurement type': 'custom',
+            ...  'scan rate': {'value': 50.0, 'unit': 'V / s'},
+            ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'x', 'unit': 'mV vs. RHE'},
+            ...             {'name': 'j', 'type': 'number', 'orientation': 'y', 'unit': 'uA / cm2'}],
+            ...  'comment': 'noisy data'},
+            ...  'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'custom', 'fields':
+            ...                       [{'name': 'E', 'type': 'number', 'unit': 'mV vs. RHE'},
+            ...                       {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}}
+            True
 
         """
+        metadata = {
+            "experimental": {
+                "tags": self.tags,
+            },
+            "source": {
+                "figure": self.figure_label,
+                "curve": self.curve_label,
+            },
+            "figure description": {
+                "version": 1,
+                "type": "digitized",
+                "simultaneous measurements": self.simultaneous_measurements,
+                "measurement type": self.measurement_type,
+                "scan rate": {
+                    "value": float(self.scan_rate.value),
+                    "unit": str(self.scan_rate.unit),
+                },
+                "fields": self.figure_schema.to_dict()["fields"],
+                "comment": self.comment,
+            },
+            "data description": {
+                "version": 1,
+                "type": "digitized",
+                "measurement type": self.measurement_type,
+                "fields": self.data_schema.to_dict()["fields"],
+            },
+        }
+
         from mergedeep import merge
 
-        return merge({}, self._metadata)
+        return merge({}, self._metadata, metadata)
+
+    def plot(self):
+        r"""Visualize the data in the figure.
+
+        TODO:: Refactor once scan rate and SI is implemented (see issue #177)
+        """
+        return self.svgplot.plot()
 
 
 # Ensure that cached properties are tested, see
@@ -571,5 +735,6 @@ __test__ = {
     "SVGFigure.figure_label": SVGFigure.figure_label,
     "SVGFigure.curve_label": SVGFigure.curve_label,
     "SVGFigure.comment": SVGFigure.comment,
+    "SVGFigure.df": SVGFigure.df,
     "SVGFigure.figure_schema": SVGFigure.figure_schema,
 }

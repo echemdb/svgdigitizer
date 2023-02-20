@@ -53,8 +53,8 @@ from functools import cached_property
 import matplotlib.pyplot as plt
 from astropy import units as u
 
-from svgdigitizer.svgfigure import SVGFigure
 from svgdigitizer.exceptions import SVGAnnotationError
+from svgdigitizer.svgfigure import SVGFigure
 
 logger = logging.getLogger("cv")
 
@@ -171,6 +171,10 @@ class CV(SVGFigure):
 
     """
 
+    @cached_property
+    def measurement_type(self):
+        return "CV"
+
     @property
     def voltage_dimension(self):
         r"""
@@ -251,10 +255,7 @@ class CV(SVGFigure):
         dimensions = list(set(["E", "U"]).intersection(self.figure_schema.field_names))
 
         if len(dimensions) == 1:
-            if (
-                self.figure_schema.get_field(dimensions[0]).custom["orientation"]
-                == "x"
-            ):
+            if self.figure_schema.get_field(dimensions[0]).custom["orientation"] == "x":
                 return dimensions[0]
             raise SVGAnnotationError("The voltage must be on the x-axis in the SVG.")
 
@@ -306,10 +307,7 @@ class CV(SVGFigure):
         dimensions = list(set(["I", "j"]).intersection(self.figure_schema.field_names))
 
         if len(dimensions) == 1:
-            if (
-                self.figure_schema.get_field(dimensions[0]).custom["orientation"]
-                == "y"
-            ):
+            if self.figure_schema.get_field(dimensions[0]).custom["orientation"] == "y":
                 return dimensions[0]
             raise SVGAnnotationError("The current must be on the y-axis in the SVG.")
 
@@ -400,7 +398,7 @@ class CV(SVGFigure):
                         {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         """
-        from frictionless import fields, Schema
+        from frictionless import Schema, fields
 
         schema = Schema.from_descriptor(self.figure_schema.to_dict())
 
@@ -761,98 +759,6 @@ class CV(SVGFigure):
             + str(self.data_schema.get_field(self.current_dimension).custom["unit"])
             + "]"
         )
-
-    @property
-    def metadata(self):
-        r"""
-        A dict with properties of the original figure derived from
-        textlabels in the SVG file, as well as properties of the dataframe
-        created with :meth:`df`.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 mV vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 mV vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ...   <text x="-400" y="430">comment: noisy data</text>
-            ...   <text x="-400" y="530">linked: SXRD, SHG</text>
-            ...   <text x="-200" y="630">Figure: 2b</text>
-            ...   <text x="-200" y="730">tags: BCV, HER, OER</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.metadata == \
-            ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
-            ...  'source': {'figure': '2b', 'curve': '0'},
-            ...  'figure description': {'version': 1,
-            ...  'type': 'digitized',
-            ...  'simultaneous measurements': ['SXRD', 'SHG'],
-            ...  'measurement type': 'CV',
-            ...  'scan rate': {'value': 50.0, 'unit': 'V / s'},
-            ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'x', 'reference': 'RHE', 'unit': 'mV'},
-            ...             {'name': 'j', 'type': 'number', 'orientation': 'y', 'unit': 'uA / cm2'}],
-            ...  'comment': 'noisy data'},
-            ...  'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'CV', 'fields':
-            ...                       [{'name': 'E', 'type': 'number', 'reference': 'RHE', 'unit': 'V'},
-            ...                       {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
-            ...                       {'name': 't', 'type': 'number', 'unit': 's'}]}}
-            True
-
-        """
-        metadata = {
-            "experimental": {
-                "tags": self.tags,
-            },
-            "source": {
-                "figure": self.figure_label,
-                "curve": self.curve_label,
-            },
-            "figure description": {
-                "version": 1,
-                "type": "digitized",
-                "simultaneous measurements": self.simultaneous_measurements,
-                "measurement type": "CV",
-                "scan rate": {
-                    "value": float(self.scan_rate.value),
-                    "unit": str(self.scan_rate.unit),
-                },
-                "fields": self.figure_schema.to_dict()["fields"],
-                "comment": self.comment,
-            },
-            "data description": {
-                "version": 1,
-                "type": "digitized",
-                "measurement type": "CV",
-                "fields": self.data_schema.to_dict()["fields"],
-            },
-        }
-
-        from mergedeep import merge
-
-        return merge({}, self._metadata, metadata)
 
 
 # Ensure that cached properties are tested, see
