@@ -240,6 +240,54 @@ class SVGFigure:
         return comments[0].value
 
     @property
+    def figure_schema(self):
+        # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
+        r"""
+        A frictionless `Schema` object, including a `Fields` object
+        describing the voltage and current axis of the original plot
+        including original units. The reference electrode of the
+        potential/voltage axis is also given (if available).
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.figure_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V vs. RHE', 'orientation': 'x'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
+
+        """
+
+        return self.svgplot.figure_schema
+
+    @property
     def tags(self):
         r"""
         A list of acronyms commonly used in the community to describe

@@ -248,11 +248,11 @@ class CV(SVGFigure):
             svgdigitizer.exceptions.SVGAnnotationError: The voltage must be on the x-axis in the SVG.
 
         """
-        dimensions = list(set(["E", "U"]).intersection(self.svgplot.schema.field_names))
+        dimensions = list(set(["E", "U"]).intersection(self.svgplot.figure_schema.field_names))
 
         if len(dimensions) == 1:
             if (
-                self.svgplot.schema.get_field(dimensions[0]).custom["orientation"]
+                self.svgplot.figure_schema.get_field(dimensions[0]).custom["orientation"]
                 == "x"
             ):
                 return dimensions[0]
@@ -303,11 +303,11 @@ class CV(SVGFigure):
             'j'
 
         """
-        dimensions = list(set(["I", "j"]).intersection(self.svgplot.schema.field_names))
+        dimensions = list(set(["I", "j"]).intersection(self.svgplot.figure_schema.field_names))
 
         if len(dimensions) == 1:
             if (
-                self.svgplot.schema.get_field(dimensions[0]).custom["orientation"]
+                self.svgplot.figure_schema.get_field(dimensions[0]).custom["orientation"]
                 == "y"
             ):
                 return dimensions[0]
@@ -469,7 +469,7 @@ class CV(SVGFigure):
         """
         import re
 
-        schema = self.svgplot.schema
+        schema = super().figure_schema
 
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
         match = re.match(
