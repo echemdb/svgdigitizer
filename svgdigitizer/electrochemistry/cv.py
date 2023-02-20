@@ -488,64 +488,6 @@ class CV(SVGFigure):
         return schema
 
     @cached_property
-    def scan_rate(self):
-        r"""
-        Return the scan rate of the plot.
-
-        The scan rate is read from a ``<text>`` in the SVG file such as
-        ``<text>scan rate: 50 V / s</text>``.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V / s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.scan_rate
-            <Quantity 50. V / s>
-
-        """
-        rates = self.svgplot.svg.get_texts(
-            "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
-        )
-
-        if len(rates) > 1:
-            raise SVGAnnotationError(
-                "Multiple text fields with a scan rate were provided in the SVG. Remove all but one."
-            )
-
-        if not rates:
-            rate = self._metadata.get("figure description", {}).get("scan rate", {})
-
-            if "value" not in rate or "unit" not in rate:
-                raise SVGAnnotationError("No text with scan rate found in the SVG.")
-
-            return float(rate["value"]) * u.Unit(str(rate["unit"]))
-
-        return float(rates[0].value) * u.Unit(rates[0].unit)
-
-    @cached_property
     def df(self):
         # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltammogram and which is displayed in the documentation (see issue #73).
         r"""

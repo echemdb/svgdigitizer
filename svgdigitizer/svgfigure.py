@@ -240,6 +240,120 @@ class SVGFigure:
         return comments[0].value
 
     @cached_property
+    def scan_rate(self):
+        r"""
+        Return the scan rate of the plot.
+
+        The scan rate is read from a ``<text>`` in the SVG file such as
+        ``<text>scan rate: 50 V / s</text>``.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V / s</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.scan_rate
+            <Quantity 50. V / s>
+
+        """
+        rates = self.svgplot.svg.get_texts(
+            "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
+        )
+
+        if len(rates) > 1:
+            raise SVGAnnotationError(
+                "Multiple text fields with a scan rate were provided in the SVG. Remove all but one."
+            )
+
+        if not rates:
+            rate = self._metadata.get("figure description", {}).get("scan rate", {})
+
+            if "value" not in rate or "unit" not in rate:
+                raise SVGAnnotationError("No text with scan rate found in the SVG.")
+
+            return float(rate["value"]) * u.Unit(str(rate["unit"]))
+
+        return float(rates[0].value) * u.Unit(rates[0].unit)
+
+    @property
+    def data_schema(self):
+        # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
+        r"""
+        A frictionless `Schema` object, including a `Field` object
+        describing the data generated with :meth:`df`.
+        Unless the units of the axis in the columns of the :meth:`df` remain unchanged
+        and no axis was added, such as a time axis reconstructed from a scan rate,
+        ``data_schema`` is almost identical to ``figure_schema``. In the individual fields
+        the key `orientation` was removed.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.data_schema  # doctest: +NORMALIZE_WHITESPACE
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V vs. RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}
+
+        """
+        from frictionless import Schema
+
+        schema = Schema.from_descriptor(self.figure_schema.to_dict())
+        for name in schema.field_names:
+            if 'orientation' in schema.get_field(name).to_dict():
+                del schema.get_field(name).custom["orientation"]
+
+        return schema
+
+    @cached_property
     def figure_schema(self):
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
