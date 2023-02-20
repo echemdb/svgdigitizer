@@ -54,7 +54,9 @@ class SVGFigure:
         if measurement_type == "CV":
             return CV
 
-        raise NotImplementedError
+        raise NotImplementedError(
+            f"The specific figure with name `{measurement_type} is currently not supported."
+        )
 
     @cached_property
     def measurement_type(self):
