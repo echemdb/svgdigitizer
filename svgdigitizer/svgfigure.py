@@ -49,7 +49,7 @@ class SVGFigure:
         Creates plots for specific data such as cyclic voltammograms (CV).
         TODO:: Add description and docstring (see issue #177)
         """
-        from svgdigitizer.electrochemistry.cv import CV # pylint: disable=cyclic-import
+        from svgdigitizer.electrochemistry.cv import CV  # pylint: disable=cyclic-import
 
         if measurement_type == "CV":
             return CV
