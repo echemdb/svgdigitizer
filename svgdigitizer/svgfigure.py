@@ -239,7 +239,7 @@ class SVGFigure:
 
         return comments[0].value
 
-    @property
+    @cached_property
     def figure_schema(self):
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
@@ -457,4 +457,5 @@ __test__ = {
     "SVGFigure.figure_label": SVGFigure.figure_label,
     "SVGFigure.curve_label": SVGFigure.curve_label,
     "SVGFigure.comment": SVGFigure.comment,
+    "SVGFigure.figure_schema": SVGFigure.figure_schema,
 }
