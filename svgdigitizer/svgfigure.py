@@ -268,7 +268,44 @@ class SVGFigure:
         TODO:: If a scan rate is given, add a time axis `t` (see issue #177)
         TODO:: If units are supposed to be in SI, modify the df (see issue #177)
 
-        EXAMPLES::
+        EXAMPLES:
+
+        A simple x vs. y plot::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.df
+                 E    j
+            0  0.0  0.0
+            1  1.0  1.0
+
+        A dataframe with a time axis, reconstructed with a given scan rate::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
@@ -300,12 +337,63 @@ class SVGFigure:
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
             >>> figure.df
-                 E    j
-            0  0.0  0.0
-            1  1.0  1.0
+                  t    E    j
+            0   0.0  0.0  0.0
+            1  20.0  1.0  1.0
 
         """
-        return self.svgplot.df.copy()
+        df = self.svgplot.df.copy()
+        if self.scan_rate:
+            self._add_time_axis(df)
+            return df[["t", self.svgplot.xlabel, self.svgplot.ylabel]]
+
+        return df
+
+    def _add_time_axis(self, df):
+        r"""
+        Add a time column to the dataframe `df`, based on the :meth:`rate`.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ... </svg>'''))
+            >>> cv = CV(SVGPlot(svg))
+            >>> df = cv.svgplot.df.copy()
+            >>> cv._add_voltage_axis(df)
+            >>> cv._add_time_axis(df)
+
+        """
+
+        df["deltaU"] = abs(df[self.svgplot.xlabel].diff().fillna(0))
+        df["cumdeltaU"] = df["deltaU"].cumsum()
+        df["t"] = df["cumdeltaU"] / float(self.scan_rate.si.value)
+
 
     @cached_property
     def scan_rate(self):
@@ -345,6 +433,33 @@ class SVGFigure:
             >>> figure.scan_rate
             <Quantity 50. V / s>
 
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.scan_rate
+            False
+
         """
         rates = self.svgplot.svg.get_texts(
             "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
@@ -359,7 +474,8 @@ class SVGFigure:
             rate = self._metadata.get("figure description", {}).get("scan rate", {})
 
             if "value" not in rate or "unit" not in rate:
-                raise SVGAnnotationError("No text with scan rate found in the SVG.")
+                logger.warning("No text with scan rate found in the SVG or provided metadata.")
+                return False
 
             return float(rate["value"]) * u.Unit(str(rate["unit"]))
 
@@ -412,12 +528,17 @@ class SVGFigure:
                         {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}
 
         """
-        from frictionless import Schema
+        from frictionless import Schema, fields
 
         schema = Schema.from_descriptor(self.figure_schema.to_dict())
         for name in schema.field_names:
             if "orientation" in schema.get_field(name).to_dict():
                 del schema.get_field(name).custom["orientation"]
+
+        if self.scan_rate:
+            ## what if scan rate exists, but not compatible  with x_axis
+            schema.add_field(fields.NumberField(name="t"))
+            schema.update_field("t", {"unit": "s"})
 
         return schema
 
