@@ -304,6 +304,7 @@ def _create_package(metadata, csvname, outdir):
 
     new_fields = []
     for name in package_schema.field_names:
+
         if not name in data_description_schema.field_names:
             raise KeyError(
                 f"Field with name {name} is not specified in `data_description.fields`."
@@ -313,7 +314,7 @@ def _create_package(metadata, csvname, outdir):
             | package_schema.get_field(name).to_dict()
         )
 
-    package.resources[0].schema.metadata_defaults["fields"] = new_fields
+    package.resources[0].schema = Schema.from_descriptor({'fields': new_fields})
     del package.custom["data description"]["fields"]
 
     return package
