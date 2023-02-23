@@ -658,50 +658,6 @@ class CV(SVGFigure):
 
         df[self.current_dimension] = df[self.current_dimension] * conversion_factor
 
-    def _add_time_axis(self, df):
-        r"""
-        Add a time column to the dataframe `df`, based on the :meth:`rate`.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> df = cv.svgplot.df.copy()
-            >>> cv._add_voltage_axis(df)
-            >>> cv._add_time_axis(df)
-
-        """
-        df["deltaU"] = abs(df[self.voltage_dimension].diff().fillna(0))
-        df["cumdeltaU"] = df["deltaU"].cumsum()
-        df["t"] = df["cumdeltaU"] / float(self.scan_rate.si.value)
-
     def plot(self):
         r"""
         Visualize the digitized cyclic voltammogram with values in SI units.
