@@ -178,6 +178,86 @@ class SVGFigure:
         return curve_labels[0].label
 
     @cached_property
+    def xunit(self):
+        r"""Returns the unit of the x-axis.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: solid line</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.xunit
+            'V'
+
+        """
+        return self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"]
+
+    @cached_property
+    def yunit(self):
+        r"""Returns the unit of the y-axis.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: solid line</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.yunit
+            'A / cm2'
+
+        """
+        return self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"]
+
+    @cached_property
     def comment(self):
         r"""
         Return a comment describing the plot.
@@ -535,28 +615,33 @@ class SVGFigure:
             )
 
         # Infer the scan rate from the provided metadata
+
         if not rates:
             rate = self._metadata.get("figure description", {}).get("scan rate", {})
 
-            if "value" not in rate or "unit" not in rate:
-                logger.warning(
-                    "No text with scan rate found in the SVG or provided metadata."
-                )
-                return None
+            def metadata_rate_consistency():
+                if "value" not in rate or "unit" not in rate:
+                    logger.warning(
+                        "No text with scan rate found in the SVG or provided metadata."
+                    )
+                    return False
 
-            if not self.unit_is_astropy(rate["unit"]):
-                return None
+                if not self.unit_is_astropy(rate["unit"]):
+                    return False
 
-            if (
-                not (u.Unit(str(rate["unit"])) * u.s).si.bases
-                == u.Unit(x_axis_unit).si.bases
-            ):
-                logger.warning(
-                    "The unit of the scan rate provided in the metadata is not compatible with the x-axis units."
-                )
-                return None
+                if (
+                    not (u.Unit(str(rate["unit"])) * u.s).si.bases
+                    == u.Unit(x_axis_unit).si.bases
+                ):
+                    logger.warning(
+                        "The unit of the scan rate provided in the metadata is not compatible with the x-axis units."
+                    )
+                    return False
 
-            return float(rate["value"]) * u.Unit(str(rate["unit"]))
+                return True
+
+            if metadata_rate_consistency():
+                return float(rate["value"]) * u.Unit(str(rate["unit"]))
 
         svg_rate = rates[0].unit
 
@@ -999,4 +1084,6 @@ __test__ = {
     "SVGFigure.df": SVGFigure.df,
     "SVGFigure.figure_schema": SVGFigure.figure_schema,
     "SVGFigure.scan_rate": SVGFigure.scan_rate,
+    "SVGFigure.xunit": SVGFigure.xunit,
+    "SVGFigure.yunit": SVGFigure.yunit,
 }

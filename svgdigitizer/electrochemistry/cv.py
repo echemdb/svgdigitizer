@@ -81,7 +81,7 @@ class CV(SVGFigure):
     * | that the label of the second point (furthest from the origin)
       | on the x- or y-axis contains a value and a unit
       | such as ``<text>j2: 1 mA / cm2</text>`` or ``<text>E2: 1 mV</text>``.
-      | Optionally, this text of the E/U scale also indicates the
+      | Optionally, the text of the E/U scale also indicates the
       | reference scale, e.g., ``<text>E2: 1 mV vs. RHE</text>`` for RHE scale.
     * | that a scan rate is provided in a text field such as
       | ``<text">scan rate: 50 mV / s</text>``, placed anywhere in the SVG file.
@@ -170,6 +170,12 @@ class CV(SVGFigure):
         True
 
     """
+
+    def __init__(self, svgplot, metadata=None):
+        super().__init__(svgplot=svgplot, metadata=metadata)
+        assert self.svgplot.xlabel in ['U', 'E'], f"The y-label must be 'E' or 'U and not '{self.svgplot.xlabel}'."
+        assert self.svgplot.ylabel in ['I', 'j'], f"The y-label must be 'I' or 'j and not '{self.svgplot.ylabel}'."
+
 
     @cached_property
     def measurement_type(self):
