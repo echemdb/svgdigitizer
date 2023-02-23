@@ -413,10 +413,10 @@ class SVGFigure:
             ...     <path d="M -100 0 L 0 0" />
             ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.df
+            >>> figure1 = SVGFigure(SVGPlot(svg))
+            >>> figure1.df
                   t    E    j
             0   0.0  0.0  0.0
             1  20.0  1.0  1.0
@@ -486,6 +486,53 @@ class SVGFigure:
         return True
 
     @cached_property
+    def _scan_rates(self):
+        r"""
+        Return the scan rate of the plot.
+
+        The scan rate is read from a ``<text>`` in the SVG file such as
+        ``<text>scan rate: 50 V / s</text>``.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 K / s</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.scan_rate
+            <Quantity 50. V / s>
+
+        """
+        return self.svgplot.svg.get_texts(
+            "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
+        )
+
+    @cached_property
     def scan_rate(self):
         r"""
         Return the scan rate of the plot.
@@ -527,7 +574,7 @@ class SVGFigure:
             >>> figure.scan_rate
             <Quantity 50. V / s>
 
-        TESTS
+        TESTS::
 
         A plot without a scan rate:
 
@@ -558,8 +605,8 @@ class SVGFigure:
             ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.scan_rate
+            >>> figure2 = SVGFigure(SVGPlot(svg))
+            >>> figure2.scan_rate
 
         A plot with a scan rate that does not match with the x-axis units:
 
@@ -591,14 +638,13 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 m / s</text>
             ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.scan_rate
+            >>> figure3 = SVGFigure(SVGPlot(svg))
+            >>> figure3.scan_rate
 
         """
         # We ignore the scan rate when the unit on the x-axis is not compatible with astropy.
-        x_axis_unit = self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"]
 
-        if not self.unit_is_astropy(x_axis_unit):
+        if not self.unit_is_astropy(self.xunit):
             logger.warning(
                 "Ignoring scan rate since unit on the x-axis is not compatible with astropy."
             )
@@ -616,7 +662,7 @@ class SVGFigure:
 
         # Infer the scan rate from the provided metadata
 
-        if not rates:
+        if len(rates) == 0:
             rate = self._metadata.get("figure description", {}).get("scan rate", {})
 
             def metadata_rate_consistency():
@@ -631,7 +677,7 @@ class SVGFigure:
 
                 if (
                     not (u.Unit(str(rate["unit"])) * u.s).si.bases
-                    == u.Unit(x_axis_unit).si.bases
+                    == u.Unit(self.xunit).si.bases
                 ):
                     logger.warning(
                         "The unit of the scan rate provided in the metadata is not compatible with the x-axis units."
@@ -643,18 +689,20 @@ class SVGFigure:
             if metadata_rate_consistency():
                 return float(rate["value"]) * u.Unit(str(rate["unit"]))
 
-        svg_rate = rates[0].unit
-
-        if not self.unit_is_astropy(svg_rate):
             return None
 
-        if not (u.Unit(svg_rate) * u.s).si.bases == u.Unit(x_axis_unit).si.bases:
+        svg_rate_unit = rates[0].unit
+
+        if not self.unit_is_astropy(svg_rate_unit):
+            return None
+
+        if not (u.Unit(svg_rate_unit) * u.s).si.bases == u.Unit(self.xunit).si.bases:
             logger.warning(
                 "The unit of the scan rate provided in the SVG is not compatible with the x-axis units."
             )
             return None
 
-        return float(rates[0].value) * u.Unit(svg_rate)
+        return float(rates[0].value) * u.Unit(svg_rate_unit)
 
     @property
     def data_schema(self):
@@ -1084,6 +1132,7 @@ __test__ = {
     "SVGFigure.df": SVGFigure.df,
     "SVGFigure.figure_schema": SVGFigure.figure_schema,
     "SVGFigure.scan_rate": SVGFigure.scan_rate,
+    "SVGFigure._scan_rates": SVGFigure._scan_rates,
     "SVGFigure.xunit": SVGFigure.xunit,
     "SVGFigure.yunit": SVGFigure.yunit,
 }
