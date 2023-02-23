@@ -173,9 +173,14 @@ class CV(SVGFigure):
 
     def __init__(self, svgplot, metadata=None):
         super().__init__(svgplot=svgplot, metadata=metadata)
-        assert self.svgplot.xlabel in ['U', 'E'], f"The y-label must be 'E' or 'U and not '{self.svgplot.xlabel}'."
-        assert self.svgplot.ylabel in ['I', 'j'], f"The y-label must be 'I' or 'j and not '{self.svgplot.ylabel}'."
-
+        assert self.svgplot.xlabel in [
+            "U",
+            "E",
+        ], f"The y-label must be 'E' or 'U and not '{self.svgplot.xlabel}'."
+        assert self.svgplot.ylabel in [
+            "I",
+            "j",
+        ], f"The y-label must be 'I' or 'j and not '{self.svgplot.ylabel}'."
 
     @cached_property
     def measurement_type(self):
@@ -253,9 +258,14 @@ class CV(SVGFigure):
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.voltage_dimension
+            UNEXPECTED EXCEPTION: AssertionError("The y-label must be 'E' or 'U and not 'j'.")
             Traceback (most recent call last):
-            ...
-            svgdigitizer.exceptions.SVGAnnotationError: The voltage must be on the x-axis in the SVG.
+            File "C:\Miniconda3\envs\svgdigitizer-build\lib\doctest.py", line 1350, in __run
+                exec(compile(example.source, filename, "single",
+            File "<doctest svgdigitizer.electrochemistry.cv.CV.voltage_dimension[12]>", line 1, in <module>
+            File "X:\github\svgdigitizer\svgdigitizer\electrochemistry\cv.py", line 176, in __init__
+                assert self.svgplot.xlabel in [
+            AssertionError: The y-label must be 'E' or 'U and not 'j'.
 
         """
         dimensions = list(set(["E", "U"]).intersection(self.figure_schema.field_names))

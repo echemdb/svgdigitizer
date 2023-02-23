@@ -485,7 +485,7 @@ class SVGFigure:
             return False
         return True
 
-    @cached_property
+    @property
     def _scan_rates(self):
         r"""
         Return the scan rate of the plot.
@@ -521,11 +521,11 @@ class SVGFigure:
             ...     <path d="M -100 0 L 0 0" />
             ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 K / s</text>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.scan_rate
-            <Quantity 50. V / s>
+            >>> figure._scan_rates
+            [<text>scan rate: 50 mV / s</text>]
 
         """
         return self.svgplot.svg.get_texts(
@@ -568,11 +568,11 @@ class SVGFigure:
             ...     <path d="M -100 0 L 0 0" />
             ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V / s</text>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
             >>> figure.scan_rate
-            <Quantity 50. V / s>
+            <Quantity 50. mV / s>
 
         TESTS::
 
@@ -1132,7 +1132,6 @@ __test__ = {
     "SVGFigure.df": SVGFigure.df,
     "SVGFigure.figure_schema": SVGFigure.figure_schema,
     "SVGFigure.scan_rate": SVGFigure.scan_rate,
-    "SVGFigure._scan_rates": SVGFigure._scan_rates,
     "SVGFigure.xunit": SVGFigure.xunit,
     "SVGFigure.yunit": SVGFigure.yunit,
 }
