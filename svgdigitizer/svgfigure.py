@@ -477,16 +477,34 @@ class SVGFigure:
 
     @classmethod
     def unit_is_astropy(cls, unit):
-        """Returns True of False if a given unit is a compatible astropy unit."""
+        r"""
+        Verify if a string is a compatible astropy unit.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svgfigure import  SVGFigure
+            >>> SVGFigure.unit_is_astropy('mV/s')
+            True
+
+        TESTS::
+
+            >>> from svgdigitizer.svgfigure import  SVGFigure
+            >>> SVGFigure.unit_is_astropy('mv/s')
+            False
+
+        """
+
         try:
             u.Unit(unit)
         except ValueError as exc:
+            # The ValueError raised by astropy is rather useful to figure out
+            # possible issues with the provided string.
             logger.warning(exc)
             return False
         return True
 
-    @property
-    def _scan_rates(self):
+    @cached_property
+    def scan_rate_labels(self):
         r"""
         Return the scan rate of the plot.
 
@@ -524,7 +542,7 @@ class SVGFigure:
             ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure._scan_rates
+            >>> figure.scan_rate_labels
             [<text>scan rate: 50 mV / s</text>]
 
         """
@@ -642,7 +660,7 @@ class SVGFigure:
             >>> figure3.scan_rate
 
         """
-        # We ignore the scan rate when the unit on the x-axis is not compatible with astropy.
+        # The scan rate is ignored when the unit on the x-axis is not compatible with astropy.
 
         if not self.unit_is_astropy(self.xunit):
             logger.warning(
@@ -650,10 +668,7 @@ class SVGFigure:
             )
             return None
 
-        # Infer the scan rate from the SVG
-        rates = self.svgplot.svg.get_texts(
-            "(?:scan rate): (?P<value>-?[0-9.]+) *(?P<unit>.*)"
-        )
+        rates = self.scan_rate_labels
 
         if len(rates) > 1:
             raise SVGAnnotationError(
@@ -676,8 +691,8 @@ class SVGFigure:
                     return False
 
                 if (
-                    not (u.Unit(str(rate["unit"])) * u.s).si.bases
-                    == u.Unit(self.xunit).si.bases
+                    not (1 * u.Unit(str(rate["unit"])) * u.s).si.unit
+                    == (1 * u.Unit(self.xunit)).si.unit
                 ):
                     logger.warning(
                         "The unit of the scan rate provided in the metadata is not compatible with the x-axis units."
@@ -696,7 +711,10 @@ class SVGFigure:
         if not self.unit_is_astropy(svg_rate_unit):
             return None
 
-        if not (u.Unit(svg_rate_unit) * u.s).si.bases == u.Unit(self.xunit).si.bases:
+        if (
+            not (1 * u.Unit(svg_rate_unit) * u.s).si.unit
+            == (1 * u.Unit(self.xunit)).si.unit
+        ):
             logger.warning(
                 "The unit of the scan rate provided in the SVG is not compatible with the x-axis units."
             )
@@ -1131,6 +1149,7 @@ __test__ = {
     "SVGFigure.comment": SVGFigure.comment,
     "SVGFigure.df": SVGFigure.df,
     "SVGFigure.figure_schema": SVGFigure.figure_schema,
+    "SVGFigure.scan_rate_labels": SVGFigure.scan_rate_labels,
     "SVGFigure.scan_rate": SVGFigure.scan_rate,
     "SVGFigure.xunit": SVGFigure.xunit,
     "SVGFigure.yunit": SVGFigure.yunit,
