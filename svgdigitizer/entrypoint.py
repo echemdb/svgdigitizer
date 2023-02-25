@@ -19,7 +19,7 @@ EXAMPLES::
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021-2022 Albert Engstfeld
+#        Copyright (C) 2021-2023 Albert Engstfeld
 #        Copyright (C)      2021 Johannes Hermann
 #        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
@@ -313,7 +313,7 @@ def _create_package(metadata, csvname, outdir):
             | package_schema.get_field(name).to_dict()
         )
 
-    package.resources[0].schema.metadata_defaults["fields"] = new_fields
+    package.resources[0].schema = Schema.from_descriptor({"fields": new_fields})
     del package.custom["data description"]["fields"]
 
     return package
@@ -343,7 +343,7 @@ def _write_metadata(out, metadata):
 
     import json
 
-    json.dump(metadata, out, default=defaultconverter, ensure_ascii=False)
+    json.dump(metadata, out, default=defaultconverter, ensure_ascii=False, indent=4)
     # json.dump does not save files with a newline, which compromises the tests
     # where the output files are compared to an expected json.
     out.write("\n")
