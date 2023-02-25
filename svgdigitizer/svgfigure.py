@@ -39,9 +39,10 @@ class SVGFigure:
     TODO:: Add description and docstring (see issue #177)
     """
 
-    def __init__(self, svgplot, metadata=None):
+    def __init__(self, svgplot, metadata=None, si_units=False):
         self.svgplot = svgplot
         self._metadata = metadata or {}
+        self.si_units = si_units
 
     @staticmethod
     def create_figure(measurement_type=None):
@@ -257,6 +258,52 @@ class SVGFigure:
         """
         return self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"]
 
+
+    @property
+    def xunits(self):
+        r"""Returns different formats of the x-axis unit.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: solid line</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 mV / cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 mV / cm</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.xunits  # doctest: +NORMALIZE_WHITESPACE
+            {'unit original': Unit("mV / cm"),
+            'unit si': {'unit': Unit("V / m"), 'scale': 0.1},
+            'unit without prefix': {'unit': Unit("V / m"), 'scale': 0.1}}
+
+        """
+        return Units(self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"]).units
+
+    def yunits(self):
+        return Units(self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"]).units
+
     @cached_property
     def comment(self):
         r"""
@@ -421,14 +468,141 @@ class SVGFigure:
             0   0.0  0.0  0.0
             1  20.0  1.0  1.0
 
+        A dataframe with a time axis, reconstructed with a given scan rate
+        and in SI units::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 mV</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 mV</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
+            ... </svg>'''))
+            >>> figure1 = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure1.df
+                  t      E     j
+            0  0.00  0.000  0.00
+            1  0.02  0.001  0.01
+
+        TESTS::
+
+        A dataframe with a time axis, reconstructed with a given scan rate
+        and in SI units, where one axis does not have compatible astropy units::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 mV</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 mV</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 persons</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 persons</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
+            ... </svg>'''))
+            >>> figure1 = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure1.df
+                  t      E    j
+            0  0.00  0.000  0.0
+            1  0.02  0.001  1.0
+
         """
         df = self.svgplot.df.copy()
+
+        if self.si_units:
+            for column in df.columns:
+                column_unit = self.figure_schema.get_field(column).custom["unit"]
+                if self.unit_is_astropy(column_unit):
+                    self._convert_axis_to_si(df, column)
 
         if self.scan_rate:
             self._add_time_axis(df)
             return df[["t", self.svgplot.xlabel, self.svgplot.ylabel]]
 
-        return df
+        return df[[self.svgplot.xlabel, self.svgplot.ylabel]]
+
+    def _convert_axis_to_si(self, df, label):
+        r"""
+        Add a voltage column to the dataframe `df`.
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 mV</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 mV</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure._convert_axis_to_si(df = figure.svgplot.df.copy(), label='E')
+
+        """
+        quantity = 1 * u.Unit(
+            self.figure_schema.get_field(label).custom["unit"]
+        )
+        # Convert the axis unit to SI unit V and use the value
+        # to convert the potential values in the df to V
+        df[label] = df[label] * quantity.si.value
 
     def _add_time_axis(self, df):
         r"""
@@ -733,43 +907,113 @@ class SVGFigure:
         ``data_schema`` is almost identical to ``figure_schema``. In the individual fields
         the key `orientation` was removed.
 
-        EXAMPLES:
+        # EXAMPLES:
 
-        A plot without a scan rate::
+        # A plot without a scan rate::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.svgfigure import SVGFigure
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.data_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V vs. RHE'},
-                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}
+        #     >>> from svgdigitizer.svg import SVG
+        #     >>> from svgdigitizer.svgplot import SVGPlot
+        #     >>> from svgdigitizer.svgfigure import SVGFigure
+        #     >>> from io import StringIO
+        #     >>> svg = SVG(StringIO(r'''
+        #     ... <svg>
+        #     ...   <g>
+        #     ...     <path d="M 0 100 L 100 0" />
+        #     ...     <text x="0" y="0">curve: 0</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 0 200 L 0 100" />
+        #     ...     <text x="0" y="200">E1: 0 V</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 100 200 L 100 100" />
+        #     ...     <text x="100" y="200">E2: 1 V</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 100 L 0 100" />
+        #     ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 0 L 0 0" />
+        #     ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+        #     ...   </g>
+        #     ... </svg>'''))
+        #     >>> figure = SVGFigure(SVGPlot(svg))
+        #     >>> figure.data_schema  # doctest: +NORMALIZE_WHITESPACE
+        #     {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V'},
+        #                 {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}
 
-        A plot with a scan rate:
+        # A plot without a scan rate but incompatible x axis units::
+
+        #     >>> from svgdigitizer.svg import SVG
+        #     >>> from svgdigitizer.svgplot import SVGPlot
+        #     >>> from svgdigitizer.svgfigure import SVGFigure
+        #     >>> from io import StringIO
+        #     >>> svg = SVG(StringIO(r'''
+        #     ... <svg>
+        #     ...   <g>
+        #     ...     <path d="M 0 100 L 100 0" />
+        #     ...     <text x="0" y="0">curve: 0</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 0 200 L 0 100" />
+        #     ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 100 200 L 100 100" />
+        #     ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 100 L 0 100" />
+        #     ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 0 L 0 0" />
+        #     ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+        #     ...   </g>
+        #     ... </svg>'''))
+        #     >>> figure1 = SVGFigure(SVGPlot(svg))
+        #     >>> figure1.data_schema  # doctest: +NORMALIZE_WHITESPACE
+        #     {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V vs. RHE'},
+        #                 {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}
+
+        # A plot with a scan rate:
+
+        #     >>> from svgdigitizer.svg import SVG
+        #     >>> from svgdigitizer.svgplot import SVGPlot
+        #     >>> from svgdigitizer.svgfigure import SVGFigure
+        #     >>> from io import StringIO
+        #     >>> svg = SVG(StringIO(r'''
+        #     ... <svg>
+        #     ...   <g>
+        #     ...     <path d="M 0 100 L 100 0" />
+        #     ...     <text x="0" y="0">curve: 0</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 0 200 L 0 100" />
+        #     ...     <text x="0" y="200">E1: 0 V</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M 100 200 L 100 100" />
+        #     ...     <text x="100" y="200">E2: 1 V</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 100 L 0 100" />
+        #     ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+        #     ...   </g>
+        #     ...   <g>
+        #     ...     <path d="M -100 0 L 0 0" />
+        #     ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+        #     ...   </g>
+        #     ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+        #     ... </svg>'''))
+        #     >>> figure_rate = SVGFigure(SVGPlot(svg))
+        #     >>> figure_rate.data_schema  # doctest: +NORMALIZE_WHITESPACE
+        #     {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V'},
+        #                 {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'},
+        #                 {'name': 't', 'type': 'number', 'unit': 's'}]}
+
+        A plot with a scan rate and converted to SI units:
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
@@ -799,12 +1043,11 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.data_schema  # doctest: +NORMALIZE_WHITESPACE
+            >>> figure_rate_si = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure_rate_si.data_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V'},
                         {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'},
                         {'name': 't', 'type': 'number', 'unit': 's'}]}
-
 
         """
         from frictionless import Schema, fields
@@ -813,6 +1056,13 @@ class SVGFigure:
         for name in schema.field_names:
             if "orientation" in schema.get_field(name).to_dict():
                 del schema.get_field(name).custom["orientation"]
+
+        if self.si_units:
+            for name in self.figure_schema.field_names:
+                field_unit = self.figure_schema.get_field(name).custom["unit"]
+                if self.unit_is_astropy(field_unit):
+                    si_unit = (1* u.Unit(field_unit)).si.unit.to_string()
+                    schema.update_field(name, {"unit": si_unit})
 
         if self.scan_rate:
             schema.add_field(fields.NumberField(name="t"))
@@ -1139,6 +1389,99 @@ class SVGFigure:
         TODO:: Refactor once scan rate and SI is implemented (see issue #177)
         """
         return self.svgplot.plot()
+
+
+class Units:
+    r"""
+    EXAMPLES::
+
+        >>> from svgdigitizer.svgfigure import Units
+        >>> units = Units('V / cm')
+        >>> units.unit
+        Unit("V / cm")
+        >>> units.unit_si
+        Unit("100 V / m")
+        >>> units.non_prefix_unit
+        Unit("100 V / m")
+
+        SI is rather ambiguous since in the above example "V" is maintained in the unit.
+        If one simply parses ``V``, the results might be ``Unit("W / A")`` or ``Unit("A Ohm")``.
+
+    """
+    def __init__(self, unit):
+        self.unit = u.Unit(unit)
+        self.unit_si = self.unit.si
+        self.non_prefix_unit = self.remove_unit_prefix(self.unit)
+
+    @property
+    def units(self):
+        r"""
+        EXAMPLES::
+
+            >>> from svgdigitizer.svgfigure import Units
+            >>> units = Units('mV / cm')
+            >>> units.units  # doctest: +NORMALIZE_WHITESPACE
+            {'unit original': Unit("mV / cm"),
+            'unit si': {'unit': Unit("V / m"), 'scale': 0.1},
+            'unit without prefix': {'unit': Unit("V / m"), 'scale': 0.1}}
+
+            >>> units = Units('V / (cm h)')
+            >>> units.units  # doctest: +NORMALIZE_WHITESPACE
+            {'unit original': Unit("V / (cm h)"),
+            'unit si': {'unit': Unit("m T / s2"), 'scale': 0.027777777777777776},
+            'unit without prefix': {'unit': Unit("V / (h m)"), 'scale': 100.0}}
+
+        """
+        # TODO: Support composite axis units such as "1000 1/K"
+        units = {'unit original': self.unit,
+        'unit si': {'unit': self.compositeunit_unit(self.unit_si),
+                    'scale': self.unit_si.scale},
+        'unit without prefix': {'unit': self.compositeunit_unit(self.non_prefix_unit),
+                            'scale': self.non_prefix_unit.scale},
+        }
+
+        return units
+
+    @classmethod
+    def remove_unit_prefix(cls, unit):
+        r"""
+        EXAMPLES::
+
+            >>> from svgdigitizer.svgfigure import Units
+            >>> import astropy.units as u
+            >>> Units.remove_unit_prefix(u.Unit('mV / cm'))
+            Unit("0.1 V / m")
+
+        """
+        import astropy
+        import math
+
+        unit_parts = []
+        for unit_, power in zip(unit.bases, unit.powers):
+            if not type(unit_) == astropy.units.core.Unit:
+                unit_parts.append(unit_.represents**power)
+            else:
+                unit_parts.append(unit_**power)
+        return math.prod(unit_parts).unit
+
+    @classmethod
+    def compositeunit_unit(cls, unit):
+        r"""
+        EXAMPLES::
+
+            >>> from svgdigitizer.svgfigure import Units
+            >>> import astropy.units as u
+            >>> composite_unit = Units.remove_unit_prefix(u.Unit('mV / cm'))
+            >>> composite_unit
+            Unit("0.1 V / m")
+            >>> Units.compositeunit_unit(composite_unit)
+            Unit("V / m")
+            >>> Units.compositeunit_unit(u.Unit('mV / cm').si)
+            Unit("V / m")
+
+        """
+        import math
+        return math.prod([((unit_**power)) for unit_, power in zip(unit.bases, unit.powers)]).unit
 
 
 # Ensure that cached properties are tested, see

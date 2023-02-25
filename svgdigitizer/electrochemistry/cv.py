@@ -171,8 +171,8 @@ class CV(SVGFigure):
 
     """
 
-    def __init__(self, svgplot, metadata=None):
-        super().__init__(svgplot=svgplot, metadata=metadata)
+    def __init__(self, svgplot, metadata=None, si_units=False):
+        super().__init__(svgplot=svgplot, metadata=metadata, si_units=si_units)
         assert self.svgplot.xlabel in [
             "U",
             "E",
