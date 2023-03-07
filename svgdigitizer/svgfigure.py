@@ -29,6 +29,8 @@ from functools import cached_property
 
 import astropy.units as u
 
+from svgdigitizer.units import Units
+
 from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("svgfigure")
@@ -180,7 +182,7 @@ class SVGFigure:
 
     @cached_property
     def xunit(self):
-        r"""Returns the unit of the x-axis.
+        r"""Returns the original unit of the x-axis.
 
         EXAMPLES::
 
@@ -213,18 +215,18 @@ class SVGFigure:
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
             >>> figure.xunit
-            'V'
+            'V vs. RHE'
 
         """
-        if self.si_units:
-            return self.xunits['unit si']['unit']
+        # if self.si_units:
+        #     return self.xunits['unit si']['unit']
 
-        return self.xunits['unit original']
-        #return self.data_schema.get_field(self.svgplot.xlabel).custom["unit"]
+        # return self.xunits['unit original']
+        return self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"]
 
     @cached_property
     def yunit(self):
-        r"""Returns the unit of the y-axis.
+        r"""Returns the original unit of the y-axis.
 
         EXAMPLES::
 
@@ -260,11 +262,11 @@ class SVGFigure:
             'A / cm2'
 
         """
-        if self.si_units:
-            return self.yunits['unit si']['unit']
+        # if self.si_units:
+        #     return self.yunits['unit si']['unit']
 
-        return self.yunits['unit original']
-        #return self.data_schema.get_field(self.svgplot.ylabel).custom["unit"]
+        # return self.yunits['unit original']
+        return self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"]
 
 
     @property
@@ -306,7 +308,8 @@ class SVGFigure:
             'unit si': {'unit': 'V / m', 'scale': 0.1}}
 
         """
-        return Units(self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"]).units
+        units = Units(self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"])
+        return units.units
 
     @property
     def yunits(self):
@@ -347,7 +350,8 @@ class SVGFigure:
             'unit si': {'unit': 'A / m2', 'scale': 10000.0}}
 
         """
-        return Units(self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"]).units
+        units = Units(self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"])
+        return units.units
 
     @cached_property
     def comment(self):
@@ -657,7 +661,7 @@ class SVGFigure:
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
+            >>> from svgdigitizer.svgfigure import SVGFigure
             >>> from io import StringIO
             >>> svg = SVG(StringIO(r'''
             ... <svg>
@@ -667,11 +671,11 @@ class SVGFigure:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V</text>
+            ...     <text x="0" y="200">E1: 0 cm</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V</text>
+            ...     <text x="100" y="200">E2: 1 cm</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
@@ -681,18 +685,25 @@ class SVGFigure:
             ...     <path d="M -100 0 L 0 0" />
             ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
             ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+            ...   <text x="-200" y="330">scan rate: 50 cm/s</text>
             ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> df = cv.svgplot.df.copy()
-            >>> cv._add_voltage_axis(df)
-            >>> cv._add_time_axis(df)
+            >>> plot = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> df = plot.svgplot.df.copy()
+            >>> plot._add_time_axis(df)
 
         """
+        x_quantity = 1 * u.Unit(
+            #self.data_schema.get_field(self.svgplot.xlabel).custom["unit"]
+            self.xunit
+        )
+        if self.si_units:
+            x_quantity = x_quantity.si
+
+        factor = (x_quantity / (self.scan_rate)).decompose()
 
         df["delta_x"] = abs(df[self.svgplot.xlabel].diff().fillna(0))
         df["cumdelta_x"] = df["delta_x"].cumsum()
-        df["t"] = df["cumdelta_x"] / float(self.scan_rate.si.value)
+        df["t"] = df["cumdelta_x"] * factor.value #float(self.scan_rate.si.value)
 
     @classmethod
     def unit_is_astropy(cls, unit):
@@ -1103,8 +1114,8 @@ class SVGFigure:
                 del schema.get_field(name).custom["orientation"]
 
         if self.si_units:
-            for name in self.figure_schema.field_names:
-                field_unit = self.figure_schema.get_field(name).custom["unit"]
+            for name in schema.field_names:
+                field_unit = schema.get_field(name).custom["unit"]
                 if self.unit_is_astropy(field_unit):
                     si_unit = (1* u.Unit(field_unit)).si.unit.to_string()
                     schema.update_field(name, {"unit": si_unit})
@@ -1434,173 +1445,6 @@ class SVGFigure:
         TODO:: Refactor once scan rate and SI is implemented (see issue #177)
         """
         return self.svgplot.plot()
-
-
-class Units:
-    r"""
-    EXAMPLES::
-
-        >>> from svgdigitizer.svgfigure import Units
-        >>> units = Units('mV / cm')
-        >>> units.unit
-        Unit("mV / cm")
-        >>> units.unit_si
-        Unit("0.1 V / m")
-
-        SI is rather ambiguous since in the above example "V" is maintained in the unit.
-        If one simply parses ``V``, the results might be ``Unit("W / A")`` or ``Unit("A Ohm")``.
-
-    """
-    def __init__(self, unit):
-        self._unit = unit
-
-    @cached_property
-    def unit(self):
-        r"""
-        Return the original unit as an astropy unit.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svgfigure import Units
-            >>> units = Units('mV / cm')
-            >>> units.unit
-            Unit("mV / cm")
-
-        """
-        return u.Unit(self._unit)
-
-    @cached_property
-    def unit_si(self):
-        r"""
-        Returns the original unit as SI unit.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svgfigure import Units
-            >>> units = Units('km / h')
-            >>> units.unit_si
-            Unit("0.277778 m / s")
-
-        """
-        return self.unit.si
-
-    @property
-    def non_prefix_unit(self):
-        r"""
-        Returns a rescaled astropy unit after removing the unit prefixes.
-
-        EXAMPLES::
-
-            # >>> from svgdigitizer.svgfigure import Units
-            # >>> import astropy.units as u
-            # >>> Units.remove_unit_prefix(u.Unit('mV / cm'))
-            # Unit("0.1 V / m")
-
-        """
-
-        return self.remove_unit_prefix(self.unit)
-
-    @property
-    def units(self):
-        r"""
-        EXAMPLES::
-
-            >>> from svgdigitizer.svgfigure import Units
-            >>> units = Units('mV / cm')
-            >>> units.units ==\
-            ... {'unit original': 'mV / cm',
-            ... 'unit si': {'unit': 'V / m', 'scale': 0.1}}
-            True
-
-            >>> units = Units('V / (cm h)')
-            >>> units.units  == \
-            ... {'unit original': 'V / (cm h)',
-            ... 'unit si': {'unit': 'm T / s2', 'scale': 0.027777777777777776}}
-            True
-
-        """
-        # TODO: Support composite axis units such as "1000 1/K"
-        units = {'unit original': self.unit.to_string(),
-        'unit si': {'unit': self.compositeunit_unit(self.unit_si).to_string(),
-                    'scale': self.unit_si.scale},
-        # 'unit without prefix': {'unit': self.compositeunit_unit(self.non_prefix_unit).to_string(),
-        #                     'scale': self.non_prefix_unit.scale},
-        }
-
-        return units
-
-    @classmethod
-    def remove_unit_prefix(cls, unit):
-        r"""
-        Returns a rescaled astropy unit after removing the unit prefixes.
-
-        EXAMPLES::
-
-            # >>> from svgdigitizer.svgfigure import Units
-            # >>> import astropy.units as u
-            # >>> Units.remove_unit_prefix(u.Unit('mV / cm'))
-            Unit("0.1 V / m")
-
-        """
-        import astropy
-        import math
-
-        # unit_parts = []
-        # for unit_, power in zip(unit.bases, unit.powers):
-        #     if isinstance(unit_, astropy.units.core.PrefixUnit):
-        #         unit_parts.append(unit_.represents**power)
-        #     else:
-        #         unit_parts.append(unit_**power)
-
-        # new_unit = u.Unit('')
-        # for unit in unit_parts:
-        #     new_unit *= unit
-
-        # return new_unit
-        unit_parts = []
-        for unit_, power in zip(unit.bases, unit.powers):
-            #print(isinstance(unit_, astropy.units.core.Unit))
-            print(unit_)
-            print(type(unit_))
-            if isinstance(unit_, astropy.units.core.PrefixUnit):
-                #print('tested')
-                unit_parts.append(unit_.represents**power)
-            else:
-                unit_parts.append(unit_**power)
-
-            # print(unit_, '   ', type(unit_), '    ', power)
-            # print(unit_.represents**power)
-
-        print(unit_parts)
-        return math.prod(unit_parts).unit
-
-
-
-
-        #return math.prod(unit_parts).unit
-
-    @classmethod
-    def compositeunit_unit(cls, unit):
-        r"""
-        Returns the unit of an astropy composite unit.
-
-        In astropy a composite unit can consist of a scale and a unit, such as '0.01 m / s'.
-
-        EXAMPLES::
-
-            >>> from svgdigitizer.svgfigure import Units
-            >>> import astropy.units as u
-            >>> composite_unit = u.Unit('0.01 km / h')
-            >>> composite_unit
-            Unit("0.01 km / h")
-            >>> Units.compositeunit_unit(composite_unit)
-            Unit("km / h")
-            >>> Units.compositeunit_unit(u.Unit('0.01 km / h').si)
-            Unit("m / s")
-
-        """
-        import math
-        return math.prod([((unit_**power)) for unit_, power in zip(unit.bases, unit.powers)]).unit
 
 
 # Ensure that cached properties are tested, see

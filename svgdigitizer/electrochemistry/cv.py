@@ -186,150 +186,150 @@ class CV(SVGFigure):
     def measurement_type(self):
         return "CV"
 
-    @property
-    def voltage_dimension(self):
-        r"""
-        The dimension of the voltage axis given as ``U`` (voltage) or ``E`` (potential).
+    # @property
+    # def voltage_dimension(self):
+    #     r"""
+    #     The dimension of the voltage axis given as ``U`` (voltage) or ``E`` (potential).
 
-        EXAMPLES::
+    #     EXAMPLES::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.voltage_dimension
-            'E'
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.electrochemistry.cv import CV
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: 0</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+    #         ... </svg>'''))
+    #         >>> cv = CV(SVGPlot(svg))
+    #         >>> cv.voltage_dimension
+    #         'E'
 
-        The following example is not valid, since the voltage is on the y-axis
-        and current on the x-axis.
+    #     The following example is not valid, since the voltage is on the y-axis
+    #     and current on the x-axis.
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.voltage_dimension
-            UNEXPECTED EXCEPTION: AssertionError("The y-label must be 'E' or 'U and not 'j'.")
-            Traceback (most recent call last):
-            File "C:\Miniconda3\envs\svgdigitizer-build\lib\doctest.py", line 1350, in __run
-                exec(compile(example.source, filename, "single",
-            File "<doctest svgdigitizer.electrochemistry.cv.CV.voltage_dimension[12]>", line 1, in <module>
-            File "X:\github\svgdigitizer\svgdigitizer\electrochemistry\cv.py", line 176, in __init__
-                assert self.svgplot.xlabel in [
-            AssertionError: The y-label must be 'E' or 'U and not 'j'.
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.electrochemistry.cv import CV
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: 0</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">j1: 0 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">j2: 1 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">E1: 0 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">E2: 1 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+    #         ... </svg>'''))
+    #         >>> cv = CV(SVGPlot(svg))
+    #         >>> cv.voltage_dimension
+    #         UNEXPECTED EXCEPTION: AssertionError("The y-label must be 'E' or 'U and not 'j'.")
+    #         Traceback (most recent call last):
+    #         File "C:\Miniconda3\envs\svgdigitizer-build\lib\doctest.py", line 1350, in __run
+    #             exec(compile(example.source, filename, "single",
+    #         File "<doctest svgdigitizer.electrochemistry.cv.CV.voltage_dimension[12]>", line 1, in <module>
+    #         File "X:\github\svgdigitizer\svgdigitizer\electrochemistry\cv.py", line 176, in __init__
+    #             assert self.svgplot.xlabel in [
+    #         AssertionError: The y-label must be 'E' or 'U and not 'j'.
 
-        """
-        dimensions = list(set(["E", "U"]).intersection(self.figure_schema.field_names))
+    #     """
+    #     dimensions = list(set(["E", "U"]).intersection(self.figure_schema.field_names))
 
-        if len(dimensions) == 1:
-            if self.figure_schema.get_field(dimensions[0]).custom["orientation"] == "x":
-                return dimensions[0]
-            raise SVGAnnotationError("The voltage must be on the x-axis in the SVG.")
+    #     if len(dimensions) == 1:
+    #         if self.figure_schema.get_field(dimensions[0]).custom["orientation"] == "x":
+    #             return dimensions[0]
+    #         raise SVGAnnotationError("The voltage must be on the x-axis in the SVG.")
 
-        raise SVGAnnotationError(
-            "No voltage axis or more than one voltage axis found in the SVG."
-        )
+    #     raise SVGAnnotationError(
+    #         "No voltage axis or more than one voltage axis found in the SVG."
+    #     )
 
-    @property
-    def current_dimension(self):
-        r"""
-        The dimension of the current axis given as
-        ``I`` (current) or ``j`` (current density).
+    # @property
+    # def current_dimension(self):
+    #     r"""
+    #     The dimension of the current axis given as
+    #     ``I`` (current) or ``j`` (current density).
 
-        EXAMPLES::
+    #     EXAMPLES::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 V/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.current_dimension
-            'j'
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.electrochemistry.cv import CV
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: 0</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <text x="-200" y="330">scan rate: 50 V/s</text>
+    #         ... </svg>'''))
+    #         >>> cv = CV(SVGPlot(svg))
+    #         >>> cv.current_dimension
+    #         'j'
 
-        """
-        dimensions = list(set(["I", "j"]).intersection(self.figure_schema.field_names))
+    #     """
+    #     dimensions = list(set(["I", "j"]).intersection(self.figure_schema.field_names))
 
-        if len(dimensions) == 1:
-            if self.figure_schema.get_field(dimensions[0]).custom["orientation"] == "y":
-                return dimensions[0]
-            raise SVGAnnotationError("The current must be on the y-axis in the SVG.")
+    #     if len(dimensions) == 1:
+    #         if self.figure_schema.get_field(dimensions[0]).custom["orientation"] == "y":
+    #             return dimensions[0]
+    #         raise SVGAnnotationError("The current must be on the y-axis in the SVG.")
 
-        raise SVGAnnotationError(
-            "No current axis or more than one current axis found in the SVG."
-        )
+    #     raise SVGAnnotationError(
+    #         "No current axis or more than one current axis found in the SVG."
+        # )
 
     @property
     def data_schema(self):
@@ -370,7 +370,7 @@ class CV(SVGFigure):
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
+            >>> cv = CV(SVGPlot(svg), si_units=True)
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
                         {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
@@ -407,33 +407,39 @@ class CV(SVGFigure):
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
+            >>> cv = CV(SVGPlot(svg), si_units=True)
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 'U', 'type': 'number', 'unit': 'V', 'reference': 'unknown'},
                         {'name': 'I', 'type': 'number', 'unit': 'A'},
                         {'name': 't', 'type': 'number', 'unit': 's'}]}
 
         """
-        from frictionless import Schema, fields
+        # from frictionless import Schema, fields
 
-        schema = Schema.from_descriptor(self.figure_schema.to_dict())
+        # schema = Schema.from_descriptor(self.figure_schema.to_dict())
 
-        schema.get_field(self.voltage_dimension).custom["unit"] = "V"
-        del schema.get_field(self.voltage_dimension).custom["orientation"]
-        if self.current_dimension == "I":
-            schema.get_field(self.current_dimension).custom["unit"] = "A"
-        elif self.current_dimension == "j":
-            schema.get_field(self.current_dimension).custom["unit"] = "A / m2"
-        else:
-            raise SVGAnnotationError(
-                "None of the axis labels in the SVG have a dimension current 'I' or current density 'j'."
-            )
+        # schema.get_field(self.voltage_dimension).custom["unit"] = "V"
+        # del schema.get_field(self.voltage_dimension).custom["orientation"]
+        # if self.current_dimension == "I":
+        #     schema.get_field(self.current_dimension).custom["unit"] = "A"
+        # elif self.current_dimension == "j":
+        #     schema.get_field(self.current_dimension).custom["unit"] = "A / m2"
+        # else:
+        #     raise SVGAnnotationError(
+        #         "None of the axis labels in the SVG have a dimension current 'I' or current density 'j'."
+        #     )
 
-        del schema.get_field(self.current_dimension).custom["orientation"]
+        # del schema.get_field(self.current_dimension).custom["orientation"]
 
-        schema.add_field(fields.NumberField(name="t"))
-        schema.update_field("t", {"unit": "s"})
+        # schema.add_field(fields.NumberField(name="t"))
+        # schema.update_field("t", {"unit": "s"})
+        schema = super().data_schema
 
+        # astropy SI conversion turns `V` into `W / A` or `Ohm m`,
+        # thus we need to set it manually to `V`.
+        if self.si_units:
+            if u.allclose(1 * u.Unit(schema.get_field(self.svgplot.xlabel).custom["unit"]), 1* u.V):
+                schema.update_field(self.svgplot.xlabel, {'unit': 'V'})
         return schema
 
     @cached_property
@@ -490,189 +496,189 @@ class CV(SVGFigure):
         pattern = r"^(?P<unit>.+?)? *(?:(?:@|vs\.?) *(?P<reference>.+))?$"
         match = re.match(
             pattern,
-            schema.get_field(self.voltage_dimension).custom["unit"],
+            schema.get_field(self.svgplot.xlabel).custom["unit"],
             re.IGNORECASE,
         )
 
         schema.update_field(
-            self.voltage_dimension,
+            self.svgplot.xlabel,
             {"unit": match[1], "reference": match[2] or "unknown"},
         )
 
         return schema
 
-    @cached_property
-    def df(self):
-        # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltammogram and which is displayed in the documentation (see issue #73).
-        r"""
-        Return a dataframe with axis 't', 'E' (or 'U'), and 'I' (or 'j).
-        The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
+    # @cached_property
+    # def df(self):
+    #     # TODO: Add a more meaningful curve that reflects the shape of a cyclic voltammogram and which is displayed in the documentation (see issue #73).
+    #     r"""
+    #     Return a dataframe with axis 't', 'E' (or 'U'), and 'I' (or 'j).
+    #     The dimensions are in SI units 's', 'V' and 'A' (or 'A / m2').
 
-        The dataframe is constructed based on the units and values,
-        determined from ``svgplot``. These are usually not in SI units
-        and will be converted in the process of creating the df.
+    #     The dataframe is constructed based on the units and values,
+    #     determined from ``svgplot``. These are usually not in SI units
+    #     and will be converted in the process of creating the df.
 
-        The time axis can only be created when a scan rate is given
-        in the plot, i.e., '50 mV /s'.
+    #     The time axis can only be created when a scan rate is given
+    #     in the plot, i.e., '50 mV /s'.
 
-        EXAMPLES::
+    #     EXAMPLES::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv.df
-                  t    E     j
-            0   0.0  0.0  0.00
-            1  20.0  1.0  0.01
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.electrochemistry.cv import CV
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: 0</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <text x="-200" y="330">scan rate: 50 mV/s</text>
+    #         ... </svg>'''))
+    #         >>> cv = CV(SVGPlot(svg))
+    #         >>> cv.df
+    #               t    E     j
+    #         0   0.0  0.0  0.00
+    #         1  20.0  1.0  0.01
 
-        The same cv but now sampled at 0.1 V increments on the voltage axis (x-axis)::
+    #     The same cv but now sampled at 0.1 V increments on the voltage axis (x-axis)::
 
-            >>> cv = CV(SVGPlot(svg, sampling_interval=.1))
-            >>> cv.df
-                   t    E      j
-            0    0.0  0.0  0.000
-            1    2.0  0.1  0.001
-            2    4.0  0.2  0.002
-            3    6.0  0.3  0.003
-            4    8.0  0.4  0.004
-            5   10.0  0.5  0.005
-            6   12.0  0.6  0.006
-            7   14.0  0.7  0.007
-            8   16.0  0.8  0.008
-            9   18.0  0.9  0.009
-            10  20.0  1.0  0.010
+    #         >>> cv = CV(SVGPlot(svg, sampling_interval=.1))
+    #         >>> cv.df
+    #                t    E      j
+    #         0    0.0  0.0  0.000
+    #         1    2.0  0.1  0.001
+    #         2    4.0  0.2  0.002
+    #         3    6.0  0.3  0.003
+    #         4    8.0  0.4  0.004
+    #         5   10.0  0.5  0.005
+    #         6   12.0  0.6  0.006
+    #         7   14.0  0.7  0.007
+    #         8   16.0  0.8  0.008
+    #         9   18.0  0.9  0.009
+    #         10  20.0  1.0  0.010
 
-        """
-        df = self.svgplot.df.copy()
-        self._add_voltage_axis(df)
+    #     """
+    #     df = self.svgplot.df.copy()
+    #     self._add_voltage_axis(df)
 
-        self._add_current_axis(df)
+    #     self._add_current_axis(df)
 
-        self._add_time_axis(df)
+    #     self._add_time_axis(df)
 
-        # Rearrange columns.
-        return df[["t", self.voltage_dimension, self.current_dimension]]
+    #     # Rearrange columns.
+    #     return df[["t", self.voltage_dimension, self.current_dimension]]
 
-    def _add_voltage_axis(self, df):
-        r"""
-        Add a voltage column to the dataframe `df`.
+    # def _add_voltage_axis(self, df):
+    #     r"""
+    #     Add a voltage column to the dataframe `df`.
 
-        EXAMPLES::
+    #     EXAMPLES::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv._add_voltage_axis(df = cv.svgplot.df.copy())
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.electrochemistry.cv import CV
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: 0</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
+    #         ... </svg>'''))
+    #         >>> cv = CV(SVGPlot(svg))
+    #         >>> cv._add_voltage_axis(df = cv.svgplot.df.copy())
 
-        """
-        voltage = 1 * u.Unit(
-            self.figure_schema.get_field(self.voltage_dimension).custom["unit"]
-        )
-        # Convert the axis unit to SI unit V and use the value
-        # to convert the potential values in the df to V
-        df[self.voltage_dimension] = df[self.voltage_dimension] * voltage.si
+    #     """
+    #     voltage = 1 * u.Unit(
+    #         self.figure_schema.get_field(self.voltage_dimension).custom["unit"]
+    #     )
+    #     # Convert the axis unit to SI unit V and use the value
+    #     # to convert the potential values in the df to V
+    #     df[self.voltage_dimension] = df[self.voltage_dimension] * voltage.si
 
-    def _add_current_axis(self, df):
-        r"""
-        Add a current 'I' or current density 'j' column to the dataframe `df`.
+    # def _add_current_axis(self, df):
+    #     r"""
+    #     Add a current 'I' or current density 'j' column to the dataframe `df`.
 
-        EXAMPLES::
+    #     EXAMPLES::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.electrochemistry.cv import CV
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: 0</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
-            ...   </g>
-            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
-            ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg))
-            >>> cv._add_current_axis(df = cv.svgplot.df.copy())
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.electrochemistry.cv import CV
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: 0</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 V vs. RHE</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+    #         ...   </g>
+    #         ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
+    #         ... </svg>'''))
+    #         >>> cv = CV(SVGPlot(svg))
+    #         >>> cv._add_current_axis(df = cv.svgplot.df.copy())
 
-        """
-        current = 1 * u.Unit(
-            self.figure_schema.get_field(self.current_dimension).custom["unit"]
-        )
+    #     """
+    #     current = 1 * u.Unit(
+    #         self.figure_schema.get_field(self.current_dimension).custom["unit"]
+    #     )
 
-        # Distinguish whether the y data is current ('A') or current density ('A / cm2')
-        if "m2" in str(current.unit):
-            conversion_factor = current.si
-        else:
-            conversion_factor = current.si
+    #     # Distinguish whether the y data is current ('A') or current density ('A / cm2')
+    #     if "m2" in str(current.unit):
+    #         conversion_factor = current.si
+    #     else:
+    #         conversion_factor = current.si
 
-        df[self.current_dimension] = df[self.current_dimension] * conversion_factor
+    #     df[self.current_dimension] = df[self.current_dimension] * conversion_factor
 
     def plot(self):
         r"""
@@ -713,22 +719,22 @@ class CV(SVGFigure):
 
         """
         self.df.plot(
-            x=self.voltage_dimension,
-            y=self.current_dimension,
+            x=self.svgplot.xlabel,
+            y=self.svgplot.ylabel,
         )
         plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
         plt.xlabel(
-            self.voltage_dimension
+            self.svgplot.xlabel
             + " ["
-            + str(self.data_schema.get_field(self.voltage_dimension).custom["unit"])
+            + str(self.data_schema.get_field(self.svgplot.xlabel).custom["unit"])
             + " vs. "
-            + self.data_schema.get_field(self.voltage_dimension).custom["reference"]
+            + self.data_schema.get_field(self.svgplot.xlabel).custom["reference"]
             + "]"
         )
         plt.ylabel(
-            self.current_dimension
+            self.svgplot.ylabel
             + " ["
-            + str(self.data_schema.get_field(self.current_dimension).custom["unit"])
+            + str(self.data_schema.get_field(self.svgplot.ylabel).custom["unit"])
             + "]"
         )
 
@@ -736,6 +742,6 @@ class CV(SVGFigure):
 # Ensure that cached properties are tested, see
 # https://stackoverflow.com/questions/69178071/cached-property-doctest-is-not-detected/72500890#72500890
 __test__ = {
-    "CV.df": CV.df,
+    # "CV.df": CV.df,
     "CV.figure_schema": CV.figure_schema,
 }
