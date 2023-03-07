@@ -697,7 +697,7 @@ class SVGFigure:
             self.xunit
         )
         if self.si_units:
-            x_quantity = x_quantity.si
+            x_quantity = 1 * x_quantity.si.unit
 
         factor = (x_quantity / (self.scan_rate)).decompose()
 

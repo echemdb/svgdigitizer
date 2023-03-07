@@ -131,7 +131,7 @@ class CV(SVGFigure):
         ...   <text x="-400" y="530">linked: SXRD, SHG</text>
         ...   <text x="-400" y="330">tags: BCV, HER, OER</text>
         ... </svg>'''))
-        >>> cv = CV(SVGPlot(svg))
+        >>> cv = CV(SVGPlot(svg), si_units=True)
 
     The data of the CV can be returned as a dataframe
     with axis 't', 'E' or 'U', and 'I' (current) or 'j' (current density).
