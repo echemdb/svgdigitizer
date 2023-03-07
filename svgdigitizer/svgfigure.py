@@ -29,7 +29,7 @@ from functools import cached_property
 
 import astropy.units as u
 
-from svgdigitizer.units import Units
+# from svgdigitizer.units import Units
 
 from svgdigitizer.exceptions import SVGAnnotationError
 
@@ -269,89 +269,89 @@ class SVGFigure:
         return self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"]
 
 
-    @property
-    def xunits(self):
-        r"""Returns different formats of the x-axis unit.
+    # @property
+    # def xunits(self):
+    #     r"""Returns different formats of the x-axis unit.
 
-        EXAMPLES::
+    #     EXAMPLES::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.svgfigure import SVGFigure
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: solid line</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 mV / cm</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 mV / cm</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.xunits  # doctest: +NORMALIZE_WHITESPACE
-            {'unit original': 'mV / cm',
-            'unit si': {'unit': 'V / m', 'scale': 0.1}}
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.svgfigure import SVGFigure
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: solid line</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 mV / cm</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 mV / cm</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+    #         ...   </g>
+    #         ... </svg>'''))
+    #         >>> figure = SVGFigure(SVGPlot(svg))
+    #         >>> figure.xunits  # doctest: +NORMALIZE_WHITESPACE
+    #         {'unit original': 'mV / cm',
+    #         'unit si': {'unit': 'V / m', 'scale': 0.1}}
 
-        """
-        units = Units(self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"])
-        return units.units
+    #     """
+    #     units = Units(self.figure_schema.get_field(self.svgplot.xlabel).custom["unit"])
+    #     return units.units
 
-    @property
-    def yunits(self):
-        r"""Returns different formats of the y-axis unit.
+    # @property
+    # def yunits(self):
+    #     r"""Returns different formats of the y-axis unit.
 
-        EXAMPLES::
+    #     EXAMPLES::
 
-            >>> from svgdigitizer.svg import SVG
-            >>> from svgdigitizer.svgplot import SVGPlot
-            >>> from svgdigitizer.svgfigure import SVGFigure
-            >>> from io import StringIO
-            >>> svg = SVG(StringIO(r'''
-            ... <svg>
-            ...   <g>
-            ...     <path d="M 0 100 L 100 0" />
-            ...     <text x="0" y="0">curve: solid line</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 mV / cm</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 mV / cm</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 100 L 0 100" />
-            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
-            ...   </g>
-            ...   <g>
-            ...     <path d="M -100 0 L 0 0" />
-            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
-            ...   </g>
-            ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.yunits  # doctest: +NORMALIZE_WHITESPACE
-            {'unit original': 'A / cm2',
-            'unit si': {'unit': 'A / m2', 'scale': 10000.0}}
+    #         >>> from svgdigitizer.svg import SVG
+    #         >>> from svgdigitizer.svgplot import SVGPlot
+    #         >>> from svgdigitizer.svgfigure import SVGFigure
+    #         >>> from io import StringIO
+    #         >>> svg = SVG(StringIO(r'''
+    #         ... <svg>
+    #         ...   <g>
+    #         ...     <path d="M 0 100 L 100 0" />
+    #         ...     <text x="0" y="0">curve: solid line</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 0 200 L 0 100" />
+    #         ...     <text x="0" y="200">E1: 0 mV / cm</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M 100 200 L 100 100" />
+    #         ...     <text x="100" y="200">E2: 1 mV / cm</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 100 L 0 100" />
+    #         ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+    #         ...   </g>
+    #         ...   <g>
+    #         ...     <path d="M -100 0 L 0 0" />
+    #         ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+    #         ...   </g>
+    #         ... </svg>'''))
+    #         >>> figure = SVGFigure(SVGPlot(svg))
+    #         >>> figure.yunits  # doctest: +NORMALIZE_WHITESPACE
+    #         {'unit original': 'A / cm2',
+    #         'unit si': {'unit': 'A / m2', 'scale': 10000.0}}
 
-        """
-        units = Units(self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"])
-        return units.units
+    #     """
+    #     units = Units(self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"])
+    #     return units.units
 
     @cached_property
     def comment(self):
