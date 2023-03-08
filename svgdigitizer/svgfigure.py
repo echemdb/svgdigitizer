@@ -645,7 +645,7 @@ class SVGFigure:
             0  0.00  0.000  0.00
             1  0.02  0.001  0.01
 
-        TESTS::
+        TESTS:
 
         A dataframe with a time axis, reconstructed with a given scan rate
         and in SI units, where the y-axis does not have compatible astropy units::
@@ -910,9 +910,9 @@ class SVGFigure:
             >>> figure.scan_rate
             <Quantity 50. mV / s>
 
-        TESTS::
+        TESTS:
 
-        A plot without a scan rate:
+        A plot without a scan rate::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
