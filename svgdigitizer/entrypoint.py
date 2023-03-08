@@ -58,6 +58,8 @@ skewed_option = click.option(
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
 )
 
+si_option = click.option("--si", is_flag=False, help="Converts units of the plot and CSV to SI (if possible).")
+
 
 def _outfile(template, suffix=None, outdir=None):
     r"""
@@ -200,8 +202,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
     help="write output files to this directory",
 )
 @click.argument("svg", type=click.Path(exists=True))
+@si_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
+def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
     r"""
     Digitize a cylic voltammogram.
 
@@ -245,12 +248,12 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
         with open(svg, mode="rb") as infile:
-            cv = CV(_create_svgplot(infile, sampling_interval=None, skewed=skewed))
+            cv = CV(_create_svgplot(infile, sampling_interval=None, skewed=skewed, si_units=si))
 
             from astropy import units as u
 
             sampling_interval /= u.Unit(
-                cv.figure_schema.get_field(cv.voltage_dimension).custom["unit"]
+                cv.figure_schema.get_field(cv.svgplot.xlabel).custom["unit"]
             ).to(u.V)
 
     if metadata:
@@ -262,6 +265,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
+            si_units=si,
         )
 
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
