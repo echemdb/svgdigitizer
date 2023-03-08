@@ -58,7 +58,11 @@ skewed_option = click.option(
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
 )
 
-si_option = click.option("--si", is_flag=False, help="Converts units of the plot and CSV to SI (if possible).")
+si_option = click.option(
+    "--si",
+    is_flag=False,
+    help="Converts units of the plot and CSV to SI (if possible).",
+)
 
 
 def _outfile(template, suffix=None, outdir=None):
@@ -248,7 +252,10 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
         with open(svg, mode="rb") as infile:
-            cv = CV(_create_svgplot(infile, sampling_interval=None, skewed=skewed, si_units=si))
+            cv = CV(
+                _create_svgplot(infile, sampling_interval=None, skewed=skewed),
+                si_units=si,
+            )
 
             from astropy import units as u
 

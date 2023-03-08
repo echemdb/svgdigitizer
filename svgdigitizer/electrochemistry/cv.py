@@ -53,7 +53,6 @@ from functools import cached_property
 import matplotlib.pyplot as plt
 from astropy import units as u
 
-from svgdigitizer.exceptions import SVGAnnotationError
 from svgdigitizer.svgfigure import SVGFigure
 
 logger = logging.getLogger("cv")
@@ -329,7 +328,7 @@ class CV(SVGFigure):
 
     #     raise SVGAnnotationError(
     #         "No current axis or more than one current axis found in the SVG."
-        # )
+    # )
 
     @property
     def data_schema(self):
@@ -438,8 +437,11 @@ class CV(SVGFigure):
         # astropy SI conversion turns `V` into `W / A` or `Ohm m`,
         # thus we need to set it manually to `V`.
         if self.si_units:
-            if u.allclose(1 * u.Unit(schema.get_field(self.svgplot.xlabel).custom["unit"]), 1* u.V):
-                schema.update_field(self.svgplot.xlabel, {'unit': 'V'})
+            if u.allclose(
+                1 * u.Unit(schema.get_field(self.svgplot.xlabel).custom["unit"]),
+                1 * u.V,
+            ):
+                schema.update_field(self.svgplot.xlabel, {"unit": "V"})
         return schema
 
     @cached_property

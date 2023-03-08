@@ -29,9 +29,10 @@ from functools import cached_property
 
 import astropy.units as u
 
+from svgdigitizer.exceptions import SVGAnnotationError
+
 # from svgdigitizer.units import Units
 
-from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("svgfigure")
 
@@ -267,7 +268,6 @@ class SVGFigure:
 
         # return self.yunits['unit original']
         return self.figure_schema.get_field(self.svgplot.ylabel).custom["unit"]
-
 
     # @property
     # def xunits(self):
@@ -646,9 +646,7 @@ class SVGFigure:
             >>> figure._convert_axis_to_si(df = figure.svgplot.df.copy(), label='E')
 
         """
-        quantity = 1 * u.Unit(
-            self.figure_schema.get_field(label).custom["unit"]
-        )
+        quantity = 1 * u.Unit(self.figure_schema.get_field(label).custom["unit"])
         # Convert the axis unit to SI unit V and use the value
         # to convert the potential values in the df to V
         df[label] = df[label] * quantity.si.value
@@ -693,7 +691,7 @@ class SVGFigure:
 
         """
         x_quantity = 1 * u.Unit(
-            #self.data_schema.get_field(self.svgplot.xlabel).custom["unit"]
+            # self.data_schema.get_field(self.svgplot.xlabel).custom["unit"]
             self.xunit
         )
         if self.si_units:
@@ -703,7 +701,7 @@ class SVGFigure:
 
         df["delta_x"] = abs(df[self.svgplot.xlabel].diff().fillna(0))
         df["cumdelta_x"] = df["delta_x"].cumsum()
-        df["t"] = df["cumdelta_x"] * factor.value #float(self.scan_rate.si.value)
+        df["t"] = df["cumdelta_x"] * factor.value  # float(self.scan_rate.si.value)
 
     @classmethod
     def unit_is_astropy(cls, unit):
@@ -1117,7 +1115,7 @@ class SVGFigure:
             for name in schema.field_names:
                 field_unit = schema.get_field(name).custom["unit"]
                 if self.unit_is_astropy(field_unit):
-                    si_unit = (1* u.Unit(field_unit)).si.unit.to_string()
+                    si_unit = (1 * u.Unit(field_unit)).si.unit.to_string()
                     schema.update_field(name, {"unit": si_unit})
 
         if self.scan_rate:
