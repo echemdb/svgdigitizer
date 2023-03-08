@@ -7,9 +7,12 @@ channels:
   - defaults
 dependencies:
   - astropy>=5,<6
+  # frictionless 5.8 requires attrs>=22.2,
+  # but a lower version might be installed when the environment is resolved.
+  - attrs>=22.2.0
   - black
   - click=8.0.3
-  - frictionless>=5.5.0,<6
+  - frictionless>=5.8.3,<6
   - isort
   - jupytext
   - matplotlib-base>=3.5,<4
