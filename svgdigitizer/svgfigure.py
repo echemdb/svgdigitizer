@@ -1412,10 +1412,9 @@ class SVGFigure:
 
         # if not linked:
         if len(linked) == 0:
-            return None
-            # return self._metadata.get("figure description", {}).get(
-            #     "simultaneous measurements", []
-            # )
+            return self._metadata.get("figure description", {}).get(
+                "simultaneous measurements", []
+            )
 
         return [i.strip() for i in linked[0].value.split(",")]
 
