@@ -60,7 +60,7 @@ skewed_option = click.option(
 
 si_option = click.option(
     "--si",
-    is_flag=False,
+    is_flag=True,
     help="Converts units of the plot and CSV to SI (if possible).",
 )
 
@@ -249,12 +249,17 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
     """
     from svgdigitizer.electrochemistry.cv import CV
 
+    if si:
+        si_units = True
+    else:
+        si_units = False
+
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
         with open(svg, mode="rb") as infile:
             cv = CV(
                 _create_svgplot(infile, sampling_interval=None, skewed=skewed),
-                si_units=si,
+                si_units=si_units,
             )
 
             from astropy import units as u
@@ -272,7 +277,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
-            si_units=si,
+            si_units=si_units,
         )
 
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)

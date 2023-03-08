@@ -1407,6 +1407,7 @@ class SVGFigure:
             "figure description": {
                 "version": 1,
                 "type": "digitized",
+                "simultaneous measurements": self.simultaneous_measurements,
                 "measurement type": self.measurement_type,
                 "fields": self.figure_schema.to_dict()["fields"],
                 "comment": self.comment,
@@ -1426,11 +1427,6 @@ class SVGFigure:
                     "value": float(self.scan_rate.value),
                     "unit": str(self.scan_rate.unit),
                 },
-            )
-
-        if self.simultaneous_measurements:
-            metadata["figure description"].setdefault(
-                "simultaneous measurements", self.simultaneous_measurements
             )
 
         from mergedeep import merge
