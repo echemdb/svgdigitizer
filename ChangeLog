@@ -10,38 +10,23 @@ v0.7.0
 **Added:**
 
 * Added custom exception classes to be more specific when errors are found in the input. Also fixes linter warnings with `pylint`>2.16.
-* Added module `svgdigitizer.svgfigure.SVGFigure` to digitize custom figures.
-* Added assertions to `svgdigitizer.electrochemistry.cv.CV`, such that only E or U (I or j) labels are allowed on the x-axis (y-axis).
-* Added properties `xunit` and `yunit` to `svgdigitizer.svgfigure`, which return the units of the axis.
-* Added `scan_rate_labels` to `svgdigitizer.svgfigure`, returning the labels in the SVG with a scan rate.
 
 **Changed:**
 
-* Changed <news item>.
 * Upgraded to frictionless 5.5.
 * Changed formatting of JSON metadata files. A newline is now added automatically at the end of the file.
 * Changed output format of JSON (datapackages) to produce indented JSON.
 
-**Deprecated:**
-
-* Deprecated <news item>.
-
 **Removed:**
 
 * Removed `__main__.py` as the entrypoint. As a result, `python -m svgdigitizer` does not invoke the digitizer anymore. The digitizer can still be invoked with `svgdigitizer` once installed.
-* Removed <news item>.
 
 **Fixed:**
 
 * Fixed detection of `simultaneous measurement` in `electrochemistry.cv.CV`.
 * Fixed the alphabetical order of the dependencies in the environment.yml.
 * Fixed doctesting of the command line interface, by moving the content from `__main__.py` to `entrypoint.py`.
-* Fixed <news item>.
 * Fixed handling of unicode characters when writing JSON files. Unicode characters are now written as UTF-8 characters without escaping.
-
-**Performance:**
-
-* Improved <news item>.
 
 
 
