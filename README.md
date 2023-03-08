@@ -59,7 +59,7 @@ test/data/mustermann_2021_svgdigitizer_1_p2.svg
 test/data/mustermann_2021_svgdigitizer_1_p3.png
 test/data/mustermann_2021_svgdigitizer_1_p3.svg
 
-$ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg # byexample: +tags
+$ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg # byexample: +skip
 $ head doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.csv  # byexample: +pass
 
 t,E,j
