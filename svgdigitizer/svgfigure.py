@@ -27,6 +27,8 @@ labels and (optionally) additional metadata provided as text fields in the SVG.
 import logging
 from functools import cached_property
 
+import matplotlib.pyplot as plt
+
 import astropy.units as u
 
 from svgdigitizer.exceptions import SVGAnnotationError
@@ -496,7 +498,7 @@ class SVGFigure:
     @cached_property
     def df(self):
         r"""
-        Return the figure as a dataframe
+        Return the figure as a dataframe.
 
         EXAMPLES:
 
@@ -584,11 +586,11 @@ class SVGFigure:
             ...   </g>
             ...   <g>
             ...     <path d="M 0 200 L 0 100" />
-            ...     <text x="0" y="200">E1: 0 V</text>
+            ...     <text x="0" y="200">E1: 0 mV</text>
             ...   </g>
             ...   <g>
             ...     <path d="M 100 200 L 100 100" />
-            ...     <text x="100" y="200">E2: 1 V</text>
+            ...     <text x="100" y="200">E2: 1 mV</text>
             ...   </g>
             ...   <g>
             ...     <path d="M -100 100 L 0 100" />
@@ -600,11 +602,11 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
-            >>> figure1 = SVGFigure(SVGPlot(svg))
-            >>> figure1.df
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.df
                   t    E    j
-            0   0.0  0.0  0.0
-            1  20.0  1.0  1.0
+            0  0.00  0.0  0.0
+            1  0.02  1.0  1.0
 
         A dataframe with a time axis, reconstructed with a given scan rate
         and in SI units::
@@ -637,8 +639,8 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
-            >>> figure1 = SVGFigure(SVGPlot(svg), si_units=True)
-            >>> figure1.df
+            >>> figure = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure.df
                   t      E     j
             0  0.00  0.000  0.00
             1  0.02  0.001  0.01
@@ -646,7 +648,7 @@ class SVGFigure:
         TESTS::
 
         A dataframe with a time axis, reconstructed with a given scan rate
-        and in SI units, where one axis does not have compatible astropy units::
+        and in SI units, where the y-axis does not have compatible astropy units::
 
             >>> from svgdigitizer.svg import SVG
             >>> from svgdigitizer.svgplot import SVGPlot
@@ -699,7 +701,7 @@ class SVGFigure:
 
     def _convert_axis_to_si(self, df, label):
         r"""
-        Add a voltage column to the dataframe `df`.
+        Scales the values in a df into SI values.
 
         EXAMPLES::
 
@@ -736,13 +738,13 @@ class SVGFigure:
 
         """
         quantity = 1 * u.Unit(self.figure_schema.get_field(label).custom["unit"])
-        # Convert the axis unit to SI unit V and use the value
-        # to convert the potential values in the df to V
+        # Convert the axis unit to SI units and use the value
+        # of the quantity to convert the original column data.
         df[label] = df[label] * quantity.si.value
 
     def _add_time_axis(self, df):
         r"""
-        Add a time column to the dataframe `df`, based on the :meth:`rate`.
+        Add a time column to the dataframe `df`, based on the :property:`scan_rate`.
 
         EXAMPLES::
 
@@ -869,10 +871,12 @@ class SVGFigure:
     @cached_property
     def scan_rate(self):
         r"""
-        Return the scan rate of the plot.
+        Return the scan rate of the plot as an astropy quantity,
+        when it matches the following criteria.
 
-        The scan rate is read from a ``<text>`` in the SVG file such as
-        ``<text>scan rate: 50 V / s</text>``.
+        The rate must be a unit divided by time or simply a frequency.
+        It must be compatible with the unit on the x-axis, i.e.,
+        when the x-axis unit is `K` the rate must be `K/s`.
 
         EXAMPLES::
 
@@ -1044,10 +1048,12 @@ class SVGFigure:
         r"""
         A frictionless `Schema` object, including a `Field` object
         describing the data generated with :meth:`df`.
-        Unless the units of the axis in the columns of the :meth:`df` remain unchanged
+        When the units of the axis in the columns of the :meth:`df` remain unchanged
         and no axis was added, such as a time axis reconstructed from a scan rate,
         ``data_schema`` is almost identical to ``figure_schema``. In the individual fields
         the key `orientation` was removed.
+        The units of the individual fields are updated upon transformation of the plot
+        to SI units.
 
         EXAMPLES:
 
@@ -1217,9 +1223,8 @@ class SVGFigure:
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
         A frictionless `Schema` object, including a `Fields` object
-        describing the voltage and current axis of the original plot
-        including original units. The reference electrode of the
-        potential/voltage axis is also given (if available).
+        describing the axis of the original plot
+        including original units.
 
         EXAMPLES::
 
@@ -1567,7 +1572,24 @@ class SVGFigure:
 
         TODO:: Refactor once scan rate and SI is implemented (see issue #177)
         """
-        return self.svgplot.plot()
+        # return self.svgplot.plot()
+        self.df.plot(
+            x=self.svgplot.xlabel,
+            y=self.svgplot.ylabel,
+        )
+        plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
+        plt.xlabel(
+            self.svgplot.xlabel
+            + " ["
+            + self.xunit
+            + "]"
+        )
+        plt.ylabel(
+            self.svgplot.ylabel
+            + " ["
+            + self.yunit
+            + "]"
+        )
 
 
 # Ensure that cached properties are tested, see

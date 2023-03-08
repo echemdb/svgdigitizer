@@ -720,23 +720,14 @@ class CV(SVGFigure):
             >>> cv.plot()
 
         """
-        self.df.plot(
-            x=self.svgplot.xlabel,
-            y=self.svgplot.ylabel,
-        )
-        plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
+        super().plot()
+
         plt.xlabel(
             self.svgplot.xlabel
             + " ["
-            + str(self.data_schema.get_field(self.svgplot.xlabel).custom["unit"])
+            + self.xunit
             + " vs. "
             + self.data_schema.get_field(self.svgplot.xlabel).custom["reference"]
-            + "]"
-        )
-        plt.ylabel(
-            self.svgplot.ylabel
-            + " ["
-            + str(self.data_schema.get_field(self.svgplot.ylabel).custom["unit"])
             + "]"
         )
 
