@@ -6,8 +6,8 @@
             "path": "package.csv",
             "scheme": "file",
             "format": "csv",
-            "encoding": "utf-8",
             "mediatype": "text/csv",
+            "encoding": "utf-8",
             "schema": {
                 "fields": [
                     {
@@ -154,10 +154,6 @@
         "type": "digitized",
         "simultaneous measurements": [],
         "measurement type": "CV",
-        "scan rate": {
-            "value": 50.0,
-            "unit": "mV / s"
-        },
         "fields": [
             {
                 "name": "E",
@@ -173,7 +169,11 @@
                 "orientation": "y"
             }
         ],
-        "comment": ""
+        "comment": "",
+        "scan rate": {
+            "value": 50.0,
+            "unit": "mV / s"
+        }
     },
     "data description": {
         "version": 1,
