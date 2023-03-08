@@ -170,8 +170,13 @@ class CV(SVGFigure):
 
     """
 
-    def __init__(self, svgplot, metadata=None, si_units=False):
-        super().__init__(svgplot=svgplot, metadata=metadata, si_units=si_units)
+    def __init__(self, svgplot, metadata=None, measurement_type="CV", si_units=False):
+        super().__init__(
+            svgplot=svgplot,
+            metadata=metadata,
+            measurement_type=measurement_type,
+            si_units=si_units,
+        )
         assert self.svgplot.xlabel in [
             "U",
             "E",
@@ -180,10 +185,6 @@ class CV(SVGFigure):
             "I",
             "j",
         ], f"The y-label must be 'I' or 'j and not '{self.svgplot.ylabel}'."
-
-    @cached_property
-    def measurement_type(self):
-        return "CV"
 
     @property
     def data_schema(self):
@@ -398,6 +399,5 @@ class CV(SVGFigure):
 # Ensure that cached properties are tested, see
 # https://stackoverflow.com/questions/69178071/cached-property-doctest-is-not-detected/72500890#72500890
 __test__ = {
-    # "CV.df": CV.df,
     "CV.figure_schema": CV.figure_schema,
 }

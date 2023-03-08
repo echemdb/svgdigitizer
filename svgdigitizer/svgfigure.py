@@ -27,12 +27,10 @@ labels and (optionally) additional metadata provided as text fields in the SVG.
 import logging
 from functools import cached_property
 
+import astropy.units as u
 import matplotlib.pyplot as plt
 
-import astropy.units as u
-
 from svgdigitizer.exceptions import SVGAnnotationError
-
 
 logger = logging.getLogger("svgfigure")
 
@@ -42,7 +40,9 @@ class SVGFigure:
     TODO:: Add description and docstring (see issue #177)
     """
 
-    def __init__(self, svgplot, metadata=None, measurement_type='custom', si_units=False):
+    def __init__(
+        self, svgplot, metadata=None, measurement_type="custom", si_units=False
+    ):
         self.svgplot = svgplot
         self._measurement_type = measurement_type
         self._metadata = metadata or {}
@@ -781,9 +781,7 @@ class SVGFigure:
             >>> plot._add_time_axis(df)
 
         """
-        x_quantity = 1 * u.Unit(
-            self.xunit
-        )
+        x_quantity = 1 * u.Unit(self.xunit)
         if self.si_units:
             x_quantity = 1 * x_quantity.si.unit
 
@@ -1042,7 +1040,7 @@ class SVGFigure:
 
         return float(rates[0].value) * u.Unit(svg_rate_unit)
 
-    @property
+    @cached_property
     def data_schema(self):
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
@@ -1303,7 +1301,7 @@ class SVGFigure:
 
         for field in schema.field_names:
             if not schema.get_field(field).custom["unit"]:
-                schema.get_field(field).custom["unit"] = ''
+                schema.get_field(field).custom["unit"] = ""
 
         return schema
 
@@ -1578,30 +1576,22 @@ class SVGFigure:
             y=self.svgplot.ylabel,
         )
         plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
-        plt.xlabel(
-            self.svgplot.xlabel
-            + " ["
-            + self.xunit
-            + "]"
-        )
-        plt.ylabel(
-            self.svgplot.ylabel
-            + " ["
-            + self.yunit
-            + "]"
-        )
+        plt.xlabel(self.svgplot.xlabel + " [" + self.xunit + "]")
+        plt.ylabel(self.svgplot.ylabel + " [" + self.yunit + "]")
 
 
 # Ensure that cached properties are tested, see
 # https://stackoverflow.com/questions/69178071/cached-property-doctest-is-not-detected/72500890#72500890
 __test__ = {
+    "SVGFigure.measurement_type": SVGFigure.measurement_type,
     "SVGFigure.figure_label": SVGFigure.figure_label,
     "SVGFigure.curve_label": SVGFigure.curve_label,
-    "SVGFigure.comment": SVGFigure.comment,
-    "SVGFigure.df": SVGFigure.df,
-    "SVGFigure.figure_schema": SVGFigure.figure_schema,
-    "SVGFigure.scan_rate_labels": SVGFigure.scan_rate_labels,
-    "SVGFigure.scan_rate": SVGFigure.scan_rate,
     "SVGFigure.xunit": SVGFigure.xunit,
     "SVGFigure.yunit": SVGFigure.yunit,
+    "SVGFigure.comment": SVGFigure.comment,
+    "SVGFigure.df": SVGFigure.df,
+    "SVGFigure.scan_rate_labels": SVGFigure.scan_rate_labels,
+    "SVGFigure.scan_rate": SVGFigure.scan_rate,
+    "SVGFigure.data_schema": SVGFigure.data_schema,
+    "SVGFigure.figure_schema": SVGFigure.figure_schema,
 }
