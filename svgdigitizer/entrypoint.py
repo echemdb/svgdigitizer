@@ -64,6 +64,20 @@ si_option = click.option(
     help="Converts units of the plot and CSV to SI (if possible).",
 )
 
+sampling_interval_option = click.option(
+    "--sampling-interval",
+    type=float,
+    default=None,
+    help="Sampling interval on the x-axis.",
+)
+
+outdir_option = click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="write output files to this directory",
+)
+
 
 def _outfile(template, suffix=None, outdir=None):
     r"""
@@ -129,12 +143,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
 
 
 @click.command()
-@click.option(
-    "--sampling-interval",
-    type=float,
-    default=None,
-    help="Sampling interval on the x-axis.",
-)
+@sampling_interval_option
 @skewed_option
 @click.argument("svg", type=click.File("rb"))
 def plot(svg, sampling_interval, skewed):
@@ -153,18 +162,8 @@ def plot(svg, sampling_interval, skewed):
 
 
 @click.command()
-@click.option(
-    "--sampling-interval",
-    type=float,
-    default=None,
-    help="Sampling interval on the x-axis.",
-)
-@click.option(
-    "--outdir",
-    type=click.Path(file_okay=False),
-    default=None,
-    help="write output files to this directory",
-)
+@sampling_interval_option
+@outdir_option
 @skewed_option
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval, outdir, skewed):
@@ -187,30 +186,93 @@ def digitize(svg, sampling_interval, outdir, skewed):
 
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
-
-@click.command(name="cv")
-@click.option(
-    "--sampling-interval",
-    type=float,
-    default=None,
-    help="sampling interval on the x-axis in volts",
-)
+@click.command(name="figure")
+@sampling_interval_option
+@outdir_option
 @click.option(
     "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
 )
-@click.option("--package", is_flag=True, help="create .json in data package format")
-@click.option(
-    "--outdir",
-    type=click.Path(file_okay=False),
-    default=None,
-    help="write output files to this directory",
-)
+# @click.option("--package", is_flag=True, help="create .json in data package format")
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
+def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si):
     r"""
-    Digitize a cylic voltammogram.
+    Digitize a figure with units on the axis and create a frictionless datapackage.
+
+    EXAMPLES::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+
+    TESTS:
+
+    The command can be invoked on files in the current directory::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> cwd = os.getcwd()
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     os.chdir(directory)
+        ...     try:
+        ...         invoke(cli, "cv", "xy_rate.svg")
+        ...     finally:
+        ...         os.chdir(cwd)
+
+    The command can be invoked without sampling when data is not given in volts::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") as svg:
+        ...         print(CV(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
+        mV
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+
+    """
+    if metadata:
+        import yaml
+
+        metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
+
+    with open(svg, mode="rb") as infile:
+        from svgdigitizer.svgfigure import SVGFigure
+        svgfigure = SVGFigure(
+            _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
+            metadata=metadata,
+            si_units=si,
+        )
+
+    csvname = _outfile(svg, suffix=".csv", outdir=outdir)
+    svgfigure.df.to_csv(csvname, index=False)
+
+    package = _create_package(svgfigure.metadata, csvname, outdir)
+
+    with open(
+        _outfile(svg, suffix=".json", outdir=outdir),
+        mode="w",
+        encoding="utf-8",
+    ) as json:
+        _write_metadata(json, package.to_dict())
+
+
+
+@click.command(name="cv")
+@sampling_interval_option
+@outdir_option
+@click.option(
+    "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
+)
+# @click.option("--package", is_flag=True, help="create .json in data package format")
+@click.argument("svg", type=click.Path(exists=True))
+@si_option
+@skewed_option
+def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, si):
+    r"""
+    Digitize a cylic voltammogram and create a frictionless datapackage. The sampling interval should be provided in mV.
 
     For inclusion in the echemdb.
 
@@ -278,15 +340,14 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
     cv.df.to_csv(csvname, index=False)
 
-    if package:
-        package = _create_package(cv.metadata, csvname, outdir)
+    package = _create_package(cv.metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
         mode="w",
         encoding="utf-8",
     ) as json:
-        _write_metadata(json, package.to_dict() if package else cv.metadata)
+        _write_metadata(json, package.to_dict())
 
 
 def _create_package(metadata, csvname, outdir):
@@ -442,6 +503,7 @@ def paginate(onlypng, pdf, outdir):
 
 cli.add_command(plot)
 cli.add_command(digitize)
+cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
 
