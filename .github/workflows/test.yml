@@ -101,12 +101,6 @@ jobs:
           svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml --si
           git diff --no-index --word-diff -- test/data/xy_rate_reference.json test/data/xy_rate_reference.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference.csv"), pandas.read_csv("test/data/xy_rate_reference.csv.expected"))'
-      - name: cli-cv-package
-        shell: bash -l {0}
-        run: |
-          svgdigitizer cv test/data/package.svg --metadata test/data/package.yaml --package --si
-          git diff --no-index --word-diff -- test/data/package.json test/data/package.json.expected
-          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package.csv"), pandas.read_csv("test/data/package.csv.expected"))'
       - name: cli-cv-cv-comment
         shell: bash -l {0}
         run: |
@@ -134,7 +128,7 @@ jobs:
       - name: cli-figure-figure-comment
         shell: bash -l {0}
         run: |
-          svgdigitizer figure test/data/figure_comment.svg --metadata test/data/figure_comment.yaml --si
+          svgdigitizer figure test/data/figure_comment.svg --metadata test/data/figure_comment.yaml
           git diff --no-index --word-diff -- test/data/figure_comment.json test/data/figure_comment.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_comment.csv"), pandas.read_csv("test/data/figure_comment.csv.expected"))'
 

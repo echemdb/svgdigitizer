@@ -1,4 +1,35 @@
 {
+    "resources": [
+        {
+            "name": "xy_rate_without_metadata_skewed",
+            "type": "table",
+            "path": "xy_rate_without_metadata_skewed.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "t",
+                        "type": "number",
+                        "unit": "s"
+                    },
+                    {
+                        "name": "E",
+                        "type": "number",
+                        "unit": "V",
+                        "reference": "unknown"
+                    },
+                    {
+                        "name": "j",
+                        "type": "number",
+                        "unit": "A / m2"
+                    }
+                ]
+            }
+        }
+    ],
     "experimental": {
         "tags": []
     },
@@ -35,24 +66,6 @@
     "data description": {
         "version": 1,
         "type": "digitized",
-        "measurement type": "CV",
-        "fields": [
-            {
-                "name": "E",
-                "type": "number",
-                "unit": "V",
-                "reference": "unknown"
-            },
-            {
-                "name": "j",
-                "type": "number",
-                "unit": "A / m2"
-            },
-            {
-                "name": "t",
-                "type": "number",
-                "unit": "s"
-            }
-        ]
+        "measurement type": "CV"
     }
 }

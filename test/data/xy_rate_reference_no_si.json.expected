@@ -1,5 +1,36 @@
 {
-    "version": 1,
+    "resources": [
+        {
+            "name": "xy_rate_reference_no_si",
+            "type": "table",
+            "path": "xy_rate_reference_no_si.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "t",
+                        "type": "number",
+                        "unit": "s"
+                    },
+                    {
+                        "name": "E",
+                        "type": "number",
+                        "unit": "V",
+                        "reference": "RHE"
+                    },
+                    {
+                        "name": "j",
+                        "type": "number",
+                        "unit": "uA cm-2"
+                    }
+                ]
+            }
+        }
+    ],
+    "version": "1",
     "source": {
         "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
         "bib": "Beden_1985_Voltammetric_833",
@@ -148,24 +179,6 @@
     "data description": {
         "version": 1,
         "type": "digitized",
-        "measurement type": "CV",
-        "fields": [
-            {
-                "name": "E",
-                "type": "number",
-                "unit": "V",
-                "reference": "RHE"
-            },
-            {
-                "name": "j",
-                "type": "number",
-                "unit": "uA cm-2"
-            },
-            {
-                "name": "t",
-                "type": "number",
-                "unit": "s"
-            }
-        ]
+        "measurement type": "CV"
     }
 }
