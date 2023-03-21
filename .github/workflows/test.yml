@@ -122,7 +122,7 @@ jobs:
       - name: cli-cv-axes-orientation
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/axes_orientation.svg --package --si
+          svgdigitizer cv test/data/axes_orientation.svg --si
           git diff --no-index --word-diff -- test/data/axes_orientation.json test/data/axes_orientation.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/axes_orientation.csv"), pandas.read_csv("test/data/axes_orientation.csv.expected"))'
       - name: cli-cv-xy-rate-reference-no-si
@@ -131,4 +131,10 @@ jobs:
           svgdigitizer cv test/data/xy_rate_reference_no_si.svg --metadata test/data/xy_rate_reference_no_si.yaml
           git diff --no-index --word-diff -- test/data/xy_rate_reference_no_si.json test/data/xy_rate_reference_no_si.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference_no_si.csv"), pandas.read_csv("test/data/xy_rate_reference_no_si.csv.expected"))'
+      - name: cli-figure-figure-comment
+        shell: bash -l {0}
+        run: |
+          svgdigitizer figure test/data/figure_comment.svg --metadata test/data/figure_comment.yaml --si
+          git diff --no-index --word-diff -- test/data/figure_comment.json test/data/figure_comment.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_comment.csv"), pandas.read_csv("test/data/figure_comment.csv.expected"))'
 
