@@ -1,4 +1,5 @@
 {
+    "$frictionless": "package/v2",
     "resources": [
         {
             "name": "xy_rate_without_metadata_skewed",
