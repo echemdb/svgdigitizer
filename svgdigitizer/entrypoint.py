@@ -186,6 +186,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
 
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
+
 @click.command(name="figure")
 @sampling_interval_option
 @outdir_option
@@ -240,6 +241,7 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si):
 
     with open(svg, mode="rb") as infile:
         from svgdigitizer.svgfigure import SVGFigure
+
         svgfigure = SVGFigure(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
@@ -257,7 +259,6 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si):
         encoding="utf-8",
     ) as json:
         _write_metadata(json, package.to_dict())
-
 
 
 @click.command(name="cv")
