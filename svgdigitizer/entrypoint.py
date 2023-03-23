@@ -243,7 +243,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @si_option
 @bibliography_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, bibliography, si_units):
+def digitize_cv(
+    svg, sampling_interval, metadata, package, outdir, skewed, bibliography, si_units
+):
     r"""
     Digitize a cylic voltammogram.
 
