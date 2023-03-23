@@ -61,7 +61,7 @@ skewed_option = click.option(
 si_option = click.option(
     "--si-units",
     is_flag=True,
-    help="Converts units of the plot and CSV to SI (if possible).",
+    help="Convert units of the plot and CSV to SI (only if they are compatible with astropy units).",
 )
 
 
