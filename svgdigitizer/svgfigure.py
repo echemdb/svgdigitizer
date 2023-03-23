@@ -693,7 +693,7 @@ class SVGFigure:
                 if self.unit_is_astropy(column_unit):
                     self._convert_axis_to_si(df, column)
 
-        if self.scan_rate:
+        if self.scan_rate != None: #deprecation
             self._add_time_axis(df)
             return df[["t", self.svgplot.xlabel, self.svgplot.ylabel]]
 
@@ -1210,7 +1210,7 @@ class SVGFigure:
                     si_unit = (1 * u.Unit(field_unit)).si.unit.to_string()
                     schema.update_field(name, {"unit": si_unit})
 
-        if self.scan_rate:
+        if self.scan_rate != None: #deprecation
             schema.add_field(fields.NumberField(name="t"))
             schema.update_field("t", {"unit": "s"})
 
@@ -1551,7 +1551,7 @@ class SVGFigure:
             },
         }
 
-        if self.scan_rate:
+        if self.scan_rate != None:
             metadata["figure description"].setdefault(
                 "scan rate",
                 {
