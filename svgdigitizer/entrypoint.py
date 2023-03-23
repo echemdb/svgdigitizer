@@ -246,7 +246,7 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si_units):
         svgfigure = SVGFigure(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
-            si_units=si,
+            force_si_units=si_units,
         )
 
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
@@ -272,7 +272,7 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si_units):
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, si):
+def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, si_units):
     r"""
     Digitize a cylic voltammogram and create a frictionless datapackage. The sampling interval should be provided in mV.
 
