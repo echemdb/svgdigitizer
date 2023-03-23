@@ -58,6 +58,12 @@ skewed_option = click.option(
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
 )
 
+si_option = click.option(
+    "--si-units",
+    is_flag=True,
+    help="Convert units of the plot and CSV to SI (only if they are compatible with astropy units).",
+)
+
 
 def _outfile(template, suffix=None, outdir=None):
     r"""
@@ -200,8 +206,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
     help="write output files to this directory",
 )
 @click.argument("svg", type=click.Path(exists=True))
+@si_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
+def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si_units):
     r"""
     Digitize a cylic voltammogram.
 
@@ -245,12 +252,15 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
     if sampling_interval is not None:
         # Rewrite the sampling interval in terms of the unit on the x-axis.
         with open(svg, mode="rb") as infile:
-            cv = CV(_create_svgplot(infile, sampling_interval=None, skewed=skewed))
+            cv = CV(
+                _create_svgplot(infile, sampling_interval=None, skewed=skewed),
+                force_si_units=si_units,
+            )
 
             from astropy import units as u
 
             sampling_interval /= u.Unit(
-                cv.figure_schema.get_field(cv.voltage_dimension).custom["unit"]
+                cv.figure_schema.get_field(cv.svgplot.xlabel).custom["unit"]
             ).to(u.V)
 
     if metadata:
@@ -262,6 +272,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed):
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
+            force_si_units=si_units,
         )
 
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
@@ -300,7 +311,9 @@ def _create_package(metadata, csvname, outdir):
 
     # Update fields in the datapackage describing the data in the CSV
     package_schema = package.resources[0].schema
-    data_description_schema = Schema.from_descriptor(package.custom["data description"])
+    data_description_schema = Schema.from_descriptor(
+        {"fields": package.custom["data description"]["fields"]}
+    )
 
     new_fields = []
     for name in package_schema.field_names:

@@ -1909,7 +1909,7 @@ class SVGPlot:
         return min(eligible_roots)
 
     @property
-    def schema(self):
+    def figure_schema(self):
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         """A frictionless `Schema` object, including a `Fields` object
         describing the dimensions, units and orientation of the original
@@ -1944,7 +1944,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.schema
+            >>> plot.figure_schema
             {'fields': [{'name': 't', 'type': 'number', 'unit': None, 'orientation': 'x'},
                         {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'y'}]}
 

@@ -124,10 +124,6 @@
         "type": "digitized",
         "simultaneous measurements": [],
         "measurement type": "CV",
-        "scan rate": {
-            "value": 50.0,
-            "unit": "mV / s"
-        },
         "fields": [
             {
                 "name": "E",
@@ -143,7 +139,11 @@
                 "orientation": "y"
             }
         ],
-        "comment": "noisy data"
+        "comment": "noisy data",
+        "scan rate": {
+            "value": 50.0,
+            "unit": "mV / s"
+        }
     },
     "data description": {
         "version": 1,

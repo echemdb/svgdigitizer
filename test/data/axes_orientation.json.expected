@@ -1,4 +1,5 @@
 {
+    "$frictionless": "package/v2",
     "resources": [
         {
             "name": "axes_orientation",
@@ -6,8 +7,8 @@
             "path": "axes_orientation.csv",
             "scheme": "file",
             "format": "csv",
-            "encoding": "utf-8",
             "mediatype": "text/csv",
+            "encoding": "utf-8",
             "schema": {
                 "fields": [
                     {
@@ -42,10 +43,6 @@
         "type": "digitized",
         "simultaneous measurements": [],
         "measurement type": "CV",
-        "scan rate": {
-            "value": 50.0,
-            "unit": "mV / s"
-        },
         "fields": [
             {
                 "name": "E",
@@ -61,7 +58,11 @@
                 "orientation": "y"
             }
         ],
-        "comment": "Working solutions of the pH-series with values lower than 3 were prepared by using HClO4 and KClO4. For pH values ranging from 3 to 9, phosphate buffer solutions were employed (Na2HPO4 and NaH2PO4). Alkaline solutions were prepared with NaOH and KClO4. The exact concentrations of these components are unkown."
+        "comment": "Working solutions of the pH-series with values lower than 3 were prepared by using HClO4 and KClO4. For pH values ranging from 3 to 9, phosphate buffer solutions were employed (Na2HPO4 and NaH2PO4). Alkaline solutions were prepared with NaOH and KClO4. The exact concentrations of these components are unkown.",
+        "scan rate": {
+            "value": 50.0,
+            "unit": "mV / s"
+        }
     },
     "data description": {
         "version": 1,
