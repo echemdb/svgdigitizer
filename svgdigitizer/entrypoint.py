@@ -59,7 +59,7 @@ skewed_option = click.option(
 )
 
 si_option = click.option(
-    "--si",
+    "--si-units",
     is_flag=True,
     help="Converts units of the plot and CSV to SI (if possible).",
 )

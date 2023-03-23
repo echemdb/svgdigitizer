@@ -6,7 +6,7 @@
 * Added possibility to reconstruct a time axis, when a scan rate is provided in the plot, who's units match those of the x-axis.
 * Added keyword `measurement_type` to `svgdigitizer.svgfigure.SVGFigure`, which will be added to the metadata.
 * Added keyword `si_units` to `svgdigitizer.svgfigure.SVGFigure`, which allows transformation of a figure with units into SI units.
-* Added flag `--si` to `digitize cv` in the CLI.
+* Added flag `--si-units` to `digitize cv` in the CLI.
 
 **Changed:**
 
