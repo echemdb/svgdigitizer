@@ -11,4 +11,5 @@ API
 :caption: "Modules:"
 api/svg.md
 api/svgplot.md
+api/svgfigure.md
 ```

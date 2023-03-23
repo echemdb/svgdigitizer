@@ -7,8 +7,7 @@
   <title>svgdigitizer.svgplot &mdash; svgdigitizer 0.7.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,15 +16,10 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script>let toggleHintShow = 'Click to show';</script>
-        <script>let toggleHintHide = 'Click to hide';</script>
-        <script>let toggleOpenOnPrint = 'true';</script>
-        <script src="../_static/togglebutton.js"></script>
-        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Cyclic Voltammograms" href="cv.html" />
+    <link rel="next" title="svgdigitizer.svgfigure" href="svgfigure.html" />
     <link rel="prev" title="svgdigitizer.svg" href="svg.html" /> 
 </head>
 
@@ -55,6 +49,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="svgfigure.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cv.html">Cyclic Voltammograms</a></li>
@@ -92,7 +87,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="module-svgdigitizer.svgplot">
+  <section id="module-svgdigitizer.svgplot">
 <span id="svgdigitizer-svgplot"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code><a class="headerlink" href="#module-svgdigitizer.svgplot" title="Permalink to this headline"></a></h1>
 <p>Scientific plots in SVG format.</p>
 <p>A <a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot" title="svgdigitizer.svgplot.SVGPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVGPlot</span></code></a> wraps a plot in SVG format consisting of a curve, axis
@@ -204,7 +199,7 @@ specifying a <cite>sampling_interval</cite>:</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.AxisOrientation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgplot.</span></span><span class="sig-name descname"><span class="pre">AxisOrientation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.AxisOrientation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgplot.</span></span><span class="sig-name descname"><span class="pre">AxisOrientation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.AxisOrientation" title="Permalink to this definition"></a></dt>
 <dd><p>The orientation of a plot axis.</p>
 </dd></dl>
 
@@ -611,6 +606,47 @@ function y=0:</p>
 </div>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.figure_schema">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.figure_schema" title="Permalink to this definition"></a></dt>
+<dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Fields</cite> object
+describing the dimensions, units and orientation of the original
+plot axes.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;t1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;t2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">figure_schema</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;x&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;y&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;y&#39;}]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.from_svg">
 <span class="sig-name descname"><span class="pre">from_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.from_svg" title="Permalink to this definition"></a></dt>
@@ -1010,47 +1046,6 @@ a sharp peak at (1, 1):</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">schema</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.schema" title="Permalink to this definition"></a></dt>
-<dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Fields</cite> object
-describing the dimensions, units and orientation of the original
-plot axes.</p>
-<p>EXAMPLES:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;t1: 0&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;t2: 1&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
-<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
-<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
-<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">schema</span>
-<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;x&#39;},</span>
-<span class="go">            {&#39;name&#39;: &#39;y&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: None, &#39;orientation&#39;: &#39;y&#39;}]}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.transformation">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transformation</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.transformation" title="Permalink to this definition"></a></dt>
 <dd><p>Return the affine map from the SVG coordinate system to the plot
@@ -1259,7 +1254,7 @@ and the other axis goes at an angle from (0, 100) to (100, 0):</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="svg.html" class="btn btn-neutral float-left" title="svgdigitizer.svg" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="cv.html" class="btn btn-neutral float-right" title="Cyclic Voltammograms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="svgfigure.html" class="btn btn-neutral float-right" title="svgdigitizer.svgfigure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

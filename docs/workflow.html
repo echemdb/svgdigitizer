@@ -7,8 +7,7 @@
   <title>Digitizing plots for echemdb &mdash; svgdigitizer 0.7.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/togglebutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,13 +16,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script>let toggleHintShow = 'Click to show';</script>
-        <script>let toggleHintHide = 'Click to hide';</script>
-        <script>let toggleOpenOnPrint = 'true';</script>
-        <script src="_static/togglebutton.js"></script>
-        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -95,7 +87,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="digitizing-plots-for-echemdb">
+  <section id="digitizing-plots-for-echemdb">
 <h1>Digitizing plots for echemdb<a class="headerlink" href="#digitizing-plots-for-echemdb" title="Permalink to this headline"></a></h1>
 <p>This step by step tutorial explains how to digitize plots commonly found in electrochemical research papers, e.g., cyclic voltammograms, for the <a class="reference external" href="https://github.com/echemdb/website">echemdb/website</a> project. In this example a cyclic voltammogram is digitized. A plot is provided in Figure 2a in the <a class="reference download internal" download="" href="_downloads/c132c4fecdaf6f5f2f413d91ce87064d/mustermann_2021_svgdigitizer_1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">publication</span> <span class="pre">example</span></code></a>.</p>
 <p><img alt="files/images/sample_data_2.png" src="_images/sample_data_21.png" /></p>
@@ -153,7 +145,7 @@
 <ul>
 <li><p><a class="reference external" href="https://docs.astropy.org/en/stable/units/standard_units.html">Standard units</a> simply read: <code class="docutils literal notranslate"><span class="pre">V</span></code>, <code class="docutils literal notranslate"><span class="pre">A</span></code> or <code class="docutils literal notranslate"><span class="pre">m</span></code>.</p></li>
 <li><p>Units can be preceeded by common prefixes, i.e., <code class="docutils literal notranslate"><span class="pre">mV</span></code>, <code class="docutils literal notranslate"><span class="pre">kV</span></code> or <code class="docutils literal notranslate"><span class="pre">uV</span></code>.</p></li>
-<li><p>Note that <span class="math notranslate nohighlight">\(\mu\)</span> is <code class="docutils literal notranslate"><span class="pre">u</span></code>.</p></li>
+<li><p>Note that $\mu$ is <code class="docutils literal notranslate"><span class="pre">u</span></code>.</p></li>
 <li><p>fractions read as follows (note the spaces between the dashes): <code class="docutils literal notranslate"><span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">mA</span> <span class="pre">/</span> <span class="pre">cm2</span></code>.</p></li>
 <li><p>For square, cubic, etc units simply add <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">3</span></code>, … to the unit (see above).</p></li>
 <li><p>Use parentheses if more than one unit is in the numerator or denominator, i.e., <code class="docutils literal notranslate"><span class="pre">(kg</span> <span class="pre">m)</span> <span class="pre">/</span> <span class="pre">s2</span></code></p></li>
@@ -166,7 +158,7 @@
 <p>When all axes have been marked, the plot looks as follows:</p>
 <p><img alt="inkscape_all_labels" src="_images/inkscape_all_labels.png" /></p>
 <p><strong>3: Trace the curve</strong></p>
-<ol class="simple">
+<ol class="arabic simple">
 <li><p>Roughly trace the blue curve</p></li>
 </ol>
 <p>Select the the tool <code class="docutils literal notranslate"><span class="pre">Draw</span> <span class="pre">Bezier</span> <span class="pre">curves</span></code> <img alt="inkscape_draw_Bezier" src="_images/inkscape_draw_Bezier.png" /> and select the mode <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">regular</span> <span class="pre">Bezier</span> <span class="pre">path</span></code><img alt="inkscape_Bezier_mode" src="_images/inkscape_Bezier_mode.png" />. Try using as few nodes as possible. It is desired that a node is placed at maxima of sharp peaks. This way these features are not missed when using low sampling rates.</p>
@@ -174,12 +166,12 @@
 <p>Select the curve, select the tool <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">paths</span> <span class="pre">by</span> <span class="pre">node</span></code><img alt="inkscape_edit_paths_by_node" src="_images/inkscape_edit_paths_by_node.png" />, and select all nodes by pressing <code class="docutils literal notranslate"><span class="pre">CTRL-a</span></code>. Click on the option <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">selected</span> <span class="pre">nodes</span> <span class="pre">smooth</span></code><img alt="inkscape_node_options" src="_images/inkscape_node_options.png" />.</p>
 <p>Click on individual nodes and adjust the handles such that the path matches the curve in the plot. Eventually adjust the position of the nodes. Do this for each node until you are satisfied with the result.</p>
 <p><img alt="inkscape_smoothed_path" src="_images/inkscape_smoothed_path.png" /></p>
-<ol class="simple">
+<ol class="arabic simple" start="2">
 <li><p>Add a text field next and name it <code class="docutils literal notranslate"><span class="pre">curve:</span> <span class="pre">identifier</span></code>, which in our case would be <code class="docutils literal notranslate"><span class="pre">curve:</span> <span class="pre">blue</span></code>.</p></li>
 <li><p>Group the text field and the curve.</p></li>
 </ol>
 <p><img alt="inkscape_smoothed_path_curve" src="_images/inkscape_smoothed_path_curve.png" /></p>
-<ol class="simple">
+<ol class="arabic simple" start="7">
 <li><p>Add a text field to the plot containing the scan rate with which the data was acquired. This value is not necessarily given in the plot or figure description and might have to be extracted from the text of the manuscript. Here, <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>. (mandatory for <code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv.CV</span></code>)</p></li>
 <li><p>Add a figure identifier such as <code class="docutils literal notranslate"><span class="pre">figure:</span> <span class="pre">2a</span></code> (mandatory for submission to <a class="reference external" href="https://github.com/echemdb/website">echemdb</a>)</p></li>
 <li><p>Add tags describing the data with commonly used acronyms. In this case: <code class="docutils literal notranslate"><span class="pre">tags:</span> <span class="pre">BCV,</span> <span class="pre">HER</span></code>. (mandatory for submission to <a class="reference external" href="https://github.com/echemdb/website">echemdb</a>)</p></li>
