@@ -60,9 +60,9 @@ skewed_option = click.option(
 )
 
 si_option = click.option(
-    "--si",
+    "--si-units",
     is_flag=True,
-    help="Converts units of the plot and CSV to SI (if possible).",
+    help="Convert units of the plot and CSV to SI (only if they are compatible with astropy units).",
 )
 
 sampling_interval_option = click.option(
@@ -198,7 +198,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @skewed_option
-def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si):
+def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si_units):
     r"""
     Digitize a figure with units on the axis and create a frictionless datapackage.
 
@@ -318,7 +318,7 @@ def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, si):
         with open(svg, mode="rb") as infile:
             cv = CV(
                 _create_svgplot(infile, sampling_interval=None, skewed=skewed),
-                si_units=si,
+                force_si_units=si_units,
             )
 
             from astropy import units as u
@@ -336,7 +336,7 @@ def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, si):
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
-            si_units=si,
+            force_si_units=si_units,
         )
 
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)

@@ -41,12 +41,12 @@ class SVGFigure:
     """
 
     def __init__(
-        self, svgplot, metadata=None, measurement_type="custom", si_units=False
+        self, svgplot, metadata=None, measurement_type="custom", force_si_units=False
     ):
         self.svgplot = svgplot
         self._measurement_type = measurement_type
         self._metadata = metadata or {}
-        self.si_units = si_units
+        self.force_si_units = force_si_units
 
     @staticmethod
     def create_figure(measurement_type=None):
@@ -260,7 +260,7 @@ class SVGFigure:
         """
         unit = self.figure_schema.get_field(label).custom["unit"]
 
-        if self.si_units:
+        if self.force_si_units:
             if self.unit_is_astropy(unit):
                 return (1 * u.Unit(unit)).si.unit.to_string()
 
@@ -332,7 +332,7 @@ class SVGFigure:
             ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure = SVGFigure(SVGPlot(svg), force_si_units=True)
             >>> figure.xunit
             'K'
 
@@ -405,7 +405,7 @@ class SVGFigure:
             ...     <text x="-100" y="0">j2: 1 A / cm2</text>
             ...   </g>
             ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure = SVGFigure(SVGPlot(svg), force_si_units=True)
             >>> figure.yunit
             'A / m2'
 
@@ -639,7 +639,7 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
-            >>> figure = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure = SVGFigure(SVGPlot(svg), force_si_units=True)
             >>> figure.df
                   t      E     j
             0  0.00  0.000  0.00
@@ -678,7 +678,7 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
-            >>> figure1 = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure1 = SVGFigure(SVGPlot(svg), force_si_units=True)
             >>> figure1.df
                   t      E    j
             0  0.00  0.000  0.0
@@ -687,13 +687,13 @@ class SVGFigure:
         """
         df = self.svgplot.df.copy()
 
-        if self.si_units:
+        if self.force_si_units:
             for column in df.columns:
                 column_unit = self.figure_schema.get_field(column).custom["unit"]
                 if self.unit_is_astropy(column_unit):
                     self._convert_axis_to_si(df, column)
 
-        if self.scan_rate:
+        if self.scan_rate is not None:
             self._add_time_axis(df)
             return df[["t", self.svgplot.xlabel, self.svgplot.ylabel]]
 
@@ -776,13 +776,13 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 cm/s</text>
             ... </svg>'''))
-            >>> plot = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> plot = SVGFigure(SVGPlot(svg), force_si_units=True)
             >>> df = plot.svgplot.df.copy()
             >>> plot._add_time_axis(df)
 
         """
         x_quantity = 1 * u.Unit(self.xunit)
-        if self.si_units:
+        if self.force_si_units:
             x_quantity = 1 * x_quantity.si.unit
 
         factor = (x_quantity / (self.scan_rate)).decompose()
@@ -1189,7 +1189,7 @@ class SVGFigure:
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 K/s</text>
             ... </svg>'''))
-            >>> figure_rate_si = SVGFigure(SVGPlot(svg), si_units=True)
+            >>> figure_rate_si = SVGFigure(SVGPlot(svg), force_si_units=True)
             >>> figure_rate_si.data_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 'T', 'type': 'number', 'unit': 'K'},
                         {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
@@ -1203,14 +1203,14 @@ class SVGFigure:
             if "orientation" in schema.get_field(name).to_dict():
                 del schema.get_field(name).custom["orientation"]
 
-        if self.si_units:
+        if self.force_si_units:
             for name in schema.field_names:
                 field_unit = schema.get_field(name).custom["unit"]
                 if self.unit_is_astropy(field_unit):
                     si_unit = (1 * u.Unit(field_unit)).si.unit.to_string()
                     schema.update_field(name, {"unit": si_unit})
 
-        if self.scan_rate:
+        if self.scan_rate is not None:
             schema.add_field(fields.NumberField(name="t"))
             schema.update_field("t", {"unit": "s"})
 
@@ -1551,7 +1551,7 @@ class SVGFigure:
             },
         }
 
-        if self.scan_rate:
+        if self.scan_rate is not None:
             metadata["figure description"].setdefault(
                 "scan rate",
                 {

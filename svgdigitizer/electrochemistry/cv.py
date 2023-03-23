@@ -130,7 +130,7 @@ class CV(SVGFigure):
         ...   <text x="-400" y="530">linked: SXRD, SHG</text>
         ...   <text x="-400" y="330">tags: BCV, HER, OER</text>
         ... </svg>'''))
-        >>> cv = CV(SVGPlot(svg), si_units=True)
+        >>> cv = CV(SVGPlot(svg), force_si_units=True)
 
     The data of the CV can be returned as a dataframe
     with axis 't', 'E' or 'U', and 'I' (current) or 'j' (current density).
@@ -170,12 +170,14 @@ class CV(SVGFigure):
 
     """
 
-    def __init__(self, svgplot, metadata=None, measurement_type="CV", si_units=False):
+    def __init__(
+        self, svgplot, metadata=None, measurement_type="CV", force_si_units=False
+    ):
         super().__init__(
             svgplot=svgplot,
             metadata=metadata,
             measurement_type=measurement_type,
-            si_units=si_units,
+            force_si_units=force_si_units,
         )
         assert self.svgplot.xlabel in [
             "U",
@@ -225,7 +227,7 @@ class CV(SVGFigure):
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg), si_units=True)
+            >>> cv = CV(SVGPlot(svg), force_si_units=True)
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
                         {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
@@ -262,7 +264,7 @@ class CV(SVGFigure):
             ...   </g>
             ...   <text x="-200" y="330">scan rate: 50 V/s</text>
             ... </svg>'''))
-            >>> cv = CV(SVGPlot(svg), si_units=True)
+            >>> cv = CV(SVGPlot(svg), force_si_units=True)
             >>> cv.data_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 'U', 'type': 'number', 'unit': 'V', 'reference': 'unknown'},
                         {'name': 'I', 'type': 'number', 'unit': 'A'},
@@ -273,7 +275,7 @@ class CV(SVGFigure):
 
         # astropy SI conversion turns `V` into `W / A` or `Ohm m`,
         # thus we need to set it manually to `V`.
-        if self.si_units:
+        if self.force_si_units:
             if u.allclose(
                 1 * u.Unit(schema.get_field(self.svgplot.xlabel).custom["unit"]),
                 1 * u.V,
