@@ -334,7 +334,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, bibli
         mode="w",
         encoding="utf-8",
     ) as json:
-        _write_metadata(json, package.to_dict() if package else cv.metadata)
+        _write_metadata(json, package.to_dict() if package else metadata)
 
 
 def _create_package(metadata, csvname, outdir):
