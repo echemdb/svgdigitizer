@@ -208,7 +208,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
+def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si_units):
     r"""
     Digitize a cylic voltammogram.
 
@@ -254,7 +254,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
         with open(svg, mode="rb") as infile:
             cv = CV(
                 _create_svgplot(infile, sampling_interval=None, skewed=skewed),
-                si_units=si,
+                force_si_units=si_units,
             )
 
             from astropy import units as u
@@ -272,7 +272,7 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si):
         cv = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
-            si_units=si,
+            force_si_units=si_units,
         )
 
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
