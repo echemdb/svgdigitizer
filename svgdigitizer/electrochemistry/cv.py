@@ -170,7 +170,9 @@ class CV(SVGFigure):
 
     """
 
-    def __init__(self, svgplot, metadata=None, measurement_type="CV", force_si_units=False):
+    def __init__(
+        self, svgplot, metadata=None, measurement_type="CV", force_si_units=False
+    ):
         super().__init__(
             svgplot=svgplot,
             metadata=metadata,
