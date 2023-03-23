@@ -12,14 +12,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: ["3.9", "3.10"]
+        python: ["3.9", "3.10", "3.11"]
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         source: ["conda", "pip"]
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v3
         with: { submodules: recursive }
-      - uses: conda-incubator/setup-miniconda@v2
-        with: { mamba-version: "*", channels: "conda-forge", channel-priority: true, python-version: "${{ matrix.python }}" }
+      - name: setup conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: "${{ matrix.python }}"
+          miniforge-variant: Mambaforge
       - name: install dependencies
         shell: bash -l {0}
         run: |
@@ -82,49 +86,55 @@ jobs:
       - name: cli-cv-xy-rate
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/xy_rate.svg --metadata test/data/xy_rate.yaml
+          svgdigitizer cv test/data/xy_rate.svg --metadata test/data/xy_rate.yaml --si-units
           git diff --no-index --word-diff -- test/data/xy_rate.json test/data/xy_rate.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate.csv"), pandas.read_csv("test/data/xy_rate.csv.expected"))'
       - name: cli-cv-xy-rate-without-metadata
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/xy_rate_without_metadata.svg
+          svgdigitizer cv test/data/xy_rate_without_metadata.svg --si-units
           git diff --no-index --word-diff -- test/data/xy_rate_without_metadata.json test/data/xy_rate_without_metadata.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata.csv"), pandas.read_csv("test/data/xy_rate_without_metadata.csv.expected"))'
       - name: cli-cv-xy-rate-reference
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml
+          svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml --si-units
           git diff --no-index --word-diff -- test/data/xy_rate_reference.json test/data/xy_rate_reference.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference.csv"), pandas.read_csv("test/data/xy_rate_reference.csv.expected"))'
       - name: cli-cv-package
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/package.svg --metadata test/data/package.yaml --package
+          svgdigitizer cv test/data/package.svg --metadata test/data/package.yaml --package --si-units
           git diff --no-index --word-diff -- test/data/package.json test/data/package.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package.csv"), pandas.read_csv("test/data/package.csv.expected"))'
       - name: cli-cv-cv-comment
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/cv_comment.svg --metadata test/data/cv_comment.yaml
+          svgdigitizer cv test/data/cv_comment.svg --metadata test/data/cv_comment.yaml --si-units
           git diff --no-index --word-diff -- test/data/cv_comment.json test/data/cv_comment.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/cv_comment.csv"), pandas.read_csv("test/data/cv_comment.csv.expected"))'
       - name: cli-cv-xy-rate-without-metadata-skewed
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/xy_rate_without_metadata_skewed.svg --skewed
+          svgdigitizer cv test/data/xy_rate_without_metadata_skewed.svg --skewed --si-units
           git diff --no-index --word-diff -- test/data/xy_rate_without_metadata_skewed.json test/data/xy_rate_without_metadata_skewed.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv"), pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv.expected"))'
       - name: cli-cv-axes-orientation
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/axes_orientation.svg --package
+          svgdigitizer cv test/data/axes_orientation.svg --package --si-units
           git diff --no-index --word-diff -- test/data/axes_orientation.json test/data/axes_orientation.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/axes_orientation.csv"), pandas.read_csv("test/data/axes_orientation.csv.expected"))'
       - name: cli-cv-package-bibliography
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/package_bibliography.svg --metadata test/data/package_bibliography.yaml --package --bibliography
+          svgdigitizer cv test/data/package_bibliography.svg --metadata test/data/package_bibliography.yaml --si-units --bibliography
           git diff --no-index --word-diff -- test/data/package_bibliography.json test/data/package_bibliography.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package_bibliography.csv"), pandas.read_csv("test/data/package_bibliography.csv.expected"))'
+      - name: cli-cv-xy-rate-reference-no-si
+        shell: bash -l {0}
+        run: |
+          svgdigitizer cv test/data/xy_rate_reference_no_si.svg --metadata test/data/xy_rate_reference_no_si.yaml
+          git diff --no-index --word-diff -- test/data/xy_rate_reference_no_si.json test/data/xy_rate_reference_no_si.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference_no_si.csv"), pandas.read_csv("test/data/xy_rate_reference_no_si.csv.expected"))'
 

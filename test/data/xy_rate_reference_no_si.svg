@@ -8,7 +8,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
-   sodipodi:docname="xy_rate.svg"
+   sodipodi:docname="xy_rate_reference.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -27,8 +27,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="88.893423"
-     inkscape:cy="224.75894"
+     inkscape:cx="259.6092"
+     inkscape:cy="258.09397"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -60,13 +60,13 @@
      transform="translate(-54.07177,-79.358292)">
     <image
        xlink:href="Ni111_NaOH_Beden1985_Fig2c.png"
-       y="79.358292"
-       x="54.07177"
-       id="image823"
-       preserveAspectRatio="none"
-       height="87.545334"
+       style="display:inline"
        width="68.749329"
-       style="display:inline" />
+       height="87.545334"
+       preserveAspectRatio="none"
+       id="image823"
+       x="54.07177"
+       y="79.358292" />
     <g
        id="g1567">
       <path
@@ -84,7 +84,7 @@
            id="tspan10648"
            style="stroke-width:0.264583"
            x="47.401714"
-           y="122.56773">j2: 0.1 μA cm⁻²</tspan></text>
+           y="122.56773">j2: 0.1 uA cm-2</tspan></text>
     </g>
     <g
        id="g1567-3"
@@ -106,7 +106,7 @@
            id="tspan2904"
            style="stroke-width:0.264583"
            x="47.220585"
-           y="155.55656">j1: -0.2  μA cm⁻²</tspan></text>
+           y="155.55656">j1: -0.2  uA cm-2</tspan></text>
     </g>
     <g
        id="g1572"
@@ -126,7 +126,7 @@
            id="tspan15404"
            style="stroke-width:0.264583"
            x="6.8084121"
-           y="83.536674">E1: 0 mV</tspan></text>
+           y="83.536674">E1: 0 V @ RHE</tspan></text>
     </g>
     <g
        id="g1577"
@@ -146,7 +146,7 @@
            id="tspan18114"
            style="stroke-width:0.264583"
            x="61.111824"
-           y="81.725914">E2: 600 mV</tspan></text>
+           y="81.725914">E2: 0.6 V @ RHE</tspan></text>
     </g>
     <g
        id="g6722">
@@ -180,16 +180,5 @@
          x="65.163452"
          y="114.31835"
          style="stroke-width:0.264583">scan rate: 50 mV/s</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="50.911507"
-       y="98.437256"
-       id="text839-2"><tspan
-         sodipodi:role="line"
-         id="tspan837-7"
-         x="50.911507"
-         y="98.437256"
-         style="stroke-width:0.264583">figure: 2b</tspan></text>
   </g>
 </svg>

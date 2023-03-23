@@ -11,10 +11,14 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v3
         with: { submodules: recursive }
-      - uses: conda-incubator/setup-miniconda@v2
-        with: { mamba-version: "*", channels: "conda-forge", channel-priority: true }
+      - name: setup conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: "${{ matrix.python }}"
+          miniforge-variant: Mambaforge
       - name: install dependencies
         shell: bash -l {0}
         run: |
@@ -43,7 +47,8 @@ jobs:
         run: |
           python -m http.server 8880 --directory doc/generated/html &
           sleep 1
-          linkchecker --check-extern http://localhost:8880/svgdigitizer/
+          # repology.org only passes the check locally but not in the Github CI. see #169
+          linkchecker --check-extern http://localhost:8880/svgdigitizer/ --ignore-url="https://repology.org/*"
       - uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

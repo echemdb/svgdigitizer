@@ -1,7 +1,7 @@
 # *********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C)      2021 Albert Engstfeld
+#        Copyright (C) 2021-2023 Albert Engstfeld
 #        Copyright (C)      2021 Johannes Hermann
 #        Copyright (C) 2021-2022 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
@@ -19,12 +19,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # *********************************************************************
-import setuptools
 from distutils.core import setup
 
 setup(
     name="svgdigitizer",
-    version="0.6.0",
+    version="0.7.0",
     packages=["svgdigitizer", "svgdigitizer.electrochemistry", "svgdigitizer.test"],
     license="GPL 3.0+",
     description="svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications.",
@@ -34,7 +33,7 @@ setup(
     install_requires=[
         "astropy>=5,<6",
         "click>=8,<9",
-        "frictionless>=4.28.2,<5",
+        "frictionless>=5.8.3,<6",
         "matplotlib>=3.5,<4",
         "mergedeep>=1.3.4,<2",
         "pandas>=1.3,<2",
@@ -48,7 +47,7 @@ setup(
         "svgwrite>=1.4,<2",
     ],
     entry_points={
-        "console_scripts": ["svgdigitizer=svgdigitizer.__main__:cli"],
+        "console_scripts": ["svgdigitizer=svgdigitizer.entrypoint:cli"],
     },
     python_requires=">=3.9",
 )
