@@ -37,9 +37,12 @@ EXAMPLES::
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import logging
 import os
 
 import click
+
+logger = logging.getLogger("svgdigitizer")
 
 
 @click.group(help=__doc__.split("EXAMPLES")[0])
@@ -56,6 +59,12 @@ skewed_option = click.option(
     "--skewed",
     is_flag=True,
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
+)
+
+bibliography_option = click.option(
+    "--bibliography",
+    is_flag=True,
+    help="Adds bibliography data from a bibfile as descriptor to the datapackage.",
 )
 
 si_option = click.option(
@@ -126,6 +135,31 @@ def _create_svgplot(svg, sampling_interval, skewed):
         sampling_interval=sampling_interval,
         algorithm="mark-aligned" if skewed else "axis-aligned",
     )
+
+
+def _create_bibliography(svg, metadata):
+    r"""
+    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`.
+
+    This is a helper method for :meth:`digitize_cv`.
+    """
+    from pybtex.database import parse_file
+
+    try:
+        metadata["source"]["citation key"]
+    except KeyError as exc:
+        raise KeyError(
+            "The name of the bibfile must be specified in the metadata in `metadata['source']['citation key']`."
+        ) from exc
+
+    bibfile = metadata["source"]["citation key"]
+
+    bib_directory = os.path.dirname(svg)
+
+    bibliography = parse_file(
+        f"{os.path.join(bib_directory, bibfile)}.bib", bib_format="bibtex"
+    )
+    return bibliography.entries[bibfile].to_string("bibtex")
 
 
 @click.command()
@@ -207,8 +241,11 @@ def digitize(svg, sampling_interval, outdir, skewed):
 )
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
+@bibliography_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si_units):
+def digitize_cv(
+    svg, sampling_interval, metadata, package, outdir, skewed, bibliography, si_units
+):
     r"""
     Digitize a cylic voltammogram.
 
@@ -278,15 +315,28 @@ def digitize_cv(svg, sampling_interval, metadata, package, outdir, skewed, si_un
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
     cv.df.to_csv(csvname, index=False)
 
+    metadata = cv.metadata
+
+    if bibliography:
+        metadata.setdefault("bibliography", {})
+
+        if metadata["bibliography"]:
+            logger.warning(
+                "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
+            )
+
+        # metadata["bibliography"] = _create_bibliography(svg, metadata)
+        metadata.update({"bibliography": _create_bibliography(svg, metadata)})
+
     if package:
-        package = _create_package(cv.metadata, csvname, outdir)
+        package = _create_package(metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
         mode="w",
         encoding="utf-8",
     ) as json:
-        _write_metadata(json, package.to_dict() if package else cv.metadata)
+        _write_metadata(json, package.to_dict() if package else metadata)
 
 
 def _create_package(metadata, csvname, outdir):

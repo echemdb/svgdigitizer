@@ -125,6 +125,12 @@ jobs:
           svgdigitizer cv test/data/axes_orientation.svg --package --si-units
           git diff --no-index --word-diff -- test/data/axes_orientation.json test/data/axes_orientation.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/axes_orientation.csv"), pandas.read_csv("test/data/axes_orientation.csv.expected"))'
+      - name: cli-cv-package-bibliography
+        shell: bash -l {0}
+        run: |
+          svgdigitizer cv test/data/package_bibliography.svg --metadata test/data/package_bibliography.yaml --si-units --bibliography
+          git diff --no-index --word-diff -- test/data/package_bibliography.json test/data/package_bibliography.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package_bibliography.csv"), pandas.read_csv("test/data/package_bibliography.csv.expected"))'
       - name: cli-cv-xy-rate-reference-no-si
         shell: bash -l {0}
         run: |
