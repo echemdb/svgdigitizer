@@ -2,9 +2,9 @@
     "$frictionless": "package/v2",
     "resources": [
         {
-            "name": "cv_bibliography",
+            "name": "figure_bibliography",
             "type": "table",
-            "path": "cv_bibliography.csv",
+            "path": "figure_bibliography.csv",
             "scheme": "file",
             "format": "csv",
             "mediatype": "text/csv",
@@ -17,10 +17,9 @@
                         "unit": "s"
                     },
                     {
-                        "name": "E",
+                        "name": "T",
                         "type": "number",
-                        "unit": "V",
-                        "reference": "RHE"
+                        "unit": "K"
                     },
                     {
                         "name": "j",
@@ -155,14 +154,13 @@
         "version": 1,
         "type": "digitized",
         "simultaneous measurements": [],
-        "measurement type": "CV",
+        "measurement type": "custom",
         "fields": [
             {
-                "name": "E",
+                "name": "T",
                 "type": "number",
-                "unit": "V",
-                "orientation": "x",
-                "reference": "RHE"
+                "unit": "K",
+                "orientation": "x"
             },
             {
                 "name": "j",
@@ -174,13 +172,13 @@
         "comment": "",
         "scan rate": {
             "value": 50.0,
-            "unit": "mV / s"
+            "unit": "K / s"
         }
     },
     "data description": {
         "version": 1,
         "type": "digitized",
-        "measurement type": "CV"
+        "measurement type": "custom"
     },
     "bibliography": "@article{cv_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Title\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2022\",\n    abstract = \"Abstract.\"\n}\n"
 }
