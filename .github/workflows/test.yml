@@ -122,9 +122,15 @@ jobs:
       - name: cli-cv-bibliography
         shell: bash -l {0}
         run: |
-          svgdigitizer cv test/data/package_bibliography.svg --metadata test/data/package_bibliography.yaml --si-units --bibliography
-          git diff --no-index --word-diff -- test/data/package_bibliography.json test/data/package_bibliography.json.expected
-          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package_bibliography.csv"), pandas.read_csv("test/data/package_bibliography.csv.expected"))'
+          svgdigitizer cv test/data/cv_bibliography.svg --metadata test/data/cv_bibliography.yaml --si-units --bibliography
+          git diff --no-index --word-diff -- test/data/cv_bibliography.json test/data/cv_bibliography.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/cv_bibliography.csv"), pandas.read_csv("test/data/cv_bibliography.csv.expected"))'
+      - name: cli-figure-bibliography
+        shell: bash -l {0}
+        run: |
+          svgdigitizer figure test/data/figure_bibliography.svg --metadata test/data/figure_bibliography.yaml --si-units --bibliography
+          git diff --no-index --word-diff -- test/data/figure_bibliography.json test/data/figure_bibliography.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_bibliography.csv"), pandas.read_csv("test/data/figure_bibliography.csv.expected"))'
       - name: cli-cv-xy-rate-reference-no-si
         shell: bash -l {0}
         run: |
