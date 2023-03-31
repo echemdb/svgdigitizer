@@ -156,7 +156,7 @@ def _create_bibliography(svg, metadata):
     r"""
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`.
 
-    This is a helper method for :meth:`digitize_cv`.
+    This is a helper method for :meth:`_create_outfiles`.
     """
     from pybtex.database import parse_file
 
@@ -232,7 +232,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @si_option
 @bibliography_option
 @skewed_option
-def digitize_figure(svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units):
+def digitize_figure(
+    svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units
+):
     r"""
     Digitize a figure with units on the axis and create a frictionless datapackage.
 
@@ -283,29 +285,9 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, bibliography, skew
             force_si_units=si_units,
         )
 
-    csvname = _outfile(svg, suffix=".csv", outdir=outdir)
-    svgfigure.df.to_csv(csvname, index=False)
-
-    metadata = svgfigure.metadata
-
-    if bibliography:
-        metadata.setdefault("bibliography", {})
-
-        if metadata["bibliography"]:
-            logger.warning(
-                "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
-            )
-
-        metadata.update({"bibliography": _create_bibliography(svg, metadata)})
-
-    package = _create_package(metadata, csvname, outdir)
-
-    with open(
-        _outfile(svg, suffix=".json", outdir=outdir),
-        mode="w",
-        encoding="utf-8",
-    ) as json:
-        _write_metadata(json, package.to_dict())
+    _create_outfiles(
+        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+    )
 
 
 @click.command(name="cv")
@@ -318,7 +300,9 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, bibliography, skew
 @bibliography_option
 @si_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units):
+def digitize_cv(
+    svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units
+):
     r"""
     Digitize a cylic voltammogram and create a frictionless datapackage. The sampling interval should be provided in mV.
 
@@ -379,16 +363,26 @@ def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, bibliography, 
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
     with open(svg, mode="rb") as infile:
-        cv = CV(
+        svgfigure = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
             force_si_units=si_units,
         )
 
-    csvname = _outfile(svg, suffix=".csv", outdir=outdir)
-    cv.df.to_csv(csvname, index=False)
+    _create_outfiles(
+        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+    )
 
-    metadata = cv.metadata
+
+def _create_outfiles(svgfigure, svg, outdir, bibliography):
+    """Writes a datapackage consisting of a CSV and JSON file from a :param:'svgfigure'
+
+    This is a helper method for CLI commands that digitize an svgfigure.
+    """
+    csvname = _outfile(svg, suffix=".csv", outdir=outdir)
+    svgfigure.df.to_csv(csvname, index=False)
+
+    metadata = svgfigure.metadata
 
     if bibliography:
         metadata.setdefault("bibliography", {})
@@ -415,7 +409,7 @@ def _create_package(metadata, csvname, outdir):
     Return a data package built from a :param:`metadata` dict and tabular data
     in :param:`csvname`.
 
-    This is a helper method for :meth:`digitize_cv`.
+    This is a helper method for :meth:`_create_outfiles`.
     """
     from frictionless import Package, Resource, Schema
 
@@ -457,7 +451,7 @@ def _write_metadata(out, metadata):
     r"""
     Write `metadata` to the `out` stream in JSON format.
 
-    This is a helper method for :meth:`digitize_cv`.
+    This is a helper method for :meth:`_create_outfiles`.
     """
 
     def defaultconverter(item):
