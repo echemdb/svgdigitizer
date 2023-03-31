@@ -21,6 +21,7 @@ dependencies:
   - pillow>=9,<10
   - pip>=21,<22
   - poppler>=22,<23
+  - pybtex>=0.24,<0.25
   - pylint>=2.12,<3
   - pytest>=6.2,<7
   - python>=3.9,<4

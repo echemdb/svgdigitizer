@@ -38,9 +38,12 @@ EXAMPLES::
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import logging
 import os
 
 import click
+
+logger = logging.getLogger("svgdigitizer")
 
 
 @click.group(help=__doc__.split("EXAMPLES")[0])
@@ -57,6 +60,12 @@ skewed_option = click.option(
     "--skewed",
     is_flag=True,
     help="Detect non-orthogonal skewed axes going through the markers instead of assuming that axes are perfectly horizontal and vertical.",
+)
+
+bibliography_option = click.option(
+    "--bibliography",
+    is_flag=True,
+    help="Adds bibliography data from a bibfile as descriptor to the datapackage.",
 )
 
 si_option = click.option(
@@ -143,6 +152,31 @@ def _create_svgplot(svg, sampling_interval, skewed):
     )
 
 
+def _create_bibliography(svg, metadata):
+    r"""
+    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`.
+
+    This is a helper method for :meth:`digitize_cv`.
+    """
+    from pybtex.database import parse_file
+
+    try:
+        metadata["source"]["citation key"]
+    except KeyError as exc:
+        raise KeyError(
+            "The name of the bibfile must be specified in the metadata in `metadata['source']['citation key']`."
+        ) from exc
+
+    bibfile = metadata["source"]["citation key"]
+
+    bib_directory = os.path.dirname(svg)
+
+    bibliography = parse_file(
+        f"{os.path.join(bib_directory, bibfile)}.bib", bib_format="bibtex"
+    )
+    return bibliography.entries[bibfile].to_string("bibtex")
+
+
 @click.command()
 @sampling_interval_option
 @skewed_option
@@ -197,8 +231,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
 # @click.option("--package", is_flag=True, help="create .json in data package format")
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
+@bibliography_option
 @skewed_option
-def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si_units):
+def digitize_figure(svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units):
     r"""
     Digitize a figure with units on the axis and create a frictionless datapackage.
 
@@ -252,7 +287,20 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si_units):
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
     svgfigure.df.to_csv(csvname, index=False)
 
-    package = _create_package(svgfigure.metadata, csvname, outdir)
+    metadata = svgfigure.metadata
+
+    if bibliography:
+        metadata.setdefault("bibliography", {})
+
+        if metadata["bibliography"]:
+            logger.warning(
+                "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
+            )
+
+        # metadata["bibliography"] = _create_bibliography(svg, metadata)
+        metadata.update({"bibliography": _create_bibliography(svg, metadata)})
+
+    package = _create_package(metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
@@ -270,9 +318,10 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, skewed, si_units):
 )
 # @click.option("--package", is_flag=True, help="create .json in data package format")
 @click.argument("svg", type=click.Path(exists=True))
+@bibliography_option
 @si_option
 @skewed_option
-def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, si_units):
+def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units):
     r"""
     Digitize a cylic voltammogram and create a frictionless datapackage. The sampling interval should be provided in mV.
 
@@ -342,7 +391,20 @@ def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, si_units):
     csvname = _outfile(svg, suffix=".csv", outdir=outdir)
     cv.df.to_csv(csvname, index=False)
 
-    package = _create_package(cv.metadata, csvname, outdir)
+    metadata = cv.metadata
+
+    if bibliography:
+        metadata.setdefault("bibliography", {})
+
+        if metadata["bibliography"]:
+            logger.warning(
+                "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
+            )
+
+        # metadata["bibliography"] = _create_bibliography(svg, metadata)
+        metadata.update({"bibliography": _create_bibliography(svg, metadata)})
+
+    package = _create_package(metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),

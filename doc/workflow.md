@@ -157,7 +157,7 @@ Propose a pull request that adds your directory to `website/literature`, e.g., b
 
 If you want to test whether your files were prepared correctly for echemdb, run:
 
-`svgdigitizer cv mustermann_2021_svgdigitizer_1_f2a_blue.svg --metadata mustermann_2021_svgdigitizer_1_f2a_blue.yaml --sampling-interval 0.001 --package`
+`svgdigitizer cv mustermann_2021_svgdigitizer_1_f2a_blue.svg --metadata mustermann_2021_svgdigitizer_1_f2a_blue.yaml --sampling-interval 0.001 --package --bibliography`
 
 This creates a CSV with the data of the plot and a JSON package file that you can inspect to verify that the data has been correctly extracted.
 
