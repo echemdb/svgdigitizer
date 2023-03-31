@@ -228,7 +228,6 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @click.option(
     "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
 )
-# @click.option("--package", is_flag=True, help="create .json in data package format")
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @bibliography_option
@@ -297,7 +296,6 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, bibliography, skew
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        # metadata["bibliography"] = _create_bibliography(svg, metadata)
         metadata.update({"bibliography": _create_bibliography(svg, metadata)})
 
     package = _create_package(metadata, csvname, outdir)
@@ -316,7 +314,6 @@ def digitize_figure(svg, sampling_interval, metadata, outdir, bibliography, skew
 @click.option(
     "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
 )
-# @click.option("--package", is_flag=True, help="create .json in data package format")
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
 @si_option
@@ -401,7 +398,6 @@ def digitize_cv(svg, sampling_interval, metadata, outdir, skewed, bibliography, 
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        # metadata["bibliography"] = _create_bibliography(svg, metadata)
         metadata.update({"bibliography": _create_bibliography(svg, metadata)})
 
     package = _create_package(metadata, csvname, outdir)
