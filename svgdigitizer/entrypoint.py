@@ -145,21 +145,33 @@ def _create_bibliography(svg, metadata):
     """
     from pybtex.database import parse_file
 
-    try:
-        metadata["source"]["citation key"]
-    except KeyError as exc:
-        raise KeyError(
-            "The name of the bibfile must be specified in the metadata in `metadata['source']['citation key']`."
-        ) from exc
+    # try:
+    #     metadata["source"]["citation key"]
+    # except KeyError as exc:
+    #     raise KeyError(
+    #         "The name of the bibfile must be specified in the metadata in `metadata['source']['citation key']`."
+    #     ) from exc
 
-    bibfile = metadata["source"]["citation key"]
+    metadata.setdefault('source',{})
+    metadata['source'].setdefault('citation key',"")
+    # if not metadata["source"]["citation key"]:
+    #     return ""
+
+    bibkey = metadata["source"]["citation key"]
 
     bib_directory = os.path.dirname(svg)
 
+    bibfile = f"{os.path.join(bib_directory, bibkey)}.bib"
+
+    if not os.path.exists(bibfile):
+    #     # Add test for this change??
+    #     raise f"A citation key with name {bibkey} was provided, but no BIB file was found."
+        return ""
+
     bibliography = parse_file(
-        f"{os.path.join(bib_directory, bibfile)}.bib", bib_format="bibtex"
+        bibfile, bib_format="bibtex"
     )
-    return bibliography.entries[bibfile].to_string("bibtex")
+    return bibliography.entries[bibkey].to_string("bibtex")
 
 
 @click.command()
