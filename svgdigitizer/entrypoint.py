@@ -139,38 +139,34 @@ def _create_svgplot(svg, sampling_interval, skewed):
 
 def _create_bibliography(svg, metadata):
     r"""
-    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`.
+    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`,
+    when both requirements are met. Otherwise an empty string is returned.
 
     This is a helper method for :meth:`digitize_cv`.
     """
     from pybtex.database import parse_file
 
-    # try:
-    #     metadata["source"]["citation key"]
-    # except KeyError as exc:
-    #     raise KeyError(
-    #         "The name of the bibfile must be specified in the metadata in `metadata['source']['citation key']`."
-    #     ) from exc
-
-    metadata.setdefault('source',{})
-    metadata['source'].setdefault('citation key',"")
-    # if not metadata["source"]["citation key"]:
-    #     return ""
+    metadata.setdefault("source", {})
+    metadata["source"].setdefault("citation key", "")
 
     bibkey = metadata["source"]["citation key"]
+    if not bibkey:
+        logger.warning(
+            f'No bibliography key found in metadata["source"]["citation key"]'
+        )
+        return ""
 
     bib_directory = os.path.dirname(svg)
 
     bibfile = f"{os.path.join(bib_directory, bibkey)}.bib"
 
     if not os.path.exists(bibfile):
-    #     # Add test for this change??
-    #     raise f"A citation key with name {bibkey} was provided, but no BIB file was found."
+        logger.warning(
+            f"A citation key with name {bibkey} was provided, but no BIB file was found."
+        )
         return ""
 
-    bibliography = parse_file(
-        bibfile, bib_format="bibtex"
-    )
+    bibliography = parse_file(bibfile, bib_format="bibtex")
     return bibliography.entries[bibkey].to_string("bibtex")
 
 
@@ -337,7 +333,6 @@ def digitize_cv(
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        # metadata["bibliography"] = _create_bibliography(svg, metadata)
         metadata.update({"bibliography": _create_bibliography(svg, metadata)})
 
     if package:
