@@ -152,7 +152,7 @@ def _create_bibliography(svg, metadata):
     bibkey = metadata["source"]["citation key"]
     if not bibkey:
         logger.warning(
-            f'No bibliography key found in metadata["source"]["citation key"]'
+            'No bibliography key found in metadata["source"]["citation key"]'
         )
         return ""
 
