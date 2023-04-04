@@ -126,7 +126,7 @@
            id="tspan15404"
            style="stroke-width:0.264583"
            x="6.8084121"
-           y="83.536674">E1: 0 V @ RHE</tspan></text>
+           y="83.536674">T1: 0 K</tspan></text>
     </g>
     <g
        id="g1577"
@@ -146,7 +146,7 @@
            id="tspan18114"
            style="stroke-width:0.264583"
            x="61.111824"
-           y="81.725914">E2: 0.6 V @ RHE</tspan></text>
+           y="81.725914">T2: 0.6 K</tspan></text>
     </g>
     <g
        id="g6722">
@@ -179,6 +179,6 @@
          id="tspan837"
          x="65.163452"
          y="114.31835"
-         style="stroke-width:0.264583">scan rate: 50 mV/s</tspan></text>
+         style="stroke-width:0.264583">scan rate: 50 K/s</tspan></text>
   </g>
 </svg>
