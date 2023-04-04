@@ -10,8 +10,9 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      cv        Digitize a cylic voltammogram.
+      cv        Digitize a cylic voltammogram and create a frictionless...
       digitize  Digitize a plot.
+      figure    Digitize a figure with units on the axis and create a...
       paginate  Render PDF pages as individual SVG files with linked PNG images.
       plot      Display a plot of the data traced in an SVG.
 
@@ -71,6 +72,20 @@ si_option = click.option(
     "--si-units",
     is_flag=True,
     help="Convert units of the plot and CSV to SI (only if they are compatible with astropy units).",
+)
+
+sampling_interval_option = click.option(
+    "--sampling-interval",
+    type=float,
+    default=None,
+    help="Sampling interval on the x-axis.",
+)
+
+outdir_option = click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="write output files to this directory",
 )
 
 
@@ -142,7 +157,7 @@ def _create_bibliography(svg, metadata):
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`,
     when both requirements are met. Otherwise an empty string is returned.
 
-    This is a helper method for :meth:`digitize_cv`.
+    This is a helper method for :meth:`_create_outfiles`.
     """
     from pybtex.database import parse_file
 
@@ -171,12 +186,7 @@ def _create_bibliography(svg, metadata):
 
 
 @click.command()
-@click.option(
-    "--sampling-interval",
-    type=float,
-    default=None,
-    help="Sampling interval on the x-axis.",
-)
+@sampling_interval_option
 @skewed_option
 @click.argument("svg", type=click.File("rb"))
 def plot(svg, sampling_interval, skewed):
@@ -195,18 +205,8 @@ def plot(svg, sampling_interval, skewed):
 
 
 @click.command()
-@click.option(
-    "--sampling-interval",
-    type=float,
-    default=None,
-    help="Sampling interval on the x-axis.",
-)
-@click.option(
-    "--outdir",
-    type=click.Path(file_okay=False),
-    default=None,
-    help="write output files to this directory",
-)
+@sampling_interval_option
+@outdir_option
 @skewed_option
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval, outdir, skewed):
@@ -230,32 +230,89 @@ def digitize(svg, sampling_interval, outdir, skewed):
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
 
 
-@click.command(name="cv")
-@click.option(
-    "--sampling-interval",
-    type=float,
-    default=None,
-    help="sampling interval on the x-axis in volts",
-)
+@click.command(name="figure")
+@sampling_interval_option
+@outdir_option
 @click.option(
     "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
-)
-@click.option("--package", is_flag=True, help="create .json in data package format")
-@click.option(
-    "--outdir",
-    type=click.Path(file_okay=False),
-    default=None,
-    help="write output files to this directory",
 )
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @bibliography_option
 @skewed_option
-def digitize_cv(
-    svg, sampling_interval, metadata, package, outdir, skewed, bibliography, si_units
+def digitize_figure(
+    svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units
 ):
     r"""
-    Digitize a cylic voltammogram.
+    Digitize a figure with units on the axis and create a frictionless datapackage.
+
+    EXAMPLES::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+
+    TESTS:
+
+    The command can be invoked on files in the current directory::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> cwd = os.getcwd()
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     os.chdir(directory)
+        ...     try:
+        ...         invoke(cli, "cv", "xy_rate.svg")
+        ...     finally:
+        ...         os.chdir(cwd)
+
+    The command can be invoked without sampling when data is not given in volts::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") as svg:
+        ...         print(CV(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
+        mV
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+
+    """
+    if metadata:
+        import yaml
+
+        metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
+
+    with open(svg, mode="rb") as infile:
+        from svgdigitizer.svgfigure import SVGFigure
+
+        svgfigure = SVGFigure(
+            _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
+            metadata=metadata,
+            force_si_units=si_units,
+        )
+
+    _create_outfiles(
+        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+    )
+
+
+@click.command(name="cv")
+@sampling_interval_option
+@outdir_option
+@click.option(
+    "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
+)
+@click.argument("svg", type=click.Path(exists=True))
+@bibliography_option
+@si_option
+@skewed_option
+def digitize_cv(
+    svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units
+):
+    r"""
+    Digitize a cylic voltammogram and create a frictionless datapackage. The sampling interval should be provided in mV.
 
     For inclusion in the echemdb.
 
@@ -314,16 +371,26 @@ def digitize_cv(
         metadata = yaml.load(metadata, Loader=yaml.SafeLoader)
 
     with open(svg, mode="rb") as infile:
-        cv = CV(
+        svgfigure = CV(
             _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed),
             metadata=metadata,
             force_si_units=si_units,
         )
 
-    csvname = _outfile(svg, suffix=".csv", outdir=outdir)
-    cv.df.to_csv(csvname, index=False)
+    _create_outfiles(
+        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+    )
 
-    metadata = cv.metadata
+
+def _create_outfiles(svgfigure, svg, outdir, bibliography):
+    """Writes a datapackage consisting of a CSV and JSON file from a :param:'svgfigure'
+
+    This is a helper method for CLI commands that digitize an svgfigure.
+    """
+    csvname = _outfile(svg, suffix=".csv", outdir=outdir)
+    svgfigure.df.to_csv(csvname, index=False)
+
+    metadata = svgfigure.metadata
 
     if bibliography:
         metadata.setdefault("bibliography", {})
@@ -335,15 +402,14 @@ def digitize_cv(
 
         metadata.update({"bibliography": _create_bibliography(svg, metadata)})
 
-    if package:
-        package = _create_package(metadata, csvname, outdir)
+    package = _create_package(metadata, csvname, outdir)
 
     with open(
         _outfile(svg, suffix=".json", outdir=outdir),
         mode="w",
         encoding="utf-8",
     ) as json:
-        _write_metadata(json, package.to_dict() if package else metadata)
+        _write_metadata(json, package.to_dict())
 
 
 def _create_package(metadata, csvname, outdir):
@@ -351,7 +417,7 @@ def _create_package(metadata, csvname, outdir):
     Return a data package built from a :param:`metadata` dict and tabular data
     in :param:`csvname`.
 
-    This is a helper method for :meth:`digitize_cv`.
+    This is a helper method for :meth:`_create_outfiles`.
     """
     from frictionless import Package, Resource, Schema
 
@@ -393,7 +459,7 @@ def _write_metadata(out, metadata):
     r"""
     Write `metadata` to the `out` stream in JSON format.
 
-    This is a helper method for :meth:`digitize_cv`.
+    This is a helper method for :meth:`_create_outfiles`.
     """
 
     def defaultconverter(item):
@@ -499,6 +565,7 @@ def paginate(onlypng, pdf, outdir):
 
 cli.add_command(plot)
 cli.add_command(digitize)
+cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
 

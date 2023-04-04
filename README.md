@@ -26,8 +26,9 @@ Usage: svgdigitizer [OPTIONS] COMMAND [ARGS]...
 Options:
   --help  Show this message and exit.
 Commands:
-  cv        Digitize a cylic voltammogram.
+  cv        Digitize a cylic voltammogram and create a frictionless...
   digitize  Digitize a plot.
+  figure    Digitize a figure with units on the axis and create a...
   paginate  Render PDF pages as individual SVG files with linked PNG images.
   plot      Display a plot of the data traced in an SVG.
 

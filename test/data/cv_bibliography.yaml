@@ -1,9 +1,10 @@
 # This file can exist with the "source" information only
 # 'Figure description' is adapted based on SVG input
+version: 1
 
 source:
     doi: https://doi.org/10.1016/0039-6028(85)90985-9
-    bib: Beden_1985_Voltammetric_833 # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
+    citation key: cv_bibliography # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
     figure: 2b # depending on the subfigure labels use 1, 1b, or 1_3
     curve: First cycle # use a unique short description to identify the curve in the figure
 
@@ -24,7 +25,7 @@ electrochemical system:
               type: salt #
               source:
                   supplier: null
-                  LOT:
+                  LOT: 
             - name: water
               sum formula: H2O
               type: solvent
@@ -34,7 +35,7 @@ electrochemical system:
               source:
                   refinement: Sartorius Arium 611UV
                   quality: ultrapure water
-                  total organic carbon:
+                  total organic carbon: 
                       value: 3
                       unit: ppb
             - name: ethanol
@@ -48,15 +49,15 @@ electrochemical system:
               type: acid
               source:
                   supplier: null
-                  LOT:
+                  LOT: 
               concentration:
                   value: 0.1
-                  unit: M #[M, mM, µM, g kg-1, ...]
-        ph:
+                  unit: M #[M, mM, µM, g kg-1, ...] 
+        ph: 
             value: 13
             uncertainty: 0.1
         temperature: # provide the temperature as it is given in the article. Assume room temperature if nothing is provided
-            value: 298.15
+            value: 298.15 
             unit: K # [K, C, F]
     electrodes:
         configuration: three # number of electrodes
@@ -73,7 +74,7 @@ electrochemical system:
             crystallographic orientation: 111 # hkl, 100, 110, poly
             source:
                 supplier: null
-                LOT:
+                LOT: 
             shape: # optional
                 type: cylinder # bead/sphere
                 height:
@@ -82,7 +83,7 @@ electrochemical system:
                 diameter:
                     value: 4
                     unit: mm
-            geometric electrolyte contact area:
+            geometric electrolyte contact area: 
                 value: null
                 unit: cm-2
             preparation procedure: null # Short description of sample preparation. This can be very useful. :)

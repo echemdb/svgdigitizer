@@ -2,9 +2,9 @@
     "$frictionless": "package/v2",
     "resources": [
         {
-            "name": "package",
+            "name": "cv_bibliography",
             "type": "table",
-            "path": "package.csv",
+            "path": "cv_bibliography.csv",
             "scheme": "file",
             "format": "csv",
             "mediatype": "text/csv",
@@ -31,9 +31,10 @@
             }
         }
     ],
+    "version": 1,
     "source": {
         "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
-        "bib": "Beden_1985_Voltammetric_833",
+        "citation key": "cv_bibliography",
         "figure": "2b",
         "curve": "label"
     },
@@ -180,5 +181,6 @@
         "version": 1,
         "type": "digitized",
         "measurement type": "CV"
-    }
+    },
+    "bibliography": "@article{cv_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Title\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2022\",\n    abstract = \"Abstract.\"\n}\n"
 }

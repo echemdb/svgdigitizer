@@ -2,9 +2,9 @@
     "$frictionless": "package/v2",
     "resources": [
         {
-            "name": "cv_comment",
+            "name": "figure_comment",
             "type": "table",
-            "path": "cv_comment.csv",
+            "path": "figure_comment.csv",
             "scheme": "file",
             "format": "csv",
             "mediatype": "text/csv",
@@ -19,13 +19,12 @@
                     {
                         "name": "E",
                         "type": "number",
-                        "unit": "V",
-                        "reference": "RHE"
+                        "unit": "V"
                     },
                     {
                         "name": "j",
                         "type": "number",
-                        "unit": "A / m2"
+                        "unit": "uA cm-2"
                     }
                 ]
             }
@@ -155,14 +154,13 @@
         "version": 1,
         "type": "digitized",
         "simultaneous measurements": [],
-        "measurement type": "CV",
+        "measurement type": "custom",
         "fields": [
             {
                 "name": "E",
                 "type": "number",
                 "unit": "V",
-                "orientation": "x",
-                "reference": "RHE"
+                "orientation": "x"
             },
             {
                 "name": "j",
@@ -180,6 +178,6 @@
     "data description": {
         "version": 1,
         "type": "digitized",
-        "measurement type": "CV"
+        "measurement type": "custom"
     }
 }

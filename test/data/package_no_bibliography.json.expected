@@ -1,4 +1,36 @@
 {
+    "$frictionless": "package/v2",
+    "resources": [
+        {
+            "name": "package_no_bibliography",
+            "type": "table",
+            "path": "package_no_bibliography.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "t",
+                        "type": "number",
+                        "unit": "s"
+                    },
+                    {
+                        "name": "E",
+                        "type": "number",
+                        "unit": "V",
+                        "reference": "RHE"
+                    },
+                    {
+                        "name": "j",
+                        "type": "number",
+                        "unit": "A / m2"
+                    }
+                ]
+            }
+        }
+    ],
     "version": 1,
     "source": {
         "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
@@ -148,25 +180,7 @@
     "data description": {
         "version": 1,
         "type": "digitized",
-        "measurement type": "CV",
-        "fields": [
-            {
-                "name": "E",
-                "type": "number",
-                "unit": "V",
-                "reference": "RHE"
-            },
-            {
-                "name": "j",
-                "type": "number",
-                "unit": "A / m2"
-            },
-            {
-                "name": "t",
-                "type": "number",
-                "unit": "s"
-            }
-        ]
+        "measurement type": "CV"
     },
     "bibliography": ""
 }

@@ -1,5 +1,5 @@
 # Figure description is adapted based on SVG input
-version: 1
+version: "1"
 
 source: 
     doi: https://doi.org/10.1016/0039-6028(85)90985-9

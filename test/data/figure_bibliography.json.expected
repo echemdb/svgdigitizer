@@ -1,8 +1,39 @@
 {
+    "$frictionless": "package/v2",
+    "resources": [
+        {
+            "name": "figure_bibliography",
+            "type": "table",
+            "path": "figure_bibliography.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "t",
+                        "type": "number",
+                        "unit": "s"
+                    },
+                    {
+                        "name": "T",
+                        "type": "number",
+                        "unit": "K"
+                    },
+                    {
+                        "name": "j",
+                        "type": "number",
+                        "unit": "A / m2"
+                    }
+                ]
+            }
+        }
+    ],
     "version": 1,
     "source": {
         "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
-        "citation key": "package_bibliography",
+        "citation key": "cv_bibliography",
         "figure": "2b",
         "curve": "label"
     },
@@ -123,14 +154,13 @@
         "version": 1,
         "type": "digitized",
         "simultaneous measurements": [],
-        "measurement type": "CV",
+        "measurement type": "custom",
         "fields": [
             {
-                "name": "E",
+                "name": "T",
                 "type": "number",
-                "unit": "V",
-                "orientation": "x",
-                "reference": "RHE"
+                "unit": "K",
+                "orientation": "x"
             },
             {
                 "name": "j",
@@ -142,31 +172,13 @@
         "comment": "",
         "scan rate": {
             "value": 50.0,
-            "unit": "mV / s"
+            "unit": "K / s"
         }
     },
     "data description": {
         "version": 1,
         "type": "digitized",
-        "measurement type": "CV",
-        "fields": [
-            {
-                "name": "E",
-                "type": "number",
-                "unit": "V",
-                "reference": "RHE"
-            },
-            {
-                "name": "j",
-                "type": "number",
-                "unit": "A / m2"
-            },
-            {
-                "name": "t",
-                "type": "number",
-                "unit": "s"
-            }
-        ]
+        "measurement type": "custom"
     },
-    "bibliography": "@article{package_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Title\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2022\",\n    abstract = \"Abstract.\"\n}\n"
+    "bibliography": "@article{cv_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Title\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2022\",\n    abstract = \"Abstract.\"\n}\n"
 }
