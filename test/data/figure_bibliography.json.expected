@@ -27,158 +27,162 @@
                         "unit": "A / m2"
                     }
                 ]
-            }
-        }
-    ],
-    "version": 1,
-    "source": {
-        "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
-        "citation key": "cv_bibliography",
-        "figure": "2b",
-        "curve": "label"
-    },
-    "curator": {
-        "name": "Albert Engstfeld",
-        "orcid": "https://orcid.org/0000-0002-9686-3948",
-        "digitized": "2021-06-01"
-    },
-    "electrochemical system": {
-        "electrolyte": {
-            "type": "aq",
-            "components": [
-                {
-                    "name": "NaCl",
-                    "sum formula": "NaCl",
-                    "concentration": {
-                        "value": 0.1,
-                        "unit": "M"
-                    },
-                    "type": "salt",
+            },
+            "metadata": {
+                "echemdb": {
+                    "version": 1,
                     "source": {
-                        "supplier": null,
-                        "LOT": null
-                    }
-                },
-                {
-                    "name": "water",
-                    "sum formula": "H2O",
-                    "type": "solvent",
-                    "proportion": {
-                        "value": 50,
-                        "unit": "volume percent"
+                        "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
+                        "citation key": "cv_bibliography",
+                        "figure": "2b",
+                        "curve": "label",
+                        "bibdata": "@article{cv_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Title\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2022\",\n    abstract = \"Abstract.\"\n}\n"
                     },
-                    "source": {
-                        "refinement": "Sartorius Arium 611UV",
-                        "quality": "ultrapure water",
-                        "total organic carbon": {
-                            "value": 3,
-                            "unit": "ppb"
+                    "curator": {
+                        "name": "Albert Engstfeld",
+                        "orcid": "https://orcid.org/0000-0002-9686-3948",
+                        "digitized": "2021-06-01"
+                    },
+                    "electrochemical system": {
+                        "electrolyte": {
+                            "type": "aq",
+                            "components": [
+                                {
+                                    "name": "NaCl",
+                                    "sum formula": "NaCl",
+                                    "concentration": {
+                                        "value": 0.1,
+                                        "unit": "M"
+                                    },
+                                    "type": "salt",
+                                    "source": {
+                                        "supplier": null,
+                                        "LOT": null
+                                    }
+                                },
+                                {
+                                    "name": "water",
+                                    "sum formula": "H2O",
+                                    "type": "solvent",
+                                    "proportion": {
+                                        "value": 50,
+                                        "unit": "volume percent"
+                                    },
+                                    "source": {
+                                        "refinement": "Sartorius Arium 611UV",
+                                        "quality": "ultrapure water",
+                                        "total organic carbon": {
+                                            "value": 3,
+                                            "unit": "ppb"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "ethanol",
+                                    "sum formula": "EtOH",
+                                    "type": "solvent",
+                                    "proportion": {
+                                        "value": 50,
+                                        "unit": "volume percent"
+                                    }
+                                },
+                                {
+                                    "name": "sulfuric acid",
+                                    "sum formula": "H2SO4",
+                                    "type": "acid",
+                                    "source": {
+                                        "supplier": null,
+                                        "LOT": null
+                                    },
+                                    "concentration": {
+                                        "value": 0.1,
+                                        "unit": "M"
+                                    }
+                                }
+                            ],
+                            "ph": {
+                                "value": 13,
+                                "uncertainty": 0.1
+                            },
+                            "temperature": {
+                                "value": 298.15,
+                                "unit": "K"
+                            }
+                        },
+                        "electrodes": {
+                            "configuration": "three",
+                            "reference electrode": {
+                                "type": "RHE",
+                                "source": {
+                                    "supplier": "SI Analytics"
+                                }
+                            },
+                            "counter electrode": {
+                                "material": "Pt",
+                                "crystallographic orientation": "poly",
+                                "shape": "wire"
+                            },
+                            "working electrode": {
+                                "material": "Ni",
+                                "crystallographic orientation": 111,
+                                "source": {
+                                    "supplier": null,
+                                    "LOT": null
+                                },
+                                "shape": {
+                                    "type": "cylinder",
+                                    "height": {
+                                        "value": 4,
+                                        "unit": "mm"
+                                    },
+                                    "diameter": {
+                                        "value": 4,
+                                        "unit": "mm"
+                                    }
+                                },
+                                "geometric electrolyte contact area": {
+                                    "value": null,
+                                    "unit": "cm-2"
+                                },
+                                "preparation procedure": null
+                            }
                         }
-                    }
-                },
-                {
-                    "name": "ethanol",
-                    "sum formula": "EtOH",
-                    "type": "solvent",
-                    "proportion": {
-                        "value": 50,
-                        "unit": "volume percent"
-                    }
-                },
-                {
-                    "name": "sulfuric acid",
-                    "sum formula": "H2SO4",
-                    "type": "acid",
-                    "source": {
-                        "supplier": null,
-                        "LOT": null
                     },
-                    "concentration": {
-                        "value": 0.1,
-                        "unit": "M"
+                    "experimental": {
+                        "tags": []
+                    },
+                    "figure description": {
+                        "version": 1,
+                        "type": "digitized",
+                        "simultaneous measurements": [],
+                        "measurement type": "custom",
+                        "fields": [
+                            {
+                                "name": "T",
+                                "type": "number",
+                                "unit": "K",
+                                "orientation": "x"
+                            },
+                            {
+                                "name": "j",
+                                "type": "number",
+                                "unit": "uA cm-2",
+                                "orientation": "y"
+                            }
+                        ],
+                        "comment": "",
+                        "scan rate": {
+                            "value": 50.0,
+                            "unit": "K / s"
+                        }
+                    },
+                    "data description": {
+                        "version": 1,
+                        "type": "digitized",
+                        "measurement type": "custom"
                     }
                 }
-            ],
-            "ph": {
-                "value": 13,
-                "uncertainty": 0.1
-            },
-            "temperature": {
-                "value": 298.15,
-                "unit": "K"
-            }
-        },
-        "electrodes": {
-            "configuration": "three",
-            "reference electrode": {
-                "type": "RHE",
-                "source": {
-                    "supplier": "SI Analytics"
-                }
-            },
-            "counter electrode": {
-                "material": "Pt",
-                "crystallographic orientation": "poly",
-                "shape": "wire"
-            },
-            "working electrode": {
-                "material": "Ni",
-                "crystallographic orientation": 111,
-                "source": {
-                    "supplier": null,
-                    "LOT": null
-                },
-                "shape": {
-                    "type": "cylinder",
-                    "height": {
-                        "value": 4,
-                        "unit": "mm"
-                    },
-                    "diameter": {
-                        "value": 4,
-                        "unit": "mm"
-                    }
-                },
-                "geometric electrolyte contact area": {
-                    "value": null,
-                    "unit": "cm-2"
-                },
-                "preparation procedure": null
             }
         }
-    },
-    "experimental": {
-        "tags": []
-    },
-    "figure description": {
-        "version": 1,
-        "type": "digitized",
-        "simultaneous measurements": [],
-        "measurement type": "custom",
-        "fields": [
-            {
-                "name": "T",
-                "type": "number",
-                "unit": "K",
-                "orientation": "x"
-            },
-            {
-                "name": "j",
-                "type": "number",
-                "unit": "uA cm-2",
-                "orientation": "y"
-            }
-        ],
-        "comment": "",
-        "scan rate": {
-            "value": 50.0,
-            "unit": "K / s"
-        }
-    },
-    "data description": {
-        "version": 1,
-        "type": "digitized",
-        "measurement type": "custom"
-    },
-    "bibliography": "@article{cv_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Title\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2022\",\n    abstract = \"Abstract.\"\n}\n"
+    ]
 }
