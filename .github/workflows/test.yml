@@ -137,6 +137,12 @@ jobs:
           svgdigitizer figure test/data/figure_bibliography.svg --metadata test/data/figure_bibliography.yaml --si-units --bibliography
           git diff --no-index --word-diff -- test/data/figure_bibliography.json test/data/figure_bibliography.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_bibliography.csv"), pandas.read_csv("test/data/figure_bibliography.csv.expected"))'
+      - name: cli-cv-package-no-bibliography
+        shell: bash -l {0}
+        run: |
+          svgdigitizer cv test/data/package_no_bibliography.svg --metadata test/data/package_no_bibliography.yaml --si-units --bibliography
+          git diff --no-index --word-diff -- test/data/package_no_bibliography.json test/data/package_no_bibliography.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package_no_bibliography.csv"), pandas.read_csv("test/data/package_no_bibliography.csv.expected"))'
       - name: cli-cv-xy-rate-reference-no-si
         shell: bash -l {0}
         run: |
