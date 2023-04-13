@@ -4,6 +4,23 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.10.0
+====================
+
+**Added:**
+
+* Added CLI command `svgdigitzer figure` which allows creating a datapackage from a figure with units on the axis.
+
+**Changed:**
+
+* Changed structure of the output frictionless datapackage. The metadata are now included as custom key in the resource instead of being a top level key. Moved the "bibliography" key from top level to `metadata.source`.
+
+**Removed:**
+
+* Removed flag `--package` from the CLI and create datapackages by default.
+
+
+
 v0.9.1
 ====================
 
