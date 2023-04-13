@@ -2,14 +2,21 @@
 
 ![Logo](./logo.svg)
 
-The purpose of this project is to digitize plots in scientific publications, recovering the measured data visualized in such a plot.
+The `svgdigitizer` allows recovering data from a curve in a figure, plotted in a 2D coordinate system, which is usually found in scientific publications.
+The data is accessible either with a command line interface or the `svgdigitizer` API from a specifically prepared scaled vector graphics (SVG) file. The data can be stored as a [frictionless datapackage](https://frictionlessdata.io/) (CSV and JSON) which can be used with [unitpackage](https://echemdb.github.io/echemdb/) to access the plots metadata or create a database of such datapackages.
 
 ## Installation
 
-Install the latest stable version of svgdigitizer with
+Install the latest stable version of `svgdigitizer` from PyPI
 
 ```sh
-pip install svgdigitizer
+pip install echemdb
+```
+
+or conda
+
+```sh
+conda install -c conda-forge echemdb
 ```
 
 Please consult our [documentation](https://echemdb.github.io/svgdigitizer/) for
@@ -17,20 +24,32 @@ more detailed [installation instructions](https://echemdb.github.io/svgdigitizer
 
 ## Command Line Interface
 
-There's a simple command line interface.
+The CLI allows creating SVG files from PDFs and allows digitizing the processed SVG files. Certain plot types have specific commands to recover different kinds of metadata.
 
 ```sh
-$ svgdigitizer
+$ svgdigitizer  # byexample: +term as-is +geometry 80x240
 Usage: svgdigitizer [OPTIONS] COMMAND [ARGS]...
   The svgdigitizer suite.
 Options:
   --help  Show this message and exit.
 Commands:
-  cv        Digitize a cylic voltammogram and create a frictionless...
+  cv        Digitize a cylic voltammogram and create a frictionless datapackage.
   digitize  Digitize a plot.
-  figure    Digitize a figure with units on the axis and create a...
+  figure    Digitize a figure with units on the axis and create a frictionless datapackage.
   paginate  Render PDF pages as individual SVG files with linked PNG images.
   plot      Display a plot of the data traced in an SVG.
+
+$ svgdigitizer paginate test/data/mustermann_2021_svgdigitizer_1.pdf
+$ ls test/data/mustermann_*
+test/data/mustermann_2021_svgdigitizer_1.pdf
+test/data/mustermann_2021_svgdigitizer_1_p0.png
+test/data/mustermann_2021_svgdigitizer_1_p0.svg
+test/data/mustermann_2021_svgdigitizer_1_p1.png
+test/data/mustermann_2021_svgdigitizer_1_p1.svg
+test/data/mustermann_2021_svgdigitizer_1_p2.png
+test/data/mustermann_2021_svgdigitizer_1_p2.svg
+test/data/mustermann_2021_svgdigitizer_1_p3.png
+test/data/mustermann_2021_svgdigitizer_1_p3.svg
 
 $ svgdigitizer plot test/data/xy.svg  # byexample: +skip
 [displays a plot]
@@ -47,18 +66,6 @@ x,y
 -0.1590678564623873,-0.18159820372385482
 -0.15889594826709386,-0.17875993211020125
 -0.1587240400718004,-0.17592150922694227
-
-$ svgdigitizer paginate test/data/mustermann_2021_svgdigitizer_1.pdf
-$ ls test/data/mustermann_*
-test/data/mustermann_2021_svgdigitizer_1.pdf
-test/data/mustermann_2021_svgdigitizer_1_p0.png
-test/data/mustermann_2021_svgdigitizer_1_p0.svg
-test/data/mustermann_2021_svgdigitizer_1_p1.png
-test/data/mustermann_2021_svgdigitizer_1_p1.svg
-test/data/mustermann_2021_svgdigitizer_1_p2.png
-test/data/mustermann_2021_svgdigitizer_1_p2.svg
-test/data/mustermann_2021_svgdigitizer_1_p3.png
-test/data/mustermann_2021_svgdigitizer_1_p3.svg
 
 $ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg
 $ head doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.csv  # byexample: +pass

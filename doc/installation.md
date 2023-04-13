@@ -38,7 +38,6 @@ from our [GitHub Repository](https://github.com/echemdb/svgdigitizer) with
 pip install git+https://github.com/echemdb/svgdigitizer@master
 ```
 
-
 Install with conda from conda-forge
 -----------------------------------
 
@@ -90,6 +89,6 @@ pip install -e svgdigitizer
 ```
 
 Any changes you make to the files in your local copy of the svgdigitizer should
-now be available in your next Python session. 
+now be available in your next Python session.
 
 We would love to see your contribution to the svgdigitizer.
