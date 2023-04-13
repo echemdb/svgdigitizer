@@ -393,14 +393,15 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography):
     metadata = svgfigure.metadata
 
     if bibliography:
-        metadata.setdefault("bibliography", {})
+        metadata.setdefault("source", {})
+        metadata["source"].setdefault("bibdata", {})
 
-        if metadata["bibliography"]:
+        if metadata["source"]["bibdata"]:
             logger.warning(
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        metadata.update({"bibliography": _create_bibliography(svg, metadata)})
+        metadata["source"].update({"bibdata": _create_bibliography(svg, metadata)})
 
     package = _create_package(metadata, csvname, outdir)
 
@@ -430,12 +431,15 @@ def _create_package(metadata, csvname, outdir):
         ],
     )
     package.infer()
-    package.custom = metadata
+    resource = package.resources[0]
+
+    resource.custom.setdefault("metadata", {})
+    resource.custom["metadata"].setdefault("echemdb", metadata)
 
     # Update fields in the datapackage describing the data in the CSV
-    package_schema = package.resources[0].schema
+    package_schema = resource.schema
     data_description_schema = Schema.from_descriptor(
-        {"fields": package.custom["data description"]["fields"]}
+        {"fields": resource.custom["metadata"]["echemdb"]["data description"]["fields"]}
     )
 
     new_fields = []
@@ -449,8 +453,8 @@ def _create_package(metadata, csvname, outdir):
             | package_schema.get_field(name).to_dict()
         )
 
-    package.resources[0].schema = Schema.from_descriptor({"fields": new_fields})
-    del package.custom["data description"]["fields"]
+    resource.schema = Schema.from_descriptor({"fields": new_fields})
+    del resource.custom["metadata"]["echemdb"]["data description"]["fields"]
 
     return package
 
