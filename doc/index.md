@@ -26,7 +26,12 @@ Welcome to svgdigitizer's documentation!
 ========================================
 
 The `svgdigitizer` allows recovering data from a curve in a figure,
-plotted in a 2D coordinate system.
+plotted in a 2D coordinate system. The data can be recovered from an SVG with a Python API or a command line interface to create figures or [frictionless datapackages](https://frictionlessdata.io/) (CSV and JSON). The `svgdigitizer` supports units, scalebars, scaling factors, and [more](#advantages).
+
+![files/logo/logo.png](files/logo/logo.png)
+
+## Example Plot
+
 Such plots are often found in scientific publications, where
 in many cases, especially for old publications, the source data
 is not accessible anymore.
@@ -115,14 +120,14 @@ Advantages
 Even though it might seem that svgdigitizer is more time consuming to create digitized figures it has the following advantages compared to other plot digitizers, such as:
 
 * usage of splines allows for very **precise retracing** distinct features
-* supports ***multiple y (x) values** for a single x (y) value
+* supports **multiple y (x) values** for a single x (y) value
 * supports **scale bars**
 * supports **scaling factors**
 * supports plots with **skewed axis**
 * splines can be digitized with specific **sampling intervals**
 * **extracts units** from axis labels
 * **extracts metadata** associated with the plot in the SVG
-* **reconstruct a time axis** with a given scan rate
+* **reconstruct time series** with a given scan rate
 * **saves data as [frictionless datapackage](https://frictionlessdata.io/)** (CSV + JSON) allowing for [FAIR](https://en.wikipedia.org/wiki/FAIR_data) data usage
 * **inclusion of metadata** in the datapackage
 * **Python API** to interact with the retraced data
