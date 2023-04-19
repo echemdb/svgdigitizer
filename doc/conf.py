@@ -23,6 +23,8 @@ html_theme = 'sphinx_rtd_theme'
 
 html_static_path = []
 
+myst_heading_anchors = 2
+
 # Add Edit on GitHub links
 html_context = {
     'display_github': True,
