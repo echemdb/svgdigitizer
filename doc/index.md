@@ -120,7 +120,7 @@ Advantages
 Even though it might seem that svgdigitizer is more time consuming to create digitized figures it has the following advantages compared to other plot digitizers, such as:
 
 * usage of splines allows for very **precise retracing** distinct features
-* supports **multiple y (x) values** for a single x (y) value
+* supports **multiple y (x) values per x (y) value**
 * supports **scale bars**
 * supports **scaling factors**
 * supports plots with **skewed axis**
@@ -137,15 +137,25 @@ Even though it might seem that svgdigitizer is more time consuming to create dig
 Installation
 ============
 
-The package is hosted on [PiPY](https://pypi.org/project/svgdigitizer/) and can be installed via
+This package is available on [PiPY](https://pypi.org/project/svgdigitizer/) and can be installed with pip:
 
 ```sh .noeval
 pip install svgdigitizer
 ```
 
-+++
+The package is also available on [conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock) an can be installed with conda
 
-Read the [installation instructions](installation.md) on further details if you want to contribute to the project.
+```sh .noeval
+conda install -c conda-forge svgdigitizer
+```
+
+or mamba
+
+```sh .noeval
+mamba install -c conda-forge svgdigitizer
+```
+
+See the [installation instructions](installation.md) for further details.
 
 Further information
 ===================
@@ -157,6 +167,12 @@ Currently the following datasets are supported:
 * [cyclic voltammograms](api/cv.md) (*I* vs. *E* — current vs. potential curves or *j* vs. *E* — current density vs. potential curves) commonly found in electrochemistry. For further details and requirements refer to the specific instructions of the [cv module](api/cv.md) itself or the detailed description on how to [digitize cyclic voltammograms](workflow.md) for the [echemdb](https://echemdb.github.io/website/).
 
 If you have used this project in the preparation of a publication, please cite it as described [on our zenodo page](https://zenodo.org/record/5881475).
+
+<!-- Include some details on usage with echemdb
+## Datapackage interaction
+
+Datapackges created with `svgplot` (or modules inheriting from `svgplot` such as `cv`) can be loaded with the unitpackage module to create a database of the digitized data. In case your own data has the same datapackage structure, the digitized data can easily be compared with your own data.
+-->
 
 ```{toctree}
 :maxdepth: 2

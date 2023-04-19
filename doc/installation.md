@@ -72,6 +72,8 @@ To install the svgdigitizer into an existing environment, activate that environm
 conda install svgdigitizer
 ```
 
+In case you use mamba instead of conda, replace `conda` with mamba in the examples above.
+
 Install with pip for development
 --------------------------------
 
