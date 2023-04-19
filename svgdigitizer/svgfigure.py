@@ -1567,14 +1567,46 @@ class SVGFigure:
     def plot(self):
         r"""Visualize the data in the figure.
 
-        TODO:: Refactor once scan rate and SI is implemented (see issue #177)
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg))
+            >>> figure.plot
+
         """
-        # return self.svgplot.plot()
+
         self.df.plot(
             x=self.svgplot.xlabel,
             y=self.svgplot.ylabel,
         )
-        plt.axhline(linewidth=1, linestyle=":", alpha=0.5)
+
         plt.xlabel(self.svgplot.xlabel + " [" + self.xunit + "]")
         plt.ylabel(self.svgplot.ylabel + " [" + self.yunit + "]")
 
