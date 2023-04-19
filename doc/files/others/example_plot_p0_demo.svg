@@ -5,7 +5,7 @@
    width="2126px"
    id="svg6"
    sodipodi:docname="example_plot_p0_demo.svg"
-   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
    inkscape:export-filename="example_plot_p0_demo.png"
    inkscape:export-xdpi="400"
    inkscape:export-ydpi="400"
@@ -38,20 +38,29 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
+     inkscape:window-width="3456"
+     inkscape:window-height="2036"
      id="namedview8"
      showgrid="false"
-     inkscape:zoom="0.29821261"
-     inkscape:cx="982.52049"
-     inkscape:cy="529.82334"
-     inkscape:window-x="-8"
-     inkscape:window-y="32"
+     inkscape:zoom="0.84347263"
+     inkscape:cx="888.58841"
+     inkscape:cy="651.47342"
+     inkscape:window-x="-12"
+     inkscape:window-y="-12"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg6"
-     inkscape:pagecheckerboard="0" />
+     inkscape:pagecheckerboard="0"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
-     id="defs2" />
+     id="defs2">
+    <rect
+       x="2233.6231"
+       y="-67.57777"
+       width="1211.6576"
+       height="437.47715"
+       id="rect443" />
+  </defs>
   <image
      xlink:href="../images/example_plot_p0.png"
      height="1418px"
@@ -61,24 +70,21 @@
      y="0"
      id="image4" />
   <g
-     id="g4517"
-     inkscape:export-filename="F:\Github\echemdb\svgdigitizer\doc\files\images\example_plot_p0_demo.png"
-     inkscape:export-xdpi="400"
-     inkscape:export-ydpi="400">
+     id="g1794">
     <path
        sodipodi:nodetypes="csssssssssssssssssssssc"
        inkscape:connector-curvature="0"
        id="path4508"
        d="m 440.96057,992.12934 c 0,0 110.50319,-0.61664 228.02524,-183.17469 57.14177,-88.76369 80.88586,-151.04307 84.67113,-221.31861 3.12581,-58.03242 -19.2918,-212.68362 -12.57492,-214.19282 4.31447,-0.96941 9.79004,186.35685 124.07256,331.97791 47.60692,60.66169 93.46069,120.73539 164.59992,150.49223 36.1249,15.11069 119.4893,25.88473 126.2578,8.5867 7.0521,-18.02277 64.9082,-99.17178 84.7133,-174.16883 31.0987,-117.76318 38.4117,-189.7012 24.3537,-270.14506 -18.555,-106.17683 -53.517,-116.88336 -81.8661,-119.04316 -16.5248,-1.25895 -47.447,55.59167 -48.0153,100.30355 -0.7943,62.49274 6.2708,136.01386 45.168,184.93199 54.0986,68.03593 81.1841,94.70188 157.6057,137.4858 14.6526,8.20311 54.2373,5.73226 75.4495,-13.41325 27.1531,-24.50761 30.3885,-111.66197 35.2098,-110.6593 5.2694,1.09587 -18.6315,79.07352 -1.6766,105.62933 23.3166,36.51996 59.7453,17.86023 90.5394,18.44322 44.7377,0.84696 133.9414,-23.61603 134.342,-20.74862 0.3026,2.16531 -75.3217,18.48691 -89.4915,63.92252 -10.4881,33.63043 -17.4796,42.24746 40.659,65.80875 43.3671,17.57499 74.2814,14.31775 139.1624,-20.11988 34.7918,-18.46681 62.2784,-83.27674 92.0917,-141.98639 31.0247,-61.09497 39.5258,-113.2845 39.5258,-113.2845"
-       style="fill:none;stroke:#ff0000;stroke-width:2.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="fill:none;stroke:#ff0000;stroke-width:2.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <text
        id="text4512"
-       y="251.39426"
-       x="1192.6884"
+       y="484.95255"
+       x="1343.2563"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:80px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"><tspan
-         y="251.39426"
-         x="1192.6884"
+         y="484.95255"
+         x="1343.2563"
          id="tspan4510"
          sodipodi:role="line">curve: blue</tspan></text>
   </g>
@@ -166,28 +172,39 @@
   </g>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:80px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="1093.1799"
-     y="90.088326"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="1331.6012"
+     y="80.603729"
      id="text4587"
      inkscape:export-filename="F:\Github\echemdb\svgdigitizer\doc\files\images\example_plot_p0_demo.png"
      inkscape:export-xdpi="400"
      inkscape:export-ydpi="400"><tspan
        sodipodi:role="line"
        id="tspan4585"
-       x="1093.1799"
-       y="90.088326">comment: random data </tspan></text>
+       x="1331.6012"
+       y="80.603729">comment: random data </tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:80px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     x="1485.5173"
-     y="412.00629"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="1331.5699"
+     y="158.29324"
      id="text4591"
      inkscape:export-filename="example_plot_p0_demo.png"
      inkscape:export-xdpi="400"
      inkscape:export-ydpi="400"><tspan
        sodipodi:role="line"
        id="tspan4589"
-       x="1485.5173"
-       y="412.00629">operator: Mr. X</tspan></text>
+       x="1331.5699"
+       y="158.29324">operator: Mr. X</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:64px;fill:#000000;fill-opacity:0.401852;stroke-width:2.4"
+     x="1330.215"
+     y="233.55826"
+     id="text370"><tspan
+       sodipodi:role="line"
+       id="tspan368"
+       x="1330.215"
+       y="233.55826"
+       style="fill:#000000;fill-opacity:1">scan rate: 50 mV / s</tspan></text>
 </svg>
