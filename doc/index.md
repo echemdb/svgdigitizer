@@ -180,6 +180,5 @@ Datapackges created with `svgplot` (or modules inheriting from `svgplot` such as
 installation.md
 cli.md
 api.md
-api/cv.md
 workflow.md
 ```
