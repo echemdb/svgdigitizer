@@ -18,10 +18,8 @@ where the curve is traced, the axes are labeled and the scan rate is provided.
 This SVG file can then be analyzed by this class to produce the coordinates
 corresponding to the original measured values.
 
-A more detailed description on preparing the SVG files is provided in the :class:`CV`
-or ...
-
-TODO:: Link to workflow.md (see issue #73)
+A more detailed description on preparing the SVG files is provided in the description of :class:`CV`
+or the :doc:`documentation </workflow>` to create files for `echemdb <echemdb.org>`_.
 
 For the documentation below, the path of a CV is presented simply as a line.
 
@@ -68,7 +66,8 @@ class CV(SVGFigure):
     path can then be analyzed by this class to produce the coordinates
     corresponding to the original measured values.
 
-    TODO:: Link to workflow.md (see issue #73)
+    A detailed description can also be found in the :doc:`documentation </workflow>`
+    to create files for `echemdb <echemdb.org>`_.
 
     EXAMPLES:
 
