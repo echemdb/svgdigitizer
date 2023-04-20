@@ -41,13 +41,12 @@ documents. An extreme case for such a plot is depicted in the following figure.
 ![files/images/example_plot_p0.png](files/images/example_plot_p0.png)
 
 In order to recover the source data, first the plot is imported in a
-vector graphics program, such as [Inkscape](https://inkscape.org/).
-The curve is traced with *regular bezier paths* and two points and text labels
-are created and grouped for each axis to define the coordinate system.
-The curve is grouped with a text label.
-A scan rate can be given as text label, where the units of the rate must be equivalent to the unit on the x-axis divided by time, such as `50 mV / s`. This allows reconstructing a time axis during CSV creation.
+vector graphics program, such as [Inkscape](https://inkscape.org/) to create an SVG file.
+The curve is traced with a *regular bezier path* and is grouped with a text label containing a unique label.
+The coordinate system is defined by groups of two points and text labels for each axis.
+A scan rate can be given as text label, where the units of the rate must be equivalent to the unit on the x-axis divided by time, such as `50 mV / s`. This allows reconstructing a time axis for inclusion in the CSV file.
 Additional labels describing the data
-can be provided anywhere in the SVG file. The resulting file looks as follows.
+can be provided anywhere in the SVG file. For the above figure the SVG looks as follows.
 
 ![files/images/example_plot_p0_demo.png](files/images/example_plot_p0_demo.png)
 
@@ -57,7 +56,7 @@ can be provided anywhere in the SVG file. The resulting file looks as follows.
 
 This SVG can be digitized from the [command line interface](cli.md), which creates a [frictionless datapacke](https://frictionlessdata.io/) including a
 {download}`CSV <./files/others/example_plot_p0_demo.csv>` of the x and y data (here U and v) and a {download}`JSON <./files/others/example_plot_p0_demo.json>` file with metadata.
-The sampling of the bezier paths can be set by `--sampling-interval` which specifies the sampling interval in x units.
+The sampling of the *bezier paths* can be set by `--sampling-interval` which specifies the sampling interval in x units.
 In this specific case also indicate that the axes are `--skewed`.
 
 ```sh .noeval
@@ -183,8 +182,4 @@ cli.md
 api.md
 api/cv.md
 workflow.md
-```
-
-```{code-cell} ipython3
-
 ```
