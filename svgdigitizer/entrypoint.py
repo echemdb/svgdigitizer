@@ -531,19 +531,20 @@ def _create_linked_svg(svg, png):
 
 
 @click.command()
-@click.option("--onlypng", is_flag=True, help="Only produce png files")
+@click.option("--onlypng", is_flag=True, help="Only produce png files.")
 @click.option(
     "--outdir",
     type=click.Path(file_okay=False),
     default=None,
-    help="write output files to this directory",
+    help="Write output files to this directory.",
 )
 @click.argument("pdf")
 def paginate(onlypng, pdf, outdir):
-    r"""
+    """
     Render PDF pages as individual SVG files with linked PNG images.
 
     The SVG and PNG files are written to the PDF's directory.
+    \f
 
     EXAMPLES::
 
