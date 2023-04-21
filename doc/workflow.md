@@ -123,7 +123,7 @@ Select the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/
 
    ![inkscape_smoothed_path](files/images/inkscape_smoothed_path.png)
 
-2. Add a text field next and name it `curve: identifier`, which in our case would be `curve: blue`.
+2. Add a text field and name it `curve: identifier`, which in our case would be `curve: blue`.
 
 3. Group the text field and the curve.
 

@@ -178,6 +178,7 @@ Datapackges created with `svgplot` (or modules inheriting from `svgplot` such as
 :caption: "Contents:"
 :hidden:
 installation.md
+usage.md
 cli.md
 api.md
 workflow.md

@@ -5,12 +5,17 @@ author = 'the svgdigitizer authors'
 release = '0.10.0'
 
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.todo", "myst_nb"]
+extensions = ["sphinx.ext.autodoc",
+        "sphinx.ext.todo",
+        "myst_nb",
+        "sphinx_design"
+]
 
 source_suffix = {
     '.rst': 'restructuredtext',
     '.ipynb': 'myst-nb',
     '.myst': 'myst-nb',
+
 }
 
 templates_path = ['_templates']
