@@ -12,9 +12,10 @@ kernelspec:
   name: python3
 ---
 
-# CLI
+Command Line Interface
+======================
 
-Some tests
+The CLI allows creating SVG files from PDFs and allows digitizing the processed SVG files. Certain plot types have specific commands to recover different kinds of metadata. All options are revealed
 
 ```{note}
 The preceding `!` in the following examples is used to evaluate bash commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html). Remove the `!` to evaluate the command in the shell.
@@ -26,9 +27,4 @@ The preceding `!` in the following examples is used to evaluate bash commands in
 
 ```{code-cell} ipython3
 !svgdigitizer cv --help
-```
-
-```{code-cell} ipython3
-%%bash
-svgdigitizer
 ```
