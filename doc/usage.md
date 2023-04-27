@@ -109,7 +109,8 @@ Units should be provided in the [astropy format](https://docs.astropy.org/en/sta
 Usually data is recored with a certain rate (unit per unit time) resulting in time series data. In a plot, however, often two variables are plotted one against another. For example, assume a cyclist is riding his bike through a looping at a constant velocity of 30 m/s. The following figure shows the position of the cyclist in terms of distance and height. By adding a text label `scan rate: 30 m / s` the [`SVGFigure`](api/svgfigure.md) module is able to reconstruct the time axis.
 
 ```{code-cell} ipython3
-:tags: ["remove-input", "remove-output"]
+:tags: [remove-input, remove-output]
+
 from myst_nb import glue
 from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
@@ -132,38 +133,22 @@ dataframe
 ```
 ````
 
-
-
-
-<!-- ### Mark axis coordinates and labels
-
-To create a coordinate system, we mark two points on each axis with a text label and a line pointing on the x/y-coordinate. **The text label and the lines must be grouped**.
-
-In the SVG file, by marking two positions on each axis, both the units and the scale of the axis will be extracted.
-
-In the example, the first position on the x-axis will be 0.0 V vs RHE. Add a text label that contains `E1: 0.0 V vs RHE`. Draw a line connecting the text label and the position on the x-axis. Finally **group** the **line** and the **text label**.
-
-Repeat this for positions `E2`, `j1` and `j2`.
-
-````{tab-set}
-```{tab-item} CLI
-`CLI command`
-```
-
-```{tab-item} API
-`API code`!
-```
-````
--->
-
 ## Plot Types
+
+Data can be presented in different ways in figures. The `svgdigitizer` has some special functionalities to deal with special cases such as skewed axis, scalebars, or scaling factors.
+
+### Skewed Figures
+
+Figures can have distorted axis. Such plots can, for example, be found in scanned publications from the past. `svgdigitizer` can unskew the axis to recover the original data.
 
 ### Scalebars
 
+
+
 ### Scaling Factors
 
-### Skewed Plots
+To compare data with signals of different magnitude, eventually the dataset with the lower magnitude is rescaled with a certain factor. Such factors are usually provided in the scientific figure (or its caption).
 
 ### Scatter Plots
 
-### Bar Plots
+## Datapackage Interaction

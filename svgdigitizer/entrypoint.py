@@ -78,14 +78,14 @@ sampling_interval_option = click.option(
     "--sampling-interval",
     type=float,
     default=None,
-    help="Sampling interval on the x-axis.",
+    help="Sampling interval on the x-axis with respect to the x-axis values.",
 )
 
 outdir_option = click.option(
     "--outdir",
     type=click.Path(file_okay=False),
     default=None,
-    help="write output files to this directory",
+    help="Write output files to this directory.",
 )
 
 
@@ -210,10 +210,11 @@ def plot(svg, sampling_interval, skewed):
 @skewed_option
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval, outdir, skewed):
-    r"""
-    Digitize a plot.
+    """
+    Digitize a 2D plot.
 
     Produces a CSV from the curve traced in the SVG.
+    \f
 
     EXAMPLES::
 
@@ -243,8 +244,12 @@ def digitize(svg, sampling_interval, outdir, skewed):
 def digitize_figure(
     svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units
 ):
-    r"""
+    """
     Digitize a figure with units on the axis and create a frictionless datapackage.
+
+    The resulting CVS contains a time axis, when text label with a scan rate is given
+    in the SVG whose units must be of type `x-axis unit / time unit`, such as `scan rate: 50 K / s`.
+    \f
 
     EXAMPLES::
 
@@ -311,10 +316,13 @@ def digitize_figure(
 def digitize_cv(
     svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units
 ):
-    r"""
-    Digitize a cylic voltammogram and create a frictionless datapackage. The sampling interval should be provided in mV.
+    """
+    Digitize a cylic voltammogram and create a frictionless datapackage.
 
-    For inclusion in the echemdb.
+    The sampling interval should be provided in mV.
+
+    For inclusion in www.echemdb.org.
+    \f
 
     EXAMPLES::
 
@@ -335,7 +343,7 @@ def digitize_cv(
         ...     finally:
         ...         os.chdir(cwd)
 
-    The command can be invoked without sampling when data is not given in volts::
+    The command can be invoked without sampling when data is git not given in volts::
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
