@@ -190,8 +190,9 @@ def _create_bibliography(svg, metadata):
 @skewed_option
 @click.argument("svg", type=click.File("rb"))
 def plot(svg, sampling_interval, skewed):
-    r"""
+    """
     Display a plot of the data traced in an SVG.
+    \f
 
     EXAMPLES::
 
@@ -255,7 +256,7 @@ def digitize_figure(
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
 
     TESTS:
 
@@ -266,7 +267,7 @@ def digitize_figure(
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     os.chdir(directory)
         ...     try:
-        ...         invoke(cli, "cv", "xy_rate.svg")
+        ...         invoke(cli, "figure", "xy_rate.svg")
         ...     finally:
         ...         os.chdir(cwd)
 
@@ -275,13 +276,13 @@ def digitize_figure(
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
         >>> from svgdigitizer.svgplot import SVGPlot
-        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> from svgdigitizer.svgfigure import SVGFigure
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") as svg:
-        ...         print(CV(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
+        ...         print(SVGFigure(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
 
     """
     if metadata:
