@@ -1598,7 +1598,7 @@ class SVGFigure:
             ...   <text x="-200" y="330">scan rate: 50 mV / s</text>
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
-            >>> figure.plot
+            >>> figure.plot()
 
         """
 
