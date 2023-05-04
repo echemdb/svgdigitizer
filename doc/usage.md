@@ -139,24 +139,51 @@ from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 from svgdigitizer.svgfigure import SVGFigure
 
-plot = SVGFigure(SVGPlot(SVG(open('./files/others/looping_scan_rate.svg', 'rb')), sampling_interval=0.01, algorithm='mark-aligned'))
+svg = './files/others/looping_scan_rate.svg'
+plot = SVGFigure(SVGPlot(SVG(open(svg, 'rb')), algorithm='mark-aligned', sampling_interval=0.01))
 plot.df.head(8)
 ```
 
 ### Skewed Figures
 
-Figures can have distorted axis. Such plots can, for example, be found in scanned publications from the past. `svgdigitizer` can unskew the axis to recover the original data.
+Figures can have distorted (skewed) axis. Such plots can, for example, be found in old scanned publications, such as in the following example.
 
-highlight
-`algorithm='mark-aligned'`
+```{image} ./files/others/example_plot_p0.png
+:class: bg-primary mb-1
+:width: 500px
+:align: center
+```
+
+To remove the distorition first {download}`annotate the SVG <./files/others/example_plot_skewed.svg>` in the same way as in the basic example.
+
+```{image} ./files/others/example_plot_skewed_annotated.png
+:class: bg-primary mb-1
+:width: 500px
+:align: center
+```
+
+To digitize the SVG add the argument `algorithm='mark-aligned'`, upon invoking the `SVGPlot` object.
+
+```{warning}
+To remove the distortion a superficial coordinate system is created from the position of the labels on both axis (straight lines connect these points). Thus the distortion along the axis is not resolved by this approach and thus the data might deviate slightly from the original data.
+```
 
 ```{code-cell} ipython3
 from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 from svgdigitizer.svgfigure import SVGFigure
 
-plot = SVGFigure(SVGPlot(SVG(open('./files/others/looping_scan_rate.svg', 'rb')), sampling_interval=0.01, algorithm='mark-aligned'))
+svg = './files/others/example_plot_skewed.svg'
+plot = SVGFigure(SVGPlot(SVG(open(svg, 'rb')), algorithm='mark-aligned', sampling_interval=0.01))
 plot.plot()
+```
+
+Alternatively use the [CLI](cli.md) and add the option `--skewed`
+
+```{code-cell} ipython3
+:tags: [remove-stderr]
+
+!svgdigitizer figure ./files/others/example_plot_skewed.svg --skewed --sampling_interval 0.01
 ```
 
 ### Scaling Factors
@@ -185,7 +212,8 @@ from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 from svgdigitizer.svgfigure import SVGFigure
 
-plot = SVGFigure(SVGPlot(SVG(open('./files/others/looping_scaling_factor.svg', 'rb')), sampling_interval=0.01))
+svg = './files/others/looping_scaling_factor.svg'
+plot = SVGFigure(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=0.01))
 plot.plot()
 ```
 
@@ -194,7 +222,7 @@ or simply by using one of the digitizing options of the [CLI](cli.md).
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scaling_factor.pdf
+!svgdigitizer figure ./files/others/looping_scaling_factor.svg --sampling-interval 0.01
 ```
 
 ### Scale bars
@@ -232,7 +260,8 @@ from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 from svgdigitizer.svgfigure import SVGFigure
 
-plot = SVGFigure(SVGPlot(SVG(open('./files/others/looping_scale_bar.svg', 'rb')), sampling_interval=0.01))
+svg = './files/others/looping_scale_bar.svg'
+plot = SVGFigure(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=0.01))
 plot.plot()
 ```
 
