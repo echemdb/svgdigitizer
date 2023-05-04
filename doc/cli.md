@@ -60,8 +60,7 @@ Produces a CSV from the curve traced in the SVG.
 
 Consider the following skewed plot.
 
-```{image} /files/others/example_plot_p0.png
-:class: bg-primary mb-1
+```{image} ./files/others/example_plot_p0.png
 :width: 500px
 :align: center
 ```
@@ -289,5 +288,9 @@ The bib file content is included in the resulting JSON of the datapackge
 
 from frictionless import Package
 package = Package('./files/others/looping_scan_rate_bib.json')
-package
+package.infer()
+```
+
+```{code-cell} ipython3
+
 ```
