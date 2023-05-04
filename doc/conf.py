@@ -5,7 +5,8 @@ author = 'the svgdigitizer authors'
 release = '0.10.0'
 
 
-extensions = ["sphinx.ext.autodoc",
+extensions = [
+        "sphinx.ext.autodoc",
         "sphinx.ext.todo",
         "myst_nb",
         "sphinx_design"

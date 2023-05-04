@@ -111,7 +111,7 @@ Click on individual nodes and adjust the handles such that the path matches the 
 Units should be provided in the [astropy format](https://docs.astropy.org/en/stable/units/index.html). In brief:
 
 * [Standard units](https://docs.astropy.org/en/stable/units/standard_units.html) simply read: `V`, `A` or `m`.
-* Units can be preceeded by common prefixes, i.e., `mV`, `kV` or `uV`. (Note that $\mu$ is `u`.)
+* Units can be preceeded by common prefixes, i.e., `mV`, `kV` or `uV`. (Note that {math}`\mu` is `u`.)
 * fractions read as follows: `mV / s`, `mA / cm2`.
 * For square, cubic, etc units simply add `2`, `3`, ... to the unit (see above).
 * Use parentheses if more than one unit is in the numerator or denominator, i.e., `(kg m) / s2`
@@ -141,7 +141,7 @@ plot.df.head(8)
 
 ## Plot Types
 
-Data can be presented in different ways in figures. The `svgdigitizer` has some special functionalities to deal with special cases such as skewed axis, scalebars, or scaling factors.
+Data can be presented in different ways in figures. The `svgdigitizer` has some special functionalities to deal with special cases such as skewed axis, scale bars, or scaling factors.
 
 +++
 
@@ -165,6 +165,40 @@ plot.plot()
 
 To compare data with signals of different magnitude, eventually the dataset with the lower magnitude is rescaled with a certain factor. Such factors are usually provided in the scientific figure (or its caption).
 
+```{image} ./files/others/looping_scaling_factor_p0.png
+:class: bg-primary mb-1
+:width: 500px
+:align: center
+```
+
+To rescale the resulting data, add a text field, such as `x_scaling_factor: 8.3`, where `x` should be the name of the dimension on the respective axis.
+An {download}`annotated SVG <./files/others/looping_scaling_factor.svg>` looks as follows.
+
+```{image} ./files/others/looping_scaling_factor_annotated.png
+:class: bg-primary mb-1
+:width: 500px
+:align: center
+```
+
+The data can be acquired without further options with the API
+
+```{code-cell} ipython3
+from svgdigitizer.svg import SVG
+from svgdigitizer.svgplot import SVGPlot
+from svgdigitizer.svgfigure import SVGFigure
+
+plot = SVGFigure(SVGPlot(SVG(open('./files/others/looping_scaling_factor.svg', 'rb')), sampling_interval=0.01))
+plot.plot()
+```
+
+or simply by using one of the digitizing options of the [CLI](cli.md).
+
+```{code-cell} ipython3
+:tags: [remove-stderr]
+
+!svgdigitizer figure ./files/others/looping_scaling_factor.pdf
+```
+
 ### Scale bars
 
 Some published data are lacking a y-scale. Instead a scale bar is shown, which provides information on the magnitude of the features observed in such a figure such as in the following example.
@@ -179,12 +213,12 @@ To extract the data one has to know at least one point on the y-axis
 (usually a baseline is provided as in the example above).
 That point as is annotated as in the simple example above with a text label, such as `x1: 0 m`,
 where x can be the dimension of the x-axis, grouped with a line pointing to the respective origin
-For the scale bar add a text label, such as, `x_scale_bar: 40 m`, where x should be the same label as that used for the origin.
+For the scale bar add a text label, such as, `x_scale_bar: 40 m`, where `x` should be the same label as that used for the origin.
 In addition draw two lines pointing to both extremes of the scale bar, and group these lines with the label.
 An {download}`annotated SVG <./files/others/looping_scale_bar.svg>` looks as follows.
 
 ```{note}
-This approach also works for scale bars for the x-axis or both.
+This approach also works for scale bars for the x-axis or both x- and y-axis.
 ```
 
 ```{image} ./files/others/looping_scale_bar_annotated.png
@@ -193,7 +227,7 @@ This approach also works for scale bars for the x-axis or both.
 :align: center
 ```
 
-The data can be acquire without further options with the API
+The data can be acquired without further options with the API
 
 ```{code-cell} ipython3
 from svgdigitizer.svg import SVG
@@ -208,9 +242,13 @@ or simply by using one of the digitizing options of the [CLI](cli.md).
 
 ```{code-cell} ipython3
 :tags: [remove-stderr]
+
 !svgdigitizer figure ./files/others/looping_scale_bar.svg
 ```
 
 ### Scatter Plots
+
+
+
 
 ## Datapackage Interaction
