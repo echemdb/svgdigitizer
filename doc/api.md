@@ -134,6 +134,7 @@ figure.plot()
 ## Saving Data
 
 Both for `svgplot` and `svgfigure` the data can be stored as CSV, where an
+
 * `svgplot` only saves `x` any `y` values
 * `svgfigure` saves `x`, `y`, and a time axis `t`, when a scan rate is provided as text label in the svg.
 
@@ -144,7 +145,7 @@ figure.df.to_csv('figure.csv', index=False)
 ```{warning}
 The resulting data does not contain any information on the units of the axis. These are accessible via `figure.data_schema`. If the units were converted to SI, the original units are accessible via `figure.figure_schema`.
 
-It is recommended to use the [CLI](../cli) to create a datapackage which consists of a CSV and a JSON file (with the axis units).
+It is recommended to use the [CLI](../cli) to create a datapackage which consists of a CSV and a JSON file (the latter including the axis units).
 ```
 
 ## Special Figures

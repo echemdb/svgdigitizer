@@ -1,8 +1,11 @@
 r"""
-Reconstructed scientific plot with special units and/or time axis.
+Reconstructs scientific plots with units and allows reconstructing a
+time axis.
+In principle the class :class:`SVGFigure` adds more functionality than
+the class :class:`SVGPlot`.
 
-A :class:`FigurePlot` wraps a plot in SVG format consisting of a curve, axis
-labels and (optionally) additional metadata provided as text fields in the SVG.
+A detailed description of different kinds of plots can be found
+in the :doc:`documentation </usage>`.
 
 """
 # ********************************************************************
@@ -37,7 +40,90 @@ logger = logging.getLogger("svgfigure")
 
 class SVGFigure:
     """
-    TODO:: Add description and docstring (see issue #177)
+    A digitized plot derived from an SVG file,
+    which provides access to the objects of the figure.
+
+    Typically, the SVG input has been created by tracing a CV from
+    a publication with a `<path>` in an SVG editor such as Inkscape. Such a
+    path can then be analyzed by this class to produce the coordinates
+    corresponding to the original measured values.
+
+    In addition it extracts the units from the labels, and thus allows
+    conversion of the data into SI units. Also by providing a text field
+    with a ``scan rate`` such as ``scan rate: 50 K / s``, allows reconstructing
+    of the time axis of the data.
+
+    A detailed description can also be found in the
+    :doc:`documentation </usage>`.
+
+    EXAMPLES:
+
+    The following plot has different kinds of axis units.
+    These units must be compatible with the
+    `astropy unit module <https://docs.astropy.org/en/stable/units/index.html>`_:
+
+        >>> from svgdigitizer.svg import SVG
+        >>> from svgdigitizer.svgplot import SVGPlot
+        >>> from svgdigitizer.svgfigure import SVGFigure
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <g>
+        ...     <path d="M 0 100 L 100 0" />
+        ...     <text x="0" y="0">curve: 0</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 0 200 L 0 100" />
+        ...     <text x="0" y="200">T1: 0 mK</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M 100 200 L 100 100" />
+        ...     <text x="100" y="200">T2: 1 mK</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 100 L 0 100" />
+        ...     <text x="-100" y="100">j1: 0 uA / cm2</text>
+        ...   </g>
+        ...   <g>
+        ...     <path d="M -100 0 L 0 0" />
+        ...     <text x="-100" y="0">j2: 1 uA / cm2</text>
+        ...   </g>
+        ...   <text x="-200" y="330">scan rate: 50 K/s</text>
+        ... </svg>'''))
+        >>> figure = SVGFigure(SVGPlot(svg))
+
+    In addition a text label with a scan rate is provided in the above example,
+    which allows reconstructing a time axis from the plot::
+
+        >>> figure.df
+                 t    T    j
+        0  0.00000  0.0  0.0
+        1  0.00002  1.0  1.0
+
+    The data can also be directly converted into SI units::
+
+        >>> figure_si = SVGFigure(SVGPlot(svg), force_si_units=True)
+        >>> figure_si.df
+                 t      T     j
+        0  0.00000  0.000  0.00
+        1  0.00002  0.001  0.01
+
+    The units of the data can be retrieved from the data schema
+
+        >>> figure_si.data_schema
+        {'fields': [{'name': 'T', 'type': 'number', 'unit': 'K'},
+                    {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
+                    {'name': 't', 'type': 'number', 'unit': 's'}]}
+
+    The original units in turn can be retrieved from the figure schema
+
+        >>> figure_si.figure_schema
+        {'fields': [{'name': 'T', 'type': 'number', 'unit': 'mK', 'orientation': 'x'},
+                    {'name': 'j',
+                     'type': 'number',
+                     'unit': 'uA / cm2',
+                     'orientation': 'y'}]}
+
     """
 
     def __init__(
