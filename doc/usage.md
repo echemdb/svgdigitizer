@@ -15,7 +15,7 @@ kernelspec:
 Usage
 =====
 
-The SVG files used throughout this documentation (as well as those used for testing `svgdigitizer`), were create with [Inkscape](https://inkscape.org/) (tested with V. 0.92 and V. 1.1).
+The SVG files used throughout this documentation (as well as those used for testing `svgdigitizer`), were create with [Inkscape](https://inkscape.org/) (tested with V. 0.92 and V. 1.1). All files are available for download from the [repository](https://github.com/echemdb/svgdigitizer/tree/master/doc/files/others).
 
 ```{note}
 The preceding `!` in the following CLI examples is used to evaluate bash commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html). Remove the `!` to evaluate the command in the shell.
@@ -25,22 +25,24 @@ The preceding `!` in the following CLI examples is used to evaluate bash command
 
 ### From an Image File
 
-Import an image file into an empty Inkscape document (For example, via drag and drop).
+Import an image file into an empty Inkscape document, for example, via drag and drop.
 
 ```{hint}
-We suggest linking the image in the SVG, since embedded pictures increase the time required for `svgdigitizer` to retrace the curve.
+We suggest linking the image in the SVG, since embedded pictures seem to increase the time required for `svgdigitizer` to retrace the curve (see [#19](https://github.com/echemdb/svgdigitizer/issues/19)).
 ```
 
 ```{hint}
-Lock the image file in the *Layers and Objects* pane, which turns the image sort of into a static background object.
+It is recommended to lock the image file in the *Layers and Objects* pane, which turns the image sort of into a static background object and thus can not be moved during the SVG annotation.
 ```
 
 ### From PDF
 
 When the figure is included inside a PDF use the svgdigitizer [CLI](/cli.md) to create an SVG from the PDF by typing.
 
-```sh
-svgdigitizer paginate publication.pdf
+```{code-cell} ipython3
+:tags: [remove-stderr]
+
+!svgdigitizer paginate ./files/others/looping.pdf
 ```
 
 An SVG file is created for each page of the PDF. The image is locked and acts as static background object.
@@ -69,10 +71,26 @@ An {download}`annotated SVG <./files/others/looping.svg>` of the example figure 
 :align: center
 ```
 
-The figure can be retraced in 0.1 steps (with respect to the x-axis values) via
+The figure can be retraced, for example in 0.01 steps, with respect to the x-axis values with the API.
 
-```sh
-svgdigitizer digitizer looping.svg --sampling_interval 0.1
+```{code-cell} ipython3
+:align: center
+
+from svgdigitizer.svg import SVG
+from svgdigitizer.svgplot import SVGPlot
+from svgdigitizer.svgfigure import SVGFigure
+
+svg = './files/others/looping.svg'
+plot = SVGFigure(SVGPlot(SVG(open(svg, 'rb')), sampling_interval=0.01))
+plot.plot()
+```
+
+Alternatively the data can be digitized with the [CLI](cli.md)
+
+```{code-cell} ipython3
+:tags: [remove-stderr]
+
+!svgdigitizer figure looping.svg --sampling_interval 0.01
 ```
 
 (curvetracing)=
@@ -80,28 +98,36 @@ svgdigitizer digitizer looping.svg --sampling_interval 0.1
 
 **Step 1**: Select the the tool `Draw Bezier curves` ![inkscape_draw_Bezier](./files/images/inkscape_draw_Bezier.png) and select the mode `Create regular Bezier path`![inkscape_Bezier_mode](./files/images/inkscape_Bezier_mode.png). Try using as few nodes as possible. It is desired that a node is placed at maxima of sharp peaks. This way these features are not missed when using low sampling rates.
 
-```{image} ./files/images/inkscape_rough_select.png
-:width: 500px
+```{image} ./files/others/looping_marked_points.png
+:width: 350px
 :align: center
 ```
 
-Select the curve, select the tool `Edit paths by node`![inkscape_edit_paths_by_node](./files/images/inkscape_edit_paths_by_node.png), and select all nodes by pressing `CTRL-a`. Click on the option `make selected nodes smooth`![inkscape_node_options](./files/images/inkscape_node_options.png).
+```{note}
+You can omit **step 2** when you want to retrace a scatter plot, unless you whish to reconstruct possible missing datapoints in between.
+```
 
-Click on individual nodes and adjust the handles such that the path matches the curve in the plot. Eventually adjust the position of the nodes. Do this for each node until you are satisfied with the result.
+**Step 2**: Select the curve, select the tool `Edit paths by node`![inkscape_edit_paths_by_node](./files/images/inkscape_edit_paths_by_node.png), and select all nodes by pressing `CTRL-a`. Click on the option `make selected nodes smooth`![inkscape_node_options](./files/images/inkscape_node_options.png).
 
-```{image} ./files/images/inkscape_smoothed_path.png
+Click on individual nodes and adjust the handles such that the path matches the curve in the plot. Eventually adjust the position of the nodes or add additional nodes. Do this for each node until you are satisfied with the result.
+
+```{image} ./files/others/looping_smoothed_curve.png
 :class: bg-primary mb-1
-:width: 500px
+:width: 350px
 :align: center
 ```
 
-**Step 2**: Add a text field and name it `curve: identifier`, which in this case could be `curve: blue`.
+**Step 3**: Add a text field and name it `curve: identifier`, which in this case could be `curve: blue`.
 
-**Step 3**: Group the text field and the curve.
+```{note}
+The identifier is relevant when multiple curves can be found in a single plot.
+```
 
-```{image} ./files/images/inkscape_smoothed_path_curve.png
+**Step 4**: Group the text field and the curve.
+
+```{image} ./files/others/looping_grouped_curve.png
 :class: bg-primary mb-1
-:width: 500px
+:width: 350px
 :align: center
 ```
 
@@ -322,7 +348,6 @@ Alternatively use one of the digitizing options of the [CLI](cli.md), omitting t
 ```{note}
 All other advanced annotation options above, such as a scan rate, scale bar, scaling factor, ... are equally applicable to scatter plots.
 ```
-
 
 ## Datapackage Interaction
 
