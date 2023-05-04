@@ -288,9 +288,5 @@ The bib file content is included in the resulting JSON of the datapackge
 
 from frictionless import Package
 package = Package('./files/others/looping_scan_rate_bib.json')
-package.infer()
-```
-
-```{code-cell} ipython3
-
+package
 ```

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="1334px"
+   version="1.1"
+   width="1667px"
+   id="svg4232"
+   sodipodi:docname="scatter_plot.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   inkscape:export-filename="scatter_plot_annotated.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview4234"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.0007628"
+     inkscape:cx="407.68901"
+     inkscape:cy="607.03695"
+     inkscape:window-width="3456"
+     inkscape:window-height="2036"
+     inkscape:window-x="-12"
+     inkscape:window-y="-12"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4232" />
+  <defs
+     id="defs4228" />
+  <image
+     height="1334px"
+     sodipodi:insensitive="true"
+     width="1667px"
+     x="0"
+     xlink:href="scatter_plot_p0.png"
+     y="0"
+     id="image4230" />
+  <g
+     id="g5272">
+    <text
+       xml:space="preserve"
+       style="font-size:80px;fill:#ffffff;stroke:#ffffff;stroke-width:2.4"
+       x="486.62878"
+       y="143.39062"
+       id="text4359"><tspan
+         sodipodi:role="line"
+         id="tspan4357"
+         x="486.62878"
+         y="143.39062"
+         style="font-size:80px;fill:#000000">height2: 100 m</tspan></text>
+    <path
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:3;opacity:1;stroke-dasharray:none;stroke-opacity:1"
+       d="M 492.1246,122.90624 276.28924,340.24046"
+       id="path4517" />
+  </g>
+  <g
+     id="g5416">
+    <text
+       xml:space="preserve"
+       style="font-size:80px;fill:#ffffff;stroke:#ffffff;stroke-width:2.4"
+       x="356.53973"
+       y="1057.5997"
+       id="text4359-2"><tspan
+         sodipodi:role="line"
+         id="tspan4357-4"
+         x="356.53973"
+         y="1057.5997"
+         style="font-size:80px;fill:#000000">height1: -10 m</tspan></text>
+    <path
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:1.11465;stroke-dasharray:none;stroke-opacity:1"
+       d="m 354.40218,1034.8614 -82.21859,78.7622"
+       id="path4517-5" />
+  </g>
+  <g
+     id="g8000">
+    <text
+       xml:space="preserve"
+       style="font-size:80px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.4"
+       x="1276.8063"
+       y="1273.6122"
+       id="text4359-2-2-9"><tspan
+         sodipodi:role="line"
+         id="tspan4357-4-9-6"
+         x="1276.8063"
+         y="1273.6122"
+         style="font-size:80px;fill:#000000;fill-opacity:1;stroke:none">d2: 40 m</tspan></text>
+    <path
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:1.40154;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1276.5119,1217.6401 -98.1814,-104.277"
+       id="path4517-5-4-3" />
+  </g>
+  <g
+     id="g5468">
+    <text
+       xml:space="preserve"
+       style="font-size:80px;fill:#ffffff;stroke:#ffffff;stroke-width:2.4"
+       x="373.13907"
+       y="1245.1886"
+       id="text4359-2-2"><tspan
+         sodipodi:role="line"
+         id="tspan4357-4-9"
+         x="373.13907"
+         y="1245.1886"
+         style="font-size:80px;fill:#000000">d1: -40 m</tspan></text>
+    <path
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:1.40154;stroke-dasharray:none;stroke-opacity:1"
+       d="m 373.55118,1219.5989 -98.18136,-104.277"
+       id="path4517-5-4" />
+  </g>
+  <g
+     id="g4301">
+    <text
+       xml:space="preserve"
+       style="font-size:80px;fill:#ffffff;stroke:#ffffff;stroke-width:2.4"
+       x="600.9173"
+       y="821.35883"
+       id="text4359-3"><tspan
+         sodipodi:role="line"
+         id="tspan4357-5"
+         x="600.9173"
+         y="821.35883"
+         style="font-size:80px;fill:#000000">curve: blue dots</tspan></text>
+    <path
+       style="fill:#ffffff;fill-opacity:0;stroke:#ff0000;stroke-width:2.7;stop-color:#000000"
+       d="M 394.69892,889.32162 512.60898,807.38413 617.52895,666.4916 705.46187,544.58459 784.40166,408.68825 930.29037,295.77438 l 138.89403,51.96037 72.9444,130.90015 67.9482,121.90701 48.9626,106.91844 54.9581,109.91615 79.939,86.93369 63.9512,34.97332 104.92,9.99238"
+       id="path4021" />
+  </g>
+</svg>

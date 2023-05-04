@@ -169,6 +169,8 @@ To remove the distortion a superficial coordinate system is created from the pos
 ```
 
 ```{code-cell} ipython3
+:tags: [remove-stderr]
+
 from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 from svgdigitizer.svgfigure import SVGFigure
@@ -208,6 +210,8 @@ An {download}`annotated SVG <./files/others/looping_scaling_factor.svg>` looks a
 The data can be acquired without further options with the API
 
 ```{code-cell} ipython3
+:tags: [remove-stderr]
+
 from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 from svgdigitizer.svgfigure import SVGFigure
@@ -256,6 +260,8 @@ This approach also works for scale bars for the x-axis or both x- and y-axis.
 The data can be acquired without further options with the API
 
 ```{code-cell} ipython3
+:tags: [remove-stderr]
+
 from svgdigitizer.svg import SVG
 from svgdigitizer.svgplot import SVGPlot
 from svgdigitizer.svgfigure import SVGFigure
@@ -270,12 +276,60 @@ or simply by using one of the digitizing options of the [CLI](cli.md).
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scale_bar.svg
+!svgdigitizer figure ./files/others/looping_scale_bar.svg --sampling-interval 0.01
 ```
 
 ### Scatter Plots
 
+Some text
 
+```{image} ./files/others/scatter_plot_p0.png
+:class: bg-primary mb-1
+:width: 500px
+:align: center
+```
+
+To remove the distorition first {download}`annotate the SVG <./files/others/scatter_plot.svg>` in the same way as in the basic example.
+
+```{image} ./files/others/scatter_plot_annotated.png
+:class: bg-primary mb-1
+:width: 500px
+:align: center
+```
+
+The data can be acquired with the API without specifying a sampling interval.
+
+```{code-cell} ipython3
+:tags: [remove-stderr]
+
+from svgdigitizer.svg import SVG
+from svgdigitizer.svgplot import SVGPlot
+from svgdigitizer.svgfigure import SVGFigure
+
+svg = './files/others/scatter_plot.svg'
+plot = SVGFigure(SVGPlot(SVG(open(svg, 'rb'))))
+plot.df.plot.scatter('d', 'height', color='red')
+```
+
+Alternatively use one of the digitizing options of the [CLI](cli.md), omitting the `--sampling-interval` option.
+
+```{code-cell} ipython3
+:tags: [remove-stderr]
+
+!svgdigitizer figure ./files/others/looping_scale_bar.svg
+```
+
+```{note}
+All other advanced annotation options above, such as a scan rate, scale bar, scaling factor, ... are equally applicable to scatter plots.
+```
 
 
 ## Datapackage Interaction
+
+```{code-cell} ipython3
+!svgdigitizer paginate ./files/others/scatter_plot.pdf
+```
+
+```{code-cell} ipython3
+
+```
