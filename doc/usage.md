@@ -45,7 +45,7 @@ svgdigitizer paginate publication.pdf
 
 An SVG file is created for each page of the PDF. The image is locked and acts as static background object.
 
-## SVG Annotation
+## SVG Annotation (Basics)
 
 We consider the following {download}`example figure<./files/others/example_plot_p0.png>`.
 
@@ -116,7 +116,11 @@ Units should be provided in the [astropy format](https://docs.astropy.org/en/sta
 * For square, cubic, etc units simply add `2`, `3`, ... to the unit (see above).
 * Use parentheses if more than one unit is in the numerator or denominator, i.e., `(kg m) / s2`
 
-### Time Series Data
+## Advanced plots
+
+Data can be presented in different ways in figures and eventually some additional information can be extracted from a properly annotated SVG. For example, `svgdigitizer` is able to reconstruct a time axis from a scan rate, remove distortion from skewed axis, reconstruct data from scale bars, or apply scaling factors.
+
+### Time Series (Scan Rate)
 
 Usually data is recorded with a certain rate (unit per unit time), measuring another variable, resulting in 2D time series data. In a plot, however, often the two variables are plotted one against another and the temporal information is lost. For example, assume a cyclist is riding his bike through a looping at a constant velocity of 30 m/s. The following figure shows the position of the cyclist in terms of distance and height. By adding a text label `scan rate: 30 m / s` the [`SVGFigure`](api/svgfigure.md) module is able to reconstruct the time axis.
 
@@ -138,12 +142,6 @@ from svgdigitizer.svgfigure import SVGFigure
 plot = SVGFigure(SVGPlot(SVG(open('./files/others/looping_scan_rate.svg', 'rb')), sampling_interval=0.01, algorithm='mark-aligned'))
 plot.df.head(8)
 ```
-
-## Plot Types
-
-Data can be presented in different ways in figures. The `svgdigitizer` has some special functionalities to deal with special cases such as skewed axis, scale bars, or scaling factors.
-
-+++
 
 ### Skewed Figures
 
