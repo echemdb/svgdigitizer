@@ -1,9 +1,28 @@
 # SVGDigitizer — (x,y) Data Points from SVG files
 
-![Logo](./logo.svg)
+![Logo](./doc/files/logo/logo.png)
 
 The `svgdigitizer` allows recovering data from a curve in a figure, plotted in a 2D coordinate system, which is usually found in scientific publications.
 The data is accessible either with a command line interface or the `svgdigitizer` API from a specifically prepared scaled vector graphics (SVG) file. The data can be stored as a [frictionless datapackage](https://frictionlessdata.io/) (CSV and JSON) which can be used with [unitpackage](https://echemdb.github.io/echemdb/) to access the plots metadata or create a database of such datapackages.
+
+# Advantages
+
+The `svgdigitizer` has the following advantages compared to other plot digitizers, such as:
+
+* usage of splines allows for very **precise retracing** distinct features
+* supports **multiple y (x) values per x (y) value**
+* supports **scale bars**
+* supports **scaling factors**
+* supports plots with distorted/**skewed axis**
+* splines can be digitized with specific **sampling intervals**
+* **extracts units** from axis labels
+* **extracts metadata** associated with the plot in the SVG
+* **reconstruct time series** with a given scan rate
+* **saves data as [frictionless datapackage](https://frictionlessdata.io/)** (CSV + JSON) allowing for [FAIR](https://en.wikipedia.org/wiki/FAIR_data) data usage
+* **inclusion of metadata** in the datapackage
+* **Python API** to interact with the retraced data
+
+Refer to our [documentation](https://echemdb.github.io/svgdigitizer/) for more details.
 
 ## Installation
 
@@ -24,7 +43,7 @@ more detailed [installation instructions](https://echemdb.github.io/svgdigitizer
 
 ## Command Line Interface
 
-The CLI allows creating SVG files from PDFs and allows digitizing the processed SVG files. Certain plot types have specific commands to recover different kinds of metadata.
+The CLI allows creating SVG files from PDFs and allows digitizing the processed SVG files. Certain plot types have specific commands to recover different kinds of metadata. Refer to the [CLI documentation](https://echemdb.github.io/svgdigitizer/cli) for more information.
 
 ```sh
 $ svgdigitizer  # byexample: +term as-is +geometry 80x240
@@ -39,64 +58,26 @@ Commands:
   paginate  Render PDF pages as individual SVG files with linked PNG images.
   plot      Display a plot of the data traced in an SVG.
 
-$ svgdigitizer paginate test/data/mustermann_2021_svgdigitizer_1.pdf
-$ ls test/data/mustermann_*
-test/data/mustermann_2021_svgdigitizer_1.pdf
-test/data/mustermann_2021_svgdigitizer_1_p0.png
-test/data/mustermann_2021_svgdigitizer_1_p0.svg
-test/data/mustermann_2021_svgdigitizer_1_p1.png
-test/data/mustermann_2021_svgdigitizer_1_p1.svg
-test/data/mustermann_2021_svgdigitizer_1_p2.png
-test/data/mustermann_2021_svgdigitizer_1_p2.svg
-test/data/mustermann_2021_svgdigitizer_1_p3.png
-test/data/mustermann_2021_svgdigitizer_1_p3.svg
-
-$ svgdigitizer plot test/data/xy.svg  # byexample: +skip
-[displays a plot]
-
-$ svgdigitizer digitize test/data/xy.svg
-$ head test/data/xy.csv  # byexample: +pass
-x,y
--0.16009930563414798,-0.1986285897538036
--0.15992739743885453,-0.1957901668705444
--0.1597554892435611,-0.19295174398728543
--0.15958358104826764,-0.19011347237363185
--0.1594116728529742,-0.18727504949037288
--0.15923976465768075,-0.1844366266071139
--0.1590678564623873,-0.18159820372385482
--0.15889594826709386,-0.17875993211020125
--0.1587240400718004,-0.17592150922694227
-
-$ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg
-$ head doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.csv  # byexample: +pass
-
-t,E,j
-0.0,-0.0960124785649914,-2.080260291844327
-0.7905675531192768,-0.05648410090902756,-1.0308948282866481
-2.248602982368486,0.016417670553432906,-0.16935125824021272
-3.987638717224935,0.10336945729625535,0.1323211424212127
-5.432216587072722,0.17559835078864472,0.8935782484922993
-6.137505185508352,0.2108627807104262,1.1030689590733505
-7.034812039233036,0.2557281233966604,0.594205898184805
-7.6578480240944335,0.2868799226397303,0.36151217639411015
-8.628013087315537,0.3353881758007855,0.25379596409161875
+$ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg --sampling-interval 0.01
 ```
 
 ## API
 
 You can also use the `svgdigitizer` package directly from Python.
 
-The examples are based on the test files provided with `svgdigitizer` in the folder `test/data`.
+The examples are based on the documentation files provided with `svgdigitizer` in the folder `doc/files/others`.
 
 ```python
->>> from svgdigitizer.svgplot import SVGPlot
 >>> from svgdigitizer.svg import SVG
+>>> from svgdigitizer.svgplot import SVGPlot
+>>> from svgdigitizer.svgfigure import SVGFigure
 
->>> svgplot = SVGPlot(SVG(open('test/data/xy_rate.svg', 'rb')))
+
+>>> plot = SVGFigure(SVGPlot(SVG(open('doc/files/others/looping.svg', 'rb'))))
 ```
 
-`svgplot.df` provides a dataframe of the digitized curve.
-`svgplot.plot()` shows a plot of the digitized curve.
+`plot.df` provides a dataframe of the digitized curve.
+`plot.plot()` shows a plot of the digitized curve.
 
 
 ## Submodule CV
