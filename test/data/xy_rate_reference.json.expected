@@ -1,5 +1,4 @@
 {
-    "$frictionless": "package/v2",
     "resources": [
         {
             "name": "xy_rate_reference",
