@@ -61,9 +61,9 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  cv        Digitize a cylic voltammogram and create a frictionless...
+  cv        Digitize a cylic voltammogram and create a frictionless datapackage.
   digitize  Digitize a 2D plot.
-  figure    Digitize a figure with units on the axis and create a...
+  figure    Digitize a figure with units on the axis and create a frictionless datapackage.
   paginate  Render PDF pages as individual SVG files with linked PNG images.
   plot      Display a plot of the data traced in an SVG.
 
