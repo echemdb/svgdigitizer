@@ -45,6 +45,7 @@ jobs:
         run: |
           pytest --doctest-modules svgdigitizer
         if: ${{ matrix.source == 'conda' }}
+      # Disable testing readme with byexample (see #187)
       # - name: byexample
       #   shell: bash -l {0}
       #   run: |
