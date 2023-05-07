@@ -357,6 +357,18 @@ The datapackages obtained with the `svgdigitizer` can be used along with the [fr
 :tags: [output_scroll]
 
 from frictionless import Package
-package = Package('./files/others/looping_scan_rate_bib.json')
+package = Package('./files/others/looping_scan_rate.json')
 package
+```
+
+Alternatively use the [`echemdb` module](https://echemdb.github.io/echemdb/), which is specifically designed for datapackages with additional metadata and columns containing units. It also allows creating a database from all packages within a folder.
+
+<!-- We do not evaluate the cell. Otherwise we would create a circular dependence between svgdigitizer and echemdb. -->
+
+```python
+from echemdb.local import collect_packages
+from echemdb.database import Database
+db = Database(packages=collect_packages('./files/others/'))
+entry = db['looping_scan_rate']
+entry.df
 ```
