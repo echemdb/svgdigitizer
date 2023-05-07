@@ -351,10 +351,12 @@ All other advanced annotation options above, such as a scan rate, scale bar, sca
 
 ## Datapackage Interaction
 
-```{code-cell} ipython3
-!svgdigitizer paginate ./files/others/scatter_plot.pdf
-```
+The datapackages obtained with the `svgdigitizer` can be used along with the [frictionless framework](https://framework.frictionlessdata.io/).
 
 ```{code-cell} ipython3
+:tags: [output_scroll]
 
+from frictionless import Package
+package = Package('./files/others/looping_scan_rate_bib.json')
+package
 ```
