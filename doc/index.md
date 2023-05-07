@@ -116,7 +116,7 @@ figure.plot() # Or plot.plot() for an svgplot instance.
 Advantages
 ============
 
-Even though it might seem that svgdigitizer is more time consuming to create digitized figures it has the following advantages compared to other plot digitizers, such as:
+The `svgdigitizer has some advantages compared to other plot digitizers:
 
 * usage of splines allows for very **precise retracing** distinct features
 * supports **multiple y (x) values per x (y) value**

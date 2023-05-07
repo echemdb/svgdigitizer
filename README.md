@@ -7,7 +7,7 @@ The data is accessible either with a command line interface or the API from a sp
 
 # Advantages
 
-The `svgdigitizer` has the some advantages compared to other plot digitizers, such as:
+The `svgdigitizer` has some advantages compared to other plot digitizers, such as:
 
 * supports **multiple y (x) values per x (y) value**
 * usage of splines allows for very **precise retracing** distinct features
@@ -26,16 +26,22 @@ Refer to our [documentation](https://echemdb.github.io/svgdigitizer/) for more d
 
 ## Installation
 
-Install the latest stable version of `svgdigitizer` from PyPI
+This package is available on [PiPY](https://pypi.org/project/svgdigitizer/) and can be installed with pip:
 
-```sh
-pip install echemdb
+```sh .noeval
+pip install svgdigitizer
 ```
 
-or conda
+The package is also available on [conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock) an can be installed with conda
 
-```sh
-conda install -c conda-forge echemdb
+```sh .noeval
+conda install -c conda-forge svgdigitizer
+```
+
+or mamba
+
+```sh .noeval
+mamba install -c conda-forge svgdigitizer
 ```
 
 Please consult our [documentation](https://echemdb.github.io/svgdigitizer/) for
@@ -46,19 +52,22 @@ more detailed [installation instructions](https://echemdb.github.io/svgdigitizer
 The CLI allows creating SVG files from PDFs and allows digitizing the processed SVG files. Certain plot types have specific commands to recover different kinds of metadata. Refer to the [CLI documentation](https://echemdb.github.io/svgdigitizer/cli) for more information.
 
 ```sh
-$ svgdigitizer  # byexample: +term as-is +geometry 80x240
+$ svgdigitizer
 Usage: svgdigitizer [OPTIONS] COMMAND [ARGS]...
+
   The svgdigitizer suite.
+
 Options:
   --help  Show this message and exit.
+
 Commands:
-  cv        Digitize a cylic voltammogram and create a frictionless datapackage.
-  digitize  Digitize a plot.
-  figure    Digitize a figure with units on the axis and create a frictionless datapackage.
+  cv        Digitize a cylic voltammogram and create a frictionless...
+  digitize  Digitize a 2D plot.
+  figure    Digitize a figure with units on the axis and create a...
   paginate  Render PDF pages as individual SVG files with linked PNG images.
   plot      Display a plot of the data traced in an SVG.
 
-$ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg --sampling-interval 0.01
+$ svgdigitizer figure doc/files/others/looping_scan_rate.svg --sampling-interval 0.01
 ```
 
 ## API
@@ -71,13 +80,13 @@ You can also use the `svgdigitizer` package directly from Python, to access prop
 >>> from svgdigitizer.svgfigure import SVGFigure
 
 
->>> plot = SVGFigure(SVGPlot(SVG(open('doc/files/others/looping.svg', 'rb')), sampling_interval=0.01))
+>>> figure = SVGFigure(SVGPlot(SVG(open('doc/files/others/looping.svg', 'rb')), sampling_interval=0.01))
 ```
 
 Examples:
-`plot.df` provides a dataframe of the digitized curve.
-`plot.plot()` shows a plot of the digitized curve.
-`plot.metadadata` provides a dict with metadata of the original plot, such as original units of the axis.
+`figure.df` provides a dataframe of the digitized curve.
+`figure.plot()` shows a plot of the digitized curve.
+`figure.metadadata` provides a dict with metadata of the original plot, such as original units of the axis.
 
 The `svgdigitizer` can be enhanced with submodules, which are designed to digitize specific plot types, such sas the submodule `electrochemistry.cv`.
 This submodule allows digitizing cyclic voltammograms
@@ -92,4 +101,4 @@ commonly found in the field of electrochemistry.
 >>> cv = CV(SVGPlot(SVG(open(cv_svg, 'rb')), sampling_interval=0.01))
 ```
 
-The resulting `cv` object has the same properties than the `plot` object above.
+The resulting `cv` object has the same properties than the `figure` object above.
