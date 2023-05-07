@@ -255,7 +255,7 @@ or simply by using one of the digitizing options of the [CLI](cli.md).
 !svgdigitizer figure ./files/others/looping_scaling_factor.svg --sampling-interval 0.01
 ```
 
-### Scale bars
+### Scale Bars
 
 Some published data are lacking a y-scale. Instead a scale bar is shown, which provides information on the magnitude of the features observed in such a figure such as in the following example.
 

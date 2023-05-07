@@ -25,14 +25,14 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="1.0007628"
-     inkscape:cx="599.04304"
-     inkscape:cy="685.97672"
+     inkscape:cx="472.13985"
+     inkscape:cy="685.97674"
      inkscape:window-width="3456"
      inkscape:window-height="2036"
      inkscape:window-x="-12"
      inkscape:window-y="-12"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g2408" />
+     inkscape:current-layer="svg6" />
   <defs
      id="defs2" />
   <image
@@ -128,21 +128,21 @@
     <text
        xml:space="preserve"
        style="font-size:80px;fill:#ffffff;stroke:#ffffff;stroke-width:2.4"
-       x="436.8287"
-       y="158.58029"
+       x="281.94684"
+       y="257.50482"
        id="text4359-2-5"><tspan
          sodipodi:role="line"
          id="tspan4357-4-0"
-         x="436.8287"
-         y="158.58029"
+         x="281.94684"
+         y="257.50482"
          style="font-size:80px;fill:#000000">height_scale_bar: 40 m</tspan></text>
     <path
-       style="fill:#ff0000;stroke:#ff0000;stroke-width:2.78449;stroke-dasharray:none;stroke-opacity:1"
-       d="m 1082.9465,267.11746 310.0414,-130.3411"
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:1.89745;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1247.687,233.42709 213.3827,-87.94131"
        id="path4517-5-49" />
     <path
-       style="fill:#ff0000;stroke:#ff0000;stroke-width:2.7;stroke-dasharray:none;stroke-opacity:1"
-       d="m 1084.0947,489.29906 311.4546,-349.3209"
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:1.34064;stroke-dasharray:none;stroke-opacity:1"
+       d="M 1242.5325,238.38732 1457.943,362.91124"
        id="path4517-5-49-5" />
   </g>
 </svg>
