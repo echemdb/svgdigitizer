@@ -26,11 +26,6 @@ api/svgfigure.md
 
 +++
 
-```{todo}
-* Explain the basic workflow here, .svg → SVG → SVGPlot → dataframe → .csv.
-* Move the API documentation from the README.md to the very top of the actual .py modules as examples.
-```
-
 The different modules of `svgdigitizer` provide access to the elements of an SVG with different complexity to retrace different kinds of plots.
 The following provides a brief description of the connection between the modules of `svgdigitizer`. For more information on the individual modules refer to the respective documentation.
 
