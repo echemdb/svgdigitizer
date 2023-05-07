@@ -1,23 +1,23 @@
-# SVGDigitizer — (x,y) Data Points from SVG files
+# SVGDigitizer — Extract (x,y) Data Points from SVG files
 
 ![Logo](./doc/files/logo/logo.png)
 
 The `svgdigitizer` allows recovering data from a curve in a figure, plotted in a 2D coordinate system, which is usually found in scientific publications.
-The data is accessible either with a command line interface or the `svgdigitizer` API from a specifically prepared scaled vector graphics (SVG) file. The data can be stored as a [frictionless datapackage](https://frictionlessdata.io/) (CSV and JSON) which can be used with [unitpackage](https://echemdb.github.io/echemdb/) to access the plots metadata or create a database of such datapackages.
+The data is accessible either with a command line interface or the API from a specifically prepared scaled vector graphics (SVG) file. The data can be stored as a [frictionless datapackage](https://frictionlessdata.io/) (CSV and JSON) which can be used with [unitpackage](https://echemdb.github.io/echemdb/) to access the plots metadata or create a database of such datapackages.
 
 # Advantages
 
-The `svgdigitizer` has the following advantages compared to other plot digitizers, such as:
+The `svgdigitizer` has the some advantages compared to other plot digitizers, such as:
 
-* usage of splines allows for very **precise retracing** distinct features
 * supports **multiple y (x) values per x (y) value**
+* usage of splines allows for very **precise retracing** distinct features
+* splines can be digitized with specific **sampling intervals**
+* supports plots with distorted/**skewed axis**
+* **extracts units** from axis labels
+* **reconstruct time series** with a given scan rate
 * supports **scale bars**
 * supports **scaling factors**
-* supports plots with distorted/**skewed axis**
-* splines can be digitized with specific **sampling intervals**
-* **extracts units** from axis labels
 * **extracts metadata** associated with the plot in the SVG
-* **reconstruct time series** with a given scan rate
 * **saves data as [frictionless datapackage](https://frictionlessdata.io/)** (CSV + JSON) allowing for [FAIR](https://en.wikipedia.org/wiki/FAIR_data) data usage
 * **inclusion of metadata** in the datapackage
 * **Python API** to interact with the retraced data
@@ -63,9 +63,7 @@ $ svgdigitizer cv doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdi
 
 ## API
 
-You can also use the `svgdigitizer` package directly from Python.
-
-The examples are based on the documentation files provided with `svgdigitizer` in the folder `doc/files/others`.
+You can also use the `svgdigitizer` package directly from Python, to access properties of the SVG or additional properties associated with the figure.
 
 ```python
 >>> from svgdigitizer.svg import SVG
@@ -73,49 +71,25 @@ The examples are based on the documentation files provided with `svgdigitizer` i
 >>> from svgdigitizer.svgfigure import SVGFigure
 
 
->>> plot = SVGFigure(SVGPlot(SVG(open('doc/files/others/looping.svg', 'rb'))))
+>>> plot = SVGFigure(SVGPlot(SVG(open('doc/files/others/looping.svg', 'rb')), sampling_interval=0.01))
 ```
 
+Examples:
 `plot.df` provides a dataframe of the digitized curve.
 `plot.plot()` shows a plot of the digitized curve.
+`plot.metadadata` provides a dict with metadata of the original plot, such as original units of the axis.
 
-
-## Submodule CV
-
-The submodule `electrochemistry.cv` is specifically designed to digitize cyclic voltammograms
+The `svgdigitizer` can be enhanced with submodules, which are designed to digitize specific plot types, such sas the submodule `electrochemistry.cv`.
+This submodule allows digitizing cyclic voltammograms
 commonly found in the field of electrochemistry.
 
 ```python
->>> from svgdigitizer.svgplot import SVGPlot
 >>> from svgdigitizer.svg import SVG
+>>> from svgdigitizer.svgplot import SVGPlot
 >>> from svgdigitizer.electrochemistry.cv import CV
 
->>> cv = CV(SVGPlot(SVG(open('test/data/xy_rate.svg', 'rb'))))
+>>> cv_svg = 'doc/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg'
+>>> cv = CV(SVGPlot(SVG(open(cv_svg, 'rb')), sampling_interval=0.01))
 ```
 
-`cv.df` provides a dataframe with a time, voltage and current axis (in SI units). Depending on the type of data the current is expressed as current `I` in `A` or a current density `j` in `A / m2`.
-
-The dataframe can for example be saved as `csv` via:
-
-```python
-from pathlib import Path
-cv.df.to_csv(Path(svgfile).with_suffix('.csv'), index=False)
-```
-
-`cv.plot()` shows a plot of the digitizd data with appropriate axis labels.
-`cv.metadadata` provides a dict with metadata of the original plot, such as original units of the axis.
-
-
-`CV` also accepts a dict with metadata, which is updated with keywords related to the original figure (`figure descripton`), i.e., original axis units.
-
-```python
->>> import yaml
->>> from svgdigitizer.svgplot import SVGPlot
->>> from svgdigitizer.svg import SVG
->>> from svgdigitizer.electrochemistry.cv import CV
-
->>> with open('test/data/xy_rate.yaml') as f:
-...    metadata = yaml.load(f, Loader=yaml.SafeLoader)
-
->>> cv = CV(SVGPlot(SVG(open('test/data/xy_rate.svg', 'rb'))), metadata=metadata)
-```
+The resulting `cv` object has the same properties than the `plot` object above.
