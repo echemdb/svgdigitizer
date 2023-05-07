@@ -211,10 +211,6 @@ which can be digitzed via
 
 The flag `--si-unit` is used by the [`figure`](figure) command and commands that inherit from `figure` such as the `cv` command. The units are converted to SI units, if they are compatible with the [astropy](https://www.astropy.org/) unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.
 
-```{todo}
-Add example
-```
-
 ```{warning}
 In some cases conversion to SI units might not result in the desired output. For example, even thought `V` is considered as an SI unit, astropy might convert the unit to `W / A` or `A Ohm`.
 ```
