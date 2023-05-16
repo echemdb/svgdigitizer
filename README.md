@@ -88,7 +88,8 @@ Examples:
 `figure.plot()` shows a plot of the digitized curve.
 `figure.metadadata` provides a dict with metadata of the original plot, such as original units of the axis.
 
-The `svgdigitizer` can be enhanced with submodules, which are designed to digitize specific plot types, such sas the submodule `electrochemistry.cv`.
+The `svgdigitizer` can be enhanced with submodules, which are designed to digitize specific plot types, such as the submodule `electrochemistry.cv`.
+
 This submodule allows digitizing cyclic voltammograms
 commonly found in the field of electrochemistry.
 

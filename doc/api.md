@@ -87,7 +87,7 @@ plot.df
 
 **[SVGFigure](/api/svgfigure)**
 
-The [`SVGPlot`](/api/svgplot) object can be used to create an [`SVGFigure`](/api/svgfigure) object. This object has enhanced functionalities, which allow for example, extraction of units from the labels, reconstructing a time axis from a given scan rate or returning the data in SI units.
+The [`SVGPlot`](/api/svgplot) object can be used to create an [`SVGFigure`](/api/svgfigure) object. This object has enhanced functionalities, which allow, for example, extraction of units from the labels, reconstructing a time axis from a given scan rate or returning the data in SI units.
 
 ```{warning}
 Conversion into SI units can lead to undesired results. For example, `V` is eventually transformed by astropy into `W / A` or `A Ohm`.

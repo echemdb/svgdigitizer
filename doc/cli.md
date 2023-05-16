@@ -15,7 +15,7 @@ kernelspec:
 Command Line Interface
 ======================
 
-The command line interface (CLI) allows creating SVG files from PDFs, which in tun allows digitizing the [processed SVG files](usage.md). Certain plot types have specific commands to recover different kinds of plots with different metadata. All commands and options are revealed with
+The command line interface (CLI) allows creating SVG files from PDFs, which in turn allows digitizing the [processed SVG files](usage.md). Certain plot types have specific commands to recover different kinds of plots with different metadata. All commands and options are revealed with
 
 ```{note}
 The preceding `!` in the following examples is used to evaluate bash commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html). Remove the `!` to evaluate the command in the shell.
@@ -175,7 +175,7 @@ The `cv` option is designed specifically to digitze [cyclic voltammograms (CVs)]
 
 * Certain keys in the output metadata are directly related to cyclic voltammetry measurements.
 * The units on the x-axis must be equivalent to volt `U` given in units of `V` and those on the y-axis equivalent to current `I` in units of `A` or current density `j` in units of `A / m2`.
-* The voltage unit can given vs. a reference, such as `V vs. RHE`. In that case the dimension should be `E` instead of `U`.
+* The voltage unit can be given vs. a reference, such as `V vs. RHE`. In that case, the dimension should be `E` instead of `U`.
 * The `--sampling-interval` should be provided in units of `mV`.
 
 These standardized CV data are, for example, used in the [echemdb](https://www.echemdb.org) database.
@@ -209,15 +209,15 @@ which can be digitzed via
 
 ### `--si-units`
 
-The flag `--si-unit` is used by the [`figure`](figure) command and commands that inherit from `figure` such as the `cv` command. The units are converted to SI units, if they are compatible with the [astropy](https://www.astropy.org/) unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.
+The flag `--si-unit` is used by the [`figure`](figure) command and commands that inherit from `figure`, such as the `cv` command. The units are converted to SI units, if they are compatible with the [astropy](https://www.astropy.org/) unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.
 
 ```{warning}
-In some cases conversion to SI units might not result in the desired output. For example, even thought `V` is considered as an SI unit, astropy might convert the unit to `W / A` or `A Ohm`.
+In some cases conversion to SI units might not result in the desired output. For example, even though `V` is considered as an SI unit, astropy might convert the unit to `W / A` or `A Ohm`.
 ```
 
 ### `--metadata`
 
-The flag `--metadata` allows adding metadata to the resource of the datapackage from a yaml file. It is used by the [`figure`](figure) command and commands that inherit from `figure` such as the `cv` command.
+The flag `--metadata` allows adding metadata to the resource of the datapackage from a yaml file. It is used by the [`figure`](figure) command and commands that inherit from `figure`, such as the `cv` command.
 
 Consider the following figure where the annotated {download}`SVG (looping_scan_rate.svg)<./files/others/looping_scan_rate.svg>`.
 
