@@ -5,7 +5,7 @@
    width="5100px"
    id="svg6"
    sodipodi:docname="mustermann_2021_svgdigitizer_1_f2a_blue.svg"
-   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -34,18 +34,20 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
+     inkscape:window-width="3456"
+     inkscape:window-height="2036"
      id="namedview8"
      showgrid="false"
      inkscape:zoom="0.28601727"
-     inkscape:cx="3758.5143"
-     inkscape:cy="3852.9142"
-     inkscape:window-x="-8"
-     inkscape:window-y="32"
+     inkscape:cx="3354.6925"
+     inkscape:cy="3854.6623"
+     inkscape:window-x="-12"
+     inkscape:window-y="-12"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg6"
-     inkscape:pagecheckerboard="0" />
+     inkscape:pagecheckerboard="0"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2">
     <inkscape:path-effect
@@ -284,4 +286,14 @@
        id="tspan4547"
        x="4234.0103"
        y="2804.0266">tags: BCV, HER</tspan></text>
+  <rect
+     style="fill:#ffffff;fill-opacity:0;stroke:#ffffff;stroke-width:2.86159;stop-color:#000000;stroke-opacity:1"
+     id="rect269"
+     width="2527.8193"
+     height="2422.9307"
+     x="2548.7971"
+     y="2464.8862"
+     inkscape:export-filename="mustermann_2021_svgdigitizer_1_f2a_blue.png"
+     inkscape:export-xdpi="96"
+     inkscape:export-ydpi="96" />
 </svg>

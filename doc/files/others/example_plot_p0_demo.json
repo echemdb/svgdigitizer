@@ -1,0 +1,73 @@
+{
+    "resources": [
+        {
+            "name": "example_plot_p0_demo",
+            "type": "table",
+            "path": "example_plot_p0_demo.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "t",
+                        "type": "number",
+                        "unit": "s"
+                    },
+                    {
+                        "name": "U",
+                        "type": "number",
+                        "unit": "V"
+                    },
+                    {
+                        "name": "v",
+                        "type": "number",
+                        "unit": "m / s"
+                    }
+                ]
+            },
+            "metadata": {
+                "echemdb": {
+                    "experimental": {
+                        "tags": []
+                    },
+                    "source": {
+                        "figure": "",
+                        "curve": "blue"
+                    },
+                    "figure description": {
+                        "version": 1,
+                        "type": "digitized",
+                        "simultaneous measurements": [],
+                        "measurement type": "custom",
+                        "fields": [
+                            {
+                                "name": "U",
+                                "type": "number",
+                                "unit": "V",
+                                "orientation": "x"
+                            },
+                            {
+                                "name": "v",
+                                "type": "number",
+                                "unit": "m / s",
+                                "orientation": "y"
+                            }
+                        ],
+                        "comment": "random data",
+                        "scan rate": {
+                            "value": 50.0,
+                            "unit": "mV / s"
+                        }
+                    },
+                    "data description": {
+                        "version": 1,
+                        "type": "digitized",
+                        "measurement type": "custom"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -45,14 +45,15 @@ jobs:
         run: |
           pytest --doctest-modules svgdigitizer
         if: ${{ matrix.source == 'conda' }}
-      - name: byexample
-        shell: bash -l {0}
-        run: |
-          mamba install -y byexample
-          byexample -l shell,python -o +norm-ws --timeout=30 README.md
-        # byexample is not available for Windows
-        # the exact numerical output of commands differs between Linux & macOS
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.source == 'conda' }}
+      # Disable testing readme with byexample (see #187)
+      # - name: byexample
+      #   shell: bash -l {0}
+      #   run: |
+      #     mamba install -y byexample
+      #     # byexample -l shell,python -o +norm-ws --timeout=30 README.md
+        ## byexample is not available for Windows
+        ## the exact numerical output of commands differs between Linux & macOS
+        # if: ${{ matrix.os == 'ubuntu-latest' && matrix.source == 'conda' }}
       - name: cli-digitize-xy
         shell: bash -l {0}
         run: |

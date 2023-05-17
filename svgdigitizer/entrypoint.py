@@ -11,7 +11,7 @@ EXAMPLES::
       --help  Show this message and exit.
     Commands:
       cv        Digitize a cylic voltammogram and create a frictionless...
-      digitize  Digitize a plot.
+      digitize  Digitize a 2D plot.
       figure    Digitize a figure with units on the axis and create a...
       paginate  Render PDF pages as individual SVG files with linked PNG images.
       plot      Display a plot of the data traced in an SVG.
@@ -78,14 +78,14 @@ sampling_interval_option = click.option(
     "--sampling-interval",
     type=float,
     default=None,
-    help="Sampling interval on the x-axis.",
+    help="Sampling interval on the x-axis with respect to the x-axis values.",
 )
 
 outdir_option = click.option(
     "--outdir",
     type=click.Path(file_okay=False),
     default=None,
-    help="write output files to this directory",
+    help="Write output files to this directory.",
 )
 
 
@@ -190,8 +190,9 @@ def _create_bibliography(svg, metadata):
 @skewed_option
 @click.argument("svg", type=click.File("rb"))
 def plot(svg, sampling_interval, skewed):
-    r"""
+    """
     Display a plot of the data traced in an SVG.
+    \f
 
     EXAMPLES::
 
@@ -210,10 +211,11 @@ def plot(svg, sampling_interval, skewed):
 @skewed_option
 @click.argument("svg", type=click.Path(exists=True))
 def digitize(svg, sampling_interval, outdir, skewed):
-    r"""
-    Digitize a plot.
+    """
+    Digitize a 2D plot.
 
     Produces a CSV from the curve traced in the SVG.
+    \f
 
     EXAMPLES::
 
@@ -243,14 +245,18 @@ def digitize(svg, sampling_interval, outdir, skewed):
 def digitize_figure(
     svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units
 ):
-    r"""
+    """
     Digitize a figure with units on the axis and create a frictionless datapackage.
+
+    The resulting CVS contains a time axis, when text label with a scan rate is given
+    in the SVG whose units must be of type `x-axis unit / time unit`, such as `scan rate: 50 K / s`.
+    \f
 
     EXAMPLES::
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
 
     TESTS:
 
@@ -261,7 +267,7 @@ def digitize_figure(
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     os.chdir(directory)
         ...     try:
-        ...         invoke(cli, "cv", "xy_rate.svg")
+        ...         invoke(cli, "figure", "xy_rate.svg")
         ...     finally:
         ...         os.chdir(cwd)
 
@@ -270,13 +276,13 @@ def digitize_figure(
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
         >>> from svgdigitizer.svgplot import SVGPlot
-        >>> from svgdigitizer.electrochemistry.cv import CV
+        >>> from svgdigitizer.svgfigure import SVGFigure
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     with open(os.path.join(directory, "xy_rate.svg"), mode="rb") as svg:
-        ...         print(CV(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
+        ...         print(SVGFigure(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "cv", os.path.join(directory, "xy_rate.svg"))
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
 
     """
     if metadata:
@@ -311,10 +317,13 @@ def digitize_figure(
 def digitize_cv(
     svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units
 ):
-    r"""
-    Digitize a cylic voltammogram and create a frictionless datapackage. The sampling interval should be provided in mV.
+    """
+    Digitize a cylic voltammogram and create a frictionless datapackage.
 
-    For inclusion in the echemdb.
+    The sampling interval should be provided in mV.
+
+    For inclusion in www.echemdb.org.
+    \f
 
     EXAMPLES::
 
@@ -335,7 +344,7 @@ def digitize_cv(
         ...     finally:
         ...         os.chdir(cwd)
 
-    The command can be invoked without sampling when data is not given in volts::
+    The command can be invoked without sampling when data is git not given in volts::
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> from svgdigitizer.svg import SVG
@@ -531,19 +540,20 @@ def _create_linked_svg(svg, png):
 
 
 @click.command()
-@click.option("--onlypng", is_flag=True, help="Only produce png files")
+@click.option("--onlypng", is_flag=True, help="Only produce png files.")
 @click.option(
     "--outdir",
     type=click.Path(file_okay=False),
     default=None,
-    help="write output files to this directory",
+    help="Write output files to this directory.",
 )
 @click.argument("pdf")
 def paginate(onlypng, pdf, outdir):
-    r"""
+    """
     Render PDF pages as individual SVG files with linked PNG images.
 
     The SVG and PNG files are written to the PDF's directory.
+    \f
 
     EXAMPLES::
 
