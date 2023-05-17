@@ -8,6 +8,7 @@
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,11 +17,12 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/design-tabs.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API" href="api.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="prev" title="Usage" href="usage.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,9 +47,37 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#paginate"><code class="docutils literal notranslate"><span class="pre">paginate</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#digitize"><code class="docutils literal notranslate"><span class="pre">digitize</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#plot"><code class="docutils literal notranslate"><span class="pre">plot</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#figure"><code class="docutils literal notranslate"><span class="pre">figure</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cv"><code class="docutils literal notranslate"><span class="pre">cv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-flags">Advanced flags</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#si-units"><code class="docutils literal notranslate"><span class="pre">--si-units</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metadata"><code class="docutils literal notranslate"><span class="pre">--metadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bibliography"><code class="docutils literal notranslate"><span class="pre">--bibliography</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/cv.html">Cyclic Voltammograms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">Digitizing plots for echemdb</a></li>
 </ul>
 
@@ -82,26 +112,611 @@
              
   <section id="command-line-interface">
 <h1>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline"></a></h1>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<ul class="simple">
-<li><p>move all but a very simple example from the README.md to here.</p></li>
-</ul>
+<p>The command line interface (CLI) allows creating SVG files from PDFs, which in turn allows digitizing the <a class="reference internal" href="usage.html"><span class="doc std std-doc">processed SVG files</span></a>. Certain plot types have specific commands to recover different kinds of plots with different metadata. All commands and options are revealed with</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The preceding <code class="docutils literal notranslate"><span class="pre">!</span></code> in the following examples is used to evaluate bash commands in <a class="reference external" href="https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html">jupyter notebooks</a>. Remove the <code class="docutils literal notranslate"><span class="pre">!</span></code> to evaluate the command in the shell.</p>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer [OPTIONS] COMMAND [ARGS]...
+
+  The svgdigitizer suite.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  cv        Digitize a cylic voltammogram and create a frictionless...
+  digitize  Digitize a 2D plot.
+  figure    Digitize a figure with units on the axis and create a...
+  paginate  Render PDF pages as individual SVG files with linked PNG images.
+  plot      Display a plot of the data traced in an SVG.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference external" href="https://github.com/echemdb/svgdigitizer/tree/master/doc/files/others">Example files</a> for the use with the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> can be found in the repository.</p>
+</div>
+<section id="paginate">
+<h2><code class="docutils literal notranslate"><span class="pre">paginate</span></code><a class="headerlink" href="#paginate" title="Permalink to this headline"></a></h2>
+<p>Create SVG and PNG files from a PDF with</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer paginate [OPTIONS] PDF
+
+  Render PDF pages as individual SVG files with linked PNG images.
+
+  The SVG and PNG files are written to the PDF&#39;s directory.
+
+Options:
+  --onlypng           Only produce png files.
+  --outdir DIRECTORY  Write output files to this directory.
+  --help              Show this message and exit.
+</pre></div>
+</div>
+</div>
+</div>
+<p><a class="reference download internal" download="" href="_downloads/58f393aebc2cca89f8e88b299072a59e/example_plot_paginate.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Example</span> <span class="pre">PDFs</span></code></a> for testing purposes are available in the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> repository.</p>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf
+</pre></div>
+</div>
+</div>
+</div>
+<p>Download the resulting <a class="reference download internal" download="" href="_downloads/2522b22e30a7f8e2620d6a364dd59e3d/example_plot_paginate_p0.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(example_plot_paginate_p0.svg)</span></code></a>.</p>
+</section>
+</section>
+<section id="digitize">
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">digitize</span></code><a class="headerlink" href="#digitize" title="Permalink to this headline"></a></h2>
+<p>Produces a CSV from the curve traced in the SVG.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>digitize<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer digitize [OPTIONS] SVG
+
+  Digitize a 2D plot.
+
+  Produces a CSV from the curve traced in the SVG.
+
+Options:
+  --sampling-interval FLOAT  Sampling interval on the x-axis with respect to
+                             the x-axis values.
+  --outdir DIRECTORY         Write output files to this directory.
+  --skewed                   Detect non-orthogonal skewed axes going through
+                             the markers instead of assuming that axes are
+                             perfectly horizontal and vertical.
+  --help                     Show this message and exit.
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id2">
+<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<p>Consider the following skewed plot.</p>
+<a class="reference internal image-reference" href="_images/example_plot_p0.png"><img alt="_images/example_plot_p0.png" class="align-center" src="_images/example_plot_p0.png" style="width: 500px;" /></a>
+<p>An unskewed digitized CSV can be created with</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>digitize<span class="w"> </span>./files/others/example_plot_p0_demo_digitize.svg<span class="w"> </span>--skewed
+</pre></div>
+</div>
+</div>
+</div>
+<p>The CSV can, for example, be imported as a pandas dataframe to create a plot.</p>
+<div class="cell tag_remove-stdout tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./files/others/example_plot_p0_demo_digitize.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/d803369d12996dc54a589dd1228205382ee4a71ffdbc2bbdea849dbdccaf757e.png" src="_images/d803369d12996dc54a589dd1228205382ee4a71ffdbc2bbdea849dbdccaf757e.png" />
+</div>
+</div>
+<p>The resulting plot indicates that only the nodes of the spline were connected. To improve the tracing use the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>digitize<span class="w"> </span>./files/others/example_plot_p0_demo_digitize.svg<span class="w"> </span>--skewed<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+</div>
+<p>The result looks as follows</p>
+<div class="cell tag_hide-input tag_remove-stdout tag_remove-stderr docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./files/others/example_plot_p0_demo_digitize.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/dc3a90cf084c5ecfaf19f61b6e0ae37bbe52fa2bdd70963f77419b1af3c6e607.png" src="_images/dc3a90cf084c5ecfaf19f61b6e0ae37bbe52fa2bdd70963f77419b1af3c6e607.png" />
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The use of <a class="reference internal" href="#digitize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">svgdigitizer</span> <span class="pre">digitize</span></code></span></a> is discouraged when your axis labels contain units, because the output CSV does not contain this information. Use <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">svgdigitizer</span> <span class="pre">figure</span></code></span></a> instead, which creates a frictionless datapackage (CSV + JSON).</p>
+</div>
+</section>
+</section>
+<section id="plot">
+<h2><code class="docutils literal notranslate"><span class="pre">plot</span></code><a class="headerlink" href="#plot" title="Permalink to this headline"></a></h2>
+<p>Display a plot of the data traced in an SVG</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>plot<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer plot [OPTIONS] SVG
+
+  Display a plot of the data traced in an SVG.
+
+Options:
+  --sampling-interval FLOAT  Sampling interval on the x-axis with respect to
+                             the x-axis values.
+  --skewed                   Detect non-orthogonal skewed axes going through
+                             the markers instead of assuming that axes are
+                             perfectly horizontal and vertical.
+  --help                     Show this message and exit.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The plot will only be displayed, when your shell is configure accordingly.</p>
+</div>
+<section id="id3">
+<h3>Examples<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<p>The plot of an annotated example SVG (with skewed axis) with a specific sampling interval can be created with</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>plot<span class="w"> </span>./files/others/example_plot_p0_demo_digitize.svg<span class="w"> </span>--skewed<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="figure">
+<span id="id4"></span><h2><code class="docutils literal notranslate"><span class="pre">figure</span></code><a class="headerlink" href="#figure" title="Permalink to this headline"></a></h2>
+<p>The figure command produces a CSV and an JSON with additional metadata, which contains, for example, information on the axis units. In addition it will reconstruct a time axis, when the rate at which the data on the x-axis is given in a text label in the SVG such as <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">30</span> <span class="pre">m/s</span></code>. Here the unit must be equivalent to that on the x-axis divided by a time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer figure [OPTIONS] SVG
+
+  Digitize a figure with units on the axis and create a frictionless
+  datapackage.
+
+  The resulting CVS contains a time axis, when text label with a scan rate is
+  given in the SVG whose units must be of type `x-axis unit / time unit`, such
+  as `scan rate: 50 K / s`.
+
+Options:
+  --sampling-interval FLOAT  Sampling interval on the x-axis with respect to
+                             the x-axis values.
+  --outdir DIRECTORY         Write output files to this directory.
+  --metadata FILENAME        yaml file with metadata
+  --si-units                 Convert units of the plot and CSV to SI (only if
+                             they are compatible with astropy units).
+  --bibliography             Adds bibliography data from a bibfile as
+                             descriptor to the datapackage.
+  --skewed                   Detect non-orthogonal skewed axes going through
+                             the markers instead of assuming that axes are
+                             perfectly horizontal and vertical.
+  --help                     Show this message and exit.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Flags <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code>, <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">si-units</span></code> are covered in the <a class="reference internal" href="#advanced-flags"><span class="std std-ref">advanced section</span></a> section below.</p>
+</div>
+<section id="id5">
+<h3>Examples<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<p>Consider the following figure where the annotated <a class="reference download internal" download="" href="_downloads/846d047f351becb5276d379bdfa9a153/looping_scan_rate.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(looping_scan_rate.svg)</span></code></a> contains a scan rate.</p>
+<a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" /></a>
+<p>Digitize the figure with</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scan_rate.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Resulting in</p>
+<div class="cell tag_hide-input tag_remove-stderr docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;distance [m]&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;height [m]&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;distance [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/b89900e8e551d453305e3caa9286bd8f91cbbea9eaa344a55d2e04be25a6addb.png" src="_images/b89900e8e551d453305e3caa9286bd8f91cbbea9eaa344a55d2e04be25a6addb.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="cv">
+<h2><code class="docutils literal notranslate"><span class="pre">cv</span></code><a class="headerlink" href="#cv" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">cv</span></code> option is designed specifically to digitze <a class="reference external" href="https://en.wikipedia.org/wiki/Cyclic_voltammetry">cyclic voltammograms (CVs)</a>. Overall the command <code class="docutils literal notranslate"><span class="pre">cv</span></code> has the same functionality as the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command. The differences are as follows.</p>
+<ul class="simple">
+<li><p>Certain keys in the output metadata are directly related to cyclic voltammetry measurements.</p></li>
+<li><p>The units on the x-axis must be equivalent to volt <code class="docutils literal notranslate"><span class="pre">U</span></code> given in units of <code class="docutils literal notranslate"><span class="pre">V</span></code> and those on the y-axis equivalent to current <code class="docutils literal notranslate"><span class="pre">I</span></code> in units of <code class="docutils literal notranslate"><span class="pre">A</span></code> or current density <code class="docutils literal notranslate"><span class="pre">j</span></code> in units of <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">/</span> <span class="pre">m2</span></code>.</p></li>
+<li><p>The voltage unit can be given vs. a reference, such as <code class="docutils literal notranslate"><span class="pre">V</span> <span class="pre">vs.</span> <span class="pre">RHE</span></code>. In that case, the dimension should be <code class="docutils literal notranslate"><span class="pre">E</span></code> instead of <code class="docutils literal notranslate"><span class="pre">U</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> should be provided in units of <code class="docutils literal notranslate"><span class="pre">mV</span></code>.</p></li>
+</ul>
+<p>These standardized CV data are, for example, used in the <a class="reference external" href="https://www.echemdb.org">echemdb</a> database.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>cv<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer cv [OPTIONS] SVG
+
+  Digitize a cylic voltammogram and create a frictionless datapackage.
+
+  The sampling interval should be provided in mV.
+
+  For inclusion in www.echemdb.org.
+
+Options:
+  --sampling-interval FLOAT  Sampling interval on the x-axis with respect to
+                             the x-axis values.
+  --outdir DIRECTORY         Write output files to this directory.
+  --metadata FILENAME        yaml file with metadata
+  --bibliography             Adds bibliography data from a bibfile as
+                             descriptor to the datapackage.
+  --si-units                 Convert units of the plot and CSV to SI (only if
+                             they are compatible with astropy units).
+  --skewed                   Detect non-orthogonal skewed axes going through
+                             the markers instead of assuming that axes are
+                             perfectly horizontal and vertical.
+  --help                     Show this message and exit.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Flags <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code>, <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">si-units</span></code> are covered in the <a class="reference internal" href="#advanced-flags"><span class="std std-ref">advanced section</span></a> section below.</p>
+</div>
+<section id="id6">
+<h3>Examples<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<p>An annotated example <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span></code></a> is shown in the following figure.</p>
+<a class="reference internal image-reference" href="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png"><img alt="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" src="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" style="width: 400px;" /></a>
+<p>which can be digitzed via</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>cv<span class="w"> </span>./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="advanced-flags">
+<span id="id7"></span><h2>Advanced flags<a class="headerlink" href="#advanced-flags" title="Permalink to this headline"></a></h2>
+<section id="si-units">
+<h3><code class="docutils literal notranslate"><span class="pre">--si-units</span></code><a class="headerlink" href="#si-units" title="Permalink to this headline"></a></h3>
+<p>The flag <code class="docutils literal notranslate"><span class="pre">--si-unit</span></code> is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code>, such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command. The units are converted to SI units, if they are compatible with the <a class="reference external" href="https://www.astropy.org/">astropy</a> unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In some cases conversion to SI units might not result in the desired output. For example, even though <code class="docutils literal notranslate"><span class="pre">V</span></code> is considered as an SI unit, astropy might convert the unit to <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">/</span> <span class="pre">A</span></code> or <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">Ohm</span></code>.</p>
+</div>
+</section>
+<section id="metadata">
+<h3><code class="docutils literal notranslate"><span class="pre">--metadata</span></code><a class="headerlink" href="#metadata" title="Permalink to this headline"></a></h3>
+<p>The flag <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> allows adding metadata to the resource of the datapackage from a yaml file. It is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code>, such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command.</p>
+<p>Consider the following figure where the annotated <a class="reference download internal" download="" href="_downloads/846d047f351becb5276d379bdfa9a153/looping_scan_rate.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(looping_scan_rate.svg)</span></code></a>.</p>
+<a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" /></a>
+<p>We collect additional metadata in a <a class="reference download internal" download="" href="_downloads/12edb710eab417e1a24d90966dc04417/looping_scan_rate_yaml.yaml"><code class="xref download docutils literal notranslate"><span class="pre">YAML</span> <span class="pre">file</span> <span class="pre">(looping_scan_rate_yaml.yaml)</span></code></a> describing the underlying “experiment”.</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scan_rate_yaml.svg<span class="w"> </span>--metadata<span class="w"> </span>./files/others/looping_scan_rate_yaml.yaml<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+</pre></div>
+</div>
+</div>
+</div>
+<p>The metadata from the YAML is included in the JSON of the resulting datapackage and is accessible with a JSON loader</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate_yaml.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;resources&#39;: [{&#39;name&#39;: &#39;looping_scan_rate_yaml&#39;,
+   &#39;type&#39;: &#39;table&#39;,
+   &#39;path&#39;: &#39;looping_scan_rate_yaml.csv&#39;,
+   &#39;scheme&#39;: &#39;file&#39;,
+   &#39;format&#39;: &#39;csv&#39;,
+   &#39;mediatype&#39;: &#39;text/csv&#39;,
+   &#39;encoding&#39;: &#39;utf-8&#39;,
+   &#39;schema&#39;: {&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;s&#39;},
+     {&#39;name&#39;: &#39;d&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;m&#39;},
+     {&#39;name&#39;: &#39;height&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;m&#39;}]},
+   &#39;metadata&#39;: {&#39;echemdb&#39;: {&#39;cyclist&#39;: &#39;John Doe&#39;,
+     &#39;title&#39;: &#39;Cyclist driving through a looping.&#39;,
+     &#39;description&#39;: &#39;The cyclist rides at a constant speed of 5 m/s along a track including a looping.&#39;,
+     &#39;experimental&#39;: {&#39;tags&#39;: []},
+     &#39;source&#39;: {&#39;figure&#39;: &#39;&#39;, &#39;curve&#39;: &#39;blue&#39;},
+     &#39;figure description&#39;: {&#39;version&#39;: 1,
+      &#39;type&#39;: &#39;digitized&#39;,
+      &#39;simultaneous measurements&#39;: [],
+      &#39;measurement type&#39;: &#39;custom&#39;,
+      &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
+        &#39;type&#39;: &#39;number&#39;,
+        &#39;unit&#39;: &#39;m&#39;,
+        &#39;orientation&#39;: &#39;x&#39;},
+       {&#39;name&#39;: &#39;height&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;m&#39;, &#39;orientation&#39;: &#39;y&#39;}],
+      &#39;comment&#39;: &#39;&#39;,
+      &#39;scan rate&#39;: {&#39;value&#39;: 30.0, &#39;unit&#39;: &#39;m / s&#39;}},
+     &#39;data description&#39;: {&#39;version&#39;: 1,
+      &#39;type&#39;: &#39;digitized&#39;,
+      &#39;measurement type&#39;: &#39;custom&#39;}}}}]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>or directly with the frictionless interface</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frictionless</span> <span class="kn">import</span> <span class="n">Package</span>
+<span class="n">package</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate_yaml.json&#39;</span><span class="p">)</span>
+<span class="n">package</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;resources&#39;: [{&#39;name&#39;: &#39;looping_scan_rate_yaml&#39;,
+                &#39;type&#39;: &#39;table&#39;,
+                &#39;path&#39;: &#39;looping_scan_rate_yaml.csv&#39;,
+                &#39;scheme&#39;: &#39;file&#39;,
+                &#39;format&#39;: &#39;csv&#39;,
+                &#39;mediatype&#39;: &#39;text/csv&#39;,
+                &#39;encoding&#39;: &#39;utf-8&#39;,
+                &#39;schema&#39;: {&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;s&#39;},
+                                      {&#39;name&#39;: &#39;d&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;m&#39;},
+                                      {&#39;name&#39;: &#39;height&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;m&#39;}]},
+                &#39;metadata&#39;: {&#39;echemdb&#39;: {&#39;cyclist&#39;: &#39;John Doe&#39;,
+                                         &#39;title&#39;: &#39;Cyclist driving through a &#39;
+                                                  &#39;looping.&#39;,
+                                         &#39;description&#39;: &#39;The cyclist rides at &#39;
+                                                        &#39;a constant speed of 5 &#39;
+                                                        &#39;m/s along a track &#39;
+                                                        &#39;including a looping.&#39;,
+                                         &#39;experimental&#39;: {&#39;tags&#39;: []},
+                                         &#39;source&#39;: {&#39;figure&#39;: &#39;&#39;,
+                                                    &#39;curve&#39;: &#39;blue&#39;},
+                                         &#39;figure description&#39;: {&#39;version&#39;: 1,
+                                                                &#39;type&#39;: &#39;digitized&#39;,
+                                                                &#39;simultaneous measurements&#39;: [],
+                                                                &#39;measurement type&#39;: &#39;custom&#39;,
+                                                                &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
+                                                                            &#39;type&#39;: &#39;number&#39;,
+                                                                            &#39;unit&#39;: &#39;m&#39;,
+                                                                            &#39;orientation&#39;: &#39;x&#39;},
+                                                                           {&#39;name&#39;: &#39;height&#39;,
+                                                                            &#39;type&#39;: &#39;number&#39;,
+                                                                            &#39;unit&#39;: &#39;m&#39;,
+                                                                            &#39;orientation&#39;: &#39;y&#39;}],
+                                                                &#39;comment&#39;: &#39;&#39;,
+                                                                &#39;scan rate&#39;: {&#39;value&#39;: 30.0,
+                                                                              &#39;unit&#39;: &#39;m &#39;
+                                                                                      &#39;/ &#39;
+                                                                                      &#39;s&#39;}},
+                                         &#39;data description&#39;: {&#39;version&#39;: 1,
+                                                              &#39;type&#39;: &#39;digitized&#39;,
+                                                              &#39;measurement type&#39;: &#39;custom&#39;}}}}]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>For electrochemical data an example YAML can be found <a class="reference external" href="https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml">here</a>.</p>
+</section>
+<section id="bibliography">
+<h3><code class="docutils literal notranslate"><span class="pre">--bibliography</span></code><a class="headerlink" href="#bibliography" title="Permalink to this headline"></a></h3>
+<p>The flag <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code> adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code> such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command.</p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>a file in the <a class="reference download internal" download="" href="_downloads/0bedde854050cea55bda0760ac710b3b/cyclist2023.bib"><code class="xref download docutils literal notranslate"><span class="pre">BibTex</span></code></a> format should exist in the same folder than the SVG (otherwise an empty string is returned)</p></li>
+<li><p>a YAML file must exist which is invoked with the <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> option.</p></li>
+<li><p>the <a class="reference download internal" download="" href="_downloads/33aa0005e6629134d025f1ed3f71821f/looping_scan_rate_bib.yaml"><code class="xref download docutils literal notranslate"><span class="pre">YAML</span> <span class="pre">file</span></code></a> file must contain a reference to the bib file such as</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">source</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">citation key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BIB_FILENAME</span><span class="w">  </span><span class="c1"># without file extension</span>
+</pre></div>
+</div>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scan_rate_bib.svg<span class="w"> </span>--bibliography<span class="w"> </span>--metadata<span class="w"> </span>./files/others/looping_scan_rate_bib.yaml<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+</pre></div>
+</div>
+</div>
+</div>
+<p>The bib file content is included in the resulting JSON of the datapackge</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frictionless</span> <span class="kn">import</span> <span class="n">Package</span>
+<span class="n">package</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate_bib.json&#39;</span><span class="p">)</span>
+<span class="n">package</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;resources&#39;: [{&#39;name&#39;: &#39;looping_scan_rate_bib&#39;,
+                &#39;type&#39;: &#39;table&#39;,
+                &#39;path&#39;: &#39;looping_scan_rate_bib.csv&#39;,
+                &#39;scheme&#39;: &#39;file&#39;,
+                &#39;format&#39;: &#39;csv&#39;,
+                &#39;mediatype&#39;: &#39;text/csv&#39;,
+                &#39;encoding&#39;: &#39;utf-8&#39;,
+                &#39;schema&#39;: {&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;s&#39;},
+                                      {&#39;name&#39;: &#39;d&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;m&#39;},
+                                      {&#39;name&#39;: &#39;height&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;m&#39;}]},
+                &#39;metadata&#39;: {&#39;echemdb&#39;: {&#39;cyclist&#39;: &#39;John Doe&#39;,
+                                         &#39;title&#39;: &#39;Cyclist driving through a &#39;
+                                                  &#39;looping.&#39;,
+                                         &#39;description&#39;: &#39;The cyclist rides at &#39;
+                                                        &#39;a constant speed of 5 &#39;
+                                                        &#39;m/s along a track &#39;
+                                                        &#39;including a looping.&#39;,
+                                         &#39;source&#39;: {&#39;citation key&#39;: &#39;cyclist2023&#39;,
+                                                    &#39;figure&#39;: &#39;&#39;,
+                                                    &#39;curve&#39;: &#39;blue&#39;,
+                                                    &#39;bibdata&#39;: &#39;@article{cyclist2023,\n&#39;
+                                                               &#39;    author = &#39;
+                                                               &#39;&quot;Doe, John&quot;,\n&#39;
+                                                               &#39;    title = &#39;
+                                                               &#39;&quot;Cycling a &#39;
+                                                               &#39;Looping&quot;,\n&#39;
+                                                               &#39;    journal = &#39;
+                                                               &#39;&quot;New Open &#39;
+                                                               &#39;Access &#39;
+                                                               &#39;Journal&quot;,\n&#39;
+                                                               &#39;    volume = &#39;
+                                                               &#39;&quot;1&quot;,\n&#39;
+                                                               &#39;    number = &#39;
+                                                               &#39;&quot;1&quot;,\n&#39;
+                                                               &#39;    pages = &#39;
+                                                               &#39;&quot;1--4&quot;,\n&#39;
+                                                               &#39;    year = &#39;
+                                                               &#39;&quot;2023&quot;,\n&#39;
+                                                               &#39;    publisher &#39;
+                                                               &#39;= &quot;Some &#39;
+                                                               &#39;publisher&quot;\n&#39;
+                                                               &#39;}\n&#39;},
+                                         &#39;experimental&#39;: {&#39;tags&#39;: []},
+                                         &#39;figure description&#39;: {&#39;version&#39;: 1,
+                                                                &#39;type&#39;: &#39;digitized&#39;,
+                                                                &#39;simultaneous measurements&#39;: [],
+                                                                &#39;measurement type&#39;: &#39;custom&#39;,
+                                                                &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
+                                                                            &#39;type&#39;: &#39;number&#39;,
+                                                                            &#39;unit&#39;: &#39;m&#39;,
+                                                                            &#39;orientation&#39;: &#39;x&#39;},
+                                                                           {&#39;name&#39;: &#39;height&#39;,
+                                                                            &#39;type&#39;: &#39;number&#39;,
+                                                                            &#39;unit&#39;: &#39;m&#39;,
+                                                                            &#39;orientation&#39;: &#39;y&#39;}],
+                                                                &#39;comment&#39;: &#39;&#39;,
+                                                                &#39;scan rate&#39;: {&#39;value&#39;: 30.0,
+                                                                              &#39;unit&#39;: &#39;m &#39;
+                                                                                      &#39;/ &#39;
+                                                                                      &#39;s&#39;}},
+                                         &#39;data description&#39;: {&#39;version&#39;: 1,
+                                                              &#39;type&#39;: &#39;digitized&#39;,
+                                                              &#39;measurement type&#39;: &#39;custom&#39;}}}}]}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, the svgdigitizer authors.</p>
+    <p>&#169; Copyright 2021-2023, the svgdigitizer authors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

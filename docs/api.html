@@ -8,6 +8,7 @@
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,10 +17,11 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/design-tabs.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="svgdigitizer.svg" href="api/svg.html" />
+    <link rel="next" title="svgdigitizer.electrochemistry.cv" href="api/cv.html" />
     <link rel="prev" title="Command Line Interface" href="cli.html" /> 
 </head>
 
@@ -45,14 +47,18 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/cv.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/svgplot.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/svgfigure.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-data">Saving Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-figures">Special Figures</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/cv.html">Cyclic Voltammograms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">Digitizing plots for echemdb</a></li>
 </ul>
 
@@ -87,22 +93,183 @@
              
   <section id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline"></a></h1>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<ul class="simple">
-<li><p>Explain the basic workflow here, .svg → SVG → SVGPlot → dataframe → .csv.</p></li>
-<li><p>Refer to the documentation below for details.</p></li>
-<li><p>Move the API documentation from the README.md to the very top of the actual .py modules as examples.</p></li>
-</ul>
-</div>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="api/cv.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/svgplot.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/svgfigure.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code></a></li>
 </ul>
 </div>
+<p>The different modules of <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> provide access to the elements of an SVG with different complexity to retrace different kinds of plots.
+The following provides a brief description of the connection between the modules of <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code>. For more information on the individual modules refer to the respective documentation.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p><strong><a class="reference internal" href="api/svg.html"><span class="doc std std-doc">SVG</span></a></strong></p>
+<p>First create an <a class="reference internal" href="api/svg.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVG</span></code></span></a> object from which you can query certain objects such as the curve.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1"> &lt;svg&gt;</span>
+<span class="s1">   &lt;g&gt;</span>
+<span class="s1">     &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="s1">     &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="s1">   &lt;/g&gt;</span>
+<span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="n">svg</span><span class="o">.</span><span class="n">get_labeled_paths</span><span class="p">(</span><span class="s2">&quot;curve&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[Path &quot;curve: 0&quot;]]
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong><a class="reference internal" href="api/svgplot.html"><span class="doc std std-doc">SVGPlot</span></a></strong></p>
+<p>The <a class="reference internal" href="api/svg.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVG</span></code></span></a> object can be used to create an <a class="reference internal" href="api/svgplot.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGPlot</span></code></span></a> object, which consists of a curve grouped with a text label, axis
+labels grouped with points determining the coordinate system, and (optionally) additional metadata provided as text fields in the <a class="reference internal" href="api/svg.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVG</span></code></span></a>. Thus the object has the characteristics of a typical 2D plot found in scientific publications.
+From this object one can extract the data as pandas dataframe, get axis labels or create a plot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;svg&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 1&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>y</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong><a class="reference internal" href="api/svgfigure.html"><span class="doc std std-doc">SVGFigure</span></a></strong></p>
+<p>The <a class="reference internal" href="api/svgplot.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGPlot</span></code></span></a> object can be used to create an <a class="reference internal" href="api/svgfigure.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGFigure</span></code></span></a> object. This object has enhanced functionalities, which allow, for example, extraction of units from the labels, reconstructing a time axis from a given scan rate or returning the data in SI units.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Conversion into SI units can lead to undesired results. For example, <code class="docutils literal notranslate"><span class="pre">V</span></code> is eventually transformed by astropy into <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">/</span> <span class="pre">A</span></code> or <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">Ohm</span></code>.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&lt;svg&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;T1: 0 mK&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;T2: 1 mK&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;g&gt;</span>
+<span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="s1">  &lt;/g&gt;</span>
+<span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 K/s&lt;/text&gt;</span>
+<span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">),</span> <span class="n">force_si_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4319b31260f00e67cf58f046befde1fe10431e871a4cb33dd5147423c4b55aaf.png" src="_images/4319b31260f00e67cf58f046befde1fe10431e871a4cb33dd5147423c4b55aaf.png" />
+</div>
+</div>
+</section>
+<section id="saving-data">
+<h2>Saving Data<a class="headerlink" href="#saving-data" title="Permalink to this headline"></a></h2>
+<p>Both for <code class="docutils literal notranslate"><span class="pre">svgplot</span></code> and <code class="docutils literal notranslate"><span class="pre">svgfigure</span></code> the data can be stored as CSV, where an</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">svgplot</span></code> only saves <code class="docutils literal notranslate"><span class="pre">x</span></code> any <code class="docutils literal notranslate"><span class="pre">y</span></code> values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">svgfigure</span></code> saves <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, and a time axis <code class="docutils literal notranslate"><span class="pre">t</span></code>, when a scan rate is provided as text label in the svg.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;figure.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The resulting data does not contain any information on the units of the axis. These are accessible via <code class="docutils literal notranslate"><span class="pre">figure.data_schema</span></code>. If the units were converted to SI, the original units are accessible via <code class="docutils literal notranslate"><span class="pre">figure.figure_schema</span></code>.</p>
+<p>It is recommended to use the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a> to create a datapackage which consists of a CSV and a JSON file (the latter including the axis units).</p>
+</div>
+</section>
+<section id="special-figures">
+<h2>Special Figures<a class="headerlink" href="#special-figures" title="Permalink to this headline"></a></h2>
+<p>New modules can be created to retrace specific types of plots, such as <a class="reference internal" href="api/cv.html"><span class="doc std std-doc">cyclic voltammograms (CVs)</span></a>. These modules inherit from <a class="reference internal" href="api/svgfigure.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGFigure</span></code></span></a>.</p>
+</section>
 </section>
 
 
@@ -110,13 +277,13 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="cli.html" class="btn btn-neutral float-left" title="Command Line Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="api/svg.html" class="btn btn-neutral float-right" title="svgdigitizer.svg" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api/cv.html" class="btn btn-neutral float-right" title="svgdigitizer.electrochemistry.cv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, the svgdigitizer authors.</p>
+    <p>&#169; Copyright 2021-2023, the svgdigitizer authors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

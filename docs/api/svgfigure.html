@@ -8,6 +8,7 @@
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,10 +17,11 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/design-tabs.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Cyclic Voltammograms" href="cv.html" />
+    <link rel="next" title="Digitizing plots for echemdb" href="../workflow.html" />
     <link rel="prev" title="svgdigitizer.svgplot" href="svgplot.html" /> 
 </head>
 
@@ -45,14 +47,18 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cv.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="svgplot.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#saving-data">Saving Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#special-figures">Special Figures</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cv.html">Cyclic Voltammograms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../workflow.html">Digitizing plots for echemdb</a></li>
 </ul>
 
@@ -89,13 +95,94 @@
              
   <section id="module-svgdigitizer.svgfigure">
 <span id="svgdigitizer-svgfigure"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code><a class="headerlink" href="#module-svgdigitizer.svgfigure" title="Permalink to this headline"></a></h1>
-<p>Reconstructed scientific plot with special units and/or time axis.</p>
-<p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">FigurePlot</span></code> wraps a plot in SVG format consisting of a curve, axis
-labels and (optionally) additional metadata provided as text fields in the SVG.</p>
+<p>Reconstructs scientific plots with units and allows reconstructing a
+time axis.
+In principle the class <a class="reference internal" href="#svgdigitizer.svgfigure.SVGFigure" title="svgdigitizer.svgfigure.SVGFigure"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVGFigure</span></code></a> adds more functionality than
+the class <code class="xref py py-class docutils literal notranslate"><span class="pre">SVGPlot</span></code>.</p>
+<p>A detailed description of different kinds of plots can be found
+in the <a class="reference internal" href="../usage.html"><span class="doc">documentation</span></a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgfigure.</span></span><span class="sig-name descname"><span class="pre">SVGFigure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'custom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_si_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure" title="Permalink to this definition"></a></dt>
-<dd><p>TODO:: Add description and docstring (see issue #177)</p>
+<dd><p>A digitized plot derived from an SVG file,
+which provides access to the objects of the figure.</p>
+<p>Typically, the SVG input has been created by tracing a CV from
+a publication with a <cite>&lt;path&gt;</cite> in an SVG editor such as Inkscape. Such a
+path can then be analyzed by this class to produce the coordinates
+corresponding to the original measured values.</p>
+<p>In addition it extracts the units from the labels, and thus allows
+conversion of the data into SI units. Also by providing a text field
+with a <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate</span></code> such as <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">K</span> <span class="pre">/</span> <span class="pre">s</span></code>, allows reconstructing
+of the time axis of the data.</p>
+<p>A detailed description can also be found in the
+<a class="reference internal" href="../usage.html"><span class="doc">documentation</span></a>.</p>
+<p>EXAMPLES:</p>
+<p>The following plot has different kinds of axis units.
+These units must be compatible with the
+<a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html">astropy unit module</a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;T1: 0 mK&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;T2: 1 mK&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 uA / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 K/s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In addition a text label with a scan rate is provided in the above example,
+which allows reconstructing a time axis from the plot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">df</span>
+<span class="go">         t    T    j</span>
+<span class="go">0  0.00000  0.0  0.0</span>
+<span class="go">1  0.00002  1.0  1.0</span>
+</pre></div>
+</div>
+<p>The data can also be directly converted into SI units:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">figure_si</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">),</span> <span class="n">force_si_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure_si</span><span class="o">.</span><span class="n">df</span>
+<span class="go">         t      T     j</span>
+<span class="go">0  0.00000  0.000  0.00</span>
+<span class="go">1  0.00002  0.001  0.01</span>
+</pre></div>
+</div>
+<p>The units of the data can be retrieved from the data schema</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">figure_si</span><span class="o">.</span><span class="n">data_schema</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;T&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;K&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
+</pre></div>
+</div>
+<p>The original units in turn can be retrieved from the figure schema</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">figure_si</span><span class="o">.</span><span class="n">figure_schema</span>
+<span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;T&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;mK&#39;, &#39;orientation&#39;: &#39;x&#39;},</span>
+<span class="go">            {&#39;name&#39;: &#39;j&#39;,</span>
+<span class="go">             &#39;type&#39;: &#39;number&#39;,</span>
+<span class="go">             &#39;unit&#39;: &#39;uA / cm2&#39;,</span>
+<span class="go">             &#39;orientation&#39;: &#39;y&#39;}]}</span>
+</pre></div>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.comment">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.comment" title="Permalink to this definition"></a></dt>
@@ -828,7 +915,39 @@ created with <a class="reference internal" href="#svgdigitizer.svgfigure.SVGFigu
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Visualize the data in the figure.</p>
-<p>TODO:: Refactor once scan rate and SI is implemented (see issue #177)</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;E1: 0 V&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;E2: 1 V&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;j1: 0 A / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;j2: 1 A / cm2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 mV / s&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py property">
@@ -1236,13 +1355,13 @@ the measurement.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="svgplot.html" class="btn btn-neutral float-left" title="svgdigitizer.svgplot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="cv.html" class="btn btn-neutral float-right" title="Cyclic Voltammograms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../workflow.html" class="btn btn-neutral float-right" title="Digitizing plots for echemdb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, the svgdigitizer authors.</p>
+    <p>&#169; Copyright 2021-2023, the svgdigitizer authors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

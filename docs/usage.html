@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; svgdigitizer 0.10.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/design-tabs.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command Line Interface" href="cli.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            svgdigitizer
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-the-svg">Prepare the SVG</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-an-image-file">From an Image File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-pdf">From PDF</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#svg-annotation-basics">SVG Annotation (Basics)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#curve-tracing">Curve Tracing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#units">Units</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-plots">Advanced plots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#time-series-scan-rate">Time Series (Scan Rate)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#skewed-figures">Skewed Figures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scaling-factors">Scaling Factors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scale-bars">Scale Bars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scatter-plots">Scatter Plots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#datapackage-interaction">Datapackage Interaction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">Digitizing plots for echemdb</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">svgdigitizer</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+  
+  
+    
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/echemdb/svgdigitizer/blob/master/doc/usage.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h1>
+<p>The SVG files used throughout this documentation (as well as those used for testing <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code>), were create with <a class="reference external" href="https://inkscape.org/">Inkscape</a> (tested with V. 0.92 and V. 1.1). All files are available for download from the <a class="reference external" href="https://github.com/echemdb/svgdigitizer/tree/master/doc/files/others">repository</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The preceding <code class="docutils literal notranslate"><span class="pre">!</span></code> in the following CLI examples is used to evaluate bash commands in <a class="reference external" href="https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html">jupyter notebooks</a>. Remove the <code class="docutils literal notranslate"><span class="pre">!</span></code> to evaluate the command in the shell.</p>
+</div>
+<section id="prepare-the-svg">
+<h2>Prepare the SVG<a class="headerlink" href="#prepare-the-svg" title="Permalink to this headline"></a></h2>
+<section id="from-an-image-file">
+<h3>From an Image File<a class="headerlink" href="#from-an-image-file" title="Permalink to this headline"></a></h3>
+<p>Import an image file into an empty Inkscape document, for example, via drag and drop.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>We suggest linking the image in the SVG, since embedded pictures seem to increase the time required for <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> to retrace the curve (see <a class="reference external" href="https://github.com/echemdb/svgdigitizer/issues/19">#19</a>).</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>It is recommended to lock the image file in the <em>Layers and Objects</em> pane, which turns the image sort of into a static background object and thus can not be moved during the SVG annotation.</p>
+</div>
+</section>
+<section id="from-pdf">
+<h3>From PDF<a class="headerlink" href="#from-pdf" title="Permalink to this headline"></a></h3>
+<p>When the figure is included inside a PDF use the svgdigitizer <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a> to create an SVG from the PDF by typing.</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/looping.pdf
+</pre></div>
+</div>
+</div>
+</div>
+<p>An SVG file is created for each page of the PDF. The image is locked and acts as static background object.</p>
+</section>
+</section>
+<section id="svg-annotation-basics">
+<h2>SVG Annotation (Basics)<a class="headerlink" href="#svg-annotation-basics" title="Permalink to this headline"></a></h2>
+<p>We consider the following <a class="reference download internal" download="" href="_downloads/40c72a2e780b6bf36862064b509be29c/example_plot_p0.png"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">figure</span></code></a>.</p>
+<a class="reference internal image-reference" href="_images/looping_p0.png"><img alt="_images/looping_p0.png" class="align-center" src="_images/looping_p0.png" style="width: 500px;" /></a>
+<p>The minimum requirements to digitize such a figure with <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> are:</p>
+<ul class="simple">
+<li><p>marking two points on each axis with a group containing a text label and line pointing at a position on the axis. The label must be of type <code class="docutils literal notranslate"><span class="pre">x1:</span> <span class="pre">-40</span></code>, <code class="docutils literal notranslate"><span class="pre">x2:</span> <span class="pre">40</span></code>, <code class="docutils literal notranslate"><span class="pre">y1:</span> <span class="pre">-10</span></code>, and <code class="docutils literal notranslate"><span class="pre">y2:</span> <span class="pre">100</span></code>.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> can also be replaced with dimensions, such as <code class="docutils literal notranslate"><span class="pre">U</span></code>, <code class="docutils literal notranslate"><span class="pre">T</span></code>, <code class="docutils literal notranslate"><span class="pre">elephants</span></code> etc.</p></li>
+<li><p>The number can also be followed by a unit, such as <code class="docutils literal notranslate"><span class="pre">T1:</span> <span class="pre">20</span> <span class="pre">K</span></code> or <code class="docutils literal notranslate"><span class="pre">v1:</span> <span class="pre">20</span> <span class="pre">km</span> <span class="pre">/</span> <span class="pre">s</span></code>. (see <a class="reference internal" href="#units"><span class="std std-ref">more on units below</span></a>)</p></li>
+</ul>
+</li>
+<li><p>Tracing the curve with a <em>bezier path</em>  which is grouped with a text label of type <code class="docutils literal notranslate"><span class="pre">curve:</span> <span class="pre">identifier</span></code> (<a class="reference internal" href="#curvetracing"><span class="std std-ref">see below</span></a>)</p></li>
+</ul>
+<p>An <a class="reference download internal" download="" href="_downloads/f2fc828c330e883e90decece763656ec/looping.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a> of the example figure is shown below.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_annotated.png"><img alt="_images/looping_annotated.png" class="bg-primary mb-1 align-center" src="_images/looping_annotated.png" style="width: 500px;" /></a>
+<p>The figure can be retraced, for example in 0.01 steps, with respect to the x-axis values with the API.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+
+<span class="n">svg</span> <span class="o">=</span> <span class="s1">&#39;./files/others/looping.svg&#39;</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)),</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
+</pre></div>
+</div>
+<img alt="_images/fbe293abc61e3e968e39e4fe25ab47b197caffd71228a47d61b4dd2d02c62fc8.png" src="_images/fbe293abc61e3e968e39e4fe25ab47b197caffd71228a47d61b4dd2d02c62fc8.png" />
+</div>
+</div>
+<p>Alternatively the data can be digitized with the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a></p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>looping.svg<span class="w"> </span>--sampling_interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer figure [OPTIONS] SVG
+Try &#39;svgdigitizer figure --help&#39; for help.
+
+Error: No such option: --sampling_interval Did you mean --sampling-interval?
+</pre></div>
+</div>
+</div>
+</div>
+<section id="curve-tracing">
+<span id="curvetracing"></span><h3>Curve Tracing<a class="headerlink" href="#curve-tracing" title="Permalink to this headline"></a></h3>
+<p><strong>Step 1</strong>: Select the the tool <code class="docutils literal notranslate"><span class="pre">Draw</span> <span class="pre">Bezier</span> <span class="pre">curves</span></code> <img alt="inkscape_draw_Bezier" src="_images/inkscape_draw_Bezier.png" /> and select the mode <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">regular</span> <span class="pre">Bezier</span> <span class="pre">path</span></code><img alt="inkscape_Bezier_mode" src="_images/inkscape_Bezier_mode.png" />. Try using as few nodes as possible. It is desired that a node is placed at maxima of sharp peaks. This way these features are not missed when using low sampling rates.</p>
+<a class="reference internal image-reference" href="_images/looping_marked_points.png"><img alt="_images/looping_marked_points.png" class="align-center" src="_images/looping_marked_points.png" style="width: 350px;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can omit <strong>step 2</strong> when you want to retrace a scatter plot, unless you whish to reconstruct possible missing datapoints in between.</p>
+</div>
+<p><strong>Step 2</strong>: Select the curve, select the tool <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">paths</span> <span class="pre">by</span> <span class="pre">node</span></code><img alt="inkscape_edit_paths_by_node" src="_images/inkscape_edit_paths_by_node.png" />, and select all nodes by pressing <code class="docutils literal notranslate"><span class="pre">CTRL-a</span></code>. Click on the option <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">selected</span> <span class="pre">nodes</span> <span class="pre">smooth</span></code><img alt="inkscape_node_options" src="_images/inkscape_node_options.png" />.</p>
+<p>Click on individual nodes and adjust the handles such that the path matches the curve in the plot. Eventually adjust the position of the nodes or add additional nodes. Do this for each node until you are satisfied with the result.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_smoothed_curve.png"><img alt="_images/looping_smoothed_curve.png" class="bg-primary mb-1 align-center" src="_images/looping_smoothed_curve.png" style="width: 350px;" /></a>
+<p><strong>Step 3</strong>: Add a text field and name it <code class="docutils literal notranslate"><span class="pre">curve:</span> <span class="pre">identifier</span></code>, which in this case could be <code class="docutils literal notranslate"><span class="pre">curve:</span> <span class="pre">blue</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The identifier is relevant when multiple curves can be found in a single plot.</p>
+</div>
+<p><strong>Step 4</strong>: Group the text field and the curve.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_grouped_curve.png"><img alt="_images/looping_grouped_curve.png" class="bg-primary mb-1 align-center" src="_images/looping_grouped_curve.png" style="width: 350px;" /></a>
+</section>
+<section id="units">
+<span id="id1"></span><h3>Units<a class="headerlink" href="#units" title="Permalink to this headline"></a></h3>
+<p>Units should be provided in the <a class="reference external" href="https://docs.astropy.org/en/stable/units/index.html">astropy format</a>. In brief:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.astropy.org/en/stable/units/standard_units.html">Standard units</a> simply read: <code class="docutils literal notranslate"><span class="pre">V</span></code>, <code class="docutils literal notranslate"><span class="pre">A</span></code> or <code class="docutils literal notranslate"><span class="pre">m</span></code>.</p></li>
+<li><p>Units can be preceeded by common prefixes, i.e., <code class="docutils literal notranslate"><span class="pre">mV</span></code>, <code class="docutils literal notranslate"><span class="pre">kV</span></code> or <code class="docutils literal notranslate"><span class="pre">uV</span></code>. (Note that <span class="math notranslate nohighlight">\(\mu\)</span> is <code class="docutils literal notranslate"><span class="pre">u</span></code>.)</p></li>
+<li><p>fractions read as follows: <code class="docutils literal notranslate"><span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">mA</span> <span class="pre">/</span> <span class="pre">cm2</span></code>.</p></li>
+<li><p>For square, cubic, etc units simply add <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">3</span></code>, … to the unit (see above).</p></li>
+<li><p>Use parentheses if more than one unit is in the numerator or denominator, i.e., <code class="docutils literal notranslate"><span class="pre">(kg</span> <span class="pre">m)</span> <span class="pre">/</span> <span class="pre">s2</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="advanced-plots">
+<h2>Advanced plots<a class="headerlink" href="#advanced-plots" title="Permalink to this headline"></a></h2>
+<p>Data can be presented in different ways in figures and eventually some additional information can be extracted from a properly annotated SVG. For example, <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> is able to reconstruct a time axis from a scan rate, remove distortion from skewed axis, reconstruct data from scale bars, or apply scaling factors.</p>
+<section id="time-series-scan-rate">
+<h3>Time Series (Scan Rate)<a class="headerlink" href="#time-series-scan-rate" title="Permalink to this headline"></a></h3>
+<p>Usually data is recorded with a certain rate (unit per unit time), measuring another variable, resulting in 2D time series data. In a plot, however, often the two variables are plotted one against another and the temporal information is lost. For example, assume a cyclist is riding his bike through a looping at a constant velocity of 30 m/s. The following figure shows the position of the cyclist in terms of distance and height. By adding a text label <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">30</span> <span class="pre">m</span> <span class="pre">/</span> <span class="pre">s</span></code> the <a class="reference internal" href="api/svgfigure.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGFigure</span></code></span></a> module is able to reconstruct the time axis.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" class="bg-primary mb-1 align-center" src="_images/looping_scan_rate_annotated.png" style="width: 500px;" /></a>
+<p>The resulting data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+
+<span class="n">svg</span> <span class="o">=</span> <span class="s1">&#39;./files/others/looping_scan_rate.svg&#39;</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)),</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;mark-aligned&#39;</span><span class="p">,</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>t</th>
+      <th>d</th>
+      <th>height</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000000</td>
+      <td>-36.310556</td>
+      <td>15.020192</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.000333</td>
+      <td>-36.300556</td>
+      <td>15.051233</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.000667</td>
+      <td>-36.290556</td>
+      <td>15.080984</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.001000</td>
+      <td>-36.280556</td>
+      <td>15.109806</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.001333</td>
+      <td>-36.270556</td>
+      <td>15.137820</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.001667</td>
+      <td>-36.260556</td>
+      <td>15.165090</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.002000</td>
+      <td>-36.250556</td>
+      <td>15.191657</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.002333</td>
+      <td>-36.240556</td>
+      <td>15.217546</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="skewed-figures">
+<h3>Skewed Figures<a class="headerlink" href="#skewed-figures" title="Permalink to this headline"></a></h3>
+<p>Figures can have distorted (skewed) axis. Such plots can, for example, be found in old scanned publications, such as in the following example.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/example_plot_p0.png"><img alt="_images/example_plot_p0.png" class="bg-primary mb-1 align-center" src="_images/example_plot_p0.png" style="width: 500px;" /></a>
+<p>To remove the distorition first <a class="reference download internal" download="" href="_downloads/edb22d780a7fa2c3da01272c237500af/example_plot_skewed.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotate</span> <span class="pre">the</span> <span class="pre">SVG</span></code></a> in the same way as in the basic example.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/example_plot_skewed_annotated.png"><img alt="_images/example_plot_skewed_annotated.png" class="bg-primary mb-1 align-center" src="_images/example_plot_skewed_annotated.png" style="width: 500px;" /></a>
+<p>To digitize the SVG add the argument <code class="docutils literal notranslate"><span class="pre">algorithm='mark-aligned'</span></code>, upon invoking the <code class="docutils literal notranslate"><span class="pre">SVGPlot</span></code> object.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>To remove the distortion a superficial coordinate system is created from the position of the labels on both axis (straight lines connect these points). Thus the distortion along the axis is not resolved by this approach and thus the data might deviate slightly from the original data.</p>
+</div>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+
+<span class="n">svg</span> <span class="o">=</span> <span class="s1">&#39;./files/others/example_plot_skewed.svg&#39;</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)),</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;mark-aligned&#39;</span><span class="p">,</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/9d004bc0daed2b77ccef857463dfafa4c104b98ca458cf4bde249baed6e80aaa.png" src="_images/9d004bc0daed2b77ccef857463dfafa4c104b98ca458cf4bde249baed6e80aaa.png" />
+</div>
+</div>
+<p>Alternatively use the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a> and add the option <code class="docutils literal notranslate"><span class="pre">--skewed</span></code></p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/example_plot_skewed.svg<span class="w"> </span>--skewed<span class="w"> </span>--sampling_interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer figure [OPTIONS] SVG
+Try &#39;svgdigitizer figure --help&#39; for help.
+
+Error: No such option: --sampling_interval Did you mean --sampling-interval?
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="scaling-factors">
+<h3>Scaling Factors<a class="headerlink" href="#scaling-factors" title="Permalink to this headline"></a></h3>
+<p>To compare data with signals of different magnitude, eventually the dataset with the lower magnitude is rescaled with a certain factor. Such factors are usually provided in the scientific figure (or its caption).</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_scaling_factor_p0.png"><img alt="_images/looping_scaling_factor_p0.png" class="bg-primary mb-1 align-center" src="_images/looping_scaling_factor_p0.png" style="width: 500px;" /></a>
+<p>To rescale the resulting data, add a text field, such as <code class="docutils literal notranslate"><span class="pre">x_scaling_factor:</span> <span class="pre">8.3</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> should be the name of the dimension on the respective axis.
+An <a class="reference download internal" download="" href="_downloads/3dd78e4d7c496ae30d13a7571ed5e69a/looping_scaling_factor.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a> looks as follows.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_scaling_factor_annotated.png"><img alt="_images/looping_scaling_factor_annotated.png" class="bg-primary mb-1 align-center" src="_images/looping_scaling_factor_annotated.png" style="width: 500px;" /></a>
+<p>The data can be acquired without further options with the API</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+
+<span class="n">svg</span> <span class="o">=</span> <span class="s1">&#39;./files/others/looping_scaling_factor.svg&#39;</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)),</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/762ac9a5879274565161c44fbbe66032cdf04793065fdd3d2ed4267445ebd653.png" src="_images/762ac9a5879274565161c44fbbe66032cdf04793065fdd3d2ed4267445ebd653.png" />
+</div>
+</div>
+<p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a>.</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scaling_factor.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="scale-bars">
+<h3>Scale Bars<a class="headerlink" href="#scale-bars" title="Permalink to this headline"></a></h3>
+<p>Some published data are lacking a y-scale. Instead a scale bar is shown, which provides information on the magnitude of the features observed in such a figure such as in the following example.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_scale_bar_p0.png"><img alt="_images/looping_scale_bar_p0.png" class="bg-primary mb-1 align-center" src="_images/looping_scale_bar_p0.png" style="width: 500px;" /></a>
+<p>To extract the data one has to know at least one point on the y-axis
+(usually a baseline is provided as in the example above).
+That point as is annotated as in the simple example above with a text label, such as <code class="docutils literal notranslate"><span class="pre">x1:</span> <span class="pre">0</span> <span class="pre">m</span></code>,
+where x can be the dimension of the x-axis, grouped with a line pointing to the respective origin
+For the scale bar add a text label, such as, <code class="docutils literal notranslate"><span class="pre">x_scale_bar:</span> <span class="pre">40</span> <span class="pre">m</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> should be the same label as that used for the origin.
+In addition draw two lines pointing to both extremes of the scale bar, and group these lines with the label.
+An <a class="reference download internal" download="" href="_downloads/d540543f46fc86e49c89fb5e3581e2ac/looping_scale_bar.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a> looks as follows.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This approach also works for scale bars for the x-axis or both x- and y-axis.</p>
+</div>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_scale_bar_annotated.png"><img alt="_images/looping_scale_bar_annotated.png" class="bg-primary mb-1 align-center" src="_images/looping_scale_bar_annotated.png" style="width: 500px;" /></a>
+<p>The data can be acquired without further options with the API</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+
+<span class="n">svg</span> <span class="o">=</span> <span class="s1">&#39;./files/others/looping_scale_bar.svg&#39;</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)),</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/79bf490f591e379b9af66b770afa8928bbefd86156a3aeb0008863b364ae8371.png" src="_images/79bf490f591e379b9af66b770afa8928bbefd86156a3aeb0008863b364ae8371.png" />
+</div>
+</div>
+<p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a>.</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scale_bar.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="scatter-plots">
+<h3>Scatter Plots<a class="headerlink" href="#scatter-plots" title="Permalink to this headline"></a></h3>
+<p>Some text</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/scatter_plot_p0.png"><img alt="_images/scatter_plot_p0.png" class="bg-primary mb-1 align-center" src="_images/scatter_plot_p0.png" style="width: 500px;" /></a>
+<p>To remove the distorition first <a class="reference download internal" download="" href="_downloads/edf3c8cd422a16475cbcf9e4c1bdae32/scatter_plot.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotate</span> <span class="pre">the</span> <span class="pre">SVG</span></code></a> in the same way as in the basic example.</p>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/scatter_plot_annotated.png"><img alt="_images/scatter_plot_annotated.png" class="bg-primary mb-1 align-center" src="_images/scatter_plot_annotated.png" style="width: 500px;" /></a>
+<p>The data can be acquired with the API without specifying a sampling interval.</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+
+<span class="n">svg</span> <span class="o">=</span> <span class="s1">&#39;./files/others/scatter_plot.svg&#39;</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))))</span>
+<span class="n">plot</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;d&#39;, ylabel=&#39;height&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/42b36c7a90068f4c4f5b88f4414349f83a47304888b7d88cdb2fb28fddf0e453.png" src="_images/42b36c7a90068f4c4f5b88f4414349f83a47304888b7d88cdb2fb28fddf0e453.png" />
+</div>
+</div>
+<p>Alternatively use one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a>, omitting the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
+<div class="cell tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scale_bar.svg
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
+No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All other advanced annotation options above, such as a scan rate, scale bar, scaling factor, … are equally applicable to scatter plots.</p>
+</div>
+</section>
+</section>
+<section id="datapackage-interaction">
+<h2>Datapackage Interaction<a class="headerlink" href="#datapackage-interaction" title="Permalink to this headline"></a></h2>
+<p>The datapackages obtained with the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> can be used along with the <a class="reference external" href="https://framework.frictionlessdata.io/">frictionless framework</a>.</p>
+<div class="cell tag_output_scroll docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frictionless</span> <span class="kn">import</span> <span class="n">Package</span>
+<span class="n">package</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate.json&#39;</span><span class="p">)</span>
+<span class="n">package</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;resources&#39;: [{&#39;name&#39;: &#39;looping_scan_rate&#39;,
+                &#39;type&#39;: &#39;table&#39;,
+                &#39;path&#39;: &#39;looping_scan_rate.csv&#39;,
+                &#39;scheme&#39;: &#39;file&#39;,
+                &#39;format&#39;: &#39;csv&#39;,
+                &#39;mediatype&#39;: &#39;text/csv&#39;,
+                &#39;encoding&#39;: &#39;utf-8&#39;,
+                &#39;schema&#39;: {&#39;fields&#39;: [{&#39;name&#39;: &#39;t&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;s&#39;},
+                                      {&#39;name&#39;: &#39;d&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;m&#39;},
+                                      {&#39;name&#39;: &#39;height&#39;,
+                                       &#39;type&#39;: &#39;number&#39;,
+                                       &#39;unit&#39;: &#39;m&#39;}]},
+                &#39;metadata&#39;: {&#39;echemdb&#39;: {&#39;experimental&#39;: {&#39;tags&#39;: []},
+                                         &#39;source&#39;: {&#39;figure&#39;: &#39;&#39;,
+                                                    &#39;curve&#39;: &#39;blue&#39;},
+                                         &#39;figure description&#39;: {&#39;version&#39;: 1,
+                                                                &#39;type&#39;: &#39;digitized&#39;,
+                                                                &#39;simultaneous measurements&#39;: [],
+                                                                &#39;measurement type&#39;: &#39;custom&#39;,
+                                                                &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
+                                                                            &#39;type&#39;: &#39;number&#39;,
+                                                                            &#39;unit&#39;: &#39;m&#39;,
+                                                                            &#39;orientation&#39;: &#39;x&#39;},
+                                                                           {&#39;name&#39;: &#39;height&#39;,
+                                                                            &#39;type&#39;: &#39;number&#39;,
+                                                                            &#39;unit&#39;: &#39;m&#39;,
+                                                                            &#39;orientation&#39;: &#39;y&#39;}],
+                                                                &#39;comment&#39;: &#39;&#39;,
+                                                                &#39;scan rate&#39;: {&#39;value&#39;: 30.0,
+                                                                              &#39;unit&#39;: &#39;m &#39;
+                                                                                      &#39;/ &#39;
+                                                                                      &#39;s&#39;}},
+                                         &#39;data description&#39;: {&#39;version&#39;: 1,
+                                                              &#39;type&#39;: &#39;digitized&#39;,
+                                                              &#39;measurement type&#39;: &#39;custom&#39;}}}}]}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Alternatively use the <a class="reference external" href="https://echemdb.github.io/echemdb/"><code class="docutils literal notranslate"><span class="pre">echemdb</span></code> module</a>, which is specifically designed for datapackages with additional metadata and columns containing units. It also allows creating a database from all packages within a folder.</p>
+<!-- We do not evaluate the cell. Otherwise we would create a circular dependence between svgdigitizer and echemdb. -->
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">echemdb.local</span> <span class="kn">import</span> <span class="n">collect_packages</span>
+<span class="kn">from</span> <span class="nn">echemdb.database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">packages</span><span class="o">=</span><span class="n">collect_packages</span><span class="p">(</span><span class="s1">&#39;./files/others/&#39;</span><span class="p">))</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;looping_scan_rate&#39;</span><span class="p">]</span>
+<span class="n">entry</span><span class="o">.</span><span class="n">df</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cli.html" class="btn btn-neutral float-right" title="Command Line Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2023, the svgdigitizer authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

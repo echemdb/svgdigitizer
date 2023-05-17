@@ -8,6 +8,7 @@
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,6 +17,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/design-tabs.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -44,9 +47,9 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/cv.html">Cyclic Voltammograms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">Digitizing plots for echemdb</a></li>
 </ul>
 
@@ -82,31 +85,38 @@
   <section id="welcome-to-svgdigitizer-s-documentation">
 <h1>Welcome to svgdigitizer’s documentation!<a class="headerlink" href="#welcome-to-svgdigitizer-s-documentation" title="Permalink to this headline"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> allows recovering data from a curve in a figure,
-plotted in a 2D coordinate system.
-Such plots are often found in scientific publications, where
-in many cases, especially for old puplications, the source data
+plotted in a 2D coordinate system. The data can be recovered from an SVG with a Python API or a command line interface to create figures or <a class="reference external" href="https://frictionlessdata.io/">frictionless datapackages</a> (CSV and JSON). The <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> supports units, scalebars, scaling factors, and <a class="reference internal" href="#advantages"><span class="std std-doc">more</span></a>.</p>
+<p><img alt="files/logo/logo.png" src="_images/logo.png" /></p>
+<section id="example-plot">
+<h2>Example Plot<a class="headerlink" href="#example-plot" title="Permalink to this headline"></a></h2>
+<p>Such plots are often found in scientific publications, where
+in many cases, especially for old publications, the source data
 is not accessible anymore.
 In some cases, the axes of the plot can be skewed, e.g., in scanned
 documents. An extreme case for such a plot is depicted in the following figure.</p>
-<p><img alt="files/images/example_plot_p0.png" src="_images/example_plot_p0.png" /></p>
+<p><img alt="files/images/example_plot_p0.png" src="_images/example_plot_p01.png" /></p>
 <p>In order to recover the source data, first the plot is imported in a
-vector graphics program, such as <a class="reference external" href="https://inkscape.org/">Inkscape</a>.
-The curve is traced with <em>regular bezier paths</em> and two points and text labels
-are created and grouped for each axis to define the coordinate system.
-The curve should be assigned a text label. Additional labels describing the data
-can be provided anywhere in the SVG file. The resulting file looks as follows.</p>
+vector graphics program, such as <a class="reference external" href="https://inkscape.org/">Inkscape</a> to create an SVG file.
+The curve is traced with a <em>regular bezier path</em> and is grouped with a text label containing a unique label.
+The coordinate system is defined by groups of two points and text labels for each axis.
+A scan rate can be given as text label, where the units of the rate must be equivalent to the unit on the x-axis divided by time, such as <code class="docutils literal notranslate"><span class="pre">50</span> <span class="pre">mV</span> <span class="pre">/</span> <span class="pre">s</span></code>. This allows reconstructing a time axis for inclusion in the CSV file.
+Additional labels describing the data
+can be provided anywhere in the SVG file. For the above figure the SVG looks as follows.</p>
 <p><img alt="files/images/example_plot_p0_demo.png" src="_images/example_plot_p0_demo.png" /></p>
+</section>
 <section id="command-line-interface">
 <h2><a class="reference internal" href="cli.html"><span class="doc std std-doc">Command line interface</span></a><a class="headerlink" href="#command-line-interface" title="Permalink to this headline"></a></h2>
-<p>This SVG can be digitized from the <a class="reference internal" href="cli.html"><span class="doc std std-doc">command line interface</span></a>, which creates a <a class="reference download internal" download="" href="_downloads/f3edd92abfa46114c05eee661d38ff8d/example_plot_p0_demo.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span></code></a> file of the x and y data (here U and v).
-The sampling of the bezier paths can be set by <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> which specifies the sampling interval in x units. In this specific case also indicate that the axes are <code class="docutils literal notranslate"><span class="pre">--skewed</span></code>.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>svgdigitizer<span class="w"> </span>digitize<span class="w"> </span>example_plot_p0_demo.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01<span class="w"> </span>--skewed
+<p>This SVG can be digitized from the <a class="reference internal" href="cli.html"><span class="doc std std-doc">command line interface</span></a>, which creates a <a class="reference external" href="https://frictionlessdata.io/">frictionless datapacke</a> including a
+<a class="reference download internal" download="" href="_downloads/f3edd92abfa46114c05eee661d38ff8d/example_plot_p0_demo.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span></code></a> of the x and y data (here U and v) and a <a class="reference download internal" download="" href="_downloads/b9a2e6146cfab3d7011df7885b2a98b9/example_plot_p0_demo.json"><code class="xref download docutils literal notranslate"><span class="pre">JSON</span></code></a> file with metadata.
+The sampling of the <em>bezier paths</em> can be set by <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> which specifies the sampling interval in x units.
+In this specific case also indicate that the axes are <code class="docutils literal notranslate"><span class="pre">--skewed</span></code>.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>example_plot_p0_demo.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01<span class="w"> </span>--skewed
 </pre></div>
 </div>
 </section>
 <section id="api">
 <h2><a class="reference internal" href="api.html"><span class="doc std std-doc">API</span></a><a class="headerlink" href="#api" title="Permalink to this headline"></a></h2>
-<p>With the Python <a class="reference internal" href="api.html"><span class="doc std std-doc">API</span></a>, the SVG can also be used to create an <a class="reference internal" href="api/svgplot.html"><span class="doc std std-doc">SVGPlot instance</span></a>.</p>
+<p>With the Python <a class="reference internal" href="api.html"><span class="doc std std-doc">API</span></a>, the SVG can also be used to create an <a class="reference internal" href="api/svgplot.html"><span class="doc std std-doc">SVGPlot instance</span></a> to extract basic information.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
@@ -143,7 +153,8 @@ The sampling of the bezier paths can be set by <code class="docutils literal not
  &lt;text&gt;v1: 10 m / s&lt;/text&gt;,
  &lt;text&gt;v2: 60 m / s&lt;/text&gt;,
  &lt;text&gt;comment: random data&lt;/text&gt;,
- &lt;text&gt;operator: Mr. X&lt;/text&gt;]
+ &lt;text&gt;operator: Mr. X&lt;/text&gt;,
+ &lt;text&gt;scan rate: 50 mV / s&lt;/text&gt;]
 </pre></div>
 </div>
 </div>
@@ -151,7 +162,7 @@ The sampling of the bezier paths can be set by <code class="docutils literal not
 <p>The sampled data can be extracted as a <a class="reference external" href="https://pandas.pydata.org/">pandas</a> dataframe, where the values are given the original plots units:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="o">.</span><span class="n">df</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -204,61 +215,137 @@ The sampling of the bezier paths can be set by <code class="docutils literal not
       <td>9.921301</td>
       <td>12.030082</td>
     </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The <a class="reference internal" href="api/svgplot.html"><span class="doc std std-doc">SVGPlot instance</span></a> can be used be used to create an <a class="reference internal" href="api/svgfigure.html"><span class="doc std std-doc">SVGFigure instance</span></a>, which, for example, reconstructs the time axis based on the scan rate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+
+<span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+<span class="n">figure</span><span class="o">.</span><span class="n">scan_rate</span> <span class="c1"># Returns an astropy quantity</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[50 \; \mathrm{\frac{mV}{s}}\]</div>
+</div>
+</div>
+<p>And the corresponding data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>t</th>
+      <th>U</th>
+      <th>v</th>
+    </tr>
+  </thead>
+  <tbody>
     <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
+      <th>0</th>
+      <td>0.0</td>
+      <td>9.881301</td>
+      <td>12.035193</td>
     </tr>
     <tr>
-      <th>9607</th>
-      <td>76.077684</td>
-      <td>24.594898</td>
+      <th>1</th>
+      <td>0.2</td>
+      <td>9.891301</td>
+      <td>12.033743</td>
     </tr>
     <tr>
-      <th>9608</th>
-      <td>76.087684</td>
-      <td>24.781568</td>
+      <th>2</th>
+      <td>0.4</td>
+      <td>9.901301</td>
+      <td>12.032435</td>
     </tr>
     <tr>
-      <th>9609</th>
-      <td>76.097684</td>
-      <td>25.003583</td>
+      <th>3</th>
+      <td>0.6</td>
+      <td>9.911301</td>
+      <td>12.031220</td>
     </tr>
     <tr>
-      <th>9610</th>
-      <td>76.107684</td>
-      <td>25.300545</td>
-    </tr>
-    <tr>
-      <th>9611</th>
-      <td>76.112096</td>
-      <td>26.021488</td>
+      <th>4</th>
+      <td>0.8</td>
+      <td>9.921301</td>
+      <td>12.030082</td>
     </tr>
   </tbody>
 </table>
-<p>9612 rows × 2 columns</p>
 </div></div></div>
 </div>
 <p>A plot can be created via</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span> <span class="c1"># Or plot.plot() for an svgplot instance.</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/d60403d35cbf677245d1211ab5916ab81dd1c14bb4fa9043407f98cd4a154186.png" src="_images/d60403d35cbf677245d1211ab5916ab81dd1c14bb4fa9043407f98cd4a154186.png" />
+<img alt="_images/9d004bc0daed2b77ccef857463dfafa4c104b98ca458cf4bde249baed6e80aaa.png" src="_images/9d004bc0daed2b77ccef857463dfafa4c104b98ca458cf4bde249baed6e80aaa.png" />
 </div>
 </div>
 </section>
+</section>
+<section id="advantages">
+<h1>Advantages<a class="headerlink" href="#advantages" title="Permalink to this headline"></a></h1>
+<p>The `svgdigitizer has some advantages compared to other plot digitizers:</p>
+<ul class="simple">
+<li><p>usage of splines allows for very <strong>precise retracing</strong> distinct features</p></li>
+<li><p>supports <strong>multiple y (x) values per x (y) value</strong></p></li>
+<li><p>supports <strong>scale bars</strong></p></li>
+<li><p>supports <strong>scaling factors</strong></p></li>
+<li><p>supports plots with <strong>skewed axis</strong></p></li>
+<li><p>splines can be digitized with specific <strong>sampling intervals</strong></p></li>
+<li><p><strong>extracts units</strong> from axis labels</p></li>
+<li><p><strong>extracts metadata</strong> associated with the plot in the SVG</p></li>
+<li><p><strong>reconstruct time series</strong> with a given scan rate</p></li>
+<li><p><strong>saves data as <a class="reference external" href="https://frictionlessdata.io/">frictionless datapackage</a></strong> (CSV + JSON) allowing for <a class="reference external" href="https://en.wikipedia.org/wiki/FAIR_data">FAIR</a> data usage</p></li>
+<li><p><strong>inclusion of metadata</strong> in the datapackage</p></li>
+<li><p><strong>Python API</strong> to interact with the retraced data</p></li>
+</ul>
 </section>
 <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<p>The package is hosted on <a class="reference external" href="https://pypi.org/project/svgdigitizer/">PiPY</a> and can be installed via</p>
+<p>This package is available on <a class="reference external" href="https://pypi.org/project/svgdigitizer/">PiPY</a> and can be installed with pip:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
-<p>Read the <a class="reference internal" href="installation.html"><span class="doc std std-doc">installation instructions</span></a> on further details if you want to contribute to the project.</p>
+<p>The package is also available on <a class="reference external" href="https://github.com/conda-forge/svgdigitizer-feedstock">conda-forge</a> an can be installed with conda</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>svgdigitizer
+</pre></div>
+</div>
+<p>or mamba</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>svgdigitizer
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="installation.html"><span class="doc std std-doc">installation instructions</span></a> for further details.</p>
 </section>
 <section id="further-information">
 <h1>Further information<a class="headerlink" href="#further-information" title="Permalink to this headline"></a></h1>
@@ -268,6 +355,11 @@ The sampling of the bezier paths can be set by <code class="docutils literal not
 <li><p><a class="reference internal" href="api/cv.html"><span class="doc std std-doc">cyclic voltammograms</span></a> (<em>I</em> vs. <em>E</em> — current vs. potential curves or <em>j</em> vs. <em>E</em> — current density vs. potential curves) commonly found in electrochemistry. For further details and requirements refer to the specific instructions of the <a class="reference internal" href="api/cv.html"><span class="doc std std-doc">cv module</span></a> itself or the detailed description on how to <a class="reference internal" href="workflow.html"><span class="doc std std-doc">digitize cyclic voltammograms</span></a> for the <a class="reference external" href="https://echemdb.github.io/website/">echemdb</a>.</p></li>
 </ul>
 <p>If you have used this project in the preparation of a publication, please cite it as described <a class="reference external" href="https://zenodo.org/record/5881475">on our zenodo page</a>.</p>
+<!-- Include some details on usage with echemdb
+## Datapackage interaction
+
+Datapackges created with `svgplot` (or modules inheriting from `svgplot` such as `cv`) can be loaded with the unitpackage module to create a database of the digitized data. In case your own data has the same datapackage structure, the digitized data can easily be compared with your own data.
+-->
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -282,7 +374,7 @@ The sampling of the bezier paths can be set by <code class="docutils literal not
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, the svgdigitizer authors.</p>
+    <p>&#169; Copyright 2021-2023, the svgdigitizer authors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

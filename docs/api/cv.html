@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cyclic Voltammograms &mdash; svgdigitizer 0.10.0 documentation</title>
+  <title>svgdigitizer.electrochemistry.cv &mdash; svgdigitizer 0.10.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -16,11 +17,12 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/design-tabs.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Digitizing plots for echemdb" href="../workflow.html" />
-    <link rel="prev" title="svgdigitizer.svgfigure" href="svgfigure.html" /> 
+    <link rel="next" title="svgdigitizer.svg" href="svg.html" />
+    <link rel="prev" title="API" href="../api.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,9 +47,18 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Cyclic Voltammograms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="svgplot.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="svgfigure.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#saving-data">Saving Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#special-figures">Special Figures</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../workflow.html">Digitizing plots for echemdb</a></li>
 </ul>
 
@@ -65,7 +76,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Cyclic Voltammograms</li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></li>
   
   
     
@@ -82,7 +94,7 @@
            <div itemprop="articleBody">
              
   <section id="module-svgdigitizer.electrochemistry.cv">
-<span id="cyclic-voltammograms"></span><h1>Cyclic Voltammograms<a class="headerlink" href="#module-svgdigitizer.electrochemistry.cv" title="Permalink to this headline"></a></h1>
+<span id="svgdigitizer-electrochemistry-cv"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code><a class="headerlink" href="#module-svgdigitizer.electrochemistry.cv" title="Permalink to this headline"></a></h1>
 <p>This module contains specific functions to digitize cyclic voltammograms.
 Cyclic voltammograms represent current-voltage curves, where the voltage applied
 at an electrochemical working electrode is modulated by a triangular wave potential
@@ -96,9 +108,8 @@ With this information the time axis can be reconstructed.</p>
 where the curve is traced, the axes are labeled and the scan rate is provided.
 This SVG file can then be analyzed by this class to produce the coordinates
 corresponding to the original measured values.</p>
-<p>A more detailed description on preparing the SVG files is provided in the <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV" title="svgdigitizer.electrochemistry.cv.CV"><code class="xref py py-class docutils literal notranslate"><span class="pre">CV</span></code></a>
-or …</p>
-<p>TODO:: Link to workflow.md (see issue #73)</p>
+<p>A more detailed description on preparing the SVG files is provided in the description of <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV" title="svgdigitizer.electrochemistry.cv.CV"><code class="xref py py-class docutils literal notranslate"><span class="pre">CV</span></code></a>
+or the <a class="reference internal" href="../workflow.html"><span class="doc">documentation</span></a> to create files for <a class="reference external" href="https://www.echemdb.org">echemdb</a>.</p>
 <p>For the documentation below, the path of a CV is presented simply as a line.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV">
@@ -109,7 +120,8 @@ which provides access to the objects of the CV.</p>
 a publication with a <cite>&lt;path&gt;</cite> in an SVG editor such as Inkscape. Such a
 path can then be analyzed by this class to produce the coordinates
 corresponding to the original measured values.</p>
-<p>TODO:: Link to workflow.md (see issue #73)</p>
+<p>A detailed description can also be found in the <a class="reference internal" href="../workflow.html"><span class="doc">documentation</span></a>
+to create files for <a class="reference external" href="https://www.echemdb.org">echemdb</a>.</p>
 <p>EXAMPLES:</p>
 <p>An instance of this class can be created from a specially prepared SVG file.
 It requires:</p>
@@ -401,14 +413,14 @@ potential/voltage axis is also given (if available).</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="svgfigure.html" class="btn btn-neutral float-left" title="svgdigitizer.svgfigure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../workflow.html" class="btn btn-neutral float-right" title="Digitizing plots for echemdb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="svg.html" class="btn btn-neutral float-right" title="svgdigitizer.svg" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, the svgdigitizer authors.</p>
+    <p>&#169; Copyright 2021-2023, the svgdigitizer authors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
