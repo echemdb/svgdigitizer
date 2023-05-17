@@ -54,7 +54,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#step-2-prepare-svg-and-png-files-from-the-pdf">Step 2: Prepare SVG and PNG files from the PDF</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-3-digitize-a-plot">Step 3: Digitize a plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-4-create-a-metadata-file-for-each-digitized-curve">Step 4: Create a metadata file for each digitized curve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-5-submit-to-echemdb">Step 5: Submit to echemdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-submit-to-echemdb-org">Step 5: Submit to echemdb.org</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
@@ -91,9 +91,9 @@
              
   <section id="digitizing-plots-for-echemdb">
 <h1>Digitizing plots for echemdb<a class="headerlink" href="#digitizing-plots-for-echemdb" title="Permalink to this headline"></a></h1>
-<p>The <a class="reference external" href="https://www.echemdb.org">echemdb.org</a> database accepts plots commonly found in electrochemical research papers, e.g., cyclic voltammograms. The following example plot is provided in Figure 2a in the <a class="reference download internal" download="" href="_downloads/c132c4fecdaf6f5f2f413d91ce87064d/mustermann_2021_svgdigitizer_1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">publication</span> <span class="pre">example</span> <span class="pre">(PDF)</span></code></a>.</p>
+<p>The <a class="reference external" href="https://www.echemdb.org/cv">echemdb.org</a> collection accepts plots commonly found in electrochemical research papers, e.g., cyclic voltammograms. The following example plot is provided in Figure 2a in the <a class="reference download internal" download="" href="_downloads/c132c4fecdaf6f5f2f413d91ce87064d/mustermann_2021_svgdigitizer_1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">publication</span> <span class="pre">example</span> <span class="pre">(PDF)</span></code></a>.</p>
 <a class="bg-primary mb-1 reference internal image-reference" href="_images/sample_data_21.png"><img alt="_images/sample_data_21.png" class="bg-primary mb-1 align-center" src="_images/sample_data_21.png" style="width: 450px;" /></a>
-<p>Data uploaded to <a class="reference external" href="https://www.echemdb.org">echemdb.org</a> requires specifically annotated SVG files, including a specific metadata file, and a bibliography file explained in the following step by step tutorial.</p>
+<p>Data uploaded to <a class="reference external" href="https://www.echemdb.org/cv">echemdb.org</a> requires specifically annotated SVG files, including a specific metadata file, and a bibliography file explained in the following step by step tutorial.</p>
 <section id="step-1-prepare-pdf-and-bib-files">
 <h2>Step 1: Prepare PDF and BIB files<a class="headerlink" href="#step-1-prepare-pdf-and-bib-files" title="Permalink to this headline"></a></h2>
 <p><strong>1: Create a new directory</strong></p>
@@ -216,13 +216,13 @@ Therefore, create a copy of the SVG file of page two (<code class="docutils lite
 <p>The general structure of the yaml file for the website is provided at <a class="reference external" href="https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml">echemdb/electrochemistry-metadata-schema</a>. Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the <a class="reference external" href="https://github.com/echemdb/website/literature/">repository</a></p>
 <p>Adjust all keys in the file according to the content of the research article.</p>
 </section>
-<section id="step-5-submit-to-echemdb">
-<h2>Step 5: Submit to echemdb<a class="headerlink" href="#step-5-submit-to-echemdb" title="Permalink to this headline"></a></h2>
+<section id="step-5-submit-to-echemdb-org">
+<h2>Step 5: Submit to echemdb.org<a class="headerlink" href="#step-5-submit-to-echemdb-org" title="Permalink to this headline"></a></h2>
 <p>Propose a pull request in the GitHub repository that adds your directory to <code class="docutils literal notranslate"><span class="pre">website/literature</span></code>, e.g., by uploading the YAML, SVG and BIB files you created at https://github.com/echemdb/website/upload/main/literature/mustermann_2021_svgdigitizer_1 (replace <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1</span></code> with the name of your data).</p>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline"></a></h2>
-<p>If you want to test whether your files were prepared correctly for echemdb, run:</p>
+<p>If you want to test whether your files were prepared correctly for <a class="reference external" href="https:///www.echemdb.org/cv">echemdb.org</a>, run:</p>
 <p><code class="docutils literal notranslate"><span class="pre">svgdigitizer</span> <span class="pre">cv</span> <span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.svg</span> <span class="pre">--metadata</span> <span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.yaml</span> <span class="pre">--sampling-interval</span> <span class="pre">0.001</span> <span class="pre">--bibliography</span></code></p>
 <p>This creates a CSV with the data of the plot and a JSON package file that you can inspect to verify that the data has been correctly extracted.</p>
 </section>

@@ -356,8 +356,9 @@ Error: No such option: --sampling_interval Did you mean --sampling-interval?
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer figure [OPTIONS] SVG
 Try &#39;svgdigitizer figure --help&#39; for help.
-
-Error: No such option: --sampling_interval Did you mean --sampling-interval?
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Error: No such option: --sampling_interval Did you mean --sampling-interval?
 </pre></div>
 </div>
 </div>
@@ -555,11 +556,11 @@ No text with `figure` containing a label such as `figure: 1a` found in the SVG.
 </div>
 </div>
 </div>
-<p>Alternatively use the <a class="reference external" href="https://echemdb.github.io/echemdb/"><code class="docutils literal notranslate"><span class="pre">echemdb</span></code> module</a>, which is specifically designed for datapackages with additional metadata and columns containing units. It also allows creating a database from all packages within a folder.</p>
+<p>Alternatively use the <a class="reference external" href="https://echemdb.github.io/unitpackage/"><code class="docutils literal notranslate"><span class="pre">unitpackage</span></code> module</a>, which is specifically designed for datapackages with additional metadata and columns containing units. It also allows creating a database from all packages within a folder.</p>
 <!-- We do not evaluate the cell. Otherwise we would create a circular dependence between svgdigitizer and echemdb. -->
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">echemdb.local</span> <span class="kn">import</span> <span class="n">collect_packages</span>
-<span class="kn">from</span> <span class="nn">echemdb.database</span> <span class="kn">import</span> <span class="n">Database</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">packages</span><span class="o">=</span><span class="n">collect_packages</span><span class="p">(</span><span class="s1">&#39;./files/others/&#39;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">unitpackage.local</span> <span class="kn">import</span> <span class="n">collect_packages</span>
+<span class="kn">from</span> <span class="nn">unitpackage.database</span> <span class="kn">import</span> <span class="n">Colllection</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="n">packages</span><span class="o">=</span><span class="n">collect_packages</span><span class="p">(</span><span class="s1">&#39;./files/others/&#39;</span><span class="p">))</span>
 <span class="n">entry</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;looping_scan_rate&#39;</span><span class="p">]</span>
 <span class="n">entry</span><span class="o">.</span><span class="n">df</span>
 </pre></div>

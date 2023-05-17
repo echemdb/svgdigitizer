@@ -167,11 +167,9 @@ Currently the following datasets are supported:
 
 If you have used this project in the preparation of a publication, please cite it as described [on our zenodo page](https://zenodo.org/record/5881475).
 
-<!-- Include some details on usage with echemdb
 ## Datapackage interaction
 
-Datapackges created with `svgplot` (or modules inheriting from `svgplot` such as `cv`) can be loaded with the unitpackage module to create a database of the digitized data. In case your own data has the same datapackage structure, the digitized data can easily be compared with your own data.
--->
+Datapackges created with `svgplot` (or modules inheriting from `svgplot` such as `cv`) can be loaded with the ['unitpackage' module](https://echemdb.github.io/unitpackage/) to create a database of the digitized data. In case your own data has the same datapackage structure, the digitized data can easily be compared with your own data.
 
 ```{toctree}
 :maxdepth: 2
