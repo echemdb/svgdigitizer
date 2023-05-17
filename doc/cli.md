@@ -178,7 +178,7 @@ The `cv` option is designed specifically to digitze [cyclic voltammograms (CVs)]
 * The voltage unit can be given vs. a reference, such as `V vs. RHE`. In that case, the dimension should be `E` instead of `U`.
 * The `--sampling-interval` should be provided in units of `mV`.
 
-These standardized CV data are, for example, used in the [echemdb](https://www.echemdb.org) database.
+These standardized CV data are, for example, used in the [echemdb](https://www.echemdb.org/cv) database.
 
 ```{code-cell} ipython3
 !svgdigitizer cv --help
