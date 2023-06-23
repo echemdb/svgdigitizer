@@ -163,7 +163,7 @@ Propose a pull request in the GitHub repository that adds your directory to `web
 
 ## Notes
 
-If you want to test whether your files were prepared correctly for [echemdb.org](https:///www.echemdb.org/cv), run:
+If you want to test whether your files were prepared correctly for [echemdb.org](https://www.echemdb.org/cv), run:
 
 `svgdigitizer cv mustermann_2021_svgdigitizer_1_f2a_blue.svg --metadata mustermann_2021_svgdigitizer_1_f2a_blue.yaml --sampling-interval 0.001 --bibliography`
 
