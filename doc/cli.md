@@ -18,7 +18,7 @@ Command Line Interface
 The command line interface (CLI) allows creating SVG files from PDFs, which in turn allows digitizing the [processed SVG files](usage.md). Certain plot types have specific commands to recover different kinds of plots with different metadata. All commands and options are revealed with
 
 ```{note}
-The preceding `!` in the following examples is used to evaluate bash commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html). Remove the `!` to evaluate the command in the shell.
+The preceding `!` in the following examples is used to evaluate bash commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/latest/notebook/example.html). Remove the `!` to evaluate the command in the shell.
 ```
 
 ```{code-cell} ipython3
