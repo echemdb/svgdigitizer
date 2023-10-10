@@ -18,7 +18,7 @@ Usage
 The SVG files used throughout this documentation (as well as those used for testing `svgdigitizer`), were create with [Inkscape](https://inkscape.org/) (tested with V. 0.92 and V. 1.1). All files are available for download from the [repository](https://github.com/echemdb/svgdigitizer/tree/master/doc/files/others).
 
 ```{note}
-The preceding `!` in the following CLI examples is used to evaluate bash commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html). Remove the `!` to evaluate the command in the shell.
+The preceding `!` in the following CLI examples is used to evaluate shell commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/latest/notebook/example.html). Remove the `!` to evaluate the command in the shell.
 ```
 
 ## Prepare the SVG
