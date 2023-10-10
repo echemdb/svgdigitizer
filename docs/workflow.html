@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Digitizing plots for echemdb &mdash; svgdigitizer 0.10.0 documentation</title>
@@ -13,11 +13,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/design-tabs.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=82662543"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/design-tabs.js?v=36754332"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -90,12 +91,12 @@
            <div itemprop="articleBody">
              
   <section id="digitizing-plots-for-echemdb">
-<h1>Digitizing plots for echemdb<a class="headerlink" href="#digitizing-plots-for-echemdb" title="Permalink to this headline"></a></h1>
+<h1>Digitizing plots for echemdb<a class="headerlink" href="#digitizing-plots-for-echemdb" title="Link to this heading"></a></h1>
 <p>The <a class="reference external" href="https://www.echemdb.org/cv">echemdb.org</a> collection accepts plots commonly found in electrochemical research papers, e.g., cyclic voltammograms. The following example plot is provided in Figure 2a in the <a class="reference download internal" download="" href="_downloads/c132c4fecdaf6f5f2f413d91ce87064d/mustermann_2021_svgdigitizer_1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">publication</span> <span class="pre">example</span> <span class="pre">(PDF)</span></code></a>.</p>
 <a class="bg-primary mb-1 reference internal image-reference" href="_images/sample_data_21.png"><img alt="_images/sample_data_21.png" class="bg-primary mb-1 align-center" src="_images/sample_data_21.png" style="width: 450px;" /></a>
 <p>Data uploaded to <a class="reference external" href="https://www.echemdb.org/cv">echemdb.org</a> requires specifically annotated SVG files, including a specific metadata file, and a bibliography file explained in the following step by step tutorial.</p>
 <section id="step-1-prepare-pdf-and-bib-files">
-<h2>Step 1: Prepare PDF and BIB files<a class="headerlink" href="#step-1-prepare-pdf-and-bib-files" title="Permalink to this headline"></a></h2>
+<h2>Step 1: Prepare PDF and BIB files<a class="headerlink" href="#step-1-prepare-pdf-and-bib-files" title="Link to this heading"></a></h2>
 <p><strong>1: Create a new directory</strong></p>
 <p>The directory should be named <code class="docutils literal notranslate"><span class="pre">FirstAuthorName_Year_FirstTitleWord_FirstPageNr</span></code>.</p>
 <div class="admonition note">
@@ -108,7 +109,7 @@
 <p>Put the publication PDF in the newly created directory. The PDF should be named according to the same scheme:</p>
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1.pdf</span></code></p>
 <p><strong>2: Place a BIB file in the folder</strong></p>
-<p>A suggested approach is to search for the article with <a class="reference external" href="http://scholar.google.com/">Google Scholar</a>.</p>
+<p>A suggested approach is to search for the article with <a class="reference external" href="https://scholar.google.com/">Google Scholar</a>.</p>
 <p>Modify the scholar settings so that a BibTeX link appears below the citation:</p>
 <p>Click on the 3 lines next to the Google Scholar logo and choose <em><strong>Settings</strong></em></p>
 <a class="bg-primary mb-1 reference internal image-reference" href="_images/scholar_options_selection.png"><img alt="_images/scholar_options_selection.png" class="bg-primary mb-1 align-center" src="_images/scholar_options_selection.png" style="width: 200px;" /></a>
@@ -129,7 +130,7 @@
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1.pdf</span></code></p>
 </section>
 <section id="step-2-prepare-svg-and-png-files-from-the-pdf">
-<h2>Step 2: Prepare SVG and PNG files from the PDF<a class="headerlink" href="#step-2-prepare-svg-and-png-files-from-the-pdf" title="Permalink to this headline"></a></h2>
+<h2>Step 2: Prepare SVG and PNG files from the PDF<a class="headerlink" href="#step-2-prepare-svg-and-png-files-from-the-pdf" title="Link to this heading"></a></h2>
 <p>Use the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a> to create SVG and PNG files from the PDF, i.e., execute the following command in the folder with the PDF.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
@@ -187,7 +188,7 @@ I/O Error: Couldn&#39;t open file &#39;mustermann_2021_svgdigitizer_1.pdf&#39;: 
 </div>
 </section>
 <section id="step-3-digitize-a-plot">
-<h2>Step 3: Digitize a plot<a class="headerlink" href="#step-3-digitize-a-plot" title="Permalink to this headline"></a></h2>
+<h2>Step 3: Digitize a plot<a class="headerlink" href="#step-3-digitize-a-plot" title="Link to this heading"></a></h2>
 <p><strong>1: Select an svg file with a plot to be digitized</strong></p>
 <p>The data in Figure 2a in the example PDF on page 2 (filename containing <code class="docutils literal notranslate"><span class="pre">_p1</span></code>)  contains three curves, which can be identified by their colors. Each digitized curve should be in a separate SVG file.
 Therefore, create a copy of the SVG file of page two (<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.svg</span></code>) and rename it to<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.svg</span></code>. Here, <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code> indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.</p>
@@ -211,18 +212,18 @@ Therefore, create a copy of the SVG file of page two (<code class="docutils lite
 </ul>
 </section>
 <section id="step-4-create-a-metadata-file-for-each-digitized-curve">
-<h2>Step 4: Create a metadata file for each digitized curve<a class="headerlink" href="#step-4-create-a-metadata-file-for-each-digitized-curve" title="Permalink to this headline"></a></h2>
+<h2>Step 4: Create a metadata file for each digitized curve<a class="headerlink" href="#step-4-create-a-metadata-file-for-each-digitized-curve" title="Link to this heading"></a></h2>
 <p>Create a YAML file with the same name as the SVG file: <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.yaml</span></code></p>
-<p>The general structure of the yaml file for the website is provided at <a class="reference external" href="https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml">echemdb/electrochemistry-metadata-schema</a>. Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the <a class="reference external" href="https://github.com/echemdb/website/literature/">repository</a></p>
+<p>The general structure of the yaml file for the website is provided at <a class="reference external" href="https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml">echemdb/electrochemistry-metadata-schema</a>. Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the <a class="reference external" href="https://github.com/echemdb/website/tree/main/literature">repository</a></p>
 <p>Adjust all keys in the file according to the content of the research article.</p>
 </section>
 <section id="step-5-submit-to-echemdb-org">
-<h2>Step 5: Submit to echemdb.org<a class="headerlink" href="#step-5-submit-to-echemdb-org" title="Permalink to this headline"></a></h2>
+<h2>Step 5: Submit to echemdb.org<a class="headerlink" href="#step-5-submit-to-echemdb-org" title="Link to this heading"></a></h2>
 <p>Propose a pull request in the GitHub repository that adds your directory to <code class="docutils literal notranslate"><span class="pre">website/literature</span></code>, e.g., by uploading the YAML, SVG and BIB files you created at https://github.com/echemdb/website/upload/main/literature/mustermann_2021_svgdigitizer_1 (replace <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1</span></code> with the name of your data).</p>
 </section>
 <section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline"></a></h2>
-<p>If you want to test whether your files were prepared correctly for <a class="reference external" href="https:///www.echemdb.org/cv">echemdb.org</a>, run:</p>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<p>If you want to test whether your files were prepared correctly for <a class="reference external" href="https://www.echemdb.org/cv">echemdb.org</a>, run:</p>
 <p><code class="docutils literal notranslate"><span class="pre">svgdigitizer</span> <span class="pre">cv</span> <span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.svg</span> <span class="pre">--metadata</span> <span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.yaml</span> <span class="pre">--sampling-interval</span> <span class="pre">0.001</span> <span class="pre">--bibliography</span></code></p>
 <p>This creates a CSV with the data of the plot and a JSON package file that you can inspect to verify that the data has been correctly extracted.</p>
 </section>

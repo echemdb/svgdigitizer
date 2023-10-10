@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>svgdigitizer.electrochemistry.cv &mdash; svgdigitizer 0.10.0 documentation</title>
@@ -13,11 +13,12 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=82662543"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/design-tabs.js?v=36754332"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,7 +51,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV"><code class="docutils literal notranslate"><span class="pre">CV</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.data_schema"><code class="docutils literal notranslate"><span class="pre">CV.data_schema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema"><code class="docutils literal notranslate"><span class="pre">CV.figure_schema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.plot"><code class="docutils literal notranslate"><span class="pre">CV.plot()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="svgplot.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="svgfigure.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code></a></li>
@@ -94,7 +103,7 @@
            <div itemprop="articleBody">
              
   <section id="module-svgdigitizer.electrochemistry.cv">
-<span id="svgdigitizer-electrochemistry-cv"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code><a class="headerlink" href="#module-svgdigitizer.electrochemistry.cv" title="Permalink to this headline"></a></h1>
+<span id="svgdigitizer-electrochemistry-cv"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code><a class="headerlink" href="#module-svgdigitizer.electrochemistry.cv" title="Link to this heading"></a></h1>
 <p>This module contains specific functions to digitize cyclic voltammograms.
 Cyclic voltammograms represent current-voltage curves, where the voltage applied
 at an electrochemical working electrode is modulated by a triangular wave potential
@@ -113,7 +122,7 @@ or the <a class="reference internal" href="../workflow.html"><span class="doc">d
 <p>For the documentation below, the path of a CV is presented simply as a line.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.electrochemistry.cv.</span></span><span class="sig-name descname"><span class="pre">CV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CV'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_si_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.electrochemistry.cv.</span></span><span class="sig-name descname"><span class="pre">CV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CV'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_si_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV" title="Link to this definition"></a></dt>
 <dd><p>A digitized cyclic voltammogram (CV) derived from an SVG file,
 which provides access to the objects of the CV.</p>
 <p>Typically, the SVG input has been created by tracing a CV from
@@ -242,7 +251,7 @@ where the axis labels and the data are provided in SI units
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.data_schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.data_schema" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.data_schema" title="Link to this definition"></a></dt>
 <dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Field</cite> object
 describing the data generated with <code class="xref py py-meth docutils literal notranslate"><span class="pre">df()</span></code>.
 Compared to <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="svgdigitizer.electrochemistry.cv.CV.figure_schema"><code class="xref py py-meth docutils literal notranslate"><span class="pre">figure_schema()</span></code></a> all fields are given in SI units.
@@ -324,7 +333,7 @@ a voltage axis with dimension U.:</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.figure_schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="Link to this definition"></a></dt>
 <dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Fields</cite> object
 describing the voltage and current axis of the original plot
 including original units. The reference electrode of the
@@ -368,7 +377,7 @@ potential/voltage axis is also given (if available).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.plot" title="Link to this definition"></a></dt>
 <dd><p>Visualize the digitized cyclic voltammogram with values in SI units.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>

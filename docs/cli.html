@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Command Line Interface &mdash; svgdigitizer 0.10.0 documentation</title>
@@ -13,11 +13,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/design-tabs.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=82662543"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/design-tabs.js?v=36754332"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -111,11 +112,11 @@
            <div itemprop="articleBody">
              
   <section id="command-line-interface">
-<h1>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline"></a></h1>
+<h1>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h1>
 <p>The command line interface (CLI) allows creating SVG files from PDFs, which in turn allows digitizing the <a class="reference internal" href="usage.html"><span class="doc std std-doc">processed SVG files</span></a>. Certain plot types have specific commands to recover different kinds of plots with different metadata. All commands and options are revealed with</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The preceding <code class="docutils literal notranslate"><span class="pre">!</span></code> in the following examples is used to evaluate bash commands in <a class="reference external" href="https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html">jupyter notebooks</a>. Remove the <code class="docutils literal notranslate"><span class="pre">!</span></code> to evaluate the command in the shell.</p>
+<p>The preceding <code class="docutils literal notranslate"><span class="pre">!</span></code> in the following examples is used to evaluate bash commands in <a class="reference external" href="https://jupyter-tutorial.readthedocs.io/en/latest/notebook/example.html">jupyter notebooks</a>. Remove the <code class="docutils literal notranslate"><span class="pre">!</span></code> to evaluate the command in the shell.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -146,7 +147,7 @@ Commands:
 <p><a class="reference external" href="https://github.com/echemdb/svgdigitizer/tree/master/doc/files/others">Example files</a> for the use with the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> can be found in the repository.</p>
 </div>
 <section id="paginate">
-<h2><code class="docutils literal notranslate"><span class="pre">paginate</span></code><a class="headerlink" href="#paginate" title="Permalink to this headline"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">paginate</span></code><a class="headerlink" href="#paginate" title="Link to this heading"></a></h2>
 <p>Create SVG and PNG files from a PDF with</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -171,7 +172,7 @@ Options:
 </div>
 <p><a class="reference download internal" download="" href="_downloads/58f393aebc2cca89f8e88b299072a59e/example_plot_paginate.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Example</span> <span class="pre">PDFs</span></code></a> for testing purposes are available in the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> repository.</p>
 <section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h3>
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf
@@ -183,7 +184,7 @@ Options:
 </section>
 </section>
 <section id="digitize">
-<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">digitize</span></code><a class="headerlink" href="#digitize" title="Permalink to this headline"></a></h2>
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">digitize</span></code><a class="headerlink" href="#digitize" title="Link to this heading"></a></h2>
 <p>Produces a CSV from the curve traced in the SVG.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -211,7 +212,7 @@ Options:
 </div>
 </div>
 <section id="id2">
-<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<h3>Examples<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>Consider the following skewed plot.</p>
 <a class="reference internal image-reference" href="_images/example_plot_p0.png"><img alt="_images/example_plot_p0.png" class="align-center" src="_images/example_plot_p0.png" style="width: 500px;" /></a>
 <p>An unskewed digitized CSV can be created with</p>
@@ -236,7 +237,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/d803369d12996dc54a589dd1228205382ee4a71ffdbc2bbdea849dbdccaf757e.png" src="_images/d803369d12996dc54a589dd1228205382ee4a71ffdbc2bbdea849dbdccaf757e.png" />
+<img alt="_images/0070b6d9d0fd31c231ac72e62d3fdc57d0f3e39bab1e0a23b9e047f4b51820e8.png" src="_images/0070b6d9d0fd31c231ac72e62d3fdc57d0f3e39bab1e0a23b9e047f4b51820e8.png" />
 </div>
 </div>
 <p>The resulting plot indicates that only the nodes of the spline were connected. To improve the tracing use the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
@@ -267,7 +268,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/dc3a90cf084c5ecfaf19f61b6e0ae37bbe52fa2bdd70963f77419b1af3c6e607.png" src="_images/dc3a90cf084c5ecfaf19f61b6e0ae37bbe52fa2bdd70963f77419b1af3c6e607.png" />
+<img alt="_images/029bf3b14804ee1a3a7c0940dd350501ff6f3bb1194849e0cace5c5ae6e51e30.png" src="_images/029bf3b14804ee1a3a7c0940dd350501ff6f3bb1194849e0cace5c5ae6e51e30.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -277,7 +278,7 @@ Options:
 </section>
 </section>
 <section id="plot">
-<h2><code class="docutils literal notranslate"><span class="pre">plot</span></code><a class="headerlink" href="#plot" title="Permalink to this headline"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">plot</span></code><a class="headerlink" href="#plot" title="Link to this heading"></a></h2>
 <p>Display a plot of the data traced in an SVG</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -306,7 +307,7 @@ Options:
 <p>The plot will only be displayed, when your shell is configure accordingly.</p>
 </div>
 <section id="id3">
-<h3>Examples<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<h3>Examples<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>The plot of an annotated example SVG (with skewed axis) with a specific sampling interval can be created with</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -318,7 +319,7 @@ Options:
 </section>
 </section>
 <section id="figure">
-<span id="id4"></span><h2><code class="docutils literal notranslate"><span class="pre">figure</span></code><a class="headerlink" href="#figure" title="Permalink to this headline"></a></h2>
+<span id="id4"></span><h2><code class="docutils literal notranslate"><span class="pre">figure</span></code><a class="headerlink" href="#figure" title="Link to this heading"></a></h2>
 <p>The figure command produces a CSV and an JSON with additional metadata, which contains, for example, information on the axis units. In addition it will reconstruct a time axis, when the rate at which the data on the x-axis is given in a text label in the SVG such as <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">30</span> <span class="pre">m/s</span></code>. Here the unit must be equivalent to that on the x-axis divided by a time.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -358,7 +359,7 @@ Options:
 <p>Flags <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code>, <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">si-units</span></code> are covered in the <a class="reference internal" href="#advanced-flags"><span class="std std-ref">advanced section</span></a> section below.</p>
 </div>
 <section id="id5">
-<h3>Examples<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<h3>Examples<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>Consider the following figure where the annotated <a class="reference download internal" download="" href="_downloads/846d047f351becb5276d379bdfa9a153/looping_scan_rate.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(looping_scan_rate.svg)</span></code></a> contains a scan rate.</p>
 <a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" /></a>
 <p>Digitize the figure with</p>
@@ -394,13 +395,13 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;distance [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/b89900e8e551d453305e3caa9286bd8f91cbbea9eaa344a55d2e04be25a6addb.png" src="_images/b89900e8e551d453305e3caa9286bd8f91cbbea9eaa344a55d2e04be25a6addb.png" />
+<img alt="_images/57107206be92658bba95f290b224af192bd5a3f69ee52d06c923f391d7b9a417.png" src="_images/57107206be92658bba95f290b224af192bd5a3f69ee52d06c923f391d7b9a417.png" />
 </div>
 </div>
 </section>
 </section>
 <section id="cv">
-<h2><code class="docutils literal notranslate"><span class="pre">cv</span></code><a class="headerlink" href="#cv" title="Permalink to this headline"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">cv</span></code><a class="headerlink" href="#cv" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">cv</span></code> option is designed specifically to digitze <a class="reference external" href="https://en.wikipedia.org/wiki/Cyclic_voltammetry">cyclic voltammograms (CVs)</a>. Overall the command <code class="docutils literal notranslate"><span class="pre">cv</span></code> has the same functionality as the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command. The differences are as follows.</p>
 <ul class="simple">
 <li><p>Certain keys in the output metadata are directly related to cyclic voltammetry measurements.</p></li>
@@ -446,7 +447,7 @@ Options:
 <p>Flags <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code>, <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">si-units</span></code> are covered in the <a class="reference internal" href="#advanced-flags"><span class="std std-ref">advanced section</span></a> section below.</p>
 </div>
 <section id="id6">
-<h3>Examples<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<h3>Examples<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <p>An annotated example <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span></code></a> is shown in the following figure.</p>
 <a class="reference internal image-reference" href="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png"><img alt="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" src="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" style="width: 400px;" /></a>
 <p>which can be digitzed via</p>
@@ -460,9 +461,9 @@ Options:
 </section>
 </section>
 <section id="advanced-flags">
-<span id="id7"></span><h2>Advanced flags<a class="headerlink" href="#advanced-flags" title="Permalink to this headline"></a></h2>
+<span id="id7"></span><h2>Advanced flags<a class="headerlink" href="#advanced-flags" title="Link to this heading"></a></h2>
 <section id="si-units">
-<h3><code class="docutils literal notranslate"><span class="pre">--si-units</span></code><a class="headerlink" href="#si-units" title="Permalink to this headline"></a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">--si-units</span></code><a class="headerlink" href="#si-units" title="Link to this heading"></a></h3>
 <p>The flag <code class="docutils literal notranslate"><span class="pre">--si-unit</span></code> is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code>, such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command. The units are converted to SI units, if they are compatible with the <a class="reference external" href="https://www.astropy.org/">astropy</a> unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -470,7 +471,7 @@ Options:
 </div>
 </section>
 <section id="metadata">
-<h3><code class="docutils literal notranslate"><span class="pre">--metadata</span></code><a class="headerlink" href="#metadata" title="Permalink to this headline"></a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">--metadata</span></code><a class="headerlink" href="#metadata" title="Link to this heading"></a></h3>
 <p>The flag <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> allows adding metadata to the resource of the datapackage from a yaml file. It is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code>, such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command.</p>
 <p>Consider the following figure where the annotated <a class="reference download internal" download="" href="_downloads/846d047f351becb5276d379bdfa9a153/looping_scan_rate.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(looping_scan_rate.svg)</span></code></a>.</p>
 <a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" /></a>
@@ -594,7 +595,7 @@ Options:
 <p>For electrochemical data an example YAML can be found <a class="reference external" href="https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml">here</a>.</p>
 </section>
 <section id="bibliography">
-<h3><code class="docutils literal notranslate"><span class="pre">--bibliography</span></code><a class="headerlink" href="#bibliography" title="Permalink to this headline"></a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">--bibliography</span></code><a class="headerlink" href="#bibliography" title="Link to this heading"></a></h3>
 <p>The flag <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code> adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code> such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command.</p>
 <p>Requirements:</p>
 <ul class="simple">

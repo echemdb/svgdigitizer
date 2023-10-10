@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to svgdigitizer’s documentation! &mdash; svgdigitizer 0.10.0 documentation</title>
@@ -13,11 +13,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/design-tabs.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=82662543"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/design-tabs.js?v=36754332"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -83,12 +84,12 @@
            <div itemprop="articleBody">
              
   <section id="welcome-to-svgdigitizer-s-documentation">
-<h1>Welcome to svgdigitizer’s documentation!<a class="headerlink" href="#welcome-to-svgdigitizer-s-documentation" title="Permalink to this headline"></a></h1>
+<h1>Welcome to svgdigitizer’s documentation!<a class="headerlink" href="#welcome-to-svgdigitizer-s-documentation" title="Link to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> allows recovering data from a curve in a figure,
 plotted in a 2D coordinate system. The data can be recovered from an SVG with a Python API or a command line interface to create figures or <a class="reference external" href="https://frictionlessdata.io/">frictionless datapackages</a> (CSV and JSON). The <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> supports units, scalebars, scaling factors, and <a class="reference internal" href="#advantages"><span class="std std-doc">more</span></a>.</p>
 <p><img alt="files/logo/logo.png" src="_images/logo.png" /></p>
 <section id="example-plot">
-<h2>Example Plot<a class="headerlink" href="#example-plot" title="Permalink to this headline"></a></h2>
+<h2>Example Plot<a class="headerlink" href="#example-plot" title="Link to this heading"></a></h2>
 <p>Such plots are often found in scientific publications, where
 in many cases, especially for old publications, the source data
 is not accessible anymore.
@@ -105,7 +106,7 @@ can be provided anywhere in the SVG file. For the above figure the SVG looks as 
 <p><img alt="files/images/example_plot_p0_demo.png" src="_images/example_plot_p0_demo.png" /></p>
 </section>
 <section id="command-line-interface">
-<h2><a class="reference internal" href="cli.html"><span class="doc std std-doc">Command line interface</span></a><a class="headerlink" href="#command-line-interface" title="Permalink to this headline"></a></h2>
+<h2><a class="reference internal" href="cli.html"><span class="doc std std-doc">Command line interface</span></a><a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h2>
 <p>This SVG can be digitized from the <a class="reference internal" href="cli.html"><span class="doc std std-doc">command line interface</span></a>, which creates a <a class="reference external" href="https://frictionlessdata.io/">frictionless datapacke</a> including a
 <a class="reference download internal" download="" href="_downloads/f3edd92abfa46114c05eee661d38ff8d/example_plot_p0_demo.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span></code></a> of the x and y data (here U and v) and a <a class="reference download internal" download="" href="_downloads/b9a2e6146cfab3d7011df7885b2a98b9/example_plot_p0_demo.json"><code class="xref download docutils literal notranslate"><span class="pre">JSON</span></code></a> file with metadata.
 The sampling of the <em>bezier paths</em> can be set by <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> which specifies the sampling interval in x units.
@@ -115,7 +116,7 @@ In this specific case also indicate that the axes are <code class="docutils lite
 </div>
 </section>
 <section id="api">
-<h2><a class="reference internal" href="api.html"><span class="doc std std-doc">API</span></a><a class="headerlink" href="#api" title="Permalink to this headline"></a></h2>
+<h2><a class="reference internal" href="api.html"><span class="doc std std-doc">API</span></a><a class="headerlink" href="#api" title="Link to this heading"></a></h2>
 <p>With the Python <a class="reference internal" href="api.html"><span class="doc std std-doc">API</span></a>, the SVG can also be used to create an <a class="reference internal" href="api/svgplot.html"><span class="doc std std-doc">SVGPlot instance</span></a> to extract basic information.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -308,13 +309,13 @@ In this specific case also indicate that the axes are <code class="docutils lite
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9d004bc0daed2b77ccef857463dfafa4c104b98ca458cf4bde249baed6e80aaa.png" src="_images/9d004bc0daed2b77ccef857463dfafa4c104b98ca458cf4bde249baed6e80aaa.png" />
+<img alt="_images/dc4d966929d89464cacb1d05ec47f3f5699792d0a3e20a77828530c3809e18ab.png" src="_images/dc4d966929d89464cacb1d05ec47f3f5699792d0a3e20a77828530c3809e18ab.png" />
 </div>
 </div>
 </section>
 </section>
 <section id="advantages">
-<h1>Advantages<a class="headerlink" href="#advantages" title="Permalink to this headline"></a></h1>
+<h1>Advantages<a class="headerlink" href="#advantages" title="Link to this heading"></a></h1>
 <p>The `svgdigitizer has some advantages compared to other plot digitizers:</p>
 <ul class="simple">
 <li><p>usage of splines allows for very <strong>precise retracing</strong> distinct features</p></li>
@@ -332,7 +333,7 @@ In this specific case also indicate that the axes are <code class="docutils lite
 </ul>
 </section>
 <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
 <p>This package is available on <a class="reference external" href="https://pypi.org/project/svgdigitizer/">PiPY</a> and can be installed with pip:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>svgdigitizer
 </pre></div>
@@ -348,7 +349,7 @@ In this specific case also indicate that the axes are <code class="docutils lite
 <p>See the <a class="reference internal" href="installation.html"><span class="doc std std-doc">installation instructions</span></a> for further details.</p>
 </section>
 <section id="further-information">
-<h1>Further information<a class="headerlink" href="#further-information" title="Permalink to this headline"></a></h1>
+<h1>Further information<a class="headerlink" href="#further-information" title="Link to this heading"></a></h1>
 <p>The svgdigitizer can be enhanced with other modules for specific datasets.</p>
 <p>Currently the following datasets are supported:</p>
 <ul class="simple">
@@ -356,7 +357,7 @@ In this specific case also indicate that the axes are <code class="docutils lite
 </ul>
 <p>If you have used this project in the preparation of a publication, please cite it as described <a class="reference external" href="https://zenodo.org/record/5881475">on our zenodo page</a>.</p>
 <section id="datapackage-interaction">
-<h2>Datapackage interaction<a class="headerlink" href="#datapackage-interaction" title="Permalink to this headline"></a></h2>
+<h2>Datapackage interaction<a class="headerlink" href="#datapackage-interaction" title="Link to this heading"></a></h2>
 <p>Datapackges created with <code class="docutils literal notranslate"><span class="pre">svgplot</span></code> (or modules inheriting from <code class="docutils literal notranslate"><span class="pre">svgplot</span></code> such as <code class="docutils literal notranslate"><span class="pre">cv</span></code>) can be loaded with the <a class="reference external" href="https://echemdb.github.io/unitpackage/">‘unitpackage’ module</a> to create a database of the digitized data. In case your own data has the same datapackage structure, the digitized data can easily be compared with your own data.</p>
 <div class="toctree-wrapper compound">
 </div>

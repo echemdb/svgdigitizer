@@ -18,7 +18,7 @@ Usage
 The SVG files used throughout this documentation (as well as those used for testing `svgdigitizer`), were create with [Inkscape](https://inkscape.org/) (tested with V. 0.92 and V. 1.1). All files are available for download from the [repository](https://github.com/echemdb/svgdigitizer/tree/master/doc/files/others).
 
 ```{note}
-The preceding `!` in the following CLI examples is used to evaluate bash commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/stable/workspace/ipython/shell.html). Remove the `!` to evaluate the command in the shell.
+The preceding `!` in the following CLI examples is used to evaluate shell commands in [jupyter notebooks](https://jupyter-tutorial.readthedocs.io/en/latest/notebook/example.html). Remove the `!` to evaluate the command in the shell.
 ```
 
 ## Prepare the SVG
@@ -211,7 +211,7 @@ Alternatively use the [CLI](cli.md) and add the option `--skewed`
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/example_plot_skewed.svg --skewed --sampling_interval 0.01
+!svgdigitizer figure ./files/others/example_plot_skewed.svg --skewed --sampling-interval 0.01
 ```
 
 ### Scaling Factors
@@ -367,7 +367,7 @@ Alternatively use the [`unitpackage` module](https://echemdb.github.io/unitpacka
 
 ```python
 from unitpackage.local import collect_packages
-from unitpackage.database import Colllection
+from unitpackage.database import Collection
 db = Collection(packages=collect_packages('./files/others/'))
 entry = db['looping_scan_rate']
 entry.df

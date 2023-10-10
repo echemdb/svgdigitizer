@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API &mdash; svgdigitizer 0.10.0 documentation</title>
@@ -13,11 +13,12 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/design-tabs.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=82662543"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/design-tabs.js?v=36754332"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -92,7 +93,7 @@
            <div itemprop="articleBody">
              
   <section id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this headline"></a></h1>
+<h1>API<a class="headerlink" href="#api" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
 <ul>
@@ -105,7 +106,7 @@
 <p>The different modules of <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> provide access to the elements of an SVG with different complexity to retrace different kinds of plots.
 The following provides a brief description of the connection between the modules of <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code>. For more information on the individual modules refer to the respective documentation.</p>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p><strong><a class="reference internal" href="api/svg.html"><span class="doc std std-doc">SVG</span></a></strong></p>
 <p>First create an <a class="reference internal" href="api/svg.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVG</span></code></span></a> object from which you can query certain objects such as the curve.</p>
 <div class="cell docutils container">
@@ -246,12 +247,12 @@ From this object one can extract the data as pandas dataframe, get axis labels o
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4319b31260f00e67cf58f046befde1fe10431e871a4cb33dd5147423c4b55aaf.png" src="_images/4319b31260f00e67cf58f046befde1fe10431e871a4cb33dd5147423c4b55aaf.png" />
+<img alt="_images/bc47d3da3e64ac62e350f087f217a7433a8adc51da2b873ccbcf644d32b310e4.png" src="_images/bc47d3da3e64ac62e350f087f217a7433a8adc51da2b873ccbcf644d32b310e4.png" />
 </div>
 </div>
 </section>
 <section id="saving-data">
-<h2>Saving Data<a class="headerlink" href="#saving-data" title="Permalink to this headline"></a></h2>
+<h2>Saving Data<a class="headerlink" href="#saving-data" title="Link to this heading"></a></h2>
 <p>Both for <code class="docutils literal notranslate"><span class="pre">svgplot</span></code> and <code class="docutils literal notranslate"><span class="pre">svgfigure</span></code> the data can be stored as CSV, where an</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">svgplot</span></code> only saves <code class="docutils literal notranslate"><span class="pre">x</span></code> any <code class="docutils literal notranslate"><span class="pre">y</span></code> values</p></li>
@@ -267,7 +268,7 @@ From this object one can extract the data as pandas dataframe, get axis labels o
 </div>
 </section>
 <section id="special-figures">
-<h2>Special Figures<a class="headerlink" href="#special-figures" title="Permalink to this headline"></a></h2>
+<h2>Special Figures<a class="headerlink" href="#special-figures" title="Link to this heading"></a></h2>
 <p>New modules can be created to retrace specific types of plots, such as <a class="reference internal" href="api/cv.html"><span class="doc std std-doc">cyclic voltammograms (CVs)</span></a>. These modules inherit from <a class="reference internal" href="api/svgfigure.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGFigure</span></code></span></a>.</p>
 </section>
 </section>

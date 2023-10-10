@@ -47,7 +47,7 @@ Put the publication PDF in the newly created directory. The PDF should be named 
 
 **2: Place a BIB file in the folder**
 
-A suggested approach is to search for the article with [Google Scholar](http://scholar.google.com/).
+A suggested approach is to search for the article with [Google Scholar](https://scholar.google.com/).
 
 Modify the scholar settings so that a BibTeX link appears below the citation:
 
@@ -153,7 +153,7 @@ Some remarks on the specific annotations:
 
 Create a YAML file with the same name as the SVG file: `mustermann_2021_svgdigitizer_1_f2a_blue.yaml`
 
-The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml). Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the [repository](https://github.com/echemdb/website/literature/)
+The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml). Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the [repository](https://github.com/echemdb/website/tree/main/literature)
 
 Adjust all keys in the file according to the content of the research article.
 
@@ -163,7 +163,7 @@ Propose a pull request in the GitHub repository that adds your directory to `web
 
 ## Notes
 
-If you want to test whether your files were prepared correctly for [echemdb.org](https:///www.echemdb.org/cv), run:
+If you want to test whether your files were prepared correctly for [echemdb.org](https://www.echemdb.org/cv), run:
 
 `svgdigitizer cv mustermann_2021_svgdigitizer_1_f2a_blue.svg --metadata mustermann_2021_svgdigitizer_1_f2a_blue.yaml --sampling-interval 0.001 --bibliography`
 
