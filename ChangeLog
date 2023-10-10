@@ -4,6 +4,19 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.11.0
+====================
+
+**Added:**
+
+* Improved the documentation with a large number of usage examples for the CLI, API and SVG annotation.
+
+**Fixed:**
+
+* Upgraded dependency on vulnerable version of pillow, see https://github.com/advisories/GHSA-j7hp-h8jx-5ppr. This possibly leads to an incompatibilities of `svgdigitizer` with Macos.
+
+
+
 v0.10.0
 ====================
 
