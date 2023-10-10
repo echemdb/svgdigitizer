@@ -40,20 +40,6 @@ jobs:
         run: |
           pip install .
         if: ${{ matrix.source == 'pip' }}
-      - name: doctest
-        shell: bash -l {0}
-        run: |
-          pytest --doctest-modules svgdigitizer
-        if: ${{ matrix.source == 'conda' }}
-      # Disable testing readme with byexample (see #187)
-      # - name: byexample
-      #   shell: bash -l {0}
-      #   run: |
-      #     mamba install -y byexample
-      #     # byexample -l shell,python -o +norm-ws --timeout=30 README.md
-        ## byexample is not available for Windows
-        ## the exact numerical output of commands differs between Linux & macOS
-        # if: ${{ matrix.os == 'ubuntu-latest' && matrix.source == 'conda' }}
       - name: cli-digitize-xy
         shell: bash -l {0}
         run: |
@@ -156,4 +142,17 @@ jobs:
           svgdigitizer figure test/data/figure_comment.svg --metadata test/data/figure_comment.yaml
           git diff --no-index --word-diff -- test/data/figure_comment.json test/data/figure_comment.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_comment.csv"), pandas.read_csv("test/data/figure_comment.csv.expected"))'
-
+      - name: doctest
+        shell: bash -l {0}
+        run: |
+          pytest --doctest-modules svgdigitizer
+        if: ${{ matrix.source == 'conda' }}
+        # Disable testing readme with byexample (see #187)
+        # - name: byexample
+        #   shell: bash -l {0}
+        #   run: |
+        #     mamba install -y byexample
+        #     # byexample -l shell,python -o +norm-ws --timeout=30 README.md
+        ## byexample is not available for Windows
+        ## the exact numerical output of commands differs between Linux & macOS
+        # if: ${{ matrix.os == 'ubuntu-latest' && matrix.source == 'conda' }}
