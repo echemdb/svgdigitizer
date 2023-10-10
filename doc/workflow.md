@@ -153,7 +153,7 @@ Some remarks on the specific annotations:
 
 Create a YAML file with the same name as the SVG file: `mustermann_2021_svgdigitizer_1_f2a_blue.yaml`
 
-The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml). Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the [repository](https://github.com/echemdb/website/literature/)
+The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml). Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the [repository](https://github.com/echemdb/website/tree/main/literature)
 
 Adjust all keys in the file according to the content of the research article.
 
