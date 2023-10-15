@@ -19,7 +19,7 @@ This SVG file can then be analyzed by this class to produce the coordinates
 corresponding to the original measured values.
 
 A more detailed description on preparing the SVG files is provided in the description of :class:`CV`
-or the :doc:`documentation </workflow>` to create files for `echemdb <https://www.echemdb.org>`_.
+or the :doc:`documentation </workflow>` to create files for `echemdb <https://www.echemdb.org/>`_.
 
 For the documentation below, the path of a CV is presented simply as a line.
 
@@ -67,7 +67,7 @@ class CV(SVGFigure):
     corresponding to the original measured values.
 
     A detailed description can also be found in the :doc:`documentation </workflow>`
-    to create files for `echemdb <https://www.echemdb.org>`_.
+    to create files for `echemdb <https://www.echemdb.org/>`_.
 
     EXAMPLES:
 
