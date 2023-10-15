@@ -41,8 +41,6 @@ setup(
         "pillow>=10.0.1,<11",
         "pybtex>=0.24,<0.25",
         "pyyaml>=6,<7",
-        "scipy>=1.7,<2",
-        "svg.path>=4.1,<5",
         "svgpathtools>=1.4,<2",
         "svgwrite>=1.4,<2",
     ],
