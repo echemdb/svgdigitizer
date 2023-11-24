@@ -2,7 +2,7 @@ project = 'svgdigitizer'
 copyright = '2021-2023, the svgdigitizer authors'
 author = 'the svgdigitizer authors'
 
-release = '0.10.0'
+release = '0.11.0'
 
 
 extensions = [

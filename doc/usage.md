@@ -211,7 +211,7 @@ Alternatively use the [CLI](cli.md) and add the option `--skewed`
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/example_plot_skewed.svg --skewed --sampling_interval 0.01
+!svgdigitizer figure ./files/others/example_plot_skewed.svg --skewed --sampling-interval 0.01
 ```
 
 ### Scaling Factors
@@ -367,7 +367,7 @@ Alternatively use the [`unitpackage` module](https://echemdb.github.io/unitpacka
 
 ```python
 from unitpackage.local import collect_packages
-from unitpackage.database import Colllection
+from unitpackage.database import Collection
 db = Collection(packages=collect_packages('./files/others/'))
 entry = db['looping_scan_rate']
 entry.df
