@@ -47,7 +47,7 @@ $ACTIVITIES = [
 ]
 
 $VERSION_BUMP_PATTERNS = [
-    ('setup.py', r"    version=", r'    version="$VERSION",'),
+    ('svgdigitizer/__init__.py', r'__version__\s*=.*', '__version__ = "$VERSION"'),
     ('doc/conf.py', r"release = ", r"release = '$VERSION'"),
 ]
 

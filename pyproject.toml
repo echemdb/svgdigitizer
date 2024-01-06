@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "svgdigitizer"
-version = "0.11.0"
 license = {text = "GPL 3.0+"}
 description = "svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications."
 requires-python = ">=3.9"
@@ -24,6 +23,10 @@ dependencies = [
     "svgpathtools>=1.4,<2",
     "svgwrite>=1.4,<2",
 ]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {attr = "svgdigitizer.__init__.__version__"}
 
 [project.readme]
 file = "README.md"

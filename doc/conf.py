@@ -1,9 +1,11 @@
+from svgdigitizer.__init__ import __version__
+
 project = 'svgdigitizer'
-copyright = '2021-2023, the svgdigitizer authors'
+copyright = '2021-2024, the svgdigitizer authors'
 author = 'the svgdigitizer authors'
 
-release = '0.11.0'
-
+version = __version__.rsplit('.',1)[0]
+release = __version__
 
 extensions = [
         "sphinx.ext.autodoc",
