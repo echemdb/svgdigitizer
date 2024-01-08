@@ -4,7 +4,6 @@
 name: svgdigitizer-build
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - astropy>=5,<6
   - black
