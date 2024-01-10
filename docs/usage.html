@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Usage &mdash; svgdigitizer 0.11.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
-      <link rel="stylesheet" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -128,7 +130,7 @@
 </section>
 <section id="from-pdf">
 <h3>From PDF<a class="headerlink" href="#from-pdf" title="Link to this heading"></a></h3>
-<p>When the figure is included inside a PDF use the svgdigitizer <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a> to create an SVG from the PDF by typing.</p>
+<p>When the figure is included inside a PDF use the svgdigitizer <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a> to create an SVG from the PDF by typing.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/looping.pdf
@@ -175,7 +177,7 @@
 <img alt="_images/eb22680846b6129cc4c7755a7a13bfd7025f6aacc6389918bc42718de6fdfbd3.png" src="_images/eb22680846b6129cc4c7755a7a13bfd7025f6aacc6389918bc42718de6fdfbd3.png" />
 </div>
 </div>
-<p>Alternatively the data can be digitized with the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a></p>
+<p>Alternatively the data can be digitized with the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a></p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>looping.svg<span class="w"> </span>--sampling_interval<span class="w"> </span><span class="m">0</span>.01
@@ -227,7 +229,7 @@ Error: No such option: --sampling_interval Did you mean --sampling-interval?
 <p>Data can be presented in different ways in figures and eventually some additional information can be extracted from a properly annotated SVG. For example, <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> is able to reconstruct a time axis from a scan rate, remove distortion from skewed axis, reconstruct data from scale bars, or apply scaling factors.</p>
 <section id="time-series-scan-rate">
 <h3>Time Series (Scan Rate)<a class="headerlink" href="#time-series-scan-rate" title="Link to this heading"></a></h3>
-<p>Usually data is recorded with a certain rate (unit per unit time), measuring another variable, resulting in 2D time series data. In a plot, however, often the two variables are plotted one against another and the temporal information is lost. For example, assume a cyclist is riding his bike through a looping at a constant velocity of 30 m/s. The following figure shows the position of the cyclist in terms of distance and height. By adding a text label <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">30</span> <span class="pre">m</span> <span class="pre">/</span> <span class="pre">s</span></code> the <a class="reference internal" href="api/svgfigure.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGFigure</span></code></span></a> module is able to reconstruct the time axis.</p>
+<p>Usually data is recorded with a certain rate (unit per unit time), measuring another variable, resulting in 2D time series data. In a plot, however, often the two variables are plotted one against another and the temporal information is lost. For example, assume a cyclist is riding his bike through a looping at a constant velocity of 30 m/s. The following figure shows the position of the cyclist in terms of distance and height. By adding a text label <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">30</span> <span class="pre">m</span> <span class="pre">/</span> <span class="pre">s</span></code> the <a class="reference internal" href="api/svgfigure.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">SVGFigure</span></code></span></a> module is able to reconstruct the time axis.</p>
 <a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" class="bg-primary mb-1 align-center" src="_images/looping_scan_rate_annotated.png" style="width: 500px;" /></a>
 <p>The resulting data</p>
 <div class="cell docutils container">
@@ -347,7 +349,7 @@ Error: No such option: --sampling_interval Did you mean --sampling-interval?
 <img alt="_images/994e23b297e96b4ea21c461e80f2a01a1eecfcffe3017141f90bbd5658146515.png" src="_images/994e23b297e96b4ea21c461e80f2a01a1eecfcffe3017141f90bbd5658146515.png" />
 </div>
 </div>
-<p>Alternatively use the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a> and add the option <code class="docutils literal notranslate"><span class="pre">--skewed</span></code></p>
+<p>Alternatively use the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a> and add the option <code class="docutils literal notranslate"><span class="pre">--skewed</span></code></p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/example_plot_skewed.svg<span class="w"> </span>--skewed<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
@@ -386,7 +388,7 @@ An <a class="reference download internal" download="" href="_downloads/3dd78e4d7
 <img alt="_images/f01ebcc27c900a5690c74ffc256f566901f7a099f55b41e79b28d8446989b1ac.png" src="_images/f01ebcc27c900a5690c74ffc256f566901f7a099f55b41e79b28d8446989b1ac.png" />
 </div>
 </div>
-<p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a>.</p>
+<p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a>.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scaling_factor.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
@@ -395,9 +397,7 @@ An <a class="reference download internal" download="" href="_downloads/3dd78e4d7
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+No text with `figure` containing a label such as `figure: 1a` found in the SVG.
 </pre></div>
 </div>
 </div>
@@ -436,7 +436,7 @@ An <a class="reference download internal" download="" href="_downloads/d540543f4
 <img alt="_images/79546d47570997b61c9f3d09f68e35499269e0c3cca605ac445e11e9236a4e60.png" src="_images/79546d47570997b61c9f3d09f68e35499269e0c3cca605ac445e11e9236a4e60.png" />
 </div>
 </div>
-<p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a>.</p>
+<p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a>.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scale_bar.svg<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
@@ -479,7 +479,7 @@ An <a class="reference download internal" download="" href="_downloads/d540543f4
 <img alt="_images/0e06260c45c56f9a0eed061f02401561164d347ab9bdae4e548e0a4ecee6f610.png" src="_images/0e06260c45c56f9a0eed061f02401561164d347ab9bdae4e548e0a4ecee6f610.png" />
 </div>
 </div>
-<p>Alternatively use one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="doc std std-doc">CLI</span></a>, omitting the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
+<p>Alternatively use one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a>, omitting the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scale_bar.svg
@@ -488,9 +488,7 @@ An <a class="reference download internal" download="" href="_downloads/d540543f4
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with `figure` containing a label such as `figure: 1a` found in the SVG.
+No text with `figure` containing a label such as `figure: 1a` found in the SVG.
 </pre></div>
 </div>
 </div>
