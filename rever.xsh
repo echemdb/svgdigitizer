@@ -47,7 +47,7 @@ $ACTIVITIES = [
 ]
 
 $VERSION_BUMP_PATTERNS = [
-    ('pyproject.toml', r'version\s*=.*', 'version = "$VERSION"'),
+    ('pyproject.toml', r'version =', 'version = "$VERSION"'),
     ('doc/conf.py', r"release = ", r"release = '$VERSION'"),
 ]
 
