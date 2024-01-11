@@ -1,9 +1,8 @@
 project = 'svgdigitizer'
-copyright = '2021-2023, the svgdigitizer authors'
+copyright = '2021-2024, the svgdigitizer authors'
 author = 'the svgdigitizer authors'
 
 release = '0.11.0'
-
 
 extensions = [
         "sphinx.ext.autodoc",
