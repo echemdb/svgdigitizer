@@ -4,6 +4,27 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.12.0
+====================
+
+**Added:**
+
+* Added testing with Python 3.12.
+
+**Changed:**
+
+* Use pyproject.toml to manage installation.
+
+**Removed:**
+
+* Removed unnecessary dependencies (`svg.path` and `scipy`).
+
+**Fixed:**
+
+* Fixed automated testing on GitHub with macOS.
+
+
+
 v0.11.0
 ====================
 
