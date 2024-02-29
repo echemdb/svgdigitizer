@@ -40,7 +40,7 @@ $PROJECT = 'svgdigitizer'
 from rever.activities.command import command
 
 command('build', 'python -m build')
-command('twine', 'twine upload dist/*')
+command('twine', 'twine upload dist/svgdigitizer-' + $VERSION + '.tar.gz')
 
 $ACTIVITIES = [
     'version_bump',
