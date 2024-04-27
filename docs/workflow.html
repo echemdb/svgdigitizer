@@ -18,7 +18,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=61ccb1f1"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/design-tabs.js?v=36754332"></script>
     <script src="_static/js/theme.js"></script>
@@ -196,10 +196,10 @@ I/O Error: Couldn&#39;t open file &#39;mustermann_2021_svgdigitizer_1.pdf&#39;: 
 Therefore, create a copy of the SVG file of page two (<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.svg</span></code>) and rename it to<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.svg</span></code>. Here, <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code> indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">_p1</span></code> can be ommited since the figure can unambiguously be identified by the figure and curve identifier label, e.g., <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">_p1</span></code> can be omitted since the figure can unambiguously be identified by the figure and curve identifier label, e.g., <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code>.</p>
 </div>
 <p><strong>2: Annotate the SVG and curve tracing</strong></p>
-<p>In principle the SVG is annotated and the curve us traced in the same way as described in the <a class="reference internal" href="usage.html"><span class="std std-doc">usage</span></a> section. A few additional notes are provide below the <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a>.</p>
+<p>In principle, the SVG is annotated and the curve is traced in the same way as described in the <a class="reference internal" href="usage.html"><span class="std std-doc">usage</span></a> section. A few additional notes are provide below the <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a>.</p>
 <a class="bg-primary mb-1 reference internal image-reference" href="_images/inkscape_final.png"><img alt="_images/inkscape_final.png" class="bg-primary mb-1 align-center" src="_images/inkscape_final.png" style="width: 550px;" /></a>
 <p>Some remarks on the specific annotations:</p>
 <ul class="simple">
@@ -208,20 +208,20 @@ Therefore, create a copy of the SVG file of page two (<code class="docutils lite
 <li><p>The curve identifier should be a short unambiguous string, preferably without special characters.</p></li>
 <li><p>A scan rate is mandatory. The information is not necessarily found in the figure (legend).</p></li>
 <li><p>Add a figure identifier such as <code class="docutils literal notranslate"><span class="pre">figure:</span> <span class="pre">2a</span></code></p></li>
-<li><p>Add tags describing the data with commonly used acronyms. In this case: <code class="docutils literal notranslate"><span class="pre">tags:</span> <span class="pre">BCV,</span> <span class="pre">HER</span></code>. Otherwise the data can hardly be classified.</p></li>
+<li><p>Add tags describing the data with commonly used acronyms. In this case: <code class="docutils literal notranslate"><span class="pre">tags:</span> <span class="pre">BCV,</span> <span class="pre">HER</span></code>. Otherwise, the data can hardly be classified.</p></li>
 <li><p>Feel free to add a comment to the plot. Use a full sentence, for example, <code class="docutils literal notranslate"><span class="pre">comment:</span> <span class="pre">The</span> <span class="pre">curve</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">bit</span> <span class="pre">noisy.</span></code></p></li>
-<li><p>Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by <code class="docutils literal notranslate"><span class="pre">linked:</span> <span class="pre">DEMS</span></code>. The field can contain multiple types of measurements if applicable. Also feel free to use acronyms commonly used in the community.</p></li>
+<li><p>Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by <code class="docutils literal notranslate"><span class="pre">linked:</span> <span class="pre">DEMS</span></code>. The field can contain multiple types of measurements if applicable. Also, feel free to use acronyms commonly used in the community.</p></li>
 </ul>
 </section>
 <section id="step-4-create-a-metadata-file-for-each-digitized-curve">
 <h2>Step 4: Create a metadata file for each digitized curve<a class="headerlink" href="#step-4-create-a-metadata-file-for-each-digitized-curve" title="Link to this heading"></a></h2>
 <p>Create a YAML file with the same name as the SVG file: <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.yaml</span></code></p>
-<p>The general structure of the yaml file for the website is provided at <a class="reference external" href="https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml">echemdb/electrochemistry-metadata-schema</a>. Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the <a class="reference external" href="https://github.com/echemdb/website/tree/main/literature">repository</a></p>
+<p>The general structure of the yaml file for the website is provided at <a class="reference external" href="https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml">echemdb/electrochemistry-metadata-schema</a>. However, it is possibly more convenient to reuse existing YAML files which exist already in the <a class="reference external" href="https://github.com/echemdb/electrochemistry-data/tree/main/literature/svgdigitizer">repository</a>.</p>
 <p>Adjust all keys in the file according to the content of the research article.</p>
 </section>
 <section id="step-5-submit-to-echemdb-org">
 <h2>Step 5: Submit to echemdb.org<a class="headerlink" href="#step-5-submit-to-echemdb-org" title="Link to this heading"></a></h2>
-<p>Propose a pull request in the GitHub repository that adds your directory to <code class="docutils literal notranslate"><span class="pre">website/literature</span></code>, e.g., by uploading the YAML, SVG and BIB files you created at https://github.com/echemdb/website/upload/main/literature/mustermann_2021_svgdigitizer_1 (replace <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1</span></code> with the name of your data).</p>
+<p>Propose a pull request in the GitHub repository that adds your directory to <code class="docutils literal notranslate"><span class="pre">website/literature</span></code>, e.g., by uploading the YAML, SVG and BIB files you created at <code class="docutils literal notranslate"><span class="pre">https://github.com/echemdb/electrochemistry-data/upload/main/literature/svgdigitizer/mustermann_2021_svgdigitizer_1</span></code> (replace <code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1</span></code> with the name of your data).</p>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
