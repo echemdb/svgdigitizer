@@ -26,7 +26,7 @@ Welcome to svgdigitizer's documentation!
 ========================================
 
 The `svgdigitizer` allows recovering data from a curve in a figure,
-plotted in a 2D coordinate system. The data can be recovered from an SVG with a Python API or a command line interface to create figures or [frictionless datapackages](https://frictionlessdata.io/) (CSV and JSON). The `svgdigitizer` supports units, scalebars, scaling factors, and [more](#advantages).
+plotted in a 2D coordinate system. The data can be recovered from an SVG with a Python API or a command line interface to create figures or [frictionless datapackages](https://frictionlessdata.io/) (CSV and JSON). The `svgdigitizer` supports units, scalebars, scaling factors, and more.
 
 ![files/logo/logo.png](files/logo/logo.png)
 
