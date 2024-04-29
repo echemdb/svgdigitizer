@@ -5,12 +5,12 @@
 The `svgdigitizer` allows recovering data from a curve in a figure, plotted in a 2D coordinate system, which is usually found in scientific publications.
 The data is accessible either with a command line interface or the API from a specifically prepared scaled vector graphics (SVG) file. The data can be stored as a [frictionless datapackage](https://frictionlessdata.io/) (CSV and JSON) which can be used with [unitpackage](https://echemdb.github.io/unitpackage/) to access the plots metadata or create a database of such datapackages.
 
-# Advantages
+# Features
 
-The `svgdigitizer` has some advantages compared to other plot digitizers, such as:
+The `svgdigitizer` has additional features compared to other plot digitizers, such as:
 
 * supports **multiple y (x) values per x (y) value**
-* usage of splines allows for very **precise retracing** distinct features
+* usage of splines allows for very **precise retracing** of distinct features
 * splines can be digitized with specific **sampling intervals**
 * supports plots with distorted/**skewed axis**
 * **extracts units** from axis labels
@@ -32,7 +32,7 @@ This package is available on [PiPY](https://pypi.org/project/svgdigitizer/) and 
 pip install svgdigitizer
 ```
 
-The package is also available on [conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock) an can be installed with conda
+The package is also available on [conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock) and can be installed with conda
 
 ```sh .noeval
 conda install -c conda-forge svgdigitizer
@@ -102,4 +102,4 @@ commonly found in the field of electrochemistry.
 >>> cv = CV(SVGPlot(SVG(open(cv_svg, 'rb')), sampling_interval=0.01))
 ```
 
-The resulting `cv` object has the same properties than the `figure` object above.
+The resulting `cv` object has the same properties as the `figure` object above.
