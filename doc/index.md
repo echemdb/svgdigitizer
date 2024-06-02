@@ -26,9 +26,27 @@ Welcome to svgdigitizer's documentation!
 ========================================
 
 The `svgdigitizer` allows recovering data from a curve in a figure,
-plotted in a 2D coordinate system. The data can be recovered from an SVG with a Python API or a command line interface to create figures or [frictionless datapackages](https://frictionlessdata.io/) (CSV and JSON). The `svgdigitizer` supports units, scalebars, scaling factors, and [more](#advantages).
+plotted in a 2D coordinate system. The data can be recovered from an SVG with a Python API or a command line interface to create figures or [frictionless datapackages](https://frictionlessdata.io/) (CSV and JSON). The `svgdigitizer` supports units, scalebars, scaling factors, and more.
 
 ![files/logo/logo.png](files/logo/logo.png)
+
+Features
+============
+
+The `svgdigitizer` has additional features compared to other plot digitizers:
+
+* usage of splines allows for very **precise retracing** of distinct features
+* supports **multiple y (x) values per x (y) value**
+* supports **scale bars**
+* supports **scaling factors**
+* supports plots with a **skewed axis**
+* splines can be digitized with specific **sampling intervals**
+* **extracts units** from axis labels
+* **extracts metadata** associated with the plot in the SVG
+* **reconstruct time series** with a given scan rate
+* **saves data as [frictionless datapackage](https://frictionlessdata.io/)** (CSV + JSON) allowing for [FAIR](https://en.wikipedia.org/wiki/FAIR_data) data usage
+* **inclusion of metadata** in the datapackage
+* **Python API** to interact with the retraced data
 
 ## Example Plot
 
@@ -112,24 +130,6 @@ A plot can be created via
 ```{code-cell} ipython3
 figure.plot() # Or plot.plot() for an svgplot instance.
 ```
-
-Advantages
-============
-
-The `svgdigitizer has some advantages compared to other plot digitizers:
-
-* usage of splines allows for very **precise retracing** distinct features
-* supports **multiple y (x) values per x (y) value**
-* supports **scale bars**
-* supports **scaling factors**
-* supports plots with **skewed axis**
-* splines can be digitized with specific **sampling intervals**
-* **extracts units** from axis labels
-* **extracts metadata** associated with the plot in the SVG
-* **reconstruct time series** with a given scan rate
-* **saves data as [frictionless datapackage](https://frictionlessdata.io/)** (CSV + JSON) allowing for [FAIR](https://en.wikipedia.org/wiki/FAIR_data) data usage
-* **inclusion of metadata** in the datapackage
-* **Python API** to interact with the retraced data
 
 +++
 
