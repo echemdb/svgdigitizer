@@ -9,30 +9,15 @@ concurrency:
 
 jobs:
   python-linter:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with: { submodules: recursive }
-      - name: setup conda environment
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          python-version: "${{ matrix.python }}"
-          miniforge-variant: Mambaforge
-      - name: install dependencies
-        shell: bash -l {0}
-        run: |
-          mamba env update --quiet -n test -f environment.yml
-          conda list
+      - uses: prefix-dev/setup-pixi@v0.8.1
+        with: { pixi-version: v0.28.2 }
       - name: pylint
-        shell: bash -l {0}
-        run: |
-          pylint svgdigitizer
+        run: pixi run pylint
       - name: black
-        shell: bash -l {0}
-        run: |
-          black --check --diff svgdigitizer
+        run: pixi run black --diff --check|
       - name: isort
-        shell: bash -l {0}
-        run: |
-          isort --check --diff svgdigitizer --line-length 256
+        run: pixi run isort --check --diff
