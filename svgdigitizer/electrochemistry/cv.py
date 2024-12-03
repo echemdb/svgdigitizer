@@ -192,7 +192,7 @@ class CV(SVGFigure):
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
         A frictionless `Schema` object, including a `Field` object
-        describing the data generated with :meth:`df`.
+        describing the data generated with ``df``.
         Compared to :meth:`figure_schema` all fields are given in SI units.
         A time axis is also included.
 

@@ -69,7 +69,7 @@ is a voltage in volts.
     ...     </svg>
     ... '''
 
-We wrap this string into an :class:`svg.SVG` object and create an actual
+We wrap this string into an :class:`~svgdigitizer.svg.SVG` object and create an actual
 :class:`SVGPlot` from it::
 
     >>> from svgdigitizer.svg import SVG
@@ -299,7 +299,7 @@ class SVGPlot:
     @cached_property
     def axis_orientations(self):
         r"""
-        Return the :class:`Orientation` for each axis.
+        Return the :class:`AxisOrientation` for each axis.
 
         ALGORITHM:
 
