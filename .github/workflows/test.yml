@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: $${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         environment: ["python-39", "python-310", "python-311", "python-312"]
