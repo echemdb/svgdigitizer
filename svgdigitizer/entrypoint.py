@@ -373,8 +373,8 @@ def digitize_cv(
             sampling_interval /= u.Unit(
                 cv.figure_schema.get_field(cv.svgplot.xlabel).custom["unit"]
             ).to(
-                u.V
-            )  # pylint: disable=no-member
+                u.V  # pylint: disable=no-member
+            )
 
     if metadata:
         import yaml
