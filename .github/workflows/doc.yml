@@ -22,7 +22,8 @@ jobs:
           cd doc
           mv generated/html generated/html_
           mkdir generated/html
-          mv generated/html_ generated/html/svgdigitizer touch generated/html/svgdigitizer/.nojekyll
+          mv generated/html_ generated/html/svgdigitizer
+          touch generated/html/svgdigitizer/.nojekyll
       - name: fix permissions
         run: |
           # Strangely, the linkchecker modules are installed writable and linkchecker then refuses to load them.
