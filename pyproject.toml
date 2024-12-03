@@ -42,12 +42,11 @@ channels = ["conda-forge"]
 platforms = ["linux-64", "osx-64", "win-64"]
 
 [tool.pixi.environments]
-doc = ["doc"]
 python-39 = ["test", "python-39"]
 python-310 = ["test", "python-310"]
 python-311 = ["test", "python-311"]
 python-312 = ["test", "python-312"]
-dev = ["test", "lint"]
+dev = ["dev", "doc", "test", "lint"]
 
 [tool.pixi.dependencies]
 astropy = "*"
@@ -114,3 +113,7 @@ sphinx_rtd_theme = "*"
 
 [tool.pixi.feature.doc.tasks]
 doc = "cd doc && make html SPHINXOPTS='-W -n --keep-going'"
+
+[tool.pixi.feature.dev.dependencies]
+pip = "*"
+conda = "*"
