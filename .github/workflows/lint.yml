@@ -18,6 +18,6 @@ jobs:
       - name: pylint
         run: pixi run pylint
       - name: black
-        run: pixi run black --diff --check|
+        run: pixi run black --diff --check
       - name: isort
         run: pixi run isort --check --diff
