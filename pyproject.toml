@@ -99,7 +99,7 @@ pylint = ">=3,<3.1"
 [tool.pixi.feature.lint.tasks]
 pylint = "pylint svgdigitizer"
 black = "black svgdigitizer"
-isort = "isort svgdigitizer"
+isort = "isort --profile black svgdigitizer"
 lint = { depends-on = ["pylint", "black", "isort"] }
 
 [tool.pixi.feature.doc.dependencies]
