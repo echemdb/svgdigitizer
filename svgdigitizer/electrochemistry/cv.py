@@ -277,7 +277,7 @@ class CV(SVGFigure):
         if self.force_si_units:
             if u.allclose(
                 1 * u.Unit(schema.get_field(self.svgplot.xlabel).custom["unit"]),
-                1 * u.V,
+                1 * u.V,  # pylint: disable=no-member
             ):
                 schema.update_field(self.svgplot.xlabel, {"unit": "V"})
         return schema
