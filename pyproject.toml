@@ -87,9 +87,10 @@ python = "3.12"
 
 [tool.pixi.feature.test.dependencies]
 pytest = "*"
+pytest-xdist = "*"
 
 [tool.pixi.feature.test.tasks]
-doctest = "pytest --doctest-modules svgdigitizer"
+doctest = "pytest -n $(nproc) --doctest-modules svgdigitizer"
 
 [tool.pixi.feature.lint.dependencies]
 black = ">=23,<24"
