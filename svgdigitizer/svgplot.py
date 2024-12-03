@@ -1176,7 +1176,10 @@ class SVGPlot:
         """
         from numpy import dot
 
-        return tuple(dot(self.transformation, [x, y, 1])[:2])
+        # Note that we call float() to explicitly() convert the numpy float64
+        # to a Python float. (So that the interface of this module does not use
+        # a mix of numpy and Python data tyes.)
+        return tuple(map(float, dot(self.transformation, [x, y, 1])[:2]))
 
     @cached_property
     def transformation(self):
@@ -1669,7 +1672,10 @@ class SVGPlot:
             if samples and abs(segment.point(0) - samples[-1]) < cls._EPSILON:
                 sample_at = sample_at[1:]
 
-            samples.extend(segment.poly()(sample_at))
+            # Note that we call complex() to explicitly() convert the numpy
+            # complex to a Python complex. (So that the interface of this
+            # module does not use a mix of numpy and Python data tyes.)
+            samples.extend(map(complex, segment.poly()(sample_at)))
 
         return [(p.real, p.imag) for p in samples]
 
@@ -1788,7 +1794,10 @@ class SVGPlot:
         x_length_target -= segment_length
 
         # Sample the curve
-        return sample_at, x_length_target
+        # Note that we call float() to explicitly() convert the numpy float64
+        # to a Python float. (So that the interface of this module does not use
+        # a mix of numpy and Python data tyes.)
+        return sample_at, float(x_length_target)
 
     @classmethod
     def _sample_snippet(
@@ -1906,7 +1915,10 @@ class SVGPlot:
                 f"The polynomial {polynomial} must have roots in [{tmin}, {tmax}]. But all roots where outside that range: {roots}"
             )
 
-        return min(eligible_roots)
+        # Note that we call float() to explicitly() convert the numpy float64
+        # to a Python float. (So that the interface of this module does not use
+        # a mix of numpy and Python data tyes.)
+        return float(min(eligible_roots))
 
     @property
     def figure_schema(self):
