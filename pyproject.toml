@@ -10,18 +10,18 @@ description = "svgdigitizer is a Python library and command line tool to recover
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "astropy>=5,<6",
+    "astropy>=5,<7",
     "click>=8,<9",
     "frictionless>=5.8.3,<6",
     "matplotlib>=3.5,<4",
     "mergedeep>=1.3.4,<2",
-    "pandas>=1.3,<2",
+    "pandas>=1.3,<3",
     "pdf2image>=1.16,<2",
-    "pillow>=10.0.1,<11",
+    "pillow>=9,<12",
     "pybtex>=0.24,<0.25",
     "pyyaml>=6,<7",
     "scipy>=1.7,<2",
-    "svg.path>=4.1,<5",
+    "svg.path>=4.1,<7",
     "svgpathtools>=1.4,<2",
     "svgwrite>=1.4,<2",
 ]
@@ -39,33 +39,33 @@ packages = [
 
 [tool.pixi.project]
 channels = ["conda-forge"]
-platforms = ["linux-64", "osx-64", "win-64", "osx-arm64"]
+platforms = ["linux-64", "osx-64", "win-64"]
 
 [tool.pixi.environments]
 doc = ["doc"]
-python-39 = ["python-39"]
-python-310 = ["python-310"]
-python-311 = ["python-311"]
-python-312 = ["python-312"]
+python-39 = ["test", "python-39"]
+python-310 = ["test", "python-310"]
+python-311 = ["test", "python-311"]
+python-312 = ["test", "python-312"]
 dev = ["test", "lint"]
 
 [tool.pixi.dependencies]
-astropy = ">=5,<6"
-click = ">=8,<9"
-frictionless = ">=5.8.3,<6"
-matplotlib-base = ">=3.5,<4"
-mergedeep = ">=1.3.4,<2"
-pandas = ">=1.3,<2"
-pdf2image = ">=1.16,<2"
-pillow = ">=10.0.1,<11"
+astropy = "*"
+click = "*"
+frictionless = "*"
+matplotlib-base = "*"
+mergedeep = "*"
+pandas = "*"
+pdf2image = "*"
+pillow = "*"
 poppler = "*"
-pybtex = ">=0.24,<0.25"
+pybtex = "*"
 python = "*"
-pyyaml = ">=6,<7"
-scipy = ">=1.7,<2"
-"svg.path" = ">=4.1,<5"
-svgpathtools = ">=1.4,<2"
-svgwrite = ">=1.4,<2"
+pyyaml = "*"
+scipy = "*"
+"svg.path" = "*"
+svgpathtools = "*"
+svgwrite = "*"
 
 [tool.pixi.tasks]
 svgdigitizer = "svgdigitizer"
