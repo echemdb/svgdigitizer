@@ -18608,7 +18608,7 @@ packages:
   name: svgdigitizer
   version: 0.12.0
   path: .
-  sha256: e55dd5d5efe722e513cd8d6877ee2e9daaa02bbc20b6f3f7f404667226349b46
+  sha256: bb013240116aeb00a0411d1f024e08fb47d8ceb0a4c3b5fb2d7317e34530ba90
   requires_dist:
   - astropy>=5,<7
   - click>=8,<9
