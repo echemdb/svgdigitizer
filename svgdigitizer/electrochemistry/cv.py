@@ -192,7 +192,7 @@ class CV(SVGFigure):
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
         A frictionless `Schema` object, including a `Field` object
-        describing the data generated with :meth:`df`.
+        describing the data generated with ``df``.
         Compared to :meth:`figure_schema` all fields are given in SI units.
         A time axis is also included.
 
@@ -277,7 +277,7 @@ class CV(SVGFigure):
         if self.force_si_units:
             if u.allclose(
                 1 * u.Unit(schema.get_field(self.svgplot.xlabel).custom["unit"]),
-                1 * u.V,
+                1 * u.V,  # pylint: disable=no-member
             ):
                 schema.update_field(self.svgplot.xlabel, {"unit": "V"})
         return schema
