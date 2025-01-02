@@ -26,7 +26,7 @@ Refer to our [documentation](https://echemdb.github.io/svgdigitizer/) for more d
 
 ## Installation
 
-This package is available on [PiPY](https://pypi.org/project/svgdigitizer/) and can be installed with pip:
+This package is available on [PyPI](https://pypi.org/project/svgdigitizer/) and can be installed with pip:
 
 ```sh .noeval
 pip install svgdigitizer
