@@ -80,6 +80,12 @@ jobs:
       - name: cli-cv-xy-rate-without-metadata-skewed
         shell: pixi run bash -e {0}
         run: |
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/xy_rate_without_metadata_skewed.svg --skewed --si-units
+          git diff --no-index --word-diff -- test/data/xy_rate_without_metadata_skewed.json test/data/xy_rate_without_metadata_skewed.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv"), pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv.expected"))'
+      - name: cli-cv-axes_orientation
+        shell: pixi run bash -e {0}
+        run: |
           pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/axes_orientation.svg --si-units
           git diff --no-index --word-diff -- test/data/axes_orientation.json test/data/axes_orientation.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/axes_orientation.csv"), pandas.read_csv("test/data/axes_orientation.csv.expected"))'

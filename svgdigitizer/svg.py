@@ -1,5 +1,5 @@
 r"""
-Provides access to the elements of an SVG tracing a plot for the digitiver.
+Provides access to the elements of an SVG tracing a plot for the svgdigitizer.
 
 EXAMPLES:
 
