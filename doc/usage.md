@@ -49,7 +49,7 @@ An SVG file is created for each page of the PDF. The image is locked and acts as
 
 ## SVG Annotation (Basics)
 
-We consider the following {download}`example figure<./files/others/example_plot_p0.png>`.
+We consider the following {download}`example figure<./files/others/looping_p0.png>`.
 
 ```{image} ./files/others/looping_p0.png
 :width: 500px
@@ -63,7 +63,7 @@ The minimum requirements to digitize such a figure with `svgdigitizer` are:
   * The number can also be followed by a unit, such as `T1: 20 K` or `v1: 20 km / s`. (see [more on units below](units))
 * Tracing the curve with a *bezier path*  which is grouped with a text label of type `curve: identifier` ([see below](curvetracing))
 
-An {download}`annotated SVG <./files/others/looping.svg>` of the example figure is shown below.
+An {download}`annotated SVG <./files/others/looping.svg>` of the example figure is shown below and can be explored locally by placing it in the same folder as the {download}`example figure<./files/others/looping_p0.png>` above.
 
 ```{image} ./files/others/looping_annotated.png
 :class: bg-primary mb-1
