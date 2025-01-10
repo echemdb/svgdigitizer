@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,23 +7,19 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to svgdigitizer’s documentation! &mdash; svgdigitizer 0.12.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
       <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=61ccb1f1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/design-tabs.js?v=f930bc37"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=61ccb1f1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -140,8 +138,8 @@ In this specific case also indicate that the axes are <code class="docutils lite
 <p>With the Python <a class="reference internal" href="api.html"><span class="std std-doc">API</span></a>, the SVG can also be used to create an <a class="reference internal" href="api/svgplot.html"><span class="std std-doc">SVGPlot instance</span></a> to extract basic information.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
-<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svgplot</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVGPlot</span>
 
 <span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">SVG</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./files/others/example_plot_p0_demo.svg&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)),</span> <span class="n">sampling_interval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;mark-aligned&#39;</span><span class="p">)</span>
 </pre></div>
@@ -243,7 +241,7 @@ In this specific case also indicate that the axes are <code class="docutils lite
 <p>The <a class="reference internal" href="api/svgplot.html"><span class="std std-doc">SVGPlot instance</span></a> can be used be used to create an <a class="reference internal" href="api/svgfigure.html"><span class="std std-doc">SVGFigure instance</span></a>, which, for example, reconstructs the time axis based on the scan rate.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svgfigure</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVGFigure</span>
 
 <span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
 <span class="n">figure</span><span class="o">.</span><span class="n">scan_rate</span> <span class="c1"># Returns an astropy quantity</span>
@@ -329,7 +327,7 @@ In this specific case also indicate that the axes are <code class="docutils lite
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/eebbaf93bf4738444ae170f0a4ff2f02bf6d29ee3e7a6d7f7b2e9d9c974aae06.png" src="_images/eebbaf93bf4738444ae170f0a4ff2f02bf6d29ee3e7a6d7f7b2e9d9c974aae06.png" />
+<img alt="_images/8a28182ffffe47ee1165b91828fa1f213d00c7fbb9e8d93411f83536bfffaa7f.png" src="_images/8a28182ffffe47ee1165b91828fa1f213d00c7fbb9e8d93411f83536bfffaa7f.png" />
 </div>
 </div>
 </section>

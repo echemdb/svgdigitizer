@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,22 +7,18 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Digitizing plots for echemdb &mdash; svgdigitizer 0.12.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
       <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=61ccb1f1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=61ccb1f1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -95,7 +93,8 @@
   <section id="digitizing-plots-for-echemdb">
 <h1>Digitizing plots for echemdb<a class="headerlink" href="#digitizing-plots-for-echemdb" title="Link to this heading"></a></h1>
 <p>The <a class="reference external" href="https://www.echemdb.org/cv">echemdb.org</a> collection accepts plots commonly found in electrochemical research papers, e.g., cyclic voltammograms. The following example plot is provided in Figure 2a in the <a class="reference download internal" download="" href="_downloads/c132c4fecdaf6f5f2f413d91ce87064d/mustermann_2021_svgdigitizer_1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">publication</span> <span class="pre">example</span> <span class="pre">(PDF)</span></code></a>.</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="_images/sample_data_21.png"><img alt="_images/sample_data_21.png" class="bg-primary mb-1 align-center" src="_images/sample_data_21.png" style="width: 450px;" /></a>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/sample_data_21.png"><img alt="_images/sample_data_21.png" class="bg-primary mb-1 align-center" src="_images/sample_data_21.png" style="width: 450px;" />
+</a>
 <p>Data uploaded to <a class="reference external" href="https://www.echemdb.org/cv">echemdb.org</a> requires specifically annotated SVG files, including a specific metadata file, and a bibliography file explained in the following step by step tutorial.</p>
 <section id="step-1-prepare-pdf-and-bib-files">
 <h2>Step 1: Prepare PDF and BIB files<a class="headerlink" href="#step-1-prepare-pdf-and-bib-files" title="Link to this heading"></a></h2>
@@ -114,15 +113,19 @@
 <p>A suggested approach is to search for the article with <a class="reference external" href="https://scholar.google.com/">Google Scholar</a>.</p>
 <p>Modify the scholar settings so that a BibTeX link appears below the citation:</p>
 <p>Click on the 3 lines next to the Google Scholar logo and choose <em><strong>Settings</strong></em></p>
-<a class="bg-primary mb-1 reference internal image-reference" href="_images/scholar_options_selection.png"><img alt="_images/scholar_options_selection.png" class="bg-primary mb-1 align-center" src="_images/scholar_options_selection.png" style="width: 200px;" /></a>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/scholar_options_selection.png"><img alt="_images/scholar_options_selection.png" class="bg-primary mb-1 align-center" src="_images/scholar_options_selection.png" style="width: 200px;" />
+</a>
 <p>Select <code class="docutils literal notranslate"><span class="pre">Show</span> <span class="pre">links</span> <span class="pre">to</span> <span class="pre">import</span> <span class="pre">citations</span> <span class="pre">into</span> <span class="pre">BibTeX</span></code></p>
-<a class="bg-primary mb-1 reference internal image-reference" href="_images/scholar_options_bibtex.png"><img alt="_images/scholar_options_bibtex.png" class="bg-primary mb-1 align-center" src="_images/scholar_options_bibtex.png" style="width: 300px;" /></a>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/scholar_options_bibtex.png"><img alt="_images/scholar_options_bibtex.png" class="bg-primary mb-1 align-center" src="_images/scholar_options_bibtex.png" style="width: 300px;" />
+</a>
 <p>An <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">into</span> <span class="pre">BibTeX</span></code> link appears below the linked article:</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="_images/scholar_options_bibtex_link.png"><img alt="_images/scholar_options_bibtex_link.png" class="bg-primary mb-1 align-center" src="_images/scholar_options_bibtex_link.png" style="width: 500px;" /></a>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/scholar_options_bibtex_link.png"><img alt="_images/scholar_options_bibtex_link.png" class="bg-primary mb-1 align-center" src="_images/scholar_options_bibtex_link.png" style="width: 500px;" />
+</a>
 <p>Download the bib file or save the content to a file named:</p>
 <p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1.bib</span></code></p>
 <p>Open the file and change the key, such that it matches the folder name:</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="_images/bibtex_key.png"><img alt="_images/bibtex_key.png" class="bg-primary mb-1 align-center" src="_images/bibtex_key.png" style="width: 550px;" /></a>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/bibtex_key.png"><img alt="_images/bibtex_key.png" class="bg-primary mb-1 align-center" src="_images/bibtex_key.png" style="width: 550px;" />
+</a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fix any typos in the title and other entries if necessary.</p>
@@ -152,19 +155,19 @@ Traceback (most recent call last):
   File &quot;/usr/share/miniconda3/envs/test/bin/svgdigitizer&quot;, line 8, in &lt;module&gt;
     sys.exit(cli())
              ^^^^^
-  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1157, in __call__
+  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1161, in __call__
     return self.main(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1078, in main
+  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1082, in main
     rv = self.invoke(ctx)
          ^^^^^^^^^^^^^^^^
-  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1688, in invoke
+  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1697, in invoke
     return _process_result(sub_ctx.command.invoke(sub_ctx))
                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1434, in invoke
+  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 1443, in invoke
     return ctx.invoke(self.callback, **ctx.params)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 783, in invoke
+  File &quot;/usr/share/miniconda3/envs/test/lib/python3.11/site-packages/click/core.py&quot;, line 788, in invoke
     return __callback(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 567, in paginate
@@ -200,7 +203,8 @@ Therefore, create a copy of the SVG file of page two (<code class="docutils lite
 </div>
 <p><strong>2: Annotate the SVG and curve tracing</strong></p>
 <p>In principle, the SVG is annotated and the curve is traced in the same way as described in the <a class="reference internal" href="usage.html"><span class="std std-doc">usage</span></a> section. A few additional notes are provide below the <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a>.</p>
-<a class="bg-primary mb-1 reference internal image-reference" href="_images/inkscape_final.png"><img alt="_images/inkscape_final.png" class="bg-primary mb-1 align-center" src="_images/inkscape_final.png" style="width: 550px;" /></a>
+<a class="bg-primary mb-1 reference internal image-reference" href="_images/inkscape_final.png"><img alt="_images/inkscape_final.png" class="bg-primary mb-1 align-center" src="_images/inkscape_final.png" style="width: 550px;" />
+</a>
 <p>Some remarks on the specific annotations:</p>
 <ul class="simple">
 <li><p>The units on the x-axis must be equivalent to a voltage <code class="docutils literal notranslate"><span class="pre">U</span></code> given in units of <code class="docutils literal notranslate"><span class="pre">V</span></code> and those on the y-axis equivalent to current <code class="docutils literal notranslate"><span class="pre">I</span></code> in units of <code class="docutils literal notranslate"><span class="pre">A</span></code> or current density <code class="docutils literal notranslate"><span class="pre">j</span></code> in units of <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">/</span> <span class="pre">m2</span></code>.</p></li>

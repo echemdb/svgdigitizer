@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,22 +7,18 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Command Line Interface &mdash; svgdigitizer 0.12.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
       <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=61ccb1f1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/design-tabs.js?v=f930bc37"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=61ccb1f1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -216,7 +214,8 @@ Options:
 <section id="id2">
 <h3>Examples<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>Consider the following skewed plot.</p>
-<a class="reference internal image-reference" href="_images/example_plot_p0.png"><img alt="_images/example_plot_p0.png" class="align-center" src="_images/example_plot_p0.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="_images/example_plot_p0.png"><img alt="_images/example_plot_p0.png" class="align-center" src="_images/example_plot_p0.png" style="width: 500px;" />
+</a>
 <p>An unskewed digitized CSV can be created with</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -228,7 +227,7 @@ Options:
 <p>The CSV can, for example, be imported as a pandas dataframe to create a plot.</p>
 <div class="cell tag_remove-stdout tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./files/others/example_plot_p0_demo_digitize.csv&#39;</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
@@ -239,7 +238,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/d16593ad114f94053ed0ded813ba1e7aa8577f8a559b8e1753b068280aed5dcd.png" src="_images/d16593ad114f94053ed0ded813ba1e7aa8577f8a559b8e1753b068280aed5dcd.png" />
+<img alt="_images/55cfb032b9c3dac1a145e572589dac064372ad7350023903593b40e010e9f288.png" src="_images/55cfb032b9c3dac1a145e572589dac064372ad7350023903593b40e010e9f288.png" />
 </div>
 </div>
 <p>The resulting plot indicates that only the nodes of the spline were connected. To improve the tracing use the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
@@ -258,7 +257,7 @@ Options:
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./files/others/example_plot_p0_demo_digitize.csv&#39;</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
@@ -270,7 +269,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/b03085ec7af9eb1beb54dac49f35d134266eb3152ddaf1d21e15ec8092ac206d.png" src="_images/b03085ec7af9eb1beb54dac49f35d134266eb3152ddaf1d21e15ec8092ac206d.png" />
+<img alt="_images/bf6d44b7520cb218023a3264645e8e7f9a8f1844102ab19a2681879af7cff745.png" src="_images/bf6d44b7520cb218023a3264645e8e7f9a8f1844102ab19a2681879af7cff745.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -363,7 +362,8 @@ Options:
 <section id="id5">
 <h3>Examples<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>Consider the following figure where the annotated <a class="reference download internal" download="" href="_downloads/846d047f351becb5276d379bdfa9a153/looping_scan_rate.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(looping_scan_rate.svg)</span></code></a> contains a scan rate.</p>
-<a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" />
+</a>
 <p>Digitize the figure with</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
@@ -385,7 +385,7 @@ Options:
 <span class="expanded">Hide code cell source</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate.csv&#39;</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;distance [m]&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;height [m]&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -397,7 +397,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;distance [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/2b757ed95ea9c37e5c26a87228b3b4510be1f7bcf156ccbb5709e66b74fa3887.png" src="_images/2b757ed95ea9c37e5c26a87228b3b4510be1f7bcf156ccbb5709e66b74fa3887.png" />
+<img alt="_images/2bde0ae65451a80447efcca3982e4045f271dd59e6fd8b8581431ca124397799.png" src="_images/2bde0ae65451a80447efcca3982e4045f271dd59e6fd8b8581431ca124397799.png" />
 </div>
 </div>
 </section>
@@ -451,7 +451,8 @@ Options:
 <section id="id6">
 <h3>Examples<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <p>An annotated example <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span></code></a> is shown in the following figure.</p>
-<a class="reference internal image-reference" href="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png"><img alt="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" src="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png"><img alt="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" src="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" style="width: 400px;" />
+</a>
 <p>which can be digitzed via</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
@@ -476,7 +477,8 @@ Options:
 <h3><code class="docutils literal notranslate"><span class="pre">--metadata</span></code><a class="headerlink" href="#metadata" title="Link to this heading"></a></h3>
 <p>The flag <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> allows adding metadata to the resource of the datapackage from a yaml file. It is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code>, such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command.</p>
 <p>Consider the following figure where the annotated <a class="reference download internal" download="" href="_downloads/846d047f351becb5276d379bdfa9a153/looping_scan_rate.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(looping_scan_rate.svg)</span></code></a>.</p>
-<a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" />
+</a>
 <p>We collect additional metadata in a <a class="reference download internal" download="" href="_downloads/12edb710eab417e1a24d90966dc04417/looping_scan_rate_yaml.yaml"><code class="xref download docutils literal notranslate"><span class="pre">YAML</span> <span class="pre">file</span> <span class="pre">(looping_scan_rate_yaml.yaml)</span></code></a> describing the underlying “experiment”.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
@@ -493,7 +495,7 @@ Options:
 <p>The metadata from the YAML is included in the JSON of the resulting datapackage and is accessible with a JSON loader</p>
 <div class="cell tag_output_scroll docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate_yaml.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="n">metadata</span>
@@ -537,7 +539,7 @@ Options:
 <p>or directly with the frictionless interface</p>
 <div class="cell tag_output_scroll docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frictionless</span> <span class="kn">import</span> <span class="n">Package</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">frictionless</span><span class="w"> </span><span class="kn">import</span> <span class="n">Package</span>
 <span class="n">package</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate_yaml.json&#39;</span><span class="p">)</span>
 <span class="n">package</span>
 </pre></div>
@@ -624,7 +626,7 @@ Options:
 <p>The bib file content is included in the resulting JSON of the datapackge</p>
 <div class="cell tag_output_scroll docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">frictionless</span> <span class="kn">import</span> <span class="n">Package</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">frictionless</span><span class="w"> </span><span class="kn">import</span> <span class="n">Package</span>
 <span class="n">package</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s1">&#39;./files/others/looping_scan_rate_bib.json&#39;</span><span class="p">)</span>
 <span class="n">package</span>
 </pre></div>
