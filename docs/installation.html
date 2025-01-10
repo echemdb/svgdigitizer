@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; svgdigitizer 0.12.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
       <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
@@ -145,17 +145,26 @@ svgdigitizer<span class="w"> </span>--help
 </section>
 <section id="install-with-pip-for-development">
 <h2>Install with pip for development<a class="headerlink" href="#install-with-pip-for-development" title="Link to this heading"></a></h2>
-<p>If you want to work on the svgdigitizer itself, get a copy of the latest
-unreleased version of the svgdigitizer:</p>
+<p>If you want to work on the svgdigitizer itself, install <a class="reference external" href="https://pixi.sh">pixi</a>
+and get a copy of the latest unreleased version of the svgdigitizer:</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/echemdb/svgdigitizer.git
+<span class="nb">cd</span><span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
-<p>Create an <a class="reference external" href="https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs">editable</a> install of the svgdigitizer:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>svgdigitizer
+<p>To launch the svgdigitizer, run</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>run<span class="w"> </span>svgdigitizer
 </pre></div>
 </div>
 <p>Any changes you make to the files in your local copy of the svgdigitizer should
 now be available in your next Python session.</p>
+<p>To build the documentation locally, run</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>run<span class="w"> </span>doc
+</pre></div>
+</div>
+<p>and to run all doctests, run</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pixi<span class="w"> </span>run<span class="w"> </span>doctest
+</pre></div>
+</div>
 <p>We would love to see your contribution to the svgdigitizer.</p>
 </section>
 </section>

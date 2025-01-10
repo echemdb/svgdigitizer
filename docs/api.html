@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API &mdash; svgdigitizer 0.12.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
       <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
@@ -111,8 +111,8 @@ The following provides a brief description of the connection between the modules
 <p>First create an <a class="reference internal" href="api/svg.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">SVG</span></code></span></a> object from which you can query certain objects such as the curve.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 <span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1"> &lt;svg&gt;</span>
 <span class="s1">   &lt;g&gt;</span>
@@ -125,6 +125,12 @@ The following provides a brief description of the connection between the modules
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/svgpathtools/path.py:47: SyntaxWarning: invalid escape sequence &#39;\.&#39;
+  FLOAT_RE = re.compile(&quot;[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?&quot;)
+/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/svgpathtools/path.py:1397: SyntaxWarning: invalid escape sequence &#39;\D&#39;
+  &quot;&quot;&quot;
+</pre></div>
+</div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[Path &quot;curve: 0&quot;]]
 </pre></div>
 </div>
@@ -136,9 +142,9 @@ labels grouped with points determining the coordinate system, and (optionally) a
 From this object one can extract the data as pandas dataframe, get axis labels or create a plot.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svgplot</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVGPlot</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 <span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">&lt;svg&gt;</span>
 <span class="s1">  &lt;g&gt;</span>
@@ -213,10 +219,10 @@ From this object one can extract the data as pandas dataframe, get axis labels o
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svgplot</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVGPlot</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svgfigure</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVGFigure</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">svgdigitizer.svg</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgplot</span> <span class="kn">import</span> <span class="n">SVGPlot</span>
+<span class="kn">from</span> <span class="nn">svgdigitizer.svgfigure</span> <span class="kn">import</span> <span class="n">SVGFigure</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 <span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">&lt;svg&gt;</span>
 <span class="s1">  &lt;g&gt;</span>
@@ -247,7 +253,11 @@ From this object one can extract the data as pandas dataframe, get axis labels o
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/220f584d76de4450c06f60daabf6187ec523ab6f06decacd4bad3f0a9c8a77e9.png" src="_images/220f584d76de4450c06f60daabf6187ec523ab6f06decacd4bad3f0a9c8a77e9.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/stringcase.py:247: SyntaxWarning: invalid escape sequence &#39;\W&#39;
+  return re.sub(&quot;\W+&quot;, &quot;&quot;, string)
+</pre></div>
+</div>
+<img alt="_images/04c9cc4a25930cd1c24077f54f54d21c358e351db3c5b78499dbcbc7a2497baa.png" src="_images/04c9cc4a25930cd1c24077f54f54d21c358e351db3c5b78499dbcbc7a2497baa.png" />
 </div>
 </div>
 </section>
