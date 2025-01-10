@@ -12,7 +12,7 @@
 <p align="center">Extract (x,y) data points from SVG files</p>
 <hr>
 
-<p align="center"><img src="https://github.com/user-attachments/assets/e8c194f1-6061-43b5-871e-7498e7f76414" width="80%">
+<p align="center"><img src="https://github.com/user-attachments/assets/4a56eae4-62f1-4466-a70a-dddba1c78216" width="80%">
   
 The `svgdigitizer` allows recovering data from a curve in a figure, plotted in a 2D coordinate system, which is usually found in scientific publications.
 The data is accessible either with a command line interface or the API from a specifically prepared scaled vector graphics (SVG) file. The data can be stored as a [frictionless datapackage](https://frictionlessdata.io/) (CSV and JSON) which can be used with [unitpackage](https://echemdb.github.io/unitpackage/) to access the plots metadata or create a database of such datapackages.
