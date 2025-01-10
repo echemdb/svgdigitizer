@@ -2,7 +2,7 @@ r"""
 Reconstructs scientific plots with units and allows reconstructing a
 time axis.
 In principle the class :class:`SVGFigure` adds more functionality than
-the class :class:`SVGPlot`.
+the class :class:`~svgdigitizer.svgplot.SVGPlot`.
 
 A detailed description of different kinds of plots can be found
 in the :doc:`documentation </usage>`.

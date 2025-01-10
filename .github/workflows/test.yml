@@ -12,147 +12,116 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: ["3.9", "3.10", "3.11", "3.12"]
+        environment: ["python-39", "python-310", "python-311", "python-312"]
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
-        source: ["conda", "pip"]
     steps:
       - name: checkout
         uses: actions/checkout@v3
         with: { submodules: recursive }
-      - name: setup conda environment
-        uses: conda-incubator/setup-miniconda@v2
+      - uses: prefix-dev/setup-pixi@v0.8.1
         with:
-          python-version: "${{ matrix.python }}"
-          miniforge-variant: Miniforge3
-      - name: install dependencies
-        shell: bash -l {0}
-        run: |
-          mamba env update --quiet -n test -f environment.yml
-          conda list
-        if: ${{ matrix.source == 'conda' }}
-      - name: install svgdigitizer
-        shell: bash -l {0}
-        run: |
-          pip install --no-dependencies .
-        if: ${{ matrix.source == 'conda' }}
-      - name: install svgdigitizer
-        shell: bash -l {0}
-        run: |
-          pip install .
-        if: ${{ matrix.source == 'pip' }}
+          pixi-version: v0.28.2
       - name: doctest
-        shell: bash -l {0}
-        run: |
-          pytest --doctest-modules svgdigitizer
-        if: ${{ matrix.source == 'conda' }}
-        # Disable testing readme with byexample (see #187)
-        # - name: byexample
-        #   shell: bash -l {0}
-        #   run: |
-        #     mamba install -y byexample
-        #     # byexample -l shell,python -o +norm-ws --timeout=30 README.md
-        ## byexample is not available for Windows
-        ## the exact numerical output of commands differs between Linux & macOS
-        # if: ${{ matrix.os == 'ubuntu-latest' && matrix.source == 'conda' }}
+        run: pixi run -e ${{ matrix.environment }} doctest
       - name: cli-digitize-xy
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer digitize test/data/xy.svg
+          pixi run -e ${{ matrix.environment }} svgdigitizer digitize test/data/xy.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy.csv"), pandas.read_csv("test/data/xy.csv.expected"))'
       - name: cli-digitize-scaling-factor
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer digitize test/data/scaling_factor.svg
+          pixi run -e ${{ matrix.environment }} svgdigitizer digitize test/data/scaling_factor.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/scaling_factor.csv"), pandas.read_csv("test/data/scaling_factor.csv.expected"))'
       - name: cli-digitize-x_and_y_scale_bar
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer digitize test/data/x_and_y_scale_bar.svg
+          pixi run -e ${{ matrix.environment }} svgdigitizer digitize test/data/x_and_y_scale_bar.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/x_and_y_scale_bar.csv"), pandas.read_csv("test/data/x_and_y_scale_bar.csv.expected"))'
       - name: cli-digitize-sampling-interval
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer digitize test/data/sampling.svg --sampling-interval .00101
+          pixi run -e ${{ matrix.environment }} svgdigitizer digitize test/data/sampling.svg --sampling-interval .00101
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling.csv"), pandas.read_csv("test/data/sampling.csv.expected"))'
       - name: cli-digitize-sampling-many-points
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer digitize test/data/sampling_many_points.svg --sampling-interval .001508
+          pixi run -e ${{ matrix.environment }} svgdigitizer digitize test/data/sampling_many_points.svg --sampling-interval .001508
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/sampling_many_points.csv"), pandas.read_csv("test/data/sampling_many_points.csv.expected"))'
       - name: cli-digitize-svg-without-layer
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer digitize test/data/svg_without_layer.svg
+          pixi run -e ${{ matrix.environment }} svgdigitizer digitize test/data/svg_without_layer.svg
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/svg_without_layer.csv"), pandas.read_csv("test/data/svg_without_layer.csv.expected"))'
       - name: cli-cv-xy-rate
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/xy_rate.svg --metadata test/data/xy_rate.yaml --si-units
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/xy_rate.svg --metadata test/data/xy_rate.yaml --si-units
           git diff --no-index --word-diff -- test/data/xy_rate.json test/data/xy_rate.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate.csv"), pandas.read_csv("test/data/xy_rate.csv.expected"))'
       - name: cli-cv-xy-rate-without-metadata
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/xy_rate_without_metadata.svg --si-units
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/xy_rate_without_metadata.svg --si-units
           git diff --no-index --word-diff -- test/data/xy_rate_without_metadata.json test/data/xy_rate_without_metadata.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata.csv"), pandas.read_csv("test/data/xy_rate_without_metadata.csv.expected"))'
       - name: cli-cv-xy-rate-reference
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml --si-units
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/xy_rate_reference.svg --metadata test/data/xy_rate_reference.yaml --si-units
           git diff --no-index --word-diff -- test/data/xy_rate_reference.json test/data/xy_rate_reference.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference.csv"), pandas.read_csv("test/data/xy_rate_reference.csv.expected"))'
       - name: cli-cv-cv-comment
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/cv_comment.svg --metadata test/data/cv_comment.yaml --si-units
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/cv_comment.svg --metadata test/data/cv_comment.yaml --si-units
           git diff --no-index --word-diff -- test/data/cv_comment.json test/data/cv_comment.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/cv_comment.csv"), pandas.read_csv("test/data/cv_comment.csv.expected"))'
       - name: cli-cv-xy-rate-without-metadata-skewed
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/xy_rate_without_metadata_skewed.svg --skewed --si-units
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/xy_rate_without_metadata_skewed.svg --skewed --si-units
           git diff --no-index --word-diff -- test/data/xy_rate_without_metadata_skewed.json test/data/xy_rate_without_metadata_skewed.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv"), pandas.read_csv("test/data/xy_rate_without_metadata_skewed.csv.expected"))'
-      - name: cli-cv-axes-orientation
-        shell: bash -l {0}
+      - name: cli-cv-axes_orientation
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/axes_orientation.svg --si-units
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/axes_orientation.svg --si-units
           git diff --no-index --word-diff -- test/data/axes_orientation.json test/data/axes_orientation.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/axes_orientation.csv"), pandas.read_csv("test/data/axes_orientation.csv.expected"))'
       - name: cli-cv-bibliography
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/cv_bibliography.svg --metadata test/data/cv_bibliography.yaml --si-units --bibliography
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/cv_bibliography.svg --metadata test/data/cv_bibliography.yaml --si-units --bibliography
           git diff --no-index --word-diff -- test/data/cv_bibliography.json test/data/cv_bibliography.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/cv_bibliography.csv"), pandas.read_csv("test/data/cv_bibliography.csv.expected"))'
       - name: cli-cv-package-no-bibliography
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/package_no_bibliography.svg --metadata test/data/package_no_bibliography.yaml --si-units --bibliography
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/package_no_bibliography.svg --metadata test/data/package_no_bibliography.yaml --si-units --bibliography
           git diff --no-index --word-diff -- test/data/package_no_bibliography.json test/data/package_no_bibliography.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package_no_bibliography.csv"), pandas.read_csv("test/data/package_no_bibliography.csv.expected"))'
       - name: cli-figure-bibliography
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer figure test/data/figure_bibliography.svg --metadata test/data/figure_bibliography.yaml --si-units --bibliography
+          pixi run -e ${{ matrix.environment }} svgdigitizer figure test/data/figure_bibliography.svg --metadata test/data/figure_bibliography.yaml --si-units --bibliography
           git diff --no-index --word-diff -- test/data/figure_bibliography.json test/data/figure_bibliography.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_bibliography.csv"), pandas.read_csv("test/data/figure_bibliography.csv.expected"))'
       - name: cli-cv-package-no-bibliography
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/package_no_bibliography.svg --metadata test/data/package_no_bibliography.yaml --si-units --bibliography
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/package_no_bibliography.svg --metadata test/data/package_no_bibliography.yaml --si-units --bibliography
           git diff --no-index --word-diff -- test/data/package_no_bibliography.json test/data/package_no_bibliography.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/package_no_bibliography.csv"), pandas.read_csv("test/data/package_no_bibliography.csv.expected"))'
       - name: cli-cv-xy-rate-reference-no-si
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer cv test/data/xy_rate_reference_no_si.svg --metadata test/data/xy_rate_reference_no_si.yaml
+          pixi run -e ${{ matrix.environment }} svgdigitizer cv test/data/xy_rate_reference_no_si.svg --metadata test/data/xy_rate_reference_no_si.yaml
           git diff --no-index --word-diff -- test/data/xy_rate_reference_no_si.json test/data/xy_rate_reference_no_si.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/xy_rate_reference_no_si.csv"), pandas.read_csv("test/data/xy_rate_reference_no_si.csv.expected"))'
       - name: cli-figure-figure-comment
-        shell: bash -l {0}
+        shell: pixi run bash -e {0}
         run: |
-          svgdigitizer figure test/data/figure_comment.svg --metadata test/data/figure_comment.yaml
+          pixi run -e ${{ matrix.environment }} svgdigitizer figure test/data/figure_comment.svg --metadata test/data/figure_comment.yaml
           git diff --no-index --word-diff -- test/data/figure_comment.json test/data/figure_comment.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_comment.csv"), pandas.read_csv("test/data/figure_comment.csv.expected"))'
