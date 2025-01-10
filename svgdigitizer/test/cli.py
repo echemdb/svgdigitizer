@@ -8,7 +8,7 @@ scenarios so we wrap it in more convenient ways here.
 # *********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021 Julian Rüth
+#        Copyright (C) 2021-2024 Julian Rüth
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -29,18 +29,20 @@ def invoke(command, *args):
     r"""
     Invoke the click ``command`` with the given list of string arguments.
 
-    >>> import click
-    >>> @click.command()
-    ... def hello(): print("Hello World")
-    >>> invoke(hello)
-    Hello World
+    EXAMPLES::
 
-    >>> @click.command()
-    ... def fails(): raise Exception("expected error")
-    >>> invoke(fails)
-    Traceback (most recent call last):
-    ...
-    Exception: expected error
+        >>> import click
+        >>> @click.command()
+        ... def hello(): print("Hello World")
+        >>> invoke(hello)
+        Hello World
+
+        >>> @click.command()
+        ... def fails(): raise Exception("expected error")
+        >>> invoke(fails)
+        Traceback (most recent call last):
+        ...
+        Exception: expected error
 
     """
     from click.testing import CliRunner
