@@ -20,7 +20,7 @@ jobs:
         with: { submodules: recursive }
       - uses: prefix-dev/setup-pixi@v0.8.1
         with:
-          pixi-version: v0.28.2
+          pixi-version: v0.39.5
       - name: doctest
         run: pixi run -e ${{ matrix.environment }} doctest
       - name: cli-digitize-xy
