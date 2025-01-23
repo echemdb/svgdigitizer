@@ -10,7 +10,7 @@ description = "svgdigitizer is a Python library and command line tool to recover
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "astropy>=5,<7",
+    "astropy>=5,<8",
     "click>=8,<9",
     "frictionless>=5.8.3,<6",
     "matplotlib>=3.5,<4",
