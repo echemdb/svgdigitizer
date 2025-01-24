@@ -46,6 +46,7 @@ python-39 = ["test", "python-39"]
 python-310 = ["test", "python-310"]
 python-311 = ["test", "python-311"]
 python-312 = ["test", "python-312"]
+python-313 = ["test", "python-313"]
 dev = ["dev", "doc", "test", "lint"]
 
 [tool.pixi.dependencies]
@@ -83,6 +84,9 @@ python = "3.11"
 
 [tool.pixi.feature.python-312.dependencies]
 python = "3.12"
+
+[tool.pixi.feature.python-313.dependencies]
+python = "3.13"
 
 [tool.pixi.feature.test.dependencies]
 pytest = "*"
