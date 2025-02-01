@@ -117,7 +117,7 @@ class SVGFigure:
 
     The original units in turn can be retrieved from the figure schema
 
-        >>> figure_si.figure_schema
+        >>> figure_si.figure_schema  # doctest: +NORMALIZE_WHITESPACE
         {'fields': [{'name': 'T', 'type': 'number', 'unit': 'mK', 'orientation': 'horizontal'},
                     {'name': 'j',
                      'type': 'number',

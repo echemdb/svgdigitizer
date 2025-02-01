@@ -1956,7 +1956,7 @@ class SVGPlot:
             ...   </g>
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
-            >>> plot.figure_schema
+            >>> plot.figure_schema  # doctest: +NORMALIZE_WHITESPACE
             {'fields': [{'name': 't', 'type': 'number', 'unit': None, 'orientation': 'horizontal'},
                         {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'vertical'}]}
 
