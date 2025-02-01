@@ -32,7 +32,6 @@
                         "curve": "blue"
                     },
                     "figure description": {
-                        "version": 1,
                         "type": "digitized",
                         "simultaneous measurements": [],
                         "measurement type": "custom",
@@ -41,19 +40,18 @@
                                 "name": "d",
                                 "type": "number",
                                 "unit": "m",
-                                "orientation": "x"
+                                "orientation": "horizontal"
                             },
                             {
                                 "name": "h",
                                 "type": "number",
                                 "unit": "m",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": ""
                     },
                     "data description": {
-                        "version": 1,
                         "type": "digitized",
                         "measurement type": "custom"
                     }
