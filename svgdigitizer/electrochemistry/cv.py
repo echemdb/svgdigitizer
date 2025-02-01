@@ -151,16 +151,14 @@ class CV(SVGFigure):
         >>> cv.metadata  == \
         ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
         ...  'source': {'figure': '2b', 'curve': 'solid'},
-        ...  'figure description': {'version': 1,
-        ...                         'type': 'digitized',
+        ...  'figure description': {'type': 'digitized',
         ...                         'simultaneous measurements': ['SXRD', 'SHG'],
         ...                         'measurement type': 'CV',
         ...                         'scan rate': {'value': 50.0, 'unit': 'V / s'},
-        ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'x', 'reference': 'RHE', 'type': 'number'},
-        ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y', 'type': 'number'}],
+        ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'horizontal', 'reference': 'RHE', 'type': 'number'},
+        ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'vertical', 'type': 'number'}],
         ...                         'comment': 'noisy data'},
-        ...  'data description': {'version': 1,
-        ...                       'type': 'digitized',
+        ...  'data description': {'type': 'digitized',
         ...                       'measurement type': 'CV',
         ...                       'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
         ...                                  {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
@@ -323,8 +321,8 @@ class CV(SVGFigure):
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.figure_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'x', 'reference': 'RHE'},
-                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'horizontal', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'vertical'}]}
 
         """
         import re

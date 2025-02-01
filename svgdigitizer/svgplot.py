@@ -1957,8 +1957,8 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.figure_schema
-            {'fields': [{'name': 't', 'type': 'number', 'unit': None, 'orientation': 'x'},
-                        {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'y'}]}
+            {'fields': [{'name': 't', 'type': 'number', 'unit': None, 'orientation': 'horizontal'},
+                        {'name': 'y', 'type': 'number', 'unit': None, 'orientation': 'vertical'}]}
 
         """
         from frictionless import Pipeline, Resource, steps
@@ -1968,8 +1968,8 @@ class SVGPlot:
         resource.infer()
 
         orientations = {
-            "horizontal": "x",
-            "vertical": "y",
+            "horizontal": "horizontal",
+            "vertical": "vertical",
         }
 
         pipeline = Pipeline(

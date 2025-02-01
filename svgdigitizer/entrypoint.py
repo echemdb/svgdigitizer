@@ -465,7 +465,7 @@ def _create_package(metadata, csvname, outdir):
         )
 
     resource.schema = Schema.from_descriptor({"fields": new_fields})
-    del resource.custom["metadata"]["echemdb"]["data description"]["fields"]
+    del resource.custom["metadata"]["echemdb"]["data description"]
 
     return package
 

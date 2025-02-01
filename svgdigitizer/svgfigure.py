@@ -118,11 +118,11 @@ class SVGFigure:
     The original units in turn can be retrieved from the figure schema
 
         >>> figure_si.figure_schema
-        {'fields': [{'name': 'T', 'type': 'number', 'unit': 'mK', 'orientation': 'x'},
+        {'fields': [{'name': 'T', 'type': 'number', 'unit': 'mK', 'orientation': 'horizontal'},
                     {'name': 'j',
                      'type': 'number',
                      'unit': 'uA / cm2',
-                     'orientation': 'y'}]}
+                     'orientation': 'vertical'}]}
 
     """
 
@@ -1342,8 +1342,8 @@ class SVGFigure:
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
             >>> figure.figure_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'x'},
-                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'horizontal'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'vertical'}]}
 
         A plot without axis units::
 
@@ -1376,8 +1376,8 @@ class SVGFigure:
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
             >>> figure.figure_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'type': 'number', 'unit': '', 'orientation': 'x'},
-                        {'name': 'j', 'type': 'number', 'unit': '', 'orientation': 'y'}]}
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': '', 'orientation': 'horizontal'},
+                        {'name': 'j', 'type': 'number', 'unit': '', 'orientation': 'vertical'}]}
 
 
         """
@@ -1549,15 +1549,14 @@ class SVGFigure:
             >>> figure.metadata == \
             ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
             ...  'source': {'figure': '2b', 'curve': '0'},
-            ...  'figure description': {'version': 1,
-            ...  'type': 'digitized',
+            ...  'figure description': {'type': 'digitized',
             ...  'measurement type': 'custom',
-            ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'x', 'unit': 'mV'},
-            ...             {'name': 'j', 'type': 'number', 'orientation': 'y', 'unit': 'uA / cm2'}],
+            ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'horizontal', 'unit': 'mV'},
+            ...             {'name': 'j', 'type': 'number', 'orientation': 'vertical', 'unit': 'uA / cm2'}],
             ...  'comment': 'noisy data',
             ...  'scan rate': {'value': 50.0, 'unit': 'V / s'},
             ...  'simultaneous measurements': ['SXRD', 'SHG']},
-            ...  'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'custom', 'fields':
+            ...  'data description': {'type': 'digitized', 'measurement type': 'custom', 'fields':
             ...                       [{'name': 'E', 'type': 'number', 'unit': 'mV'},
             ...                       {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'},
             ...                       {'name': 't', 'type': 'number', 'unit': 's'}]}}
@@ -1600,14 +1599,13 @@ class SVGFigure:
             >>> figure.metadata == \
             ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
             ...  'source': {'figure': '2b', 'curve': '0'},
-            ...  'figure description': {'version': 1,
-            ...  'type': 'digitized',
+            ...  'figure description': {'type': 'digitized',
             ...  'measurement type': 'custom',
-            ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'x', 'unit': 'mV'},
-            ...             {'name': 'j', 'type': 'number', 'orientation': 'y', 'unit': 'uA / cm2'}],
+            ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'horizontal', 'unit': 'mV'},
+            ...             {'name': 'j', 'type': 'number', 'orientation': 'vertical', 'unit': 'uA / cm2'}],
             ...  'comment': 'noisy data',
             ...  'simultaneous measurements': ['SXRD', 'SHG']},
-            ...  'data description': {'version': 1, 'type': 'digitized', 'measurement type': 'custom', 'fields':
+            ...  'data description': {'type': 'digitized', 'measurement type': 'custom', 'fields':
             ...                       [{'name': 'E', 'type': 'number', 'unit': 'mV'},
             ...                       {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}}
             True
@@ -1622,7 +1620,6 @@ class SVGFigure:
                 "curve": self.curve_label,
             },
             "figure description": {
-                "version": 1,
                 "type": "digitized",
                 "simultaneous measurements": self.simultaneous_measurements,
                 "measurement type": self.measurement_type,
@@ -1630,7 +1627,6 @@ class SVGFigure:
                 "comment": self.comment,
             },
             "data description": {
-                "version": 1,
                 "type": "digitized",
                 "measurement type": self.measurement_type,
                 "fields": self.data_schema.to_dict()["fields"],
