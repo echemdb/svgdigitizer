@@ -23,6 +23,10 @@ jobs:
           pixi-version: v0.39.5
       - name: doctest
         run: pixi run -e ${{ matrix.environment }} doctest
+      - name: Validate Data Package Metdata
+        shell: bash -l {0}
+        run: |
+            check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/main/schemas/svgdigitizer_package.json --no-cache $(find ./data/generated/ -type f -name "*.json.expected")
       - name: cli-digitize-xy
         shell: pixi run bash -e {0}
         run: |
