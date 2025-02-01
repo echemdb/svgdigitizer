@@ -61,10 +61,6 @@
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "type": "digitized",
-                        "measurement type": "CV"
                     }
                 }
             }

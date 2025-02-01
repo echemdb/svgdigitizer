@@ -173,11 +173,6 @@
                             "value": 50.0,
                             "unit": "K / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "custom"
                     }
                 }
             }
