@@ -4,6 +4,15 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.12.2
+====================
+
+**Added:**
+
+* Added testing with Python 3.13.
+
+
+
 v0.12.1
 ====================
 
