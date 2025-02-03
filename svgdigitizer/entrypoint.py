@@ -564,17 +564,13 @@ def paginate(onlypng, pdf, outdir):
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
     """
-    from pdf2image import convert_from_path
+    import pymupdf
 
-    pages = convert_from_path(pdf, dpi=600)
-    pngs = [
-        _outfile(pdf, suffix=f"_p{page}.png", outdir=outdir)
-        for page in range(len(pages))
-    ]
-
-    for page, png in zip(pages, pngs):
-        page.save(png, "PNG")
-
+    doc = pymupdf.open(pdf)
+    for page_idx, page in enumerate(doc):
+        pix = page.get_pixmap(dpi=600)
+        png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
+        pix.save(png)      
         if not onlypng:
             _create_linked_svg(_outfile(png, suffix=".svg", outdir=outdir), png)
 
