@@ -570,7 +570,7 @@ def paginate(onlypng, pdf, outdir):
     for page_idx, page in enumerate(doc):
         pix = page.get_pixmap(dpi=600)
         png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
-        pix.save(png)      
+        pix.save(png)
         if not onlypng:
             _create_linked_svg(_outfile(png, suffix=".svg", outdir=outdir), png)
 
