@@ -74,19 +74,19 @@ svgdigitizer = "svgdigitizer"
 svgdigitizer = { path = ".", editable = true }
 
 [tool.pixi.feature.python-39.dependencies]
-python = "3.9"
+python = "3.9.*"
 
 [tool.pixi.feature.python-310.dependencies]
-python = "3.10"
+python = "3.10.*"
 
 [tool.pixi.feature.python-311.dependencies]
-python = "3.11"
+python = "3.11.*"
 
 [tool.pixi.feature.python-312.dependencies]
-python = "3.12"
+python = "3.12.*"
 
 [tool.pixi.feature.python-313.dependencies]
-python = "3.13"
+python = "3.13.*"
 
 [tool.pixi.feature.test.dependencies]
 pytest = "*"
