@@ -37,7 +37,6 @@
                         "curve": "blue"
                     },
                     "figure description": {
-                        "version": 1,
                         "type": "digitized",
                         "simultaneous measurements": [],
                         "measurement type": "custom",
@@ -46,13 +45,13 @@
                                 "name": "U",
                                 "type": "number",
                                 "unit": "V",
-                                "orientation": "x"
+                                "orientation": "horizontal"
                             },
                             {
                                 "name": "v",
                                 "type": "number",
                                 "unit": "m / s",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "random data",
@@ -60,11 +59,6 @@
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "custom"
                     }
                 }
             }

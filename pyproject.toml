@@ -89,10 +89,12 @@ python = "3.12.*"
 python = "3.13.*"
 
 [tool.pixi.feature.test.dependencies]
+check-jsonschema = "*"
 pytest = "*"
 pytest-xdist = "*"
 
 [tool.pixi.feature.test.tasks]
+validate = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/main/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')"
 doctest = "pytest -n auto --doctest-modules svgdigitizer"
 
 [tool.pixi.feature.lint.dependencies]

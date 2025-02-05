@@ -38,7 +38,6 @@
                         "curve": "Pt(111)_ph_1,2_KPF6"
                     },
                     "figure description": {
-                        "version": 1,
                         "type": "digitized",
                         "simultaneous measurements": [],
                         "measurement type": "CV",
@@ -47,14 +46,14 @@
                                 "name": "E",
                                 "type": "number",
                                 "unit": "V",
-                                "orientation": "x",
+                                "orientation": "horizontal",
                                 "reference": "RHE"
                             },
                             {
                                 "name": "j",
                                 "type": "number",
                                 "unit": "uA / cm2",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "Working solutions of the pH-series with values lower than 3 were prepared by using HClO4 and KClO4. For pH values ranging from 3 to 9, phosphate buffer solutions were employed (Na2HPO4 and NaH2PO4). Alkaline solutions were prepared with NaOH and KClO4. The exact concentrations of these components are unkown.",
@@ -62,11 +61,6 @@
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "CV"
                     }
                 }
             }
