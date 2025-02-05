@@ -4,6 +4,19 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.12.3
+====================
+
+**Added:**
+
+* Added tests for validating output datapackages against echemdb's svgdigitizer Data Package schema.
+
+**Removed:**
+
+* Removed key `data description` from output Data Package, since the information is included in the key `figure description`.
+
+
+
 v0.12.2
 ====================
 
