@@ -361,9 +361,9 @@ package = Package('./files/others/looping_scan_rate.json')
 package
 ```
 
-Alternatively use the [`unitpackage` module](https://echemdb.github.io/unitpackage/), which is specifically designed for datapackages with additional metadata and columns containing units. It also allows creating a database from all packages within a folder.
+Alternatively use the [`unitpackage` module](https://echemdb.github.io/unitpackage/), which is specifically designed for Data Packages describing data with units. It also allows creating a database from all packages within a folder.
 
-<!-- We do not evaluate the cell. Otherwise we would create a circular dependence between svgdigitizer and echemdb. -->
+<!-- We do not evaluate the cell. Otherwise we would create a circular dependence between svgdigitizer and unitpackage. -->
 
 ```python
 from unitpackage.local import collect_packages
