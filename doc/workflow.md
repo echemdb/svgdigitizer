@@ -104,7 +104,7 @@ Use the [CLI](cli.md) to create SVG and PNG files from the PDF, i.e., execute th
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer paginate mustermann_2021_svgdigitizer_1.pdf
+!svgdigitizer paginate /files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf
 ```
 
 The resulting filenames are of the form:
