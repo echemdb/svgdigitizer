@@ -2,6 +2,7 @@
 max-line-length=256
 max-module-lines=65536
 good-names=x,y,z,A,Q,t,df,cv,si
+extension-pkg-allow-list=lxml.etree
 
 [MESSAGES CONTROL]
 disable=import-outside-toplevel,too-many-arguments,logging-fstring-interpolation,use-maxsplit-arg,fixme
