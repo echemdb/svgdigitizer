@@ -506,6 +506,15 @@ def _create_linked_svg(svg, png, notemplate):
 
     This is a helper method for :meth:`paginate`.
     """
+    _create_svg(svg, png, notemplate, True)
+
+
+def _create_svg(svg, png, notemplate, linked):
+    r"""
+    Write an SVG to `svg` that shows `png` as a linked image.
+
+    This is a helper method for :meth:`paginate`.
+    """
     # pylint: disable=too-many-locals
     from PIL import Image
 
@@ -529,13 +538,27 @@ def _create_linked_svg(svg, png, notemplate):
     image_layer.set_desc(title="image-layer")
     drawing.add(image_layer)
 
-    image_layer.add(
-        svgwrite.image.Image(
-            png,
-            insert=(0, 0),
-            size=(width, height),
+    if linked:
+        image_layer.add(
+            svgwrite.image.Image(
+                png,
+                insert=(0, 0),
+                size=(width, height),
+            )
         )
-    )
+    else:
+        import base64
+
+        with open(png, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+        pngdata = f"data:image/png;base64,{encoded}"
+        image_layer.add(
+            svgwrite.image.Image(
+                href=(pngdata),
+                insert=(0, 0),
+                size=(width, height),
+            )
+        )
 
     digitization_layer = inkscape.layer(id="digitization-layer", locked=False)
 
