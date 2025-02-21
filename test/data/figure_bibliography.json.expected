@@ -151,7 +151,6 @@
                         "tags": []
                     },
                     "figure description": {
-                        "version": 1,
                         "type": "digitized",
                         "simultaneous measurements": [],
                         "measurement type": "custom",
@@ -160,13 +159,13 @@
                                 "name": "T",
                                 "type": "number",
                                 "unit": "K",
-                                "orientation": "x"
+                                "orientation": "horizontal"
                             },
                             {
                                 "name": "j",
                                 "type": "number",
                                 "unit": "uA cm-2",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "",
@@ -174,11 +173,6 @@
                             "value": 50.0,
                             "unit": "K / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "custom"
                     }
                 }
             }

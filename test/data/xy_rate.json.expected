@@ -151,7 +151,6 @@
                         "tags": []
                     },
                     "figure description": {
-                        "version": 1,
                         "type": "digitized",
                         "simultaneous measurements": [],
                         "measurement type": "CV",
@@ -160,14 +159,14 @@
                                 "name": "E",
                                 "type": "number",
                                 "unit": "mV",
-                                "orientation": "x",
+                                "orientation": "horizontal",
                                 "reference": "unknown"
                             },
                             {
                                 "name": "j",
                                 "type": "number",
                                 "unit": "μA cm⁻²",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "",
@@ -175,11 +174,6 @@
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "CV"
                     }
                 }
             }

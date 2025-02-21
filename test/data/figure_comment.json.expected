@@ -150,7 +150,6 @@
                         "tags": []
                     },
                     "figure description": {
-                        "version": 1,
                         "type": "digitized",
                         "simultaneous measurements": [],
                         "measurement type": "custom",
@@ -159,13 +158,13 @@
                                 "name": "E",
                                 "type": "number",
                                 "unit": "V",
-                                "orientation": "x"
+                                "orientation": "horizontal"
                             },
                             {
                                 "name": "j",
                                 "type": "number",
                                 "unit": "uA cm-2",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "noisy data",
@@ -173,11 +172,6 @@
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "custom"
                     }
                 }
             }

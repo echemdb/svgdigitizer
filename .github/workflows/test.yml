@@ -22,7 +22,11 @@ jobs:
         with:
           pixi-version: v0.39.5
       - name: doctest
+        shell: pixi run bash -e {0}
         run: pixi run -e ${{ matrix.environment }} doctest
+      - name: Validate output Data Package Metadata
+        shell: pixi run bash -e {0}
+        run: pixi run -e ${{ matrix.environment }} validate
       - name: cli-digitize-xy
         shell: pixi run bash -e {0}
         run: |
