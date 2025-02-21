@@ -21,7 +21,7 @@ EXAMPLES::
 #  This file is part of svgdigitizer.
 #
 #        Copyright (C) 2021-2023 Albert Engstfeld
-#        Copyright (C)      2021 Johannes Hermann
+#        Copyright (C) 2021-2025 Johannes Hermann
 #        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
 #
@@ -500,12 +500,22 @@ def _write_metadata(out, metadata):
     out.write("\n")
 
 
-def _create_linked_svg(svg, png):
+def _create_linked_svg(svg, png, notemplate):
     r"""
     Write an SVG to `svg` that shows `png` as a linked image.
 
     This is a helper method for :meth:`paginate`.
     """
+    _create_svg(svg, png, notemplate, True)
+
+
+def _create_svg(svg, png, notemplate, linked):
+    r"""
+    Write an SVG to `svg` that shows `png` as a linked image.
+
+    This is a helper method for :meth:`paginate`.
+    """
+    # pylint: disable=too-many-locals
     from PIL import Image
 
     width, height = Image.open(png).size
@@ -520,29 +530,72 @@ def _create_linked_svg(svg, png):
 
     from svgwrite.extensions.inkscape import Inkscape
 
-    Inkscape(drawing)
+    inkscape = Inkscape(drawing)
 
-    img = drawing.add(
-        svgwrite.image.Image(
-            png,
-            insert=(0, 0),
-            size=(f"{width}px", f"{height}px"),
+    image_layer = inkscape.layer(id="image-layer", locked=True)
+    # add properties for svgedit
+    image_layer.attribs["class"] = "layer"
+    image_layer.set_desc(title="image-layer")
+    drawing.add(image_layer)
+
+    if linked:
+        image_layer.add(
+            svgwrite.image.Image(
+                png,
+                insert=(0, 0),
+                size=(width, height),
+            )
         )
-    )
+    else:
+        import base64
 
-    # workaround: add missing locking attribute for image element
-    # https://github.com/mozman/svgwrite/blob/c8cbf6f615910b3818ccf939fce0e407c9c789cb/svgwrite/extensions/inkscape.py#L50
-    elements = drawing.validator.elements
-    elements["image"].valid_attributes = {
-        "sodipodi:insensitive",
-    } | elements["image"].valid_attributes
-    img.attribs["sodipodi:insensitive"] = "true"
+        with open(png, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+        pngdata = f"data:image/png;base64,{encoded}"
+        image_layer.add(
+            svgwrite.image.Image(
+                href=(pngdata),
+                insert=(0, 0),
+                size=(width, height),
+            )
+        )
 
-    drawing.save(pretty=True)
+    digitization_layer = inkscape.layer(id="digitization-layer", locked=False)
+
+    digitization_layer.attribs["class"] = "layer"
+    digitization_layer.set_desc(title="digitization-layer")
+    drawing.add(digitization_layer)
+
+    if not notemplate:
+        import importlib_resources
+        from lxml import etree
+
+        assets = importlib_resources.files("svgdigitizer")
+        template_svg_root = etree.parse(
+            assets.joinpath("assets", "template.svg")
+        ).getroot()
+        main_root = etree.fromstring(drawing.tostring()).getroottree()
+        layer_id = "digitization-layer"
+        source_layer = template_svg_root.find(
+            f".//{{http://www.w3.org/2000/svg}}g[@id='{layer_id}']"
+        )
+        target_layer = main_root.find(
+            f".//{{http://www.w3.org/2000/svg}}g[@id='{layer_id}']"
+        )
+        if source_layer is not None and target_layer is not None:
+            for elem in source_layer:
+                target_layer.append(elem)
+        main_root.write(svg, pretty_print=True, xml_declaration=True, encoding="utf-8")
+
+    else:
+        drawing.save(pretty=True)
 
 
 @click.command()
 @click.option("--onlypng", is_flag=True, help="Only produce png files.")
+@click.option(
+    "--notemplate", is_flag=True, help="Omit template elements in svg files.."
+)
 @click.option(
     "--outdir",
     type=click.Path(file_okay=False),
@@ -550,7 +603,7 @@ def _create_linked_svg(svg, png):
     help="Write output files to this directory.",
 )
 @click.argument("pdf")
-def paginate(onlypng, pdf, outdir):
+def paginate(onlypng, notemplate, pdf, outdir):
     """
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -564,19 +617,17 @@ def paginate(onlypng, pdf, outdir):
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
     """
-    from pdf2image import convert_from_path
+    import pymupdf
 
-    pages = convert_from_path(pdf, dpi=600)
-    pngs = [
-        _outfile(pdf, suffix=f"_p{page}.png", outdir=outdir)
-        for page in range(len(pages))
-    ]
-
-    for page, png in zip(pages, pngs):
-        page.save(png, "PNG")
-
+    doc = pymupdf.open(pdf)
+    for page_idx, page in enumerate(doc):
+        pix = page.get_pixmap(dpi=600)
+        png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
+        pix.save(png)
         if not onlypng:
-            _create_linked_svg(_outfile(png, suffix=".svg", outdir=outdir), png)
+            _create_linked_svg(
+                _outfile(png, suffix=".svg", outdir=outdir), png, notemplate
+            )
 
 
 cli.add_command(plot)
