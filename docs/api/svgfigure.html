@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>svgdigitizer.svgfigure &mdash; svgdigitizer 0.12.3 documentation</title>
+  <title>svgdigitizer.svgfigure &mdash; svgdigitizer 0.12.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=56343b9b"></script>
+      <script src="../_static/documentation_options.js?v=9dbdab56"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -126,7 +126,7 @@ the class <a class="reference internal" href="svgplot.html#svgdigitizer.svgplot.
 in the <a class="reference internal" href="../usage.html"><span class="doc">documentation</span></a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgfigure.</span></span><span class="sig-name descname"><span class="pre">SVGFigure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'custom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_si_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svgfigure.</span></span><span class="sig-name descname"><span class="pre">SVGFigure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'custom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_si_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure" title="Link to this definition"></a></dt>
 <dd><p>A digitized plot derived from an SVG file,
 which provides access to the objects of the figure.</p>
 <p>Typically, the SVG input has been created by tracing a CV from
@@ -198,7 +198,7 @@ which allows reconstructing a time axis from the plot:</p>
 </pre></div>
 </div>
 <p>The original units in turn can be retrieved from the figure schema</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">figure_si</span><span class="o">.</span><span class="n">figure_schema</span>  
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">figure_si</span><span class="o">.</span><span class="n">figure_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;T&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;mK&#39;, &#39;orientation&#39;: &#39;horizontal&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;,</span>
 <span class="go">             &#39;type&#39;: &#39;number&#39;,</span>
@@ -208,7 +208,7 @@ which allows reconstructing a time axis from the plot:</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.comment">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.comment" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">comment</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.comment" title="Link to this definition"></a></dt>
 <dd><p>Return a comment describing the plot.</p>
 <p>The comment is read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> field in the SVG file such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;comment:</span> <span class="pre">noisy</span> <span class="pre">data&lt;/text&gt;</span></code>.</p>
 <p>EXAMPLES:</p>
@@ -277,14 +277,14 @@ which allows reconstructing a time axis from the plot:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.create_figure">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.create_figure" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.create_figure" title="Link to this definition"></a></dt>
 <dd><p>Creates plots for specific data such as cyclic voltammograms (CV).
 TODO:: Add description and docstring (see issue #177)</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.curve_label">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curve_label</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.curve_label" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curve_label</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.curve_label" title="Link to this definition"></a></dt>
 <dd><p>A descriptive label for this curve to distinguish it
 from other curves in the same figure.</p>
 <p>The curve label read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file
@@ -326,7 +326,7 @@ such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.data_schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_schema</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.data_schema" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_schema</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.data_schema" title="Link to this definition"></a></dt>
 <dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Field</cite> object
 describing the data generated with <a class="reference internal" href="#svgdigitizer.svgfigure.SVGFigure.df" title="svgdigitizer.svgfigure.SVGFigure.df"><code class="xref py py-meth docutils literal notranslate"><span class="pre">df()</span></code></a>.
 When the units of the axis in the columns of the <a class="reference internal" href="#svgdigitizer.svgfigure.SVGFigure.df" title="svgdigitizer.svgfigure.SVGFigure.df"><code class="xref py py-meth docutils literal notranslate"><span class="pre">df()</span></code></a> remain unchanged
@@ -365,7 +365,7 @@ to SI units.</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">data_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;V&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;}]}</span>
 </pre></div>
@@ -399,7 +399,7 @@ to SI units.</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">figure1</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">figure1</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure1</span><span class="o">.</span><span class="n">data_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;V vs. RHE&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;}]}</span>
 </pre></div>
@@ -434,7 +434,7 @@ to SI units.</p>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">figure_rate</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">figure_rate</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure_rate</span><span class="o">.</span><span class="n">data_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;V&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
@@ -470,7 +470,7 @@ to SI units.</p>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 K/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">figure_rate_si</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">),</span> <span class="n">force_si_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">figure_rate_si</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure_rate_si</span><span class="o">.</span><span class="n">data_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;T&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;K&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
@@ -480,7 +480,7 @@ to SI units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.df">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.df" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.df" title="Link to this definition"></a></dt>
 <dd><p>Return the figure as a dataframe.</p>
 <p>EXAMPLES:</p>
 <p>A simple x vs. y plot without axis units:</p>
@@ -668,7 +668,7 @@ and in SI units, where the y-axis does not have compatible astropy units:</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.figure_label">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_label</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.figure_label" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_label</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.figure_label" title="Link to this definition"></a></dt>
 <dd><p>An identifier of the plot to distinguish it from other
 figures on the same page.</p>
 <p>The figure name is read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file
@@ -707,7 +707,7 @@ such as <code class="docutils literal notranslate"><span class="pre">&lt;text&gt
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.figure_schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.figure_schema" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.figure_schema" title="Link to this definition"></a></dt>
 <dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Fields</cite> object
 describing the axis of the original plot
 including original units.</p>
@@ -741,7 +741,7 @@ including original units.</p>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">figure_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">figure_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;orientation&#39;: &#39;horizontal&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;vertical&#39;}]}</span>
 </pre></div>
@@ -775,7 +775,7 @@ including original units.</p>
 <span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span> <span class="o">=</span> <span class="n">SVGFigure</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">figure_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">figure</span><span class="o">.</span><span class="n">figure_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;&#39;, &#39;orientation&#39;: &#39;horizontal&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;&#39;, &#39;orientation&#39;: &#39;vertical&#39;}]}</span>
 </pre></div>
@@ -784,7 +784,7 @@ including original units.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.measurement_type">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measurement_type</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.measurement_type" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measurement_type</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.measurement_type" title="Link to this definition"></a></dt>
 <dd><p>A full name or acronym of the measurement shown in the plot,
 such as <cite>IR</cite>, <cite>Raman</cite>, <cite>I-U profile</cite>, …</p>
 <p>EXAMPLES:</p>
@@ -827,7 +827,7 @@ such as <cite>IR</cite>, <cite>Raman</cite>, <cite>I-U profile</cite>, …</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.metadata">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.metadata" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.metadata" title="Link to this definition"></a></dt>
 <dd><p>A dict with properties of the original figure derived from
 textlabels in the SVG file, as well as properties of the dataframe
 created with <a class="reference internal" href="#svgdigitizer.svgfigure.SVGFigure.df" title="svgdigitizer.svgfigure.SVGFigure.df"><code class="xref py py-meth docutils literal notranslate"><span class="pre">df()</span></code></a>.</p>
@@ -973,7 +973,7 @@ created with <a class="reference internal" href="#svgdigitizer.svgfigure.SVGFigu
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.scan_rate">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scan_rate</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.scan_rate" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scan_rate</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.scan_rate" title="Link to this definition"></a></dt>
 <dd><p>Return the scan rate of the plot as an astropy quantity,
 when it matches the following criteria.</p>
 <p>The rate must be a unit divided by time or simply a frequency.
@@ -1083,7 +1083,7 @@ when the x-axis unit is <cite>K</cite> the rate must be <cite>K/s</cite>.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.scan_rate_labels">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scan_rate_labels</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.scan_rate_labels" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scan_rate_labels</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.scan_rate_labels" title="Link to this definition"></a></dt>
 <dd><p>Return the scan rate of the plot.</p>
 <p>The scan rate is read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as
 <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;scan</span> <span class="pre">rate:</span> <span class="pre">50</span> <span class="pre">V</span> <span class="pre">/</span> <span class="pre">s&lt;/text&gt;</span></code>.</p>
@@ -1125,7 +1125,7 @@ when the x-axis unit is <cite>K</cite> the rate must be <cite>K/s</cite>.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.simultaneous_measurements">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simultaneous_measurements</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.simultaneous_measurements" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simultaneous_measurements</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.simultaneous_measurements" title="Link to this definition"></a></dt>
 <dd><p>A list of names of additional measurements which are plotted
 along with the digitized data in the same figure or subplot.</p>
 <p>The names are read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as
@@ -1167,7 +1167,7 @@ or simply <cite>linked</cite> are acceptable in the text field.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.tags">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.tags" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.tags" title="Link to this definition"></a></dt>
 <dd><p>A list of acronyms commonly used in the community to describe
 the measurement.</p>
 <p>The names are read from a <code class="docutils literal notranslate"><span class="pre">&lt;text&gt;</span></code> in the SVG file such as
@@ -1207,7 +1207,7 @@ the measurement.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.unit_is_astropy">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_is_astropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.unit_is_astropy" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_is_astropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.unit_is_astropy" title="Link to this definition"></a></dt>
 <dd><p>Verify if a string is a compatible astropy unit.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svgfigure</span><span class="w"> </span><span class="kn">import</span>  <span class="n">SVGFigure</span>
@@ -1225,7 +1225,7 @@ the measurement.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.xunit">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xunit</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.xunit" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xunit</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.xunit" title="Link to this definition"></a></dt>
 <dd><p>Returns the unit of the x-axis.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>
@@ -1297,7 +1297,7 @@ the measurement.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgfigure.SVGFigure.yunit">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">yunit</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.yunit" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">yunit</span></span><a class="headerlink" href="#svgdigitizer.svgfigure.SVGFigure.yunit" title="Link to this definition"></a></dt>
 <dd><p>Returns the unit of the y-axis.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>

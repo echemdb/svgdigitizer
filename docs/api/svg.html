@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>svgdigitizer.svg &mdash; svgdigitizer 0.12.3 documentation</title>
+  <title>svgdigitizer.svg &mdash; svgdigitizer 0.12.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=56343b9b"></script>
+      <script src="../_static/documentation_options.js?v=9dbdab56"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -152,7 +152,7 @@ group:</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">LabeledPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">LabeledPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath" title="Link to this definition"></a></dt>
 <dd><p>A <cite>&lt;path&gt;</cite> element in an SVG such as a trace of a plot with a text label.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
@@ -169,7 +169,7 @@ group:</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.far">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">far</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.far" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">far</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.far" title="Link to this definition"></a></dt>
 <dd><p>Return the end point of this path that is furthest away from the label.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
@@ -189,7 +189,7 @@ group:</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.path">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.path" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.path" title="Link to this definition"></a></dt>
 <dd><p>Return the path transformed to the global SVG coordinate system,
 i.e., with all <cite>transform</cite> attributes resolved.</p>
 <p>Note that we do not resolve CSS <cite>style</cite> transformations yet.</p>
@@ -237,7 +237,7 @@ i.e., with all <cite>transform</cite> attributes resolved.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.path_points">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.path_points" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.path_points" title="Link to this definition"></a></dt>
 <dd><p>Return the points defining this path.</p>
 <p>INPUT:</p>
 <ul class="simple">
@@ -265,7 +265,7 @@ anything, or any kind of visible curve.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPath.points">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">points</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.points" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">points</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPath.points" title="Link to this definition"></a></dt>
 <dd><p>Return the points defining this path.</p>
 <p>This returns the raw points in the <cite>d</cite> attribute, ignoring the
 commands that connect these points, i.e., ignoring whether these
@@ -291,7 +291,7 @@ anything, or any kind of visible curve.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPaths">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">LabeledPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPaths" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">LabeledPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.LabeledPaths" title="Link to this definition"></a></dt>
 <dd><p>A collection of paths associated to a single label.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
@@ -308,7 +308,7 @@ anything, or any kind of visible curve.</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svg.LabeledPaths.label">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPaths.label" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#svgdigitizer.svg.LabeledPaths.label" title="Link to this definition"></a></dt>
 <dd><p>Return the label associated to the paths.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
@@ -329,7 +329,7 @@ anything, or any kind of visible curve.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svg.SVG">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">SVG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">SVG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG" title="Link to this definition"></a></dt>
 <dd><p>An Scalable Vector Graphics (SVG) document.</p>
 <p>Provides access to the objects in an SVG while hiding details such as
 transformation attributes.</p>
@@ -403,7 +403,7 @@ texts:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="svgdigitizer.svg.SVG.transform">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG.transform" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.SVG.transform" title="Link to this definition"></a></dt>
 <dd><p>Return a transformed version of <cite>element</cite> with all <cite>transform</cite> attributes applied.</p>
 <p>EXAMPLES:</p>
 <p>Transformations can be applied to text elements:</p>
@@ -436,7 +436,7 @@ texts:</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.svg.Text">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.Text" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.svg.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svg.Text" title="Link to this definition"></a></dt>
 <dd><p>A <cite>&lt;text&gt;</cite> element in an SVG such as a label for a path.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>

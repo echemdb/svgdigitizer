@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>svgdigitizer.electrochemistry.cv &mdash; svgdigitizer 0.12.3 documentation</title>
+  <title>svgdigitizer.electrochemistry.cv &mdash; svgdigitizer 0.12.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=56343b9b"></script>
+      <script src="../_static/documentation_options.js?v=9dbdab56"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -123,7 +123,7 @@ or the <a class="reference internal" href="../workflow.html"><span class="doc">d
 <p>For the documentation below, the path of a CV is presented simply as a line.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.electrochemistry.cv.</span></span><span class="sig-name descname"><span class="pre">CV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CV'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_si_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.electrochemistry.cv.</span></span><span class="sig-name descname"><span class="pre">CV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">svgplot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CV'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_si_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV" title="Link to this definition"></a></dt>
 <dd><p>A digitized cyclic voltammogram (CV) derived from an SVG file,
 which provides access to the objects of the CV.</p>
 <p>Typically, the SVG input has been created by tracing a CV from
@@ -250,7 +250,7 @@ where the axis labels and the data are provided in SI units
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.data_schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.data_schema" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.data_schema" title="Link to this definition"></a></dt>
 <dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Field</cite> object
 describing the data generated with <code class="docutils literal notranslate"><span class="pre">df</span></code>.
 Compared to <a class="reference internal" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="svgdigitizer.electrochemistry.cv.CV.figure_schema"><code class="xref py py-meth docutils literal notranslate"><span class="pre">figure_schema()</span></code></a> all fields are given in SI units.
@@ -285,7 +285,7 @@ A time axis is also included.</p>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">),</span> <span class="n">force_si_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;A / m2&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
@@ -322,7 +322,7 @@ a voltage axis with dimension U.:</p>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">),</span> <span class="n">force_si_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">data_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;U&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;reference&#39;: &#39;unknown&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;I&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;A&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;t&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;s&#39;}]}</span>
@@ -332,7 +332,7 @@ a voltage axis with dimension U.:</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.electrochemistry.cv.CV.figure_schema">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_schema</span></span><a class="headerlink" href="#svgdigitizer.electrochemistry.cv.CV.figure_schema" title="Link to this definition"></a></dt>
 <dd><p>A frictionless <cite>Schema</cite> object, including a <cite>Fields</cite> object
 describing the voltage and current axis of the original plot
 including original units. The reference electrode of the
@@ -367,7 +367,7 @@ potential/voltage axis is also given (if available).</p>
 <span class="gp">... </span><span class="s1">  &lt;text x=&quot;-200&quot; y=&quot;330&quot;&gt;scan rate: 50 V/s&lt;/text&gt;</span>
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span> <span class="o">=</span> <span class="n">CV</span><span class="p">(</span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">figure_schema</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv</span><span class="o">.</span><span class="n">figure_schema</span>
 <span class="go">{&#39;fields&#39;: [{&#39;name&#39;: &#39;E&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;V&#39;, &#39;orientation&#39;: &#39;horizontal&#39;, &#39;reference&#39;: &#39;RHE&#39;},</span>
 <span class="go">            {&#39;name&#39;: &#39;j&#39;, &#39;type&#39;: &#39;number&#39;, &#39;unit&#39;: &#39;uA / cm2&#39;, &#39;orientation&#39;: &#39;vertical&#39;}]}</span>
 </pre></div>
