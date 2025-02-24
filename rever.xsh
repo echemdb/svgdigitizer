@@ -46,6 +46,7 @@ command('twine', 'twine upload dist/svgdigitizer-' + $VERSION + '.tar.gz dist/sv
 
 $ACTIVITIES = [
     'version_bump',
+    'pixi',
     'changelog',
     'tag',
     'push_tag',
