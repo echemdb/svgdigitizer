@@ -500,7 +500,7 @@ def _write_metadata(out, metadata):
     out.write("\n")
 
 
-def _create_linked_svg(svg, png, notemplate):
+def _create_linked_svg(svg, png, svg_template):
     r"""
     Write an SVG to `svg` that shows `png` as a linked image.
 
@@ -566,14 +566,19 @@ def _create_svg(svg, png, notemplate, linked):
     digitization_layer.set_desc(title="digitization-layer")
     drawing.add(digitization_layer)
 
-    if not notemplate:
-        import importlib_resources
+    if svg_template:
+        from importlib.resources import files
+
         from lxml import etree
 
-        assets = importlib_resources.files("svgdigitizer")
-        template_svg_root = etree.parse(
-            assets.joinpath("assets", "template.svg")
-        ).getroot()
+        if svg_template.startswith("file:"):
+            template_file = svg_template.split("file:")[1]
+        else:
+            template_file = files("svgdigitizer").joinpath(
+                "assets", f"template_{svg_template}.svg"
+            )
+
+        template_svg_root = etree.parse(template_file).getroot()
         main_root = etree.fromstring(drawing.tostring()).getroottree()
         layer_id = "digitization-layer"
         source_layer = template_svg_root.find(
@@ -594,7 +599,10 @@ def _create_svg(svg, png, notemplate, linked):
 @click.command()
 @click.option("--onlypng", is_flag=True, help="Only produce png files.")
 @click.option(
-    "--notemplate", is_flag=True, help="Omit template elements in svg files.."
+    "--template",
+    type=str,
+    default=None,
+    help="Add template elements in svg files. Options: basic, file:<file path>",
 )
 @click.option(
     "--outdir",
@@ -603,7 +611,7 @@ def _create_svg(svg, png, notemplate, linked):
     help="Write output files to this directory.",
 )
 @click.argument("pdf")
-def paginate(onlypng, notemplate, pdf, outdir):
+def paginate(onlypng, template, pdf, outdir):
     """
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -626,7 +634,7 @@ def paginate(onlypng, notemplate, pdf, outdir):
         pix.save(png)
         if not onlypng:
             _create_linked_svg(
-                _outfile(png, suffix=".svg", outdir=outdir), png, notemplate
+                _outfile(png, suffix=".svg", outdir=outdir), png, template
             )
 
 
