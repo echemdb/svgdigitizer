@@ -593,6 +593,28 @@ def _create_svg(svg, png, svg_template, linked):
     else:
         drawing.save(pretty=True)
 
+def extract_doi(pdf):
+    "Extract DOI from first pdf page"
+    import pymupdf
+    import regex
+
+    doc = pymupdf.open(pdf)
+    text = doc.get_page_text(0)
+    matches = regex.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
+    if len(matches) == 1:
+        return matches[0]
+    else:
+        print("{} DOIs found. Do not know how to proceed." % len(matches))
+
+def download_citation(doi):
+    "Download citation for DOI"
+    import requests
+
+    resp = requests.get('https://doi.org/' + doi, headers= { "Accept": 'application/x-bibtex; charset=utf-8' })
+    if resp.ok:
+        return resp.text
+    else:
+        ""
 
 @click.command()
 @click.option("--onlypng", is_flag=True, help="Only produce png files.")

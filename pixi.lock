@@ -21631,7 +21631,7 @@ packages:
 - pypi: .
   name: svgdigitizer
   version: 0.12.5
-  sha256: a7eda3eafafb3a5e93006440e6a75d3eefe5b656fbf30fe3817e6a318b7efc50
+  sha256: 2d9f505cb520a53df8b60c64db0fca6f573cdd1adfb63c94cbd3c043bb6023b4
   requires_dist:
   - astropy>=5,<8
   - click>=8,<9
@@ -21643,6 +21643,7 @@ packages:
   - pybtex>=0.24,<0.25
   - pymupdf>=1.25,<2
   - pyyaml>=6,<7
+  - requests>2,<3
   - scipy>=1.7,<2
   - svg-path>=4.1,<7
   - svgpathtools>=1.4,<2
