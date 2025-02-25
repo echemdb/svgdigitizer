@@ -506,12 +506,12 @@ def _create_linked_svg(svg, png, svg_template):
 
     This is a helper method for :meth:`paginate`.
     """
-    _create_svg(svg, png, notemplate, True)
+    _create_svg(svg, png, svg_template, True)
 
 
-def _create_svg(svg, png, notemplate, linked):
+def _create_svg(svg, png, svg_template, linked):
     r"""
-    Write an SVG to `svg` that shows `png` as a linked image.
+    Write an SVG to `svg` that shows `png` either as a linked or embedded image.
 
     This is a helper method for :meth:`paginate`.
     """
