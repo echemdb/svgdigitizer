@@ -545,10 +545,8 @@ def _create_linked_svg(svg, png, svg_template):
 
     if svg_template:
         from importlib.resources import files
-
         from xml.etree import ElementTree as ET
-        
-        
+
         if svg_template.startswith("file:"):
             template_file = svg_template.split("file:")[1]
         else:
