@@ -39,11 +39,14 @@ $PROJECT = 'svgdigitizer'
 
 from rever.activities.command import command
 
+command('pixi', 'pixi install --manifest-path "$PWD/pyproject.toml" -e dev')
+
 command('build', 'python -m build')
-command('twine', 'twine upload dist/svgdigitizer-' + $VERSION + '.tar.gz')
+command('twine', 'twine upload dist/svgdigitizer-' + $VERSION + '.tar.gz dist/svgdigitizer-' + $VERSION + '-py3-none-any.whl')
 
 $ACTIVITIES = [
     'version_bump',
+    'pixi',
     'changelog',
     'tag',
     'push_tag',
