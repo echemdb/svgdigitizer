@@ -546,8 +546,9 @@ def _create_linked_svg(svg, png, svg_template):
     if svg_template:
         from importlib.resources import files
 
-        from lxml import etree
-
+        from xml.etree import ElementTree as ET
+        
+        
         if svg_template.startswith("file:"):
             template_file = svg_template.split("file:")[1]
         else:
@@ -555,8 +556,8 @@ def _create_linked_svg(svg, png, svg_template):
                 "assets", f"template_{svg_template}.svg"
             )
 
-        template_svg_root = etree.parse(template_file).getroot()
-        main_root = etree.fromstring(drawing.tostring()).getroottree()
+        template_svg_root = ET.parse(template_file).getroot()
+        main_root = ET.ElementTree(ET.fromstring(drawing.tostring()))
         layer_id = "digitization-layer"
         source_layer = template_svg_root.find(
             f".//{{http://www.w3.org/2000/svg}}g[@id='{layer_id}']"
@@ -567,8 +568,7 @@ def _create_linked_svg(svg, png, svg_template):
         if source_layer is not None and target_layer is not None:
             for elem in source_layer:
                 target_layer.append(elem)
-        main_root.write(svg, pretty_print=True, xml_declaration=True, encoding="utf-8")
-
+        main_root.write(svg, xml_declaration=True, encoding="utf-8")
     else:
         drawing.save(pretty=True)
 
