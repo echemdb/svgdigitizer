@@ -10,11 +10,12 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      cv        Digitize a cylic voltammogram and create a frictionless...
-      digitize  Digitize a 2D plot.
-      figure    Digitize a figure with units on the axis and create a...
-      paginate  Render PDF pages as individual SVG files with linked PNG images.
-      plot      Display a plot of the data traced in an SVG.
+      create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
+      cv          Digitize a cylic voltammogram and create a frictionless...
+      digitize    Digitize a 2D plot.
+      figure      Digitize a figure with units on the axis and create a...
+      paginate    Render PDF pages as individual SVG files with linked PNG images.
+      plot        Display a plot of the data traced in an SVG.
 
 """
 # ********************************************************************
@@ -549,6 +550,7 @@ def _create_svg(svg, img, svg_template, linked):
     else:
         import base64
         import mimetypes
+
         img_mimetype = mimetypes.guess_type(img)[0].split("/")
         with open(img, "rb") as f:
             encoded = base64.b64encode(f.read()).decode()
@@ -615,6 +617,7 @@ def create_svg(img, template, outdir):
 
     """
     import mimetypes
+
     mimetype = mimetypes.guess_type(img)[0]
     if mimetype and mimetype.split("/")[1] in ["jpeg", "png"]:
         svg = _outfile(img, suffix=".svg", outdir=outdir)
