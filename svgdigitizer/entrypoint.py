@@ -596,11 +596,11 @@ def _create_svg(svg, png, svg_template, linked):
 def extract_doi(pdf):
     "Extract DOI from first pdf page"
     import pymupdf
-    import regex
+    import re
 
     doc = pymupdf.open(pdf)
     text = doc.get_page_text(0)
-    matches = regex.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
+    matches = re.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
     if len(matches) == 1:
         return matches[0]
     else:
