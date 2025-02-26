@@ -53,14 +53,14 @@ In addition to the linked image, basic elements for annotating a curve in a figu
 can be embedded in the SVG with the `--template` argument.
 
 ```{code-cell} ipython3
-!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template basic
 ```
 
 Custom templates can be included by providing to the `--template` argument a custom SVG  `file:<file path>`.
 Only elements of the template SVG residing inside a group/layer with the `id` attribute `digitization-layer` are imported.
 
 ```{code-cell} ipython3
-!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template ./files/others/example_plot_paginate/custom_template.svg
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template ./files/others/custom_template.svg
 ```
 
 (digitize)=

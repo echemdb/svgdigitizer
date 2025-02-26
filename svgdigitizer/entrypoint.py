@@ -308,7 +308,7 @@ def digitize_figure(
 @sampling_interval_option
 @outdir_option
 @click.option(
-    "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
+    "--metadata", type=click.File("rb"), default=None, help="YAML file with metadata"
 )
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
@@ -572,12 +572,12 @@ def _create_linked_svg(svg, png, svg_template):
 
 
 @click.command()
-@click.option("--onlypng", is_flag=True, help="Only produce png files.")
+@click.option("--onlypng", is_flag=True, help="Only produce PNG files.")
 @click.option(
     "--template",
-    type=str,
+    type=click.File("rb"),
     default=None,
-    help="Add template elements in svg files. Options: basic, file:<file path>",
+    help="Add template elements in SVG files. Options: basic, file:<file path>",
 )
 @click.option(
     "--outdir",
@@ -598,6 +598,10 @@ def paginate(onlypng, template, pdf, outdir):
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
+
+    TESTS::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
 
     """
     from pdf2image import convert_from_path
