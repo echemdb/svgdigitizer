@@ -593,6 +593,30 @@ def _create_svg(svg, png, svg_template, linked):
     else:
         drawing.save(pretty=True)
 
+@click.command()
+@click.option(
+    "--template",
+    type=str,
+    default=None,
+    help="Add template elements in svg files. Options: basic, file:<file path>",
+)
+@click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="Write output files to this directory.",
+)
+@click.argument("img")
+def create_svg(img, template, outdir):
+    r"""
+    Write an SVG that shows `png` or `jpeg` as a linked image.
+
+    """
+    if not img.endswith(".png") or img.endswith(".jpg") or img.endswith(".jpg"):
+        print("Only png and jpeg image formats are supported.")
+    else:
+        svg = _outfile(img, suffix=".svg", outdir=outdir)
+        _create_svg(svg, img, template, True)
 
 @click.command()
 @click.option("--onlypng", is_flag=True, help="Only produce png files.")
@@ -641,7 +665,7 @@ cli.add_command(digitize)
 cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
-
+cli.add_command(create_svg)
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their
 # docstrings would otherwise be ignored.
