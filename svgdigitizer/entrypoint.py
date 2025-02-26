@@ -506,12 +506,12 @@ def _create_linked_svg(svg, png, svg_template):
 
     This is a helper method for :meth:`paginate`.
     """
-    _create_svg(svg, png, svg_template, True)
+    _create_svg(svg, png, svg_template, linked=True)
 
 
 def _create_svg(svg, png, svg_template, linked):
     r"""
-    Write an SVG to `svg` that shows `png` either as a linked or embedded image.
+    Write an SVG to `svg` that shows `image` either as a linked or embedded image.
 
     This is a helper method for :meth:`paginate`.
     """
@@ -613,7 +613,7 @@ def create_svg(img, template, outdir):
     Write an SVG that shows `png` or `jpeg` as a linked image.
 
     """
-    if not img.endswith(".png") or img.endswith(".jpg") or img.endswith(".jpg"):
+    if not img.endswith(".png") or img.endswith(".jpg") or img.endswith(".jpeg"):
         print("Only png and jpeg image formats are supported.")
     else:
         svg = _outfile(img, suffix=".svg", outdir=outdir)
@@ -668,6 +668,7 @@ cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
 cli.add_command(create_svg)
+
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their
 # docstrings would otherwise be ignored.
