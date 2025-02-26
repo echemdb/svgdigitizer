@@ -500,16 +500,16 @@ def _write_metadata(out, metadata):
     out.write("\n")
 
 
-def _create_linked_svg(svg, png, svg_template):
+def _create_linked_svg(svg, img, svg_template):
     r"""
-    Write an SVG to `svg` that shows `png` as a linked image.
+    Write an SVG to `svg` that shows `image` as a linked image.
 
     This is a helper method for :meth:`paginate`.
     """
-    _create_svg(svg, png, svg_template, linked=True)
+    _create_svg(svg, img, svg_template, linked=True)
 
 
-def _create_svg(svg, png, svg_template, linked):
+def _create_svg(svg, img, svg_template, linked):
     r"""
     Write an SVG to `svg` that shows `image` either as a linked or embedded image.
 
@@ -518,7 +518,7 @@ def _create_svg(svg, png, svg_template, linked):
     # pylint: disable=too-many-locals
     from PIL import Image
 
-    width, height = Image.open(png).size
+    width, height = Image.open(img).size
 
     import svgwrite
 
@@ -541,20 +541,21 @@ def _create_svg(svg, png, svg_template, linked):
     if linked:
         image_layer.add(
             svgwrite.image.Image(
-                png,
+                img,
                 insert=(0, 0),
                 size=(width, height),
             )
         )
     else:
         import base64
-
-        with open(png, "rb") as f:
+        import mimetypes
+        img_mimetype = mimetypes.guess_type(img)[0].split("/")
+        with open(img, "rb") as f:
             encoded = base64.b64encode(f.read()).decode()
-        pngdata = f"data:image/png;base64,{encoded}"
+        img_data = f"data:image/{img_mimetype};base64,{encoded}"
         image_layer.add(
             svgwrite.image.Image(
-                href=(pngdata),
+                href=(img_data),
                 insert=(0, 0),
                 size=(width, height),
             )
@@ -613,11 +614,13 @@ def create_svg(img, template, outdir):
     Write an SVG that shows `png` or `jpeg` as a linked image.
 
     """
-    if not img.endswith(".png") or img.endswith(".jpg") or img.endswith(".jpeg"):
-        print("Only png and jpeg image formats are supported.")
-    else:
+    import mimetypes
+    mimetype = mimetypes.guess_type(img)[0]
+    if mimetype and mimetype.split("/")[1] in ["jpeg", "png"]:
         svg = _outfile(img, suffix=".svg", outdir=outdir)
         _create_svg(svg, img, template, True)
+    else:
+        print("Only png and jpeg image formats are supported.")
 
 
 @click.command()
