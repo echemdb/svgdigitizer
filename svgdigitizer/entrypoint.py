@@ -593,6 +593,7 @@ def _create_svg(svg, png, svg_template, linked):
     else:
         drawing.save(pretty=True)
 
+
 @click.command()
 @click.option(
     "--template",
@@ -617,6 +618,7 @@ def create_svg(img, template, outdir):
     else:
         svg = _outfile(img, suffix=".svg", outdir=outdir)
         _create_svg(svg, img, template, True)
+
 
 @click.command()
 @click.option("--onlypng", is_flag=True, help="Only produce png files.")
