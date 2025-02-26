@@ -47,6 +47,8 @@ Create SVG and PNG files from a PDF with
 
 Download the resulting {download}`SVG (example_plot_paginate_p0.svg)<./files/others/example_plot_paginate_p0.svg>`.
 
+In addition to the linked image it is also possible to import elements from another SVG file with the `--template` argument either from a custom SVG by providing `file:<file path>` or a template provided by the svgdigitizer package. Only elements of the template SVG residing inside a group/layer with the `id` attribute `digitization-layer` are imported.
+
 (digitize)=
 ## `digitize`
 
