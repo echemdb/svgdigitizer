@@ -36,3 +36,8 @@ html_context = {
     'github_repo': 'svgdigitizer',
     'github_version': 'master/doc/',
 }
+
+# repology.org only passes the check locally but not in the Github CI. see #169
+linkcheck_ignore = [
+    "https://repology.org/*",
+]
