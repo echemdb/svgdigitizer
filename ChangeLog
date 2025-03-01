@@ -4,6 +4,24 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.12.5
+====================
+
+**Fixed:**
+
+* Fixed uploading wheel.
+
+
+
+v0.12.4
+====================
+
+**Added:**
+
+* Added wheel upload on new release.
+
+
+
 v0.12.3
 ====================
 
