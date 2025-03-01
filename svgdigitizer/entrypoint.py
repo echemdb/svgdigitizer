@@ -10,11 +10,12 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      cv        Digitize a cylic voltammogram and create a frictionless...
-      digitize  Digitize a 2D plot.
-      figure    Digitize a figure with units on the axis and create a...
-      paginate  Render PDF pages as individual SVG files with linked PNG images.
-      plot      Display a plot of the data traced in an SVG.
+      create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
+      cv          Digitize a cylic voltammogram and create a frictionless...
+      digitize    Digitize a 2D plot.
+      figure      Digitize a figure with units on the axis and create a...
+      paginate    Render PDF pages as individual SVG files with linked PNG images.
+      plot        Display a plot of the data traced in an SVG.
 
 """
 # ********************************************************************
@@ -500,16 +501,25 @@ def _write_metadata(out, metadata):
     out.write("\n")
 
 
-def _create_linked_svg(svg, png, svg_template):
+def _create_linked_svg(svg, img, svg_template):
     r"""
-    Write an SVG to `svg` that shows `png` as a linked image.
+    Write an SVG to `svg` that shows `image` as a linked image.
+
+    This is a helper method for :meth:`paginate`.
+    """
+    _create_svg(svg, img, svg_template, linked=True)
+
+
+def _create_svg(svg, img, svg_template, linked):
+    r"""
+    Write an SVG to `svg` that shows `image` either as a linked or embedded image.
 
     This is a helper method for :meth:`paginate`.
     """
     # pylint: disable=too-many-locals
     from PIL import Image
 
-    width, height = Image.open(png).size
+    width, height = Image.open(img).size
 
     import svgwrite
 
@@ -529,13 +539,29 @@ def _create_linked_svg(svg, png, svg_template):
     image_layer.set_desc(title="image-layer")
     drawing.add(image_layer)
 
-    image_layer.add(
-        svgwrite.image.Image(
-            png,
-            insert=(0, 0),
-            size=(width, height),
+    if linked:
+        image_layer.add(
+            svgwrite.image.Image(
+                img,
+                insert=(0, 0),
+                size=(width, height),
+            )
         )
-    )
+    else:
+        import base64
+        import mimetypes
+
+        img_mimetype = mimetypes.guess_type(img)[0].split("/")
+        with open(img, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+        img_data = f"data:image/{img_mimetype};base64,{encoded}"
+        image_layer.add(
+            svgwrite.image.Image(
+                href=(img_data),
+                insert=(0, 0),
+                size=(width, height),
+            )
+        )
 
     digitization_layer = inkscape.layer(id="digitization-layer", locked=False)
 
@@ -572,6 +598,35 @@ def _create_linked_svg(svg, png, svg_template):
 
 
 @click.command()
+@click.option(
+    "--template",
+    type=str,
+    default=None,
+    help="Add template elements in svg files. Options: basic, file:<file path>",
+)
+@click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="Write output files to this directory.",
+)
+@click.argument("img")
+def create_svg(img, template, outdir):
+    r"""
+    Write an SVG that shows `png` or `jpeg` as a linked image.
+
+    """
+    import mimetypes
+
+    mimetype = mimetypes.guess_type(img)[0]
+    if mimetype and mimetype.split("/")[1] in ["jpeg", "png"]:
+        svg = _outfile(img, suffix=".svg", outdir=outdir)
+        _create_svg(svg, img, template, True)
+    else:
+        print("Only png and jpeg image formats are supported.")
+
+
+@click.command()
 @click.option("--onlypng", is_flag=True, help="Only produce png files.")
 @click.option(
     "--template",
@@ -600,17 +655,13 @@ def paginate(onlypng, template, pdf, outdir):
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
     """
-    from pdf2image import convert_from_path
+    import pymupdf
 
-    pages = convert_from_path(pdf, dpi=600)
-    pngs = [
-        _outfile(pdf, suffix=f"_p{page}.png", outdir=outdir)
-        for page in range(len(pages))
-    ]
-
-    for page, png in zip(pages, pngs):
-        page.save(png, "PNG")
-
+    doc = pymupdf.open(pdf)
+    for page_idx, page in enumerate(doc):
+        pix = page.get_pixmap(dpi=600)
+        png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
+        pix.save(png)
         if not onlypng:
             _create_linked_svg(
                 _outfile(png, suffix=".svg", outdir=outdir), png, template
@@ -622,6 +673,7 @@ cli.add_command(digitize)
 cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
+cli.add_command(create_svg)
 
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their
