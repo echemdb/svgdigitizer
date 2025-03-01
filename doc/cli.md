@@ -47,6 +47,16 @@ Create SVG and PNG files from a PDF with
 
 Download the resulting {download}`SVG (example_plot_paginate_p0.svg)<./files/others/example_plot_paginate_p0.svg>`.
 
+## `create-svg`
+
+Create SVG from a PNG or JPEG file with
+
+```{code-cell} ipython3
+!svgdigitizer create-svg --help
+```
+
+A {download}`Example PNG <./files/others/example_plot_p0.png>` for testing purposes is available in the `svgdigitizer` repository.
+
 (digitize)=
 ## `digitize`
 
