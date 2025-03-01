@@ -33,8 +33,4 @@ jobs:
         if: ${{ github.event_name == 'push' }}
       - name: detect broken links
         shell: pixi run -e dev bash -e {0}
-        run: |
-          python -m http.server 8880 --directory doc/generated/html &
-          sleep 1
-          # repology.org only passes the check locally but not in the Github CI. see #169
-          linkchecker --check-extern http://localhost:8880/svgdigitizer/ --ignore-url="https://repology.org/*" --no-warnings
+        run: pixi run linkcheck
