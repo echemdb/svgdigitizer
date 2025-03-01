@@ -33,6 +33,4 @@ jobs:
         if: ${{ github.event_name == 'push' }}
       - name: detect broken links
         shell: pixi run -e dev bash -e {0}
-        run: |
-          cd doc
-          make linkcheck
+        run: pixi run linkcheck
