@@ -54,6 +54,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#create-svg"><code class="docutils literal notranslate"><span class="pre">create-svg</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#digitize"><code class="docutils literal notranslate"><span class="pre">digitize</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
 </ul>
@@ -133,11 +134,12 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  cv        Digitize a cylic voltammogram and create a frictionless...
-  digitize  Digitize a 2D plot.
-  figure    Digitize a figure with units on the axis and create a...
-  paginate  Render PDF pages as individual SVG files with linked PNG images.
-  plot      Display a plot of the data traced in an SVG.
+  create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
+  cv          Digitize a cylic voltammogram and create a frictionless...
+  digitize    Digitize a 2D plot.
+  figure      Digitize a figure with units on the axis and create a...
+  paginate    Render PDF pages as individual SVG files with linked PNG...
+  plot        Display a plot of the data traced in an SVG.
 </pre></div>
 </div>
 </div>
@@ -184,7 +186,34 @@ Options:
 </div>
 </div>
 <p>Download the resulting <a class="reference download internal" download="" href="_downloads/2522b22e30a7f8e2620d6a364dd59e3d/example_plot_paginate_p0.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(example_plot_paginate_p0.svg)</span></code></a>.</p>
-<p>In addition to the linked image, basic elements for annotating a curve in a figure
+</section>
+</section>
+<section id="create-svg">
+<h2><code class="docutils literal notranslate"><span class="pre">create-svg</span></code><a class="headerlink" href="#create-svg" title="Link to this heading"></a></h2>
+<p>Create an SVG with a linked PNG or JPEG from such a file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>create-svg<span class="w"> </span>--help
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer create-svg [OPTIONS] IMG
+
+  Write an SVG that shows `png` or `jpeg` as a linked image.
+
+Options:
+  --template TEXT       Add builtin template elements in SVG files.
+  --template-file FILE  Add template elements from a custom SVG in the SVG
+                        file.
+  --outdir DIRECTORY    Write output files to this directory.
+  --help                Show this message and exit.
+</pre></div>
+</div>
+</div>
+</div>
+<p>A <a class="reference download internal" download="" href="_downloads/40c72a2e780b6bf36862064b509be29c/example_plot_p0.png"><code class="xref download docutils literal notranslate"><span class="pre">Example</span> <span class="pre">PNG</span></code></a> for testing purposes is available in the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> repository.</p>
+<p>In addition to the linked image, elements for annotating a curve in a figure
 can be embedded in the SVG from builtin templates with the <code class="docutils literal notranslate"><span class="pre">--template</span></code> option.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -204,7 +233,9 @@ Only elements of the template SVG residing inside a group/layer with the <code c
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;, line 8, in &lt;module&gt;
-    sys.exit(cli())
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    sys.exit(cli())
              ^^^^^
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1161, in __call__
     return self.main(*args, **kwargs)
@@ -221,11 +252,11 @@ Only elements of the template SVG residing inside a group/layer with the <code c
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 788, in invoke
     return __callback(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 647, in paginate
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 685, in paginate
     _create_linked_svg(
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 509, in _create_linked_svg
-    _create_svg(svg, png, template_file, True)
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 572, in _create_svg
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 510, in _create_linked_svg
+    _create_svg(svg, img, template_file, linked=True)
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 575, in _create_svg
     template_svg_root = ET.parse(template_file).getroot()
                         ^^^^^^^^^^^^^^^^^^^^^^^
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/xml/etree/ElementTree.py&quot;, line 1204, in parse
@@ -238,7 +269,6 @@ FileNotFoundError: [Errno 2] No such file or directory: &#39;./files/others/cust
 </div>
 </div>
 </div>
-</section>
 </section>
 <section id="digitize">
 <span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">digitize</span></code><a class="headerlink" href="#digitize" title="Link to this heading"></a></h2>
