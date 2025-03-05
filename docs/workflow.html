@@ -145,13 +145,6 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/pdf2image/pdf2image.py&quot;, line 602, in pdfinfo_from_path
-    raise ValueError
-ValueError
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;, line 8, in &lt;module&gt;
     sys.exit(cli())
              ^^^^^
@@ -170,16 +163,12 @@ Traceback (most recent call last):
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 788, in invoke
     return __callback(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 605, in paginate
-    pages = convert_from_path(pdf, dpi=600)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/pdf2image/pdf2image.py&quot;, line 127, in convert_from_path
-    page_count = pdfinfo_from_path(
-                 ^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/pdf2image/pdf2image.py&quot;, line 611, in pdfinfo_from_path
-    raise PDFPageCountError(
-pdf2image.exceptions.PDFPageCountError: Unable to get page count.
-I/O Error: Couldn&#39;t open file &#39;/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf&#39;: No such file or directory.
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 628, in paginate
+    doc = pymupdf.open(pdf)
+          ^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/pymupdf/__init__.py&quot;, line 2918, in __init__
+    raise FileNotFoundError(msg)
+pymupdf.FileNotFoundError: no such file: &#39;/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf&#39;
 </pre></div>
 </div>
 </div>
