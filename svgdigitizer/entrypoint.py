@@ -10,11 +10,12 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      cv        Digitize a cylic voltammogram and create a frictionless...
-      digitize  Digitize a 2D plot.
-      figure    Digitize a figure with units on the axis and create a...
-      paginate  Render PDF pages as individual SVG files with linked PNG images.
-      plot      Display a plot of the data traced in an SVG.
+      create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
+      cv          Digitize a cylic voltammogram and create a frictionless...
+      digitize    Digitize a 2D plot.
+      figure      Digitize a figure with units on the axis and create a...
+      paginate    Render PDF pages as individual SVG files with linked PNG images.
+      plot        Display a plot of the data traced in an SVG.
 
 """
 # ********************************************************************
@@ -500,25 +501,25 @@ def _write_metadata(out, metadata):
     out.write("\n")
 
 
-def _create_linked_svg(svg, png, template_file):
+def _create_linked_svg(svg, img, template_file):
     r"""
-    Write an SVG to `svg` that shows `png` as a linked image.
+    Write an SVG to `svg` that shows `image` as a linked image.
 
     This is a helper method for :meth:`paginate`.
     """
-    _create_svg(svg, png, template_file, True)
+    _create_svg(svg, img, template_file, linked=True)
 
 
-def _create_svg(svg, png, template_file, linked):
+def _create_svg(svg, img, template_file, linked):
     r"""
-    Write an SVG to `svg` that shows `png` either as a linked or embedded image.
+    Write an SVG to `svg` that shows `image` either as a linked or embedded image.
 
     This is a helper method for :meth:`paginate`.
     """
     # pylint: disable=too-many-locals
     from PIL import Image
 
-    width, height = Image.open(png).size
+    width, height = Image.open(img).size
 
     import svgwrite
 
@@ -541,20 +542,22 @@ def _create_svg(svg, png, template_file, linked):
     if linked:
         image_layer.add(
             svgwrite.image.Image(
-                png,
+                img,
                 insert=(0, 0),
                 size=(width, height),
             )
         )
     else:
         import base64
+        import mimetypes
 
-        with open(png, "rb") as f:
+        img_mimetype = mimetypes.guess_type(img)[0].split("/")
+        with open(img, "rb") as f:
             encoded = base64.b64encode(f.read()).decode()
-        pngdata = f"data:image/png;base64,{encoded}"
+        img_data = f"data:image/{img_mimetype};base64,{encoded}"
         image_layer.add(
             svgwrite.image.Image(
-                href=(pngdata),
+                href=(img_data),
                 insert=(0, 0),
                 size=(width, height),
             )
@@ -584,6 +587,41 @@ def _create_svg(svg, png, template_file, linked):
         main_root.write(svg, xml_declaration=True, encoding="utf-8")
     else:
         drawing.save(pretty=True)
+
+
+@click.command()
+@click.option(
+    "--template",
+    type=str,
+    default=None,
+    help="Add builtin template elements in SVG files.",
+)
+@click.option(
+    "--template-file",
+    type=click.Path(dir_okay=False),
+    default=None,
+    help="Add template elements from a custom SVG in the SVG file.",
+)
+@click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="Write output files to this directory.",
+)
+@click.argument("img")
+def create_svg(img, template, outdir):
+    r"""
+    Write an SVG that shows `png` or `jpeg` as a linked image.
+
+    """
+    import mimetypes
+
+    mimetype = mimetypes.guess_type(img)[0]
+    if mimetype and mimetype.split("/")[1] in ["jpeg", "png"]:
+        svg = _outfile(img, suffix=".svg", outdir=outdir)
+        _create_svg(svg, img, template, True)
+    else:
+        raise click.BadParameter("Only PNG or JPEG image formats are supported.")
 
 
 @click.command()
@@ -654,6 +692,7 @@ cli.add_command(digitize)
 cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
+cli.add_command(create_svg)
 
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their
