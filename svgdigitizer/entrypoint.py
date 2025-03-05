@@ -621,7 +621,7 @@ def create_svg(img, template, outdir):
         svg = _outfile(img, suffix=".svg", outdir=outdir)
         _create_svg(svg, img, template, True)
     else:
-        raise click.BadParameter("Only PNG and JPEG image formats are supported.")
+        raise click.BadParameter("Only PNG or JPEG image formats are supported.")
 
 
 @click.command()
