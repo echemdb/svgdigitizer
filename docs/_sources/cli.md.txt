@@ -41,11 +41,27 @@ Create SVG and PNG files from a PDF with
 
 ### Examples
 
+Create an SVG with a linked PNG for each page in a PDF.
+
 ```{code-cell} ipython3
 !svgdigitizer paginate ./files/others/example_plot_paginate.pdf
 ```
 
 Download the resulting {download}`SVG (example_plot_paginate_p0.svg)<./files/others/example_plot_paginate_p0.svg>`.
+
+In addition to the linked image, basic elements for annotating a curve in a figure
+can be embedded in the SVG from builtin templates with the `--template` option.
+
+```{code-cell} ipython3
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template basic
+```
+
+Custom templates can be included by providing to the `--template-file` argument a custom SVG  `<file path>`.
+Only elements of the template SVG residing inside a group/layer with the `id` attribute `digitization-layer` are imported.
+
+```{code-cell} ipython3
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template-file ./files/others/custom_template.svg
+```
 
 (digitize)=
 ## `digitize`

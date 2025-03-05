@@ -163,11 +163,11 @@ Commands:
   The SVG and PNG files are written to the PDF&#39;s directory.
 
 Options:
-  --onlypng           Only produce png files.
-  --template TEXT     Add template elements in svg files. Options: basic,
-                      file:&lt;file path&gt;
-  --outdir DIRECTORY  Write output files to this directory.
-  --help              Show this message and exit.
+  --onlypng             Only produce PNG files.
+  --template [basic]    Add builtin template elements in SVG files.
+  --template-file FILE  Add template elements from a custom SVG in SVG files.
+  --outdir DIRECTORY    Write output files to this directory.
+  --help                Show this message and exit.
 </pre></div>
 </div>
 </div>
@@ -175,6 +175,7 @@ Options:
 <p><a class="reference download internal" download="" href="_downloads/58f393aebc2cca89f8e88b299072a59e/example_plot_paginate.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Example</span> <span class="pre">PDFs</span></code></a> for testing purposes are available in the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> repository.</p>
 <section id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
+<p>Create an SVG with a linked PNG for each page in a PDF.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf
@@ -183,6 +184,60 @@ Options:
 </div>
 </div>
 <p>Download the resulting <a class="reference download internal" download="" href="_downloads/2522b22e30a7f8e2620d6a364dd59e3d/example_plot_paginate_p0.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(example_plot_paginate_p0.svg)</span></code></a>.</p>
+<p>In addition to the linked image, basic elements for annotating a curve in a figure
+can be embedded in the SVG from builtin templates with the <code class="docutils literal notranslate"><span class="pre">--template</span></code> option.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--template<span class="w"> </span>basic
+</pre></div>
+</div>
+</div>
+</div>
+<p>Custom templates can be included by providing to the <code class="docutils literal notranslate"><span class="pre">--template-file</span></code> argument a custom SVG  <code class="docutils literal notranslate"><span class="pre">&lt;file</span> <span class="pre">path&gt;</span></code>.
+Only elements of the template SVG residing inside a group/layer with the <code class="docutils literal notranslate"><span class="pre">id</span></code> attribute <code class="docutils literal notranslate"><span class="pre">digitization-layer</span></code> are imported.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--template-file<span class="w"> </span>./files/others/custom_template.svg
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;, line 8, in &lt;module&gt;
+    sys.exit(cli())
+             ^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1161, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1082, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1697, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 788, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 647, in paginate
+    _create_linked_svg(
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 509, in _create_linked_svg
+    _create_svg(svg, png, template_file, True)
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 572, in _create_svg
+    template_svg_root = ET.parse(template_file).getroot()
+                        ^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/xml/etree/ElementTree.py&quot;, line 1204, in parse
+    tree.parse(source, parser)
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/xml/etree/ElementTree.py&quot;, line 558, in parse
+    source = open(source, &quot;rb&quot;)
+             ^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: &#39;./files/others/custom_template.svg&#39;
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="digitize">
@@ -433,7 +488,7 @@ Options:
   --sampling-interval FLOAT  Sampling interval on the x-axis with respect to
                              the x-axis values.
   --outdir DIRECTORY         Write output files to this directory.
-  --metadata FILENAME        yaml file with metadata
+  --metadata FILENAME        YAML file with metadata
   --bibliography             Adds bibliography data from a bibfile as
                              descriptor to the datapackage.
   --si-units                 Convert units of the plot and CSV to SI (only if
