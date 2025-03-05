@@ -506,6 +506,15 @@ def _create_linked_svg(svg, png, svg_template):
 
     This is a helper method for :meth:`paginate`.
     """
+    _create_svg(svg, png, svg_template, True)
+
+
+def _create_svg(svg, png, svg_template, linked):
+    r"""
+    Write an SVG to `svg` that shows `png` either as a linked or embedded image.
+
+    This is a helper method for :meth:`paginate`.
+    """
     # pylint: disable=too-many-locals
     from PIL import Image
 
@@ -529,13 +538,27 @@ def _create_linked_svg(svg, png, svg_template):
     image_layer.set_desc(title="image-layer")
     drawing.add(image_layer)
 
-    image_layer.add(
-        svgwrite.image.Image(
-            png,
-            insert=(0, 0),
-            size=(width, height),
+    if linked:
+        image_layer.add(
+            svgwrite.image.Image(
+                png,
+                insert=(0, 0),
+                size=(width, height),
+            )
         )
-    )
+    else:
+        import base64
+
+        with open(png, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+        pngdata = f"data:image/png;base64,{encoded}"
+        image_layer.add(
+            svgwrite.image.Image(
+                href=(pngdata),
+                insert=(0, 0),
+                size=(width, height),
+            )
+        )
 
     digitization_layer = inkscape.layer(id="digitization-layer", locked=False)
 
@@ -600,17 +623,13 @@ def paginate(onlypng, template, pdf, outdir):
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
     """
-    from pdf2image import convert_from_path
+    import pymupdf
 
-    pages = convert_from_path(pdf, dpi=600)
-    pngs = [
-        _outfile(pdf, suffix=f"_p{page}.png", outdir=outdir)
-        for page in range(len(pages))
-    ]
-
-    for page, png in zip(pages, pngs):
-        page.save(png, "PNG")
-
+    doc = pymupdf.open(pdf)
+    for page_idx, page in enumerate(doc):
+        pix = page.get_pixmap(dpi=600)
+        png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
+        pix.save(png)
         if not onlypng:
             _create_linked_svg(
                 _outfile(png, suffix=".svg", outdir=outdir), png, template
