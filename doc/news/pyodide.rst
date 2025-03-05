@@ -1,3 +1,3 @@
 **Changed:**
 
-* Changed pdf handling from pdf2image to PyMuPDF which allows to run in pyodide.
+* Changed PDF handling from pdf2image to PyMuPDF, allowing to run in pyodide.

@@ -309,7 +309,7 @@ def digitize_figure(
 @sampling_interval_option
 @outdir_option
 @click.option(
-    "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
+    "--metadata", type=click.File("rb"), default=None, help="YAML file with metadata"
 )
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
@@ -501,16 +501,16 @@ def _write_metadata(out, metadata):
     out.write("\n")
 
 
-def _create_linked_svg(svg, img, svg_template):
+def _create_linked_svg(svg, img, template_file):
     r"""
     Write an SVG to `svg` that shows `image` as a linked image.
 
     This is a helper method for :meth:`paginate`.
     """
-    _create_svg(svg, img, svg_template, linked=True)
+    _create_svg(svg, img, template_file, linked=True)
 
 
-def _create_svg(svg, img, svg_template, linked):
+def _create_svg(svg, img, template_file, linked):
     r"""
     Write an SVG to `svg` that shows `image` either as a linked or embedded image.
 
@@ -569,16 +569,8 @@ def _create_svg(svg, img, svg_template, linked):
     digitization_layer.set_desc(title="digitization-layer")
     drawing.add(digitization_layer)
 
-    if svg_template:
-        from importlib.resources import files
+    if template_file:
         from xml.etree import ElementTree as ET
-
-        if svg_template.startswith("file:"):
-            template_file = svg_template.split("file:")[1]
-        else:
-            template_file = files("svgdigitizer").joinpath(
-                "assets", f"template_{svg_template}.svg"
-            )
 
         template_svg_root = ET.parse(template_file).getroot()
         main_root = ET.ElementTree(ET.fromstring(drawing.tostring()))
@@ -623,16 +615,22 @@ def create_svg(img, template, outdir):
         svg = _outfile(img, suffix=".svg", outdir=outdir)
         _create_svg(svg, img, template, True)
     else:
-        print("Only png and jpeg image formats are supported.")
+        raise click.BadParameter("Only PNG and JPEG image formats are supported.")
 
 
 @click.command()
-@click.option("--onlypng", is_flag=True, help="Only produce png files.")
+@click.option("--onlypng", is_flag=True, help="Only produce PNG files.")
 @click.option(
     "--template",
-    type=str,
+    type=click.Choice(["basic"]),
     default=None,
-    help="Add template elements in svg files. Options: basic, file:<file path>",
+    help="Add builtin template elements in SVG files.",
+)
+@click.option(
+    "--template-file",
+    type=click.Path(dir_okay=False),
+    default=None,
+    help="Add template elements from a custom SVG in SVG files.",
 )
 @click.option(
     "--outdir",
@@ -641,7 +639,7 @@ def create_svg(img, template, outdir):
     help="Write output files to this directory.",
 )
 @click.argument("pdf")
-def paginate(onlypng, template, pdf, outdir):
+def paginate(onlypng, template, template_file, pdf, outdir):
     """
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -654,8 +652,23 @@ def paginate(onlypng, template, pdf, outdir):
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
+    TESTS::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+
     """
+    from importlib.resources import files
+
     import pymupdf
+
+    if template and template_file:
+        raise click.BadParameter(
+            "Please provide either a file or a builtin template name."
+        )
+    if template:
+        template_file = files("svgdigitizer").joinpath(
+            "assets", f"template_{template}.svg"
+        )
 
     doc = pymupdf.open(pdf)
     for page_idx, page in enumerate(doc):
@@ -664,7 +677,7 @@ def paginate(onlypng, template, pdf, outdir):
         pix.save(png)
         if not onlypng:
             _create_linked_svg(
-                _outfile(png, suffix=".svg", outdir=outdir), png, template
+                _outfile(png, suffix=".svg", outdir=outdir), png, template_file
             )
 
 
