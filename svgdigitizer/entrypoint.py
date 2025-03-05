@@ -506,10 +506,10 @@ def _create_linked_svg(svg, png, template_file):
 
     This is a helper method for :meth:`paginate`.
     """
-    _create_svg(svg, png, svg_template, True)
+    _create_svg(svg, png, template_file, True)
 
 
-def _create_svg(svg, png, svg_template, linked):
+def _create_svg(svg, png, template_file, linked):
     r"""
     Write an SVG to `svg` that shows `png` either as a linked or embedded image.
 
@@ -637,15 +637,6 @@ def paginate(onlypng, template, template_file, pdf, outdir):
         template_file = files("svgdigitizer").joinpath(
             "assets", f"template_{template}.svg"
         )
-
-    pages = convert_from_path(pdf, dpi=600)
-    pngs = [
-        _outfile(pdf, suffix=f"_p{page}.png", outdir=outdir)
-        for page in range(len(pages))
-    ]
-
-    for page, png in zip(pages, pngs):
-        page.save(png, "PNG")
 
     doc = pymupdf.open(pdf)
     for page_idx, page in enumerate(doc):
