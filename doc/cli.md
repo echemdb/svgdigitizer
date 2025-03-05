@@ -52,7 +52,7 @@ Download the resulting {download}`SVG (example_plot_paginate_p0.svg)<./files/oth
 
 ## `create-svg`
 
-Create SVG from a PNG or JPEG file with
+Create an SVG with an embedded or linked PNG or JPEG from such a file.
 
 ```{code-cell} ipython3
 !svgdigitizer create-svg --help
