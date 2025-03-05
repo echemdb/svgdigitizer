@@ -52,7 +52,7 @@ Download the resulting {download}`SVG (example_plot_paginate_p0.svg)<./files/oth
 
 ## `create-svg`
 
-Create an SVG with an embedded or linked PNG or JPEG from such a file.
+Create an SVG with a linked PNG or JPEG from such a file.
 
 ```{code-cell} ipython3
 !svgdigitizer create-svg --help
@@ -60,7 +60,7 @@ Create an SVG with an embedded or linked PNG or JPEG from such a file.
 
 A {download}`Example PNG <./files/others/example_plot_p0.png>` for testing purposes is available in the `svgdigitizer` repository.
 
-In addition to the linked image, basic elements for annotating a curve in a figure
+In addition to the linked image, elements for annotating a curve in a figure
 can be embedded in the SVG from builtin templates with the `--template` option.
 
 ```{code-cell} ipython3

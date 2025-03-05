@@ -594,7 +594,13 @@ def _create_svg(svg, img, template_file, linked):
     "--template",
     type=str,
     default=None,
-    help="Add template elements in svg files. Options: basic, file:<file path>",
+    help="Add builtin template elements in SVG files.",
+)
+@click.option(
+    "--template-file",
+    type=click.Path(dir_okay=False),
+    default=None,
+    help="Add template elements from a custom SVG in the SVG file.",
 )
 @click.option(
     "--outdir",
