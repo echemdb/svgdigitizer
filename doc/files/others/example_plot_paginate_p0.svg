@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" baseProfile="full" height="1418px" version="1.1" width="2126px">
   <defs/>
-  <image height="1418px" sodipodi:insensitive="true" width="2126px" x="0" xlink:href="./files/others/example_plot_paginate_p0.png" y="0"/>
+  <g class="layer" id="image-layer" inkscape:groupmode="layer" sodipodi:insensitive="1">
+    <title>image-layer</title>
+    <image height="1418" width="2126" x="0" xlink:href="./files/others/example_plot_paginate_p0.png" y="0"/>
+  </g>
+  <g class="layer" id="digitization-layer" inkscape:groupmode="layer">
+    <title>digitization-layer</title>
+  </g>
 </svg>
