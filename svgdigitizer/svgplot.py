@@ -138,7 +138,6 @@ from enum import Enum
 from functools import cached_property
 
 import pandas as pd
-
 from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("svgplot")

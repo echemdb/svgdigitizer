@@ -589,6 +589,90 @@ def _create_svg(svg, img, template_file, linked):
         drawing.save(pretty=True)
 
 
+def _extract_doi(pdf):
+    "Extract DOI from first PDF page."
+    import re
+
+    import pymupdf
+
+    doc = pymupdf.open(pdf)
+    text = doc.get_page_text(0)
+    matches = re.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
+    if len(matches) == 1:
+        return matches[0]
+
+    raise KeyError(f"{len(matches)} DOIs found. Extraction of DOI failed.")
+
+
+@click.command()
+@click.argument("pdf")
+def get_doi(pdf):
+    r"""
+    Get the DOI from the provided PDF file.
+
+    """
+    print(_extract_doi(pdf))
+
+
+def _download_citation(doi):
+    "Download citation for DOI"
+    import requests
+
+    resp = requests.get(
+        "https://doi.org/" + doi,
+        headers={"Accept": "application/x-bibtex; charset=utf-8"},
+        timeout=5,
+    )
+    if resp.ok:
+        return resp.text
+    return ""
+
+
+@click.command()
+@click.argument("pdf")
+def get_citation(pdf):
+    r"""
+    Get the citation from the DOI provided PDF file.
+
+    """
+    doi = _extract_doi(pdf)
+    citation = _download_citation(doi)
+
+    if citation:
+        print(citation)
+    else:
+        raise KeyError("Failed to get citation.")
+
+
+def _build_identifier(citation):
+    "Build the entry identifier based bibtex citation."
+    entry = list(citation.entries.values())[0]
+    first_author = entry.persons["author"][0].last_names[0]
+    title_words = entry.fields["title"].split(" ")
+    first_word = title_words[0]
+    if "the" == first_word:  # maybe add more words?
+        first_word = title_words[1]
+    year = entry.fields["year"]
+    page = entry.fields["pages"].split("–")[0]  # unicode "–"
+    return "_".join([first_author, year, first_word, page]).lower()
+
+
+@click.command()
+@click.argument("pdf")
+def rename_by_key(pdf):
+    r"""
+    Rename the provided PDF file by the key derived from citation.
+
+    """
+    from pybtex.database import parse_string
+
+    doi = _extract_doi(pdf)
+    citation = _download_citation(doi)
+    bibliography = parse_string(citation, bib_format="bibtex")
+    identifier = _build_identifier(bibliography)
+    os.rename(pdf, identifier + ".pdf")
+
+
 @click.command()
 @click.option(
     "--template",
@@ -693,6 +777,9 @@ cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
 cli.add_command(create_svg)
+cli.add_command(get_doi)
+cli.add_command(get_citation)
+cli.add_command(rename_by_key)
 
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their
