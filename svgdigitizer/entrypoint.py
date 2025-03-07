@@ -742,8 +742,31 @@ def create_svg(img, template, outdir):
     else:
         raise click.BadParameter("Only PNG or JPEG image formats are supported.")
 
+def _parse_pages_option(ctx, param, value):
+    import re
+    if value is None:
+        return None
+    
+    match = re.fullmatch(r"(\d+)(?:-(\d+))?", value)
+    if not match:
+        raise click.BadParameter("Invalid format. Use a single number or a range like '3-5'.")
+    
+    start = int(match.group(1))
+    end = int(match.group(2)) if match.group(2) else start
+    
+    if start > end:
+        raise click.BadParameter("Invalid range. Start must be less than or equal to end.")
+    
+    return list(range(start, end + 1))
 
 @click.command()
+@click.option("--pages", callback=_parse_pages_option, help="Specify a single page (e.g., '2') or a range (e.g., '3-5').")
+@click.option(
+    "--template",
+    type=click.Choice(["basic"]),
+    default=None,
+    help="Add builtin template elements in SVG files.",
+)
 @click.option("--onlypng", is_flag=True, help="Only produce PNG files.")
 @click.option(
     "--template",
@@ -764,7 +787,7 @@ def create_svg(img, template, outdir):
     help="Write output files to this directory.",
 )
 @click.argument("pdf")
-def paginate(onlypng, template, template_file, pdf, outdir):
+def paginate(pages, onlypng, template, template_file, pdf, outdir):
     """
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -796,8 +819,13 @@ def paginate(onlypng, template, template_file, pdf, outdir):
         )
 
     doc = pymupdf.open(pdf)
-    for page_idx, page in enumerate(doc):
-        pix = page.get_pixmap(dpi=600)
+    if not pages:
+        page_range = range(doc.page_count)
+    else:
+        page_range = pages
+
+    for page_idx in page_range:
+        pix = doc.load_page(page_idx).get_pixmap(dpi=600)
         png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
         pix.save(png)
         if not onlypng:
