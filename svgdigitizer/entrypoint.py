@@ -10,12 +10,15 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
-      cv          Digitize a cylic voltammogram and create a frictionless...
-      digitize    Digitize a 2D plot.
-      figure      Digitize a figure with units on the axis and create a...
-      paginate    Render PDF pages as individual SVG files with linked PNG images.
-      plot        Display a plot of the data traced in an SVG.
+      create-svg     Write an SVG that shows `png` or `jpeg` as a linked image.
+      cv             Digitize a cylic voltammogram and create a frictionless...
+      digitize       Digitize a 2D plot.
+      figure         Digitize a figure with units on the axis and create a...
+      get-citation   Get the citation from the DOI provided PDF file.
+      get-doi        Get the DOI from the provided PDF file.
+      paginate       Render PDF pages as individual SVG files with linked PNG...
+      plot           Display a plot of the data traced in an SVG.
+      rename-by-key  Rename the provided PDF file by the key derived from...
 
 """
 # ********************************************************************
@@ -645,7 +648,37 @@ def get_citation(pdf):
 
 
 def _build_identifier(citation):
-    "Build the entry identifier based bibtex citation."
+    """
+    Build the entry identifier based on bibtex citation.
+
+    TESTS:
+
+        >>> from svgdigitizer.entrypoint import _build_identifier
+        >>> from pybtex.database import parse_string
+        >>> bibtex_string = '''@article{briega_martos_2021_cation_48,
+        ...    author = "Briega-Martos, Valent{\'\i}n and Sarabia, Francisco J and Climent, V{\'\i}ctor and Herrero, Enrique and Feliu, Juan M",
+        ...    title = "Cation Effects on Interfacial Water Structure and Hydrogen Peroxide Reduction on Pt (111)",
+        ...    journal = "ACS Measurement Science Au",
+        ...    year = "2021",
+        ...    volume = "1",
+        ...    number = "2",
+        ...    pages = "48--55",
+        ...    publisher = "ACS Publications",
+        ...    abstract = "The interface between the Pt(111) surface and several MeF/HClO4 (Me+ = Li+, Na+, or Cs+) aqueous electrolytes is investigated by means of cyclic voltammetry and laser-induced temperature jump experiments. Results point out that the effect of the electrolyte on the interfacial water structure is different depending on the nature of the metal alkali cation, with the values of the potential of maximum entropy (pme) following the order pme (Li+) < pme (Na+) < pme (Cs+). In addition, the hydrogen peroxide reduction reaction is studied under these conditions. This reaction is inhibited at low potentials as a consequence of the build up of negative charges on the electrode surface. The potential where this inhibition takes place (Einhibition) follows the same trend as the pme. These results evidence that the activity of an electrocatalytic reaction can depend to great extent on the structure of the interfacial water adlayer and that the latter can be modulated by the nature of the alkali metal cation."
+        ... }'''
+        >>> bibliography = parse_string(bibtex_string, bib_format="bibtex")
+        >>> _build_identifier(bibliography)
+        'briega-martos_2021_cation_48'
+
+        >>> from svgdigitizer.entrypoint import _download_citation
+        >>> bibtex_string = ' @article{Mart_nez_Hincapi__2021, title={Surface charge and interfacial acid-base properties: pKa,2 of carbon dioxide at Pt(110)/perchloric acid solution interfaces.}, volume={388}, ISSN={0013-4686}, url={http://dx.doi.org/10.1016/j.electacta.2021.138639}, DOI={10.1016/j.electacta.2021.138639}, journal={Electrochimica Acta}, publisher={Elsevier BV}, author={Martínez-Hincapié, R. and Rodes, A. and Climent, V. and Feliu, J.M.}, year={2021}, month=aug, pages={138639} }'
+        >>> bibliography = parse_string(bibtex_string, bib_format="bibtex")
+        >>> _build_identifier(bibliography)
+        'martinez-hincapie_2021_surface_138639'
+
+    """
+    from slugify import slugify
+    
     entry = list(citation.entries.values())[0]
     first_author = entry.persons["author"][0].last_names[0]
     title_words = entry.fields["title"].split(" ")
@@ -653,8 +686,10 @@ def _build_identifier(citation):
     if "the" == first_word:  # maybe add more words?
         first_word = title_words[1]
     year = entry.fields["year"]
-    page = entry.fields["pages"].split("–")[0]  # unicode "–"
-    return "_".join([first_author, year, first_word, page]).lower()
+    first_page = entry.fields["pages"].split("–")[0].split("-")[0]  # split unicode "–" and normal hypen "-" 
+    slugified_strs = [slugify(item) for item in [first_author, year, first_word, first_page]]
+    identifier = "_".join(slugified_strs)
+    return identifier
 
 
 @click.command()
