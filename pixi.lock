@@ -16209,7 +16209,7 @@ packages:
   - python >=3.9
   license: ISC
   purls:
-  - pkg:pypi/pexpect?source=hash-mapping
+  - pkg:pypi/pexpect?source=compressed-mapping
   size: 53561
   timestamp: 1733302019362
 - conda: https://conda.anaconda.org/conda-forge/noarch/pickleshare-0.7.5-pyhd8ed1ab_1004.conda
@@ -21068,7 +21068,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/setuptools?source=hash-mapping
+  - pkg:pypi/setuptools?source=compressed-mapping
   size: 777736
   timestamp: 1740654030775
 - conda: https://conda.anaconda.org/conda-forge/noarch/shellingham-1.5.4-pyhd8ed1ab_1.conda
@@ -21608,7 +21608,7 @@ packages:
 - pypi: .
   name: svgdigitizer
   version: 0.12.5
-  sha256: 0602d8f1cecea2e90813d498e4178bd6eaa480d4b8640751df81bbce80053a9b
+  sha256: ecf6a248f642378db1bd5420924cedb830033c55b332dc1cee9ff491f3b22c48
   requires_dist:
   - astropy>=5,<8
   - click>=8,<9
@@ -21620,6 +21620,7 @@ packages:
   - pybtex>=0.24,<0.25
   - pymupdf>=1.25,<2
   - pyyaml>=6,<7
+  - requests>2,<3
   - scipy>=1.7,<2
   - svg-path>=4.1,<7
   - svgpathtools>=1.4,<2

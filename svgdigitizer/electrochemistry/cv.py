@@ -50,7 +50,6 @@ from functools import cached_property
 
 import matplotlib.pyplot as plt
 from astropy import units as u
-
 from svgdigitizer.svgfigure import SVGFigure
 
 logger = logging.getLogger("cv")
