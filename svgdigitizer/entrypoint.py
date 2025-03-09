@@ -554,10 +554,10 @@ def _create_svg(svg, img, template_file, linked):
         import base64
         import mimetypes
 
-        img_mimetype = mimetypes.guess_type(img)[0].split("/")
+        img_mimetype = mimetypes.guess_type(img)[0]
         with open(img, "rb") as f:
             encoded = base64.b64encode(f.read()).decode()
-        img_data = f"data:image/{img_mimetype};base64,{encoded}"
+        img_data = f"data:{img_mimetype};base64,{encoded}"
         image_layer.add(
             svgwrite.image.Image(
                 href=(img_data),
