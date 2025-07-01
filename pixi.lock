@@ -1033,6 +1033,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/locket-1.0.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/linux-64/lz4-c-1.10.0-h5888daf_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/lzo-2.10-hd590300_1001.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/make-4.4.1-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-3.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/marko-2.1.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/markupsafe-3.0.2-py312h178313f_1.conda
@@ -1386,6 +1387,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/locket-1.0.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/osx-64/lz4-c-1.10.0-h240833e_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/lzo-2.10-h10d778d_1001.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/make-4.4.1-h00291cd_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-3.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/marko-2.1.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/markupsafe-3.0.2-py312h3520af0_1.conda
@@ -1722,6 +1724,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/locket-1.0.0-pyhd8ed1ab_0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/win-64/lz4-c-1.10.0-h2466b09_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/lzo-2.10-hcfcfb64_1001.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/make-4.4.1-h0e40799_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-3.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/marko-2.1.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/markupsafe-3.0.2-py312h31fea79_1.conda
@@ -13195,6 +13198,39 @@ packages:
   purls: []
   size: 142771
   timestamp: 1713516312465
+- conda: https://conda.anaconda.org/conda-forge/linux-64/make-4.4.1-hb9d3cd8_2.conda
+  sha256: d652c7bd4d3b6f82b0f6d063b0d8df6f54cc47531092d7ff008e780f3261bdda
+  md5: 33405d2a66b1411db9f7242c8b97c9e7
+  depends:
+  - __glibc >=2.17,<3.0.a0
+  - libgcc >=13
+  license: GPL-3.0-or-later
+  license_family: GPL
+  purls: []
+  size: 513088
+  timestamp: 1727801714848
+- conda: https://conda.anaconda.org/conda-forge/osx-64/make-4.4.1-h00291cd_2.conda
+  sha256: 5a5ab3ee828309185e0a76ca80f5da85f31d8480d923abb508ca00fe194d1b5a
+  md5: 59b4ad97bbb36ef5315500d5bde4bcfc
+  depends:
+  - __osx >=10.13
+  license: GPL-3.0-or-later
+  license_family: GPL
+  purls: []
+  size: 278910
+  timestamp: 1727801765025
+- conda: https://conda.anaconda.org/conda-forge/win-64/make-4.4.1-h0e40799_2.conda
+  sha256: a810cdca3d5fa50d562cda23c0c1195b45ff5f9b0c41e0d4c8c2dd3c043ff4f2
+  md5: 77ff648ad9fec660f261aa8ab0949f62
+  depends:
+  - libgcc >=13
+  - libwinpthread >=12.0.0.r4.gg4f2fc60ca
+  - ucrt >=10.0.20348.0
+  license: GPL-3.0-or-later
+  license_family: GPL
+  purls: []
+  size: 2176937
+  timestamp: 1727802346950
 - conda: https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-3.0.0-pyhd8ed1ab_1.conda
   sha256: 0fbacdfb31e55964152b24d5567e9a9996e1e7902fb08eb7d91b5fd6ce60803a
   md5: fee3164ac23dfca50cfcc8b85ddefb81
@@ -20375,7 +20411,7 @@ packages:
 - pypi: .
   name: svgdigitizer
   version: 0.12.5
-  sha256: 493d19a46f9ad8d3a6f9d4fbebdf66b4c13f450f23d1aca3c59f46adcfd9d137
+  sha256: 5d54e7abcb7d27f9944050e42061b917310f500a779e9b8e6ede0c0c30b33eff
   requires_dist:
   - astropy>=5,<8
   - click>=8,<9

@@ -112,6 +112,7 @@ lint = { depends-on = ["pylint", "black", "isort"] }
 
 [tool.pixi.feature.doc.dependencies]
 jupytext = "*"
+make = "*"
 myst-parser = "*"
 myst-nb = "*"
 sphinx = "*"
