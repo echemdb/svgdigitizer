@@ -20405,7 +20405,7 @@ packages:
 - pypi: ./
   name: svgdigitizer
   version: 0.12.6
-  sha256: 1a4f0b89d727de68b5081cae66f0c92c3708a485ca05ad6ab05de1865f56b3f9
+  sha256: bb2c15f052d1fcad214aa065e489a8f44bdd39357ef5818c4103568cc6600e4f
   requires_dist:
   - astropy>=5,<8
   - click>=8,<9
