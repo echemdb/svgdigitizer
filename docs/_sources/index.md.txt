@@ -163,9 +163,9 @@ The svgdigitizer can be enhanced with other modules for specific datasets.
 
 Currently the following datasets are supported:
 
-* [cyclic voltammograms](api/cv.md) (*I* vs. *E* — current vs. potential curves or *j* vs. *E* — current density vs. potential curves) commonly found in electrochemistry. For further details and requirements refer to the specific instructions of the [cv module](api/cv.md) itself or the detailed description on how to [digitize cyclic voltammograms](workflow.md) for the [echemdb](https://echemdb.github.io/website/).
+* [cyclic voltammograms](api/cv.md) (*I* vs. *E* — current vs. potential curves or *j* vs. *E* — current density vs. potential curves) commonly found in electrochemistry. For further details and requirements refer to the specific instructions of the [cv module](api/cv.md) itself or the detailed description on how to [digitize cyclic voltammograms](workflow.md) for the [echemdb](https://www.echemdb.org/).
 
-If you have used this project in the preparation of a publication, please cite it as described [on our zenodo page](https://zenodo.org/record/5881475).
+If you have used this project in the preparation of a publication, please cite it as described [on our zenodo page](https://zenodo.org/records/5881475).
 
 ## Datapackage interaction
 

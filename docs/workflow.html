@@ -147,27 +147,29 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;, line 8, in &lt;module&gt;
     sys.exit(cli())
-             ^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1161, in __call__
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>             ^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1442, in __call__
     return self.main(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1082, in main
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1363, in main
     rv = self.invoke(ctx)
          ^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1697, in invoke
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1830, in invoke
     return _process_result(sub_ctx.command.invoke(sub_ctx))
                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1443, in invoke
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1226, in invoke
     return ctx.invoke(self.callback, **ctx.params)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 788, in invoke
-    return __callback(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 794, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 679, in paginate
     doc = pymupdf.open(pdf)
           ^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/pymupdf/__init__.py&quot;, line 2918, in __init__
-    raise FileNotFoundError(msg)
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/pymupdf/__init__.py&quot;, line 2957, in __init__
+    raise FileNotFoundError(f&quot;no such file: &#39;{filename}&#39;&quot;)
 pymupdf.FileNotFoundError: no such file: &#39;/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf&#39;
 </pre></div>
 </div>
