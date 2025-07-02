@@ -4,6 +4,25 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.12.6
+====================
+
+**Added:**
+
+* Added an option in the CLI to create linked SVG file from image directly.
+* Added an option in the CLI to add an SVG template to the linked SVG file.
+
+**Changed:**
+
+* Changed version bound for pybtex from "">=0.24,<0.25" to ">=0.25,<0.26".
+* Changed PDF handling from pdf2image to PyMuPDF, allowing to run in pyodide.
+
+**Fixed:**
+
+* Fixed mimetype of image embedded in SVG.
+
+
+
 v0.12.5
 ====================
 
