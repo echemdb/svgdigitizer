@@ -163,13 +163,11 @@ def _create_bibliography(svg, metadata):
     from pybtex.database import parse_file
 
     metadata.setdefault("source", {})
-    metadata["source"].setdefault("citation key", "")
+    metadata["source"].setdefault("citationKey", "")
 
-    bibkey = metadata["source"]["citation key"]
+    bibkey = metadata["source"]["citationKey"]
     if not bibkey:
-        logger.warning(
-            'No bibliography key found in metadata["source"]["citation key"]'
-        )
+        logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
         return ""
 
     bib_directory = os.path.dirname(svg)
@@ -451,7 +449,7 @@ def _create_package(metadata, csvname, outdir):
     # Update fields in the datapackage describing the data in the CSV
     package_schema = resource.schema
     data_description_schema = Schema.from_descriptor(
-        {"fields": resource.custom["metadata"]["echemdb"]["data description"]["fields"]}
+        {"fields": resource.custom["metadata"]["echemdb"]["dataDescription"]["fields"]}
     )
 
     new_fields = []
@@ -466,7 +464,7 @@ def _create_package(metadata, csvname, outdir):
         )
 
     resource.schema = Schema.from_descriptor({"fields": new_fields})
-    del resource.custom["metadata"]["echemdb"]["data description"]
+    del resource.custom["metadata"]["echemdb"]["dataDescription"]
 
     return package
 

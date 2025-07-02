@@ -16,12 +16,12 @@ figure description: #This section will be updated by module `CV`
     simultaneous measurements: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
     comment: # Add whatever you think is important to understand the data
 
-electrochemical system:
+electrochemicalSystem:
     electrolyte:
         type: aq # aqueous = aq, non-aqueous=naq
         components: # create as many components as necessary. A simple electrolyte consists of two components, i.e., H2SO4 and water
             - name: NaCl # replace name by something generic, i.e., for a complex organic compound
-              sum formula:  NaCl
+              sumFormula:  NaCl
               concentration:
                   value: 0.1
                   unit: M #[M, mM, µM, g kg-1, ...]
@@ -30,7 +30,7 @@ electrochemical system:
                   supplier: null
                   LOT: 
             - name: water
-              sum formula: H2O
+              sumFormula: H2O
               type: solvent
               proportion:
                   value: 50
@@ -38,17 +38,17 @@ electrochemical system:
               source:
                   refinement: Sartorius Arium 611UV
                   quality: ultrapure water
-                  total organic carbon: 
+                  totalOrganicCarbon: 
                       value: 3
                       unit: ppb
             - name: ethanol
-              sum formula: EtOH
+              sumFormula: EtOH
               type: solvent
               proportion:
                   value: 50
                   unit: volume percent
             - name: sulfuric acid
-              sum formula: H2SO4
+              sumFormula: H2SO4
               type: acid
               source:
                   supplier: null
@@ -64,17 +64,17 @@ electrochemical system:
             unit: K # [K, C, F]
     electrodes:
         configuration: 3 # number of electrodes
-        reference electrode:
+        referenceElectrode:
             type: RHE # the reference electrode given in the experimental section. Might differ from that in the plot: MSE-sat, MSE-3M, MSE-1M, RHE, AgCl2
             source:
                 supplier: SI Analytics
-        counter electrode:
+        counterElectrode:
             material: Pt
-            crystallographic orientation: poly
+            crystallographicOrientation: poly
             shape: wire
-        working electrode:
+        workingElectrode:
             material: Ni
-            crystallographic orientation: 111 # hkl, 100, 110, poly
+            crystallographicOrientation: 111 # hkl, 100, 110, poly
             source:
                 supplier: null
                 LOT: 
@@ -86,7 +86,7 @@ electrochemical system:
                 diameter:
                     value: 4
                     unit: mm
-            geometric electrolyte contact area: 
+            geometricElectrolyteContactArea:  
                 value: null
                 unit: cm-2
-            preparation procedure: null # Short description of sample preparation. This can be very useful. :)
+            preparationProcedure: null # Short description of sample preparation. This can be very useful. :)
