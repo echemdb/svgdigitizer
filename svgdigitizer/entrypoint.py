@@ -155,7 +155,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
 
 def _create_bibliography(svg, metadata):
     r"""
-    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`,
+    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citationKey']`,
     when both requirements are met. Otherwise an empty string is returned.
 
     This is a helper method for :meth:`_create_outfiles`.

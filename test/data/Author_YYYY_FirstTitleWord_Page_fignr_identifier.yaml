@@ -12,8 +12,8 @@ curator:
     orcid: https://orcid.org/0000-0002-9686-3948
     digitized: 2021-06-01 # YYYY-MM-DD
     
-figure description: #This section will be updated by module `CV`
-    simultaneous measurements: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
+figureDescription: #This section will be updated by module `CV`
+    simultaneousMeasurements: null # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
     comment: # Add whatever you think is important to understand the data
 
 electrochemicalSystem:

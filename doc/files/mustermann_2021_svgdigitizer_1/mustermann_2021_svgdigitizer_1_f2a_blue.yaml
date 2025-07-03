@@ -15,9 +15,9 @@ curator:
     orcid: https://orcid.org/0000-0002-9686-3948
     digitized: 2021-10-09 # YYYY-MM-DD
 
-figure description:
+figureDescription:
     version: 1
-    simultaneous measurements: DEMS # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
+    simultaneousMeasurements: DEMS # FTIR, SXRD, Ring Disc - indicate if any other operando methods were shown in the same plot, which is linked to the data
     comment: data acquisition rate was low. Some features do not appear smooth. # Add whatever you think is important to understand the data
 
 electrochemicalSystem:
