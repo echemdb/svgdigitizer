@@ -31,10 +31,10 @@
                         "figure": "",
                         "curve": "blue"
                     },
-                    "figure description": {
+                    "figureDescription": {
                         "type": "digitized",
-                        "simultaneous measurements": [],
-                        "measurement type": "custom",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "custom",
                         "fields": [
                             {
                                 "name": "d",

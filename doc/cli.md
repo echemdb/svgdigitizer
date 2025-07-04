@@ -296,7 +296,7 @@ Requirements:
 
 ```yaml
 source:
-  citation key: BIB_FILENAME  # without file extension
+  citationKey: BIB_FILENAME  # without file extension
 ```
 
 ```{code-cell} ipython3

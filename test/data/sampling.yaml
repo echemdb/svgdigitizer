@@ -11,7 +11,7 @@ curator:
     name: Johannes M. Hermann
     orcid: https://orcid.org/0000-0001-7119-1295
     
-figure description:
+figureDescription:
     type: original
     measurement type: CV
     scan rate:
@@ -25,18 +25,18 @@ figure description:
         unit: uA
         normalized to: cm-2
         column number: 1
-electrochemical system:
+electrochemicalSystem:
     electrolyte:
         type: aq
         components:
             - name: water
-              sum formula: H2O
+              sumFormula: H2O
               type: solvent
               proportion:
                   value: 100
                   unit: volume percent
             - name: sulfuric acid
-              sum formula: H2SO4
+              sumFormula: H2SO4
               type: acid
               source:
                   supplier: Cica-Merck
@@ -50,17 +50,17 @@ electrochemical system:
             unit: C
     electrodes:
         configuration: 3
-        reference electrode:
+        referenceElectrode:
             type: Ag/AgCl-sat.
-        counter electrode:
+        counterElectrode:
             material: unknown
-        working electrode:
+        workingElectrode:
             material: Au
-            crystallographic orientation: 111
+            crystallographicOrientation: 111
             orientation accuracy: < 0.1°
             source:
                 supplier: 
                 LOT: 
             shape:
                 type: bead
-            preparation procedure: flame annealing (hydrogen flame)
+            preparationProcedure: flame annealing (hydrogen flame)

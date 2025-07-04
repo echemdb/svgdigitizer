@@ -577,7 +577,7 @@ class SVGFigure:
             )
 
         if not comments:
-            return self._metadata.get("figure description", {}).get("comment", "")
+            return self._metadata.get("figureDescription", {}).get("comment", "")
 
         return comments[0].value
 
@@ -1082,7 +1082,7 @@ class SVGFigure:
         # Infer the scan rate from the provided metadata
 
         if len(rates) == 0:
-            rate = self._metadata.get("figure description", {}).get("scan rate", {})
+            rate = self._metadata.get("figureDescription", {}).get("scanRate", {})
 
             def metadata_rate_consistency():
                 if "value" not in rate or "unit" not in rate:
@@ -1498,8 +1498,8 @@ class SVGFigure:
 
         # if not linked:
         if len(linked) == 0:
-            return self._metadata.get("figure description", {}).get(
-                "simultaneous measurements", []
+            return self._metadata.get("figureDescription", {}).get(
+                "simultaneousMeasurements", []
             )
 
         return [i.strip() for i in linked[0].value.split(",")]
@@ -1549,14 +1549,14 @@ class SVGFigure:
             >>> figure.metadata == \
             ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
             ...  'source': {'figure': '2b', 'curve': '0'},
-            ...  'figure description': {'type': 'digitized',
-            ...  'measurement type': 'custom',
+            ...  'figureDescription': {'type': 'digitized',
+            ...  'measurementType': 'custom',
             ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'horizontal', 'unit': 'mV'},
             ...             {'name': 'j', 'type': 'number', 'orientation': 'vertical', 'unit': 'uA / cm2'}],
             ...  'comment': 'noisy data',
-            ...  'scan rate': {'value': 50.0, 'unit': 'V / s'},
-            ...  'simultaneous measurements': ['SXRD', 'SHG']},
-            ...  'data description': {'type': 'digitized', 'measurement type': 'custom', 'fields':
+            ...  'scanRate': {'value': 50.0, 'unit': 'V / s'},
+            ...  'simultaneousMeasurements': ['SXRD', 'SHG']},
+            ...  'dataDescription': {'type': 'digitized', 'measurementType': 'custom', 'fields':
             ...                       [{'name': 'E', 'type': 'number', 'unit': 'mV'},
             ...                       {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'},
             ...                       {'name': 't', 'type': 'number', 'unit': 's'}]}}
@@ -1599,13 +1599,13 @@ class SVGFigure:
             >>> figure.metadata == \
             ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
             ...  'source': {'figure': '2b', 'curve': '0'},
-            ...  'figure description': {'type': 'digitized',
-            ...  'measurement type': 'custom',
+            ...  'figureDescription': {'type': 'digitized',
+            ...  'measurementType': 'custom',
             ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'horizontal', 'unit': 'mV'},
             ...             {'name': 'j', 'type': 'number', 'orientation': 'vertical', 'unit': 'uA / cm2'}],
             ...  'comment': 'noisy data',
-            ...  'simultaneous measurements': ['SXRD', 'SHG']},
-            ...  'data description': {'type': 'digitized', 'measurement type': 'custom', 'fields':
+            ...  'simultaneousMeasurements': ['SXRD', 'SHG']},
+            ...  'dataDescription': {'type': 'digitized', 'measurementType': 'custom', 'fields':
             ...                       [{'name': 'E', 'type': 'number', 'unit': 'mV'},
             ...                       {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}}
             True
@@ -1619,23 +1619,23 @@ class SVGFigure:
                 "figure": self.figure_label,
                 "curve": self.curve_label,
             },
-            "figure description": {
+            "figureDescription": {
                 "type": "digitized",
-                "simultaneous measurements": self.simultaneous_measurements,
-                "measurement type": self.measurement_type,
+                "simultaneousMeasurements": self.simultaneous_measurements,
+                "measurementType": self.measurement_type,
                 "fields": self.figure_schema.to_dict()["fields"],
                 "comment": self.comment,
             },
-            "data description": {
+            "dataDescription": {
                 "type": "digitized",
-                "measurement type": self.measurement_type,
+                "measurementType": self.measurement_type,
                 "fields": self.data_schema.to_dict()["fields"],
             },
         }
 
         if self.scan_rate is not None:
-            metadata["figure description"].setdefault(
-                "scan rate",
+            metadata["figureDescription"].setdefault(
+                "scanRate",
                 {
                     "value": float(self.scan_rate.value),
                     "unit": str(self.scan_rate.unit),
