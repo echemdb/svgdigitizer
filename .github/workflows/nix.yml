@@ -1,0 +1,20 @@
+name: Darwin aarch64 Test
+
+on:
+  push: { branches: [ "master" ] }
+  pull_request: { branches: [ "master" ] }
+
+jobs:
+  build:
+    runs-on: macos-latest  # macOS Sonoma (Apple Silicon)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v22
+
+      - name: Build for aarch64-darwin
+        run: |
+          nix build .#default \
+            --system aarch64-darwin
