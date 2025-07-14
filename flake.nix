@@ -58,6 +58,7 @@
           nativeCheckInputs = with pyPkgs; [ pytest pytest-xdist ];
           doCheck = true;
           checkPhase = ''
+            export MPLBACKEND=Agg
             pytest -n auto --doctest-modules svgdigitizer
           '';
           pythonImportsCheck = [ "svgdigitizer" ];
