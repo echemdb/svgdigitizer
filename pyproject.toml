@@ -126,3 +126,10 @@ linkcheck = "cd doc && make linkcheck"
 [tool.pixi.feature.dev.dependencies]
 pip = "*"
 conda = "*"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:.*builtin type swigvarlink has no __module__ attribute.*:DeprecationWarning::",
+    "ignore:.*builtin type SwigPyObject has no __module__ attribute.*:DeprecationWarning::",
+    "ignore:.*builtin type SwigPyPacked has no __module__ attribute.*:DeprecationWarning::",
+]

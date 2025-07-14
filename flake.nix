@@ -55,11 +55,10 @@
             svgpathtools
             svgwrite
           ];
-          nativeCheckInputs = [ pyPkgs.pytestCheckHook ];
+          nativeCheckInputs = with pyPkgs; [ pytest pytest-xdist ];
           doCheck = true;
           checkPhase = ''
-          #  pytest test/
-          #   pytest -n auto --doctest-modules svgdigitizer
+            pytest -n auto --doctest-modules svgdigitizer
           '';
           pythonImportsCheck = [ "svgdigitizer" ];
         };
