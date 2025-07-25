@@ -9,6 +9,7 @@ classifiers = ["License :: OSI Approved :: GNU General Public License v3 or late
 description = "svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications."
 readme = "README.md"
 requires-python = ">=3.9"
+# Additions and removals of dependencies need to be reflected in flake.nix
 dependencies = [
     "astropy>=5,<8",
     "click>=8,<9",
