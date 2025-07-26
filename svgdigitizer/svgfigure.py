@@ -32,6 +32,7 @@ from functools import cached_property
 
 import astropy.units as u
 import matplotlib.pyplot as plt
+
 from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("svgfigure")
