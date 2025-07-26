@@ -11,25 +11,6 @@
       let
         pkgs = import nixpkgs { inherit system; };
         pyPkgs = pkgs.python313Packages;
-         
-         # temporary: remove when available in repository
-         svgpathtools = pyPkgs.buildPythonPackage rec {
-          pname = "svgpathtools";
-          version = "1.7.1";
-          pyproject = true;
-
-          src = pkgs.fetchFromGitHub {
-            owner = "mathandy";
-            repo = "svgpathtools";
-            tag = "v${version}";
-            hash = "sha256-SzYssDJ+uGb5zXZ16XaMCvIPF8BKJ4VVI/gUghz1IyA=";
-          };
-
-          build-system = [ pyPkgs.setuptools ];
-          dependencies = [ pyPkgs.numpy pyPkgs.scipy pyPkgs.svgwrite ];
-          nativeCheckInputs = [ pyPkgs.pytestCheckHook ];
-          pythonImportsCheck = [ "svgpathtools" ];
-        };
 
         svgdigitizer = pyPkgs.buildPythonPackage {
           pname = "svgdigitizer";
@@ -87,7 +68,7 @@
             svgwrite
           ];
           shellHook = ''
-            echo "🐍 DevShell ready for svgdigitizer + svgpathtools"
+            echo "🐍 DevShell ready for svgdigitizer"
           '';
         };
       });
