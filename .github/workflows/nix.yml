@@ -1,4 +1,4 @@
-name: Darwin aarch64 Test
+name: Nix Test
 
 on:
   push: { branches: [ "master" ] }
@@ -6,15 +6,15 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest  # macOS Sonoma (Apple Silicon)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "ubuntu-24.04-arm", "macos-latest"]
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 
       - name: Set up Nix
-        uses: cachix/install-nix-action@v22
-
-      - name: Build for aarch64-darwin
-        run: |
-          nix build .#default \
-            --system aarch64-darwin
+        uses: cachix/install-nix-action@v31
+      - run: nix build .#default
+      - run: nix flake check
