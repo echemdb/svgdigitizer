@@ -659,7 +659,7 @@ def get_citation(pdf):
     >>> from svgdigitizer.test.cli import invoke, TemporaryData
     >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
     ...     invoke(cli, "get-citation", os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
-    @article{Hermann_2018, title={Enhanced Electrocatalytic Oxidation of Formic Acid on Au(111) in the Presence of Pyridine}, volume={165}, ISSN={1945-7111}, url={http://dx.doi.org/10.1149/2.0251815jes}, DOI={10.1149/2.0251815jes}, number={15}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Mattausch, Yannick and Weiß, Annchristin and Jacob, Timo and Kibler, Ludwig A.}, year={2018}, pages={J3192–J3198} } #pylint: disable=line-too-long
+    @article{Hermann_2018, title={Enhanced Electrocatalytic Oxidation ... year={2018}, pages={J3192–J3198} }
 
     TESTS::
 
