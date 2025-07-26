@@ -593,7 +593,7 @@ def _create_svg(svg, img, template_file, linked):
 
 
 def _extract_doi(pdf):
-    "Extract DOI from first or second (sometimes additional pages not are prepended) PDF page."
+    "Extract DOI from first or second (sometimes additional pages are prepended) PDF page."
     import re
 
     import pymupdf
@@ -654,15 +654,24 @@ def _download_citation(doi):
 def get_citation(pdf):
     r"""
     Get the citation from the DOI provided PDF file.
+    EXAMPLES::
+
+    >>> from svgdigitizer.test.cli import invoke, TemporaryData
+    >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
+    ...     invoke(cli, "get-citation", os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
+    @article{Hermann_2018, title={Enhanced Electrocatalytic Oxidation of Formic Acid on Au(111) in the Presence of Pyridine}, volume={165}, ISSN={1945-7111}, url={http://dx.doi.org/10.1149/2.0251815jes}, DOI={10.1149/2.0251815jes}, number={15}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Mattausch, Yannick and Weiß, Annchristin and Jacob, Timo and Kibler, Ludwig A.}, year={2018}, pages={J3192–J3198} } #pylint: disable=line-too-long
+
+    TESTS::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
 
     """
     doi = _extract_doi(pdf)
     citation = _download_citation(doi)
 
-    if citation:
-        print(citation)
-    else:
+    if not citation:
         raise KeyError("Failed to get citation.")
+    print(citation)
 
 
 def _build_identifier(citation):
