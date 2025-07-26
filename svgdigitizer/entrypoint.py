@@ -593,18 +593,26 @@ def _create_svg(svg, img, template_file, linked):
 
 
 def _extract_doi(pdf):
-    "Extract DOI from first PDF page."
+    "Extract DOI from first or second (sometimes additional pages not are prepended) PDF page."
     import re
 
     import pymupdf
 
     doc = pymupdf.open(pdf)
-    text = doc.get_page_text(0)
-    matches = re.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
-    if len(matches) == 1:
-        return matches[0]
 
-    raise KeyError(f"{len(matches)} DOIs found. Extraction of DOI failed.")
+    for page_num in range(min(doc.page_count, 2)):  # inspect the first (two) page(s)
+        text = doc.get_page_text(page_num)
+        matches = re.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
+        if len(matches) == 0:
+            logger.warning(f"No DOI found on page {page_num + 1}.")
+        elif len(matches) > 1:
+            raise ValueError(
+                f"{len(matches)} DOIs found. Candidates are {matches}. Extraction of DOI failed."
+            )
+        else:
+            return matches[0]
+
+    raise ValueError("No DOI found. Extraction of DOI failed.")
 
 
 @click.command()
@@ -612,6 +620,16 @@ def _extract_doi(pdf):
 def get_doi(pdf):
     r"""
     Get the DOI from the provided PDF file.
+    EXAMPLES::
+
+    >>> from svgdigitizer.test.cli import invoke, TemporaryData
+    >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
+    ...     invoke(cli, "get-doi", os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
+    10.1149/2.0251815jes
+
+    TESTS::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
 
     """
     print(_extract_doi(pdf))
