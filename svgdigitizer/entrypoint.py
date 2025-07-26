@@ -604,12 +604,13 @@ def _extract_doi(pdf):
         text = doc.get_page_text(page_num)
         matches = re.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
         if len(matches) == 0:
-            logger.warning(f"No DOI found on page {page_num + 1}.")
+            logger.info(f"No DOI found on page {page_num + 1}. Trying next page.")
         elif len(matches) > 1:
             raise ValueError(
                 f"{len(matches)} DOIs found. Candidates are {matches}. Extraction of DOI failed."
             )
         else:
+            logger.info(f"DOI found on page {page_num + 1}.")
             return matches[0]
 
     raise ValueError("No DOI found. Extraction of DOI failed.")
