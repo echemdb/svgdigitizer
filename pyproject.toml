@@ -21,7 +21,7 @@ dependencies = [
     "pymupdf>=1.25,<2",
     "pyyaml>=6,<7",
     "scipy>=1.7,<2",
-    "svg.path>=4.1,<7",
+    "svg.path>=4.1,<8",
     "svgpathtools>=1.4,<2",
     "svgwrite>=1.4,<2",
 ]
@@ -42,7 +42,7 @@ svgdigitizer = ["assets/template.svg"]
 
 [tool.pixi.project]
 channels = ["conda-forge"]
-platforms = ["linux-64", "osx-64", "win-64"]
+platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64", "win-64"]
 
 [tool.pixi.environments]
 python-39 = ["test", "python-39"]
