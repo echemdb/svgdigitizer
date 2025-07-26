@@ -760,12 +760,6 @@ def _parse_pages_option(_ctx, _param, value):
     callback=_parse_pages_option,
     help="Specify a single page (e.g., '2') or a range (e.g., '3-5').",
 )
-@click.option(
-    "--template",
-    type=click.Choice(["basic"]),
-    default=None,
-    help="Add builtin template elements in SVG files.",
-)
 @click.option("--onlypng", is_flag=True, help="Only produce PNG files.")
 @click.option(
     "--template",
