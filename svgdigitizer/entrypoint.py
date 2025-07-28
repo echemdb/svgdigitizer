@@ -10,12 +10,15 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
-      cv          Digitize a cylic voltammogram and create a frictionless...
-      digitize    Digitize a 2D plot.
-      figure      Digitize a figure with units on the axis and create a...
-      paginate    Render PDF pages as individual SVG files with linked PNG images.
-      plot        Display a plot of the data traced in an SVG.
+      create-svg     Write an SVG that shows `png` or `jpeg` as a linked image.
+      cv             Digitize a cylic voltammogram and create a frictionless...
+      digitize       Digitize a 2D plot.
+      figure         Digitize a figure with units on the axis and create a...
+      get-citation   Get the citation from the DOI provided PDF file.
+      get-doi        Get the DOI from the provided PDF file.
+      paginate       Render PDF pages as individual SVG files with linked PNG...
+      plot           Display a plot of the data traced in an SVG.
+      rename-by-key  Rename the provided PDF file by the key derived from...
 
 """
 # ********************************************************************
@@ -589,6 +592,138 @@ def _create_svg(svg, img, template_file, linked):
         drawing.save(pretty=True)
 
 
+def _extract_doi(pdf):
+    "Extract DOI from first or second (sometimes additional pages are prepended) PDF page."
+    import re
+
+    import pymupdf
+
+    doc = pymupdf.open(pdf)
+
+    for page_num in range(min(doc.page_count, 2)):  # inspect the first (two) page(s)
+        text = doc.get_page_text(page_num)
+        matches = re.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
+        if len(matches) == 0:
+            logger.info(f"No DOI found on page {page_num + 1}. Trying next page.")
+        elif len(matches) > 1:
+            raise ValueError(
+                f"{len(matches)} DOIs found. Candidates are {matches}. Extraction of DOI failed."
+            )
+        else:
+            logger.info(f"DOI found on page {page_num + 1}.")
+            return matches[0]
+
+    raise ValueError("No DOI found. Extraction of DOI failed.")
+
+
+@click.command()
+@click.argument("pdf")
+def get_doi(pdf):
+    r"""
+    Get the DOI from the provided PDF file.
+    EXAMPLES::
+
+    >>> from svgdigitizer.test.cli import invoke, TemporaryData
+    >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
+    ...     invoke(cli, "get-doi", os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
+    10.1149/2.0251815jes
+
+    TESTS::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+
+    """
+    print(_extract_doi(pdf))
+
+
+def _download_citation(doi):
+    "Download citation for DOI"
+    import requests
+
+    resp = requests.get(
+        "https://doi.org/" + doi,
+        headers={"Accept": "application/x-bibtex; charset=utf-8"},
+        timeout=5,
+    )
+    if resp.ok:
+        return resp.text
+    return ""
+
+
+@click.command()
+@click.argument("pdf")
+def get_citation(pdf):
+    r"""
+    Get the citation from the DOI provided PDF file.
+    EXAMPLES::
+
+    >>> from svgdigitizer.test.cli import invoke, TemporaryData
+    >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
+    ...     invoke(cli, "get-citation", os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
+    @article{Hermann_2018, title={Enhanced Electrocatalytic Oxidation ... year={2018}, pages={J3192–J3198} }
+
+    TESTS::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+
+    """
+    doi = _extract_doi(pdf)
+    citation = _download_citation(doi)
+
+    if not citation:
+        raise KeyError("Failed to get citation.")
+    print(citation)
+
+
+def _build_identifier(citation):
+    """
+    Build the entry identifier based on bibtex citation.
+
+    TESTS:
+
+        >>> from svgdigitizer.entrypoint import _build_identifier
+        >>> from pybtex.database import parse_string
+        >>> bibtex_string = ' @article{Mart_nez_Hincapi__2021, title={Surface charge and interfacial acid-base properties: pKa,2 of carbon dioxide at Pt(110)/perchloric acid solution interfaces.}, volume={388}, ISSN={0013-4686}, url={http://dx.doi.org/10.1016/j.electacta.2021.138639}, DOI={10.1016/j.electacta.2021.138639}, journal={Electrochimica Acta}, publisher={Elsevier BV}, author={Martínez-Hincapié, R. and Rodes, A. and Climent, V. and Feliu, J.M.}, year={2021}, month=aug, pages={138639} }' #pylint: disable=line-too-long
+        >>> bibliography = parse_string(bibtex_string, bib_format="bibtex")
+        >>> _build_identifier(bibliography)
+        'martinez-hincapie_2021_surface_138639'
+
+    """
+    from slugify import slugify
+
+    entry = list(citation.entries.values())[0]
+    first_author = entry.persons["author"][0].last_names[0]
+    title_words = entry.fields["title"].split(" ")
+    first_word = title_words[0]
+    if "the" == first_word:  # maybe add more words?
+        first_word = title_words[1]
+    year = entry.fields["year"]
+    first_page = (
+        entry.fields["pages"].split("–")[0].split("-")[0]
+    )  # split unicode "–" and normal hypen "-"
+    slugified_strs = [
+        slugify(item) for item in [first_author, year, first_word, first_page]
+    ]
+    identifier = "_".join(slugified_strs)
+    return identifier
+
+
+@click.command()
+@click.argument("pdf")
+def rename_by_key(pdf):
+    r"""
+    Rename the provided PDF file by the key derived from citation.
+
+    """
+    from pybtex.database import parse_string
+
+    doi = _extract_doi(pdf)
+    citation = _download_citation(doi)
+    bibliography = parse_string(citation, bib_format="bibtex")
+    identifier = _build_identifier(bibliography)
+    os.rename(pdf, identifier + ".pdf")
+
+
 @click.command()
 @click.option(
     "--template",
@@ -624,7 +759,35 @@ def create_svg(img, template, outdir):
         raise click.BadParameter("Only PNG or JPEG image formats are supported.")
 
 
+def _parse_pages_option(_ctx, _param, value):
+    import re
+
+    if value is None:
+        return None
+
+    match = re.fullmatch(r"(\d+)(?:-(\d+))?", value)
+    if not match:
+        raise click.BadParameter(
+            "Invalid format. Use a single number or a range like '3-5'."
+        )
+
+    start = int(match.group(1))
+    end = int(match.group(2)) if match.group(2) else start
+
+    if start > end:
+        raise click.BadParameter(
+            "Invalid range. Start must be less than or equal to end."
+        )
+
+    return list(range(start, end + 1))
+
+
 @click.command()
+@click.option(
+    "--pages",
+    callback=_parse_pages_option,
+    help="Specify a single page (e.g., '2') or a range (e.g., '3-5').",
+)
 @click.option("--onlypng", is_flag=True, help="Only produce PNG files.")
 @click.option(
     "--template",
@@ -645,7 +808,7 @@ def create_svg(img, template, outdir):
     help="Write output files to this directory.",
 )
 @click.argument("pdf")
-def paginate(onlypng, template, template_file, pdf, outdir):
+def paginate(pages, onlypng, template, template_file, pdf, outdir):
     """
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -677,8 +840,17 @@ def paginate(onlypng, template, template_file, pdf, outdir):
         )
 
     doc = pymupdf.open(pdf)
-    for page_idx, page in enumerate(doc):
-        pix = page.get_pixmap(dpi=600)
+    num_pages = doc.page_count
+    if not pages:
+        page_range = range(num_pages)
+    else:
+        page_range = pages
+        if page_range not in range(num_pages):
+            raise click.BadParameter(
+                f"Invalid range. Page numbers must be within 0-{num_pages}."
+            )
+    for page_idx in page_range:
+        pix = doc.load_page(page_idx).get_pixmap(dpi=600)
         png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
         pix.save(png)
         if not onlypng:
@@ -693,6 +865,9 @@ cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
 cli.add_command(create_svg)
+cli.add_command(get_doi)
+cli.add_command(get_citation)
+cli.add_command(rename_by_key)
 
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their
