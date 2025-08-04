@@ -36,10 +36,10 @@
                         "figure": "",
                         "curve": "blue"
                     },
-                    "figure description": {
+                    "figureDescription": {
                         "type": "digitized",
-                        "simultaneous measurements": [],
-                        "measurement type": "custom",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "custom",
                         "fields": [
                             {
                                 "name": "U",
@@ -55,7 +55,7 @@
                             }
                         ],
                         "comment": "random data",
-                        "scan rate": {
+                        "scanRate": {
                             "value": 50.0,
                             "unit": "mV / s"
                         }
