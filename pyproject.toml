@@ -97,7 +97,9 @@ pytest = "*"
 pytest-xdist = "*"
 
 [tool.pixi.feature.test.tasks]
-validate = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/main/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')"
+# To validate the metadata against a specific version preceded the version by `tags` such as `tags/0.3.0`.
+# To validate the metadata against metadata in a specific branch use `head/branch-name`.
+validate = { args = [ { "arg" = "version", "default" = "tags/0.3.0" } ],cmd = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --base-uri https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')" }
 doctest = "pytest -n auto --doctest-modules svgdigitizer"
 
 [tool.pixi.feature.lint.dependencies]
