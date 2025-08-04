@@ -250,11 +250,11 @@ Only elements of the template SVG residing inside a group/layer with the <code c
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 794, in invoke
     return callback(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 685, in paginate
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 683, in paginate
     _create_linked_svg(
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 510, in _create_linked_svg
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 508, in _create_linked_svg
     _create_svg(svg, img, template_file, linked=True)
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 575, in _create_svg
+  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 573, in _create_svg
     template_svg_root = ET.parse(template_file).getroot()
                         ^^^^^^^^^^^^^^^^^^^^^^^
   File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/xml/etree/ElementTree.py&quot;, line 1204, in parse
@@ -323,7 +323,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/272378f539d792ece75494d220585e2625989794430e6a9e309bab5eff140c9a.png" src="_images/272378f539d792ece75494d220585e2625989794430e6a9e309bab5eff140c9a.png" />
+<img alt="_images/0f4e073f1ac9f46eb2a899ca090d8da6f8e29f0298fea4e6776a707d3d603c7e.png" src="_images/0f4e073f1ac9f46eb2a899ca090d8da6f8e29f0298fea4e6776a707d3d603c7e.png" />
 </div>
 </div>
 <p>The resulting plot indicates that only the nodes of the spline were connected. To improve the tracing use the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
@@ -354,7 +354,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/75ef8e91b6e67a12300356a38d75ad10cd0c301aa714344b953ed88ee6d7b933.png" src="_images/75ef8e91b6e67a12300356a38d75ad10cd0c301aa714344b953ed88ee6d7b933.png" />
+<img alt="_images/9e66854bbb9fea2abfb15669142396e941619c0797af440c0f35b140e6efa5de.png" src="_images/9e66854bbb9fea2abfb15669142396e941619c0797af440c0f35b140e6efa5de.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -482,7 +482,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;distance [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/6c81f52bb3208b6d0febd8b691df830b1d3a0c6e434cad394e16c7a7f7860a09.png" src="_images/6c81f52bb3208b6d0febd8b691df830b1d3a0c6e434cad394e16c7a7f7860a09.png" />
+<img alt="_images/f5eb6556846b54bd1e0f5a069442fb5b7b3a5fbf32107921b830c762a95b4922.png" src="_images/f5eb6556846b54bd1e0f5a069442fb5b7b3a5fbf32107921b830c762a95b4922.png" />
 </div>
 </div>
 </section>
@@ -603,9 +603,9 @@ Options:
      &#39;description&#39;: &#39;The cyclist rides at a constant speed of 5 m/s along a track including a looping.&#39;,
      &#39;experimental&#39;: {&#39;tags&#39;: []},
      &#39;source&#39;: {&#39;figure&#39;: &#39;&#39;, &#39;curve&#39;: &#39;blue&#39;},
-     &#39;figure description&#39;: {&#39;type&#39;: &#39;digitized&#39;,
-      &#39;simultaneous measurements&#39;: [],
-      &#39;measurement type&#39;: &#39;custom&#39;,
+     &#39;figureDescription&#39;: {&#39;type&#39;: &#39;digitized&#39;,
+      &#39;simultaneousMeasurements&#39;: [],
+      &#39;measurementType&#39;: &#39;custom&#39;,
       &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
         &#39;type&#39;: &#39;number&#39;,
         &#39;unit&#39;: &#39;m&#39;,
@@ -615,7 +615,7 @@ Options:
         &#39;unit&#39;: &#39;m&#39;,
         &#39;orientation&#39;: &#39;vertical&#39;}],
       &#39;comment&#39;: &#39;&#39;,
-      &#39;scan rate&#39;: {&#39;value&#39;: 30.0, &#39;unit&#39;: &#39;m / s&#39;}}}}}]}
+      &#39;scanRate&#39;: {&#39;value&#39;: 30.0, &#39;unit&#39;: &#39;m / s&#39;}}}}}]}
 </pre></div>
 </div>
 </div>
@@ -656,22 +656,22 @@ Options:
                                          &#39;experimental&#39;: {&#39;tags&#39;: []},
                                          &#39;source&#39;: {&#39;figure&#39;: &#39;&#39;,
                                                     &#39;curve&#39;: &#39;blue&#39;},
-                                         &#39;figure description&#39;: {&#39;type&#39;: &#39;digitized&#39;,
-                                                                &#39;simultaneous measurements&#39;: [],
-                                                                &#39;measurement type&#39;: &#39;custom&#39;,
-                                                                &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
-                                                                            &#39;type&#39;: &#39;number&#39;,
-                                                                            &#39;unit&#39;: &#39;m&#39;,
-                                                                            &#39;orientation&#39;: &#39;horizontal&#39;},
-                                                                           {&#39;name&#39;: &#39;height&#39;,
-                                                                            &#39;type&#39;: &#39;number&#39;,
-                                                                            &#39;unit&#39;: &#39;m&#39;,
-                                                                            &#39;orientation&#39;: &#39;vertical&#39;}],
-                                                                &#39;comment&#39;: &#39;&#39;,
-                                                                &#39;scan rate&#39;: {&#39;value&#39;: 30.0,
-                                                                              &#39;unit&#39;: &#39;m &#39;
-                                                                                      &#39;/ &#39;
-                                                                                      &#39;s&#39;}}}}}]}
+                                         &#39;figureDescription&#39;: {&#39;type&#39;: &#39;digitized&#39;,
+                                                               &#39;simultaneousMeasurements&#39;: [],
+                                                               &#39;measurementType&#39;: &#39;custom&#39;,
+                                                               &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
+                                                                           &#39;type&#39;: &#39;number&#39;,
+                                                                           &#39;unit&#39;: &#39;m&#39;,
+                                                                           &#39;orientation&#39;: &#39;horizontal&#39;},
+                                                                          {&#39;name&#39;: &#39;height&#39;,
+                                                                           &#39;type&#39;: &#39;number&#39;,
+                                                                           &#39;unit&#39;: &#39;m&#39;,
+                                                                           &#39;orientation&#39;: &#39;vertical&#39;}],
+                                                               &#39;comment&#39;: &#39;&#39;,
+                                                               &#39;scanRate&#39;: {&#39;value&#39;: 30.0,
+                                                                            &#39;unit&#39;: &#39;m &#39;
+                                                                                    &#39;/ &#39;
+                                                                                    &#39;s&#39;}}}}}]}
 </pre></div>
 </div>
 </div>
@@ -688,7 +688,7 @@ Options:
 <li><p>the <a class="reference download internal" download="" href="_downloads/33aa0005e6629134d025f1ed3f71821f/looping_scan_rate_bib.yaml"><code class="xref download docutils literal notranslate"><span class="pre">YAML</span> <span class="pre">file</span></code></a> file must contain a reference to the bib file such as</p></li>
 </ul>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">source</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">citation key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BIB_FILENAME</span><span class="w">  </span><span class="c1"># without file extension</span>
+<span class="w">  </span><span class="nt">citationKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BIB_FILENAME</span><span class="w">  </span><span class="c1"># without file extension</span>
 </pre></div>
 </div>
 <div class="cell tag_remove-stderr docutils container">
@@ -736,7 +736,7 @@ Options:
                                                         &#39;a constant speed of 5 &#39;
                                                         &#39;m/s along a track &#39;
                                                         &#39;including a looping.&#39;,
-                                         &#39;source&#39;: {&#39;citation key&#39;: &#39;cyclist2023&#39;,
+                                         &#39;source&#39;: {&#39;citationKey&#39;: &#39;cyclist2023&#39;,
                                                     &#39;figure&#39;: &#39;&#39;,
                                                     &#39;curve&#39;: &#39;blue&#39;,
                                                     &#39;bibdata&#39;: &#39;@article{cyclist2023,\n&#39;
@@ -762,22 +762,22 @@ Options:
                                                                &#39;publisher&quot;\n&#39;
                                                                &#39;}\n&#39;},
                                          &#39;experimental&#39;: {&#39;tags&#39;: []},
-                                         &#39;figure description&#39;: {&#39;type&#39;: &#39;digitized&#39;,
-                                                                &#39;simultaneous measurements&#39;: [],
-                                                                &#39;measurement type&#39;: &#39;custom&#39;,
-                                                                &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
-                                                                            &#39;type&#39;: &#39;number&#39;,
-                                                                            &#39;unit&#39;: &#39;m&#39;,
-                                                                            &#39;orientation&#39;: &#39;horizontal&#39;},
-                                                                           {&#39;name&#39;: &#39;height&#39;,
-                                                                            &#39;type&#39;: &#39;number&#39;,
-                                                                            &#39;unit&#39;: &#39;m&#39;,
-                                                                            &#39;orientation&#39;: &#39;vertical&#39;}],
-                                                                &#39;comment&#39;: &#39;&#39;,
-                                                                &#39;scan rate&#39;: {&#39;value&#39;: 30.0,
-                                                                              &#39;unit&#39;: &#39;m &#39;
-                                                                                      &#39;/ &#39;
-                                                                                      &#39;s&#39;}}}}}]}
+                                         &#39;figureDescription&#39;: {&#39;type&#39;: &#39;digitized&#39;,
+                                                               &#39;simultaneousMeasurements&#39;: [],
+                                                               &#39;measurementType&#39;: &#39;custom&#39;,
+                                                               &#39;fields&#39;: [{&#39;name&#39;: &#39;d&#39;,
+                                                                           &#39;type&#39;: &#39;number&#39;,
+                                                                           &#39;unit&#39;: &#39;m&#39;,
+                                                                           &#39;orientation&#39;: &#39;horizontal&#39;},
+                                                                          {&#39;name&#39;: &#39;height&#39;,
+                                                                           &#39;type&#39;: &#39;number&#39;,
+                                                                           &#39;unit&#39;: &#39;m&#39;,
+                                                                           &#39;orientation&#39;: &#39;vertical&#39;}],
+                                                               &#39;comment&#39;: &#39;&#39;,
+                                                               &#39;scanRate&#39;: {&#39;value&#39;: 30.0,
+                                                                            &#39;unit&#39;: &#39;m &#39;
+                                                                                    &#39;/ &#39;
+                                                                                    &#39;s&#39;}}}}}]}
 </pre></div>
 </div>
 </div>
