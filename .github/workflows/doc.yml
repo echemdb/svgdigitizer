@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with: { submodules: recursive }
       - uses: prefix-dev/setup-pixi@v0.8.10
-        with: { pixi-version: v0.49.0 }
+        with: { pixi-version: v0.50.1 }
       - name: build documentation
         run: |
           pixi run doc
@@ -24,12 +24,10 @@ jobs:
           mkdir generated/html
           mv generated/html_ generated/html/svgdigitizer
           touch generated/html/svgdigitizer/.nojekyll
-      - uses: JamesIves/github-pages-deploy-action@3.7.1
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: doc/generated/html/svgdigitizer
-          TARGET_FOLDER: docs
+          folder: doc/generated/html/svgdigitizer
+          target-folder: docs
         if: ${{ github.event_name == 'push' }}
       - name: detect broken links
         shell: pixi run -e dev bash -e {0}

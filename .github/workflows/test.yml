@@ -13,14 +13,13 @@ jobs:
     strategy:
       matrix:
         environment: ["python-39", "python-310", "python-311", "python-312", "python-313"]
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        os: ["ubuntu-latest", "ubuntu-24.04-arm", "macos-latest", "windows-latest"]
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with: { submodules: recursive }
       - uses: prefix-dev/setup-pixi@v0.8.10
-        with:
-          pixi-version: v0.49.0
+        with: { pixi-version: v0.50.1 }
       - name: doctest
         shell: pixi run bash -e {0}
         run: pixi run -e ${{ matrix.environment }} doctest
