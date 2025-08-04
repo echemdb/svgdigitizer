@@ -1569,7 +1569,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libprotobuf-6.31.1-h9ef548d_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libre2-11-2025.07.22-h7b12aa8_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libsodium-1.0.20-h4ab18f5_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-64/libsolv-0.7.34-h9463b59_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/libsolv-0.7.35-h9463b59_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.50.4-h0c1763c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libssh2-1.11.1-hcf80075_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-15.1.0-h8f9b012_4.conda
@@ -1929,7 +1929,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libprotobuf-6.31.1-h8bb3b26_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libre2-11-2025.07.22-h6983b43_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsodium-1.0.20-h68df207_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsolv-0.7.34-hdda61c4_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsolv-0.7.35-hdda61c4_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsqlite-3.50.4-h022381a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libssh2-1.11.1-h18c354c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libstdcxx-15.1.0-h3f4de04_4.conda
@@ -2285,7 +2285,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libprotobuf-6.31.1-h6e993e7_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libre2-11-2025.07.22-h358c03a_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsodium-1.0.20-hfdf4475_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/libsolv-0.7.34-h6fd32b5_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/libsolv-0.7.35-h6fd32b5_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.50.4-h39a8b3b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libssh2-1.11.1-hed3591d_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/libthrift-0.22.0-h687e942_1.conda
@@ -2632,7 +2632,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libprotobuf-6.31.1-h702a38d_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libre2-11-2025.07.22-hb7c0934_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsodium-1.0.20-h99b78c6_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsolv-0.7.34-h5f525b2_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsolv-0.7.35-h5f525b2_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsqlite-3.50.4-h4237e3c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libssh2-1.11.1-h1590b86_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libthrift-0.22.0-h14a376c_1.conda
@@ -2968,7 +2968,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/libprotobuf-6.31.1-hdcda5b4_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libre2-11-2025.07.22-h0eb2380_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsodium-1.0.20-hc70643c_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.34-h8883371_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.35-h8883371_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.50.4-hf5d6505_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libssh2-1.11.1-h9aa295b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libthrift-0.22.0-h23985f6_1.conda
@@ -20458,60 +20458,54 @@ packages:
   purls: []
   size: 202344
   timestamp: 1716828757533
-- conda: https://conda.anaconda.org/conda-forge/linux-64/libsolv-0.7.34-h9463b59_0.conda
-  sha256: a6389bdfd6537351443fede41e5398741bbe9c756515924435262d3aa1e42f24
-  md5: 5d87f705c852b508359a4249d23cbde2
+- conda: https://conda.anaconda.org/conda-forge/linux-64/libsolv-0.7.35-h9463b59_0.conda
+  sha256: 2fc2cdc8ea4dfd9277ae910fa3cfbf342d7890837a2002cf427fd306a869150b
+  md5: 21769ce326958ec230cdcbd0f2ad97eb
   depends:
   - libstdcxx >=14
   - libgcc >=14
   - __glibc >=2.17,<3.0.a0
-  - libgcc >=14
   - libzlib >=1.3.1,<2.0a0
   license: BSD-3-Clause
-  license_family: BSD
   purls: []
-  size: 518789
-  timestamp: 1752581949344
-- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsolv-0.7.34-hdda61c4_0.conda
-  sha256: 55f54fad9a87fc6ec78fb650557fdabb9777c8bdb8bb62bc7bf1ada9e07a6b39
-  md5: dab59579f2ea7e77ddc5759165e5c2b9
+  size: 518374
+  timestamp: 1754325691186
+- conda: https://conda.anaconda.org/conda-forge/linux-aarch64/libsolv-0.7.35-hdda61c4_0.conda
+  sha256: f68dde30e903721825214310a98ff2444857d168b12ef657c064aad22a620f06
+  md5: 3e817cbcc10f018c547a1b4885094b15
   depends:
-  - libgcc >=14
   - libstdcxx >=14
   - libgcc >=14
   - libzlib >=1.3.1,<2.0a0
   license: BSD-3-Clause
-  license_family: BSD
   purls: []
-  size: 534352
-  timestamp: 1752582084256
-- conda: https://conda.anaconda.org/conda-forge/osx-64/libsolv-0.7.34-h6fd32b5_0.conda
-  sha256: 62ed4619d319d77878f7490ebe16bdab718e30262f99f5a00181b883c50d8a1d
-  md5: d5e4ff24187efa3be0e35872e78af97d
+  size: 535157
+  timestamp: 1754325829284
+- conda: https://conda.anaconda.org/conda-forge/osx-64/libsolv-0.7.35-h6fd32b5_0.conda
+  sha256: 9a510035a9b72e3e059f2cd5f031f300ed8f2971014fcdea06a84c104ce3b44b
+  md5: 9aca75cdbe9f71e9b2e717fb3e02cba0
   depends:
   - __osx >=10.13
   - libcxx >=19
   - libzlib >=1.3.1,<2.0a0
   license: BSD-3-Clause
-  license_family: BSD
   purls: []
-  size: 456795
-  timestamp: 1752581960793
-- conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsolv-0.7.34-h5f525b2_0.conda
-  sha256: 6943df8a72bc617cbad8db73e3a204cf3bd1f222fbd2f232ccd392031361fead
-  md5: 0aee957ebe46ff715490b290ed0aa7a6
+  size: 457297
+  timestamp: 1754325699071
+- conda: https://conda.anaconda.org/conda-forge/osx-arm64/libsolv-0.7.35-h5f525b2_0.conda
+  sha256: 6da97a1c572659c2be3c3f2f39d9238dac5af2b1fd546adf2b735b0fda2ed8ec
+  md5: b7ffc6dc926929b9b35af5084a761f26
   depends:
   - libcxx >=19
   - __osx >=11.0
   - libzlib >=1.3.1,<2.0a0
   license: BSD-3-Clause
-  license_family: BSD
   purls: []
-  size: 427761
-  timestamp: 1752581943883
-- conda: https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.34-h8883371_0.conda
-  sha256: 9fa91eca897618c6458615c433bd3b92e070105445e8feeb84bee4b4d55e2ec6
-  md5: 1468d82b91468e502c902a5e2173beaa
+  size: 428408
+  timestamp: 1754325703193
+- conda: https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.35-h8883371_0.conda
+  sha256: 80ccb7857fa2b60679a5209ca04334c86c46a441e8f4f2859308b69f8e1e928a
+  md5: 987be7025314bcfe936de3f0e91082b5
   depends:
   - vc >=14.3,<15
   - vc14_runtime >=14.44.35208
@@ -20521,10 +20515,9 @@ packages:
   - ucrt >=10.0.20348.0
   - libzlib >=1.3.1,<2.0a0
   license: BSD-3-Clause
-  license_family: BSD
   purls: []
-  size: 466094
-  timestamp: 1752581981080
+  size: 466924
+  timestamp: 1754325716718
 - conda: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.50.4-h0c1763c_0.conda
   sha256: 6d9c32fc369af5a84875725f7ddfbfc2ace795c28f246dc70055a79f9b2003da
   md5: 0b367fad34931cb79e0d6b7e5c06bb1c
@@ -32675,7 +32668,7 @@ packages:
 - pypi: .
   name: svgdigitizer
   version: 0.13.0
-  sha256: c57165af3fedd29379768308f9c932b4f25f3b18a45b5b30d08b07930fc95282
+  sha256: 127bc4aa1e8be3f7e8b78270a24eb9a0b4f69ccb6ad0a3bd5a3975f39099685d
   requires_dist:
   - astropy>=5,<8
   - click>=8,<9
@@ -32684,8 +32677,8 @@ packages:
   - mergedeep>=1.3.4,<2
   - pandas>=1.3,<4
   - pillow>=9,<12
-  - pybtex>=0.24,<0.26
-  - pymupdf>=1.23,<2
+  - pybtex>=0.25,<0.26
+  - pymupdf>=1.26,<2
   - pyyaml>=6,<7
   - scipy>=1.7,<2
   - svg-path>=4.1,<8
