@@ -96,7 +96,7 @@ pytest = "*"
 pytest-xdist = "*"
 
 [tool.pixi.feature.test.tasks]
-validate = { args = [ { "arg" = "version", "default" = "heads/camel-case" } ],cmd = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --base-uri https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')" }
+validate = { args = [ { "arg" = "version", "default" = "0.3.0" } ],cmd = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/{{ version }}/schemas/svgdigitizer_package.json --base-uri https://raw.githubusercontent.com/echemdb/metadata-schema/{{ version }}/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')" }
 doctest = "pytest -n auto --doctest-modules svgdigitizer"
 
 [tool.pixi.feature.lint.dependencies]
