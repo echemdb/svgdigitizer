@@ -37,10 +37,10 @@
                         "figure": "",
                         "curve": "label"
                     },
-                    "figure description": {
+                    "figureDescription": {
                         "type": "digitized",
-                        "simultaneous measurements": [],
-                        "measurement type": "CV",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "CV",
                         "fields": [
                             {
                                 "name": "E",
@@ -57,7 +57,7 @@
                             }
                         ],
                         "comment": "",
-                        "scan rate": {
+                        "scanRate": {
                             "value": 50.0,
                             "unit": "mV / s"
                         }

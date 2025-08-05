@@ -4,6 +4,23 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.13.0
+====================
+
+**Added:**
+
+* Added arm64 platforms supported by pixi.
+* Added testing of arm64 platforms in CI.
+* Added nixOS test builds.
+
+**Changed:**
+
+* Changed validation of metadata to echemdb-metadata-schema 0.3.0.
+* Changed upper version limit of svg.path from 5 to 8.
+* Changed lower version limit of PyMuPDF from 1.25 to 1.23.
+
+
+
 v0.12.6
 ====================
 
