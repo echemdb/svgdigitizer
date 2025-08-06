@@ -14,8 +14,8 @@ EXAMPLES::
       cv             Digitize a cylic voltammogram and create a frictionless...
       digitize       Digitize a 2D plot.
       figure         Digitize a figure with units on the axis and create a...
-      get-citation   Get the citation from the DOI provided PDF file.
-      get-doi        Get the DOI from the provided PDF file.
+      get-citation   Get the bibtex style bibliography entry from the DOI in the provided PDF.
+      get-doi        Get the DOI from the provided PDF.
       paginate       Render PDF pages as individual SVG files with linked PNG...
       plot           Display a plot of the data traced in an SVG.
       rename-by-key  Rename the provided PDF file by the key derived from...
@@ -591,7 +591,7 @@ def _create_svg(svg, img, template_file, linked):
 
 
 def _extract_doi(pdf):
-    "Extract DOI from first or second (sometimes additional pages are prepended) PDF page."
+    "Extract the DOI from the provided PDF. Since in some cases additional pages are prepended to the PDF, the DOI is extracted from either the first or second page."
     import re
 
     import pymupdf
@@ -619,6 +619,7 @@ def _extract_doi(pdf):
 def get_doi(pdf):
     r"""
     Get the DOI from the provided PDF file.
+
     EXAMPLES::
 
     >>> from svgdigitizer.test.cli import invoke, TemporaryData
@@ -653,6 +654,7 @@ def _download_citation(doi):
 def get_citation(pdf):
     r"""
     Get the citation from the DOI provided PDF file.
+
     EXAMPLES::
 
     >>> from svgdigitizer.test.cli import invoke, TemporaryData
@@ -669,7 +671,7 @@ def get_citation(pdf):
     citation = _download_citation(doi)
 
     if not citation:
-        raise KeyError("Failed to get citation.")
+        raise KeyError(f"Failed to get citation from DOI {doi}.")
     print(citation)
 
 
@@ -677,7 +679,7 @@ def _build_identifier(citation):
     """
     Build the entry identifier based on bibtex citation.
 
-    TESTS:
+    TESTS::
 
         >>> from svgdigitizer.entrypoint import _build_identifier
         >>> from pybtex.database import parse_string
@@ -774,7 +776,7 @@ def _parse_pages_option(_ctx, _param, value):
 
     if start > end:
         raise click.BadParameter(
-            "Invalid range. Start must be less than or equal to end."
+            f"Invalid range. Start ({start}) must be less than or equal to end ({end})."
         )
 
     return list(range(start, end + 1))
