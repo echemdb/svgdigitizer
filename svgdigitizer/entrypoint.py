@@ -415,7 +415,7 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography):
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        metadata["source"].update({"bibdata": bibliogrpaghy_data})
+        metadata["source"].update({"bibdata": bibliography_data})
 
     package = _create_package(metadata, csvname, outdir)
 
