@@ -67,7 +67,7 @@ bibliography_option = click.option(
     "--bibliography",
     type=click.Path(file_okay=False),
     default=".",
-    help="Adds bibliography data from a bibfile as descriptor to the datapackage from a specified directory.",
+    help="Adds bibliography data from a bibfile located in a specified directory as descriptor to the datapackage.",
 )
 
 si_option = click.option(
@@ -174,7 +174,14 @@ def _create_bibliography(bibliography, metadata):
 
     bib_directory = os.path.dirname(bibliography)
 
-    bibfile = f"{os.path.join(bib_directory or '.', bibkey)}.bib"
+    logger.warning('This is the bib directory: ' + str(bib_directory))
+
+    # bibfile = f"{os.path.join(bib_directory, bibkey)}.bib"
+
+    bibfile = f"{os.path.join(bibliography, bibkey)}.bib"
+
+    logger.warning('This is the bifiile: ' + str(bibfile))
+    logger.warning('Does it exist?: ' + str(os.path.exists(bibfile)))
 
     if not os.path.exists(bibfile):
         logger.warning(
