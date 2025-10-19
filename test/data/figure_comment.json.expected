@@ -32,7 +32,7 @@
                     "version": "1",
                     "source": {
                         "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
-                        "bib": "Beden_1985_Voltammetric_833",
+                        "citationKey": "Beden_1985_Voltammetric_833",
                         "figure": "2b",
                         "curve": "label"
                     },
