@@ -290,9 +290,9 @@ The flag `--bibliography` adds a bibtex bibliography entry to the JSON of the pr
 
 Requirements:
 
-* a file in the {download}`BibTex<./files/others/cyclist2023.bib>` format should exist in the same folder than the SVG (otherwise an empty string is returned)
+* a directory containing a file in the {download}`BibTex<./files/others/cyclist2023.bib>` format.
 * a YAML file must exist which is invoked with the `--metadata` option.
-* the {download}`YAML file<./files/others/looping_scan_rate_bib.yaml>` file must contain a reference to the bib file such as
+* the {download}`YAML file<./files/others/looping_scan_rate_bib.yaml>` file must contain a citationKey to the bib file such as
 
 ```yaml
 source:
@@ -302,7 +302,7 @@ source:
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scan_rate_bib.svg --bibliography --metadata ./files/others/looping_scan_rate_bib.yaml --sampling-interval 0.01
+!svgdigitizer figure ./files/others/looping_scan_rate_bib.svg --bibliography ./files/others/ --metadata ./files/others/looping_scan_rate_bib.yaml --sampling-interval 0.01
 ```
 
 The bib file content is included in the resulting JSON of the datapackge
