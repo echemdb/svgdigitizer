@@ -21,7 +21,7 @@ EXAMPLES::
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021-2023 Albert Engstfeld
+#        Copyright (C) 2021-2025 Albert Engstfeld
 #        Copyright (C) 2021-2025 Johannes Hermann
 #        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
@@ -65,8 +65,9 @@ skewed_option = click.option(
 
 bibliography_option = click.option(
     "--bibliography",
-    is_flag=True,
-    help="Adds bibliography data from a bibfile as descriptor to the datapackage.",
+    type=click.Path(file_okay=False),
+    default=".",
+    help="Adds bibliography data from a bibfile as descriptor to the datapackage from a specified directory.",
 )
 
 si_option = click.option(
@@ -153,7 +154,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
     )
 
 
-def _create_bibliography(svg, metadata):
+def _create_bibliography(bibliography, metadata):
     r"""
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citationKey']`,
     when both requirements are met. Otherwise an empty string is returned.
@@ -170,7 +171,7 @@ def _create_bibliography(svg, metadata):
         logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
         return ""
 
-    bib_directory = os.path.dirname(svg)
+    bib_directory = os.path.dirname(bibliography)
 
     bibfile = f"{os.path.join(bib_directory, bibkey)}.bib"
 
@@ -411,7 +412,7 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography):
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        metadata["source"].update({"bibdata": _create_bibliography(svg, metadata)})
+        metadata["source"].update({"bibdata": _create_bibliography(bibliography, metadata)})
 
     package = _create_package(metadata, csvname, outdir)
 
