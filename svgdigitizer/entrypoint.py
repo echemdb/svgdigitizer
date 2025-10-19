@@ -174,7 +174,7 @@ def _create_bibliography(bibliography, metadata):
 
     bib_directory = os.path.dirname(bibliography)
 
-    bibfile = f"{os.path.join(bib_directory, bibkey)}.bib"
+    bibfile = f"{os.path.join(bib_directory or ".", bibkey)}.bib"
 
     if not os.path.exists(bibfile):
         logger.warning(
@@ -182,8 +182,8 @@ def _create_bibliography(bibliography, metadata):
         )
         return ""
 
-    bibliography = parse_file(bibfile, bib_format="bibtex")
-    return bibliography.entries[bibkey].to_string("bibtex")
+    bibdata = parse_file(bibfile, bib_format="bibtex")
+    return bibdata.entries[bibkey].to_string("bibtex")
 
 
 @click.command()
