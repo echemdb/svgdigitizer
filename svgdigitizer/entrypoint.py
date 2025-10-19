@@ -174,7 +174,7 @@ def _create_bibliography(bibliography, metadata):
 
     bib_directory = os.path.dirname(bibliography)
 
-    bibfile = f"{os.path.join(bib_directory or ".", bibkey)}.bib"
+    bibfile = f"{os.path.join(bib_directory or '.', bibkey)}.bib"
 
     if not os.path.exists(bibfile):
         logger.warning(
