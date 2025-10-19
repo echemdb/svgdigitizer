@@ -128,3 +128,9 @@ jobs:
           pixi run -e ${{ matrix.environment }} svgdigitizer figure test/data/figure_comment.svg --metadata test/data/figure_comment.yaml
           git diff --no-index --word-diff -- test/data/figure_comment.json test/data/figure_comment.json.expected
           python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/figure_comment.csv"), pandas.read_csv("test/data/figure_comment.csv.expected"))'
+      - name: cli- bibliogaphy-directory
+        shell: pixi run bash -e {0}
+        run: |
+          pixi run -e ${{ matrix.environment }} svgdigitizer figure test/data/bibliography_directory.svg --metadata test/data/bibliography_directory.yaml --bibliography test/bibliography/
+          git diff --no-index --word-diff -- test/data/bibliography_directory.json test/data/bibliography_directory.json.expected
+          python -c 'import pandas; pandas.testing.assert_frame_equal(pandas.read_csv("test/data/bibliography_directory.csv"), pandas.read_csv("test/data/bibliography_directory.csv.expected"))'

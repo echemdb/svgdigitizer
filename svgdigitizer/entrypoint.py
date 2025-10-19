@@ -411,8 +411,12 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography):
             logger.warning(
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
+        bibliogrpaghy_data = _create_bibliography(bibliography, metadata)
 
-        metadata["source"].update({"bibdata": _create_bibliography(bibliography, metadata)})
+        if bibliogrpaghy_data:
+            metadata["source"].update(
+                {"bibdata": bibliogrpaghy_data}
+            )
 
     package = _create_package(metadata, csvname, outdir)
 

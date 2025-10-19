@@ -1,0 +1,172 @@
+{
+    "resources": [
+        {
+            "name": "bibliography_directory",
+            "type": "table",
+            "path": "bibliography_directory.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "E",
+                        "type": "number",
+                        "unit": "V @ RHE"
+                    },
+                    {
+                        "name": "j",
+                        "type": "number",
+                        "unit": "uA cm-2"
+                    }
+                ]
+            },
+            "metadata": {
+                "echemdb": {
+                    "version": 1,
+                    "source": {
+                        "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
+                        "citationKey": "bibliography_directory",
+                        "figure": "2b",
+                        "curve": "label",
+                        "bibdata": "@article{bibliography_directory,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Bibliography in a subdirectory\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2025\",\n    abstract = \"Abstract.\"\n}\n"
+                    },
+                    "curator": {
+                        "name": "Albert Engstfeld",
+                        "orcid": "https://orcid.org/0000-0002-9686-3948",
+                        "digitized": "2021-06-01"
+                    },
+                    "electrochemicalSystem": {
+                        "electrolyte": {
+                            "type": "aq",
+                            "components": [
+                                {
+                                    "name": "NaCl",
+                                    "sumFormula": "NaCl",
+                                    "concentration": {
+                                        "value": 0.1,
+                                        "unit": "M"
+                                    },
+                                    "type": "salt",
+                                    "source": {
+                                        "supplier": null,
+                                        "LOT": null
+                                    }
+                                },
+                                {
+                                    "name": "water",
+                                    "sumFormula": "H2O",
+                                    "type": "solvent",
+                                    "proportion": {
+                                        "value": 50,
+                                        "unit": "volume percent"
+                                    },
+                                    "source": {
+                                        "refinement": "Sartorius Arium 611UV",
+                                        "quality": "ultrapure water",
+                                        "totalOrganicCarbon": {
+                                            "value": 3,
+                                            "unit": "ppb"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "ethanol",
+                                    "sumFormula": "EtOH",
+                                    "type": "solvent",
+                                    "proportion": {
+                                        "value": 50,
+                                        "unit": "volume percent"
+                                    }
+                                },
+                                {
+                                    "name": "sulfuric acid",
+                                    "sumFormula": "H2SO4",
+                                    "type": "acid",
+                                    "source": {
+                                        "supplier": null,
+                                        "LOT": null
+                                    },
+                                    "concentration": {
+                                        "value": 0.1,
+                                        "unit": "M"
+                                    }
+                                }
+                            ],
+                            "ph": {
+                                "value": 13,
+                                "uncertainty": 0.1
+                            },
+                            "temperature": {
+                                "value": 298.15,
+                                "unit": "K"
+                            }
+                        },
+                        "electrodes": {
+                            "configuration": "three",
+                            "referenceElectrode": {
+                                "type": "RHE",
+                                "source": {
+                                    "supplier": "SI Analytics"
+                                }
+                            },
+                            "counterElectrode": {
+                                "material": "Pt",
+                                "crystallographicOrientation": "poly",
+                                "shape": "wire"
+                            },
+                            "workingElectrode": {
+                                "material": "Ni",
+                                "crystallographicOrientation": 111,
+                                "source": {
+                                    "supplier": null,
+                                    "LOT": null
+                                },
+                                "shape": {
+                                    "type": "cylinder",
+                                    "height": {
+                                        "value": 4,
+                                        "unit": "mm"
+                                    },
+                                    "diameter": {
+                                        "value": 4,
+                                        "unit": "mm"
+                                    }
+                                },
+                                "geometricElectrolyteContactArea": {
+                                    "value": null,
+                                    "unit": "cm-2"
+                                },
+                                "preparationProcedure": null
+                            }
+                        }
+                    },
+                    "experimental": {
+                        "tags": []
+                    },
+                    "figureDescription": {
+                        "type": "digitized",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "custom",
+                        "fields": [
+                            {
+                                "name": "E",
+                                "type": "number",
+                                "unit": "V @ RHE",
+                                "orientation": "horizontal"
+                            },
+                            {
+                                "name": "j",
+                                "type": "number",
+                                "unit": "uA cm-2",
+                                "orientation": "vertical"
+                            }
+                        ],
+                        "comment": ""
+                    }
+                }
+            }
+        }
+    ]
+}
