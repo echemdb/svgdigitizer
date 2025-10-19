@@ -172,16 +172,7 @@ def _create_bibliography(bibliography, metadata):
         del metadata["source"]["citationKey"]
         return ""
 
-    bib_directory = os.path.dirname(bibliography)
-
-    logger.warning('This is the bib directory: ' + str(bib_directory))
-
-    # bibfile = f"{os.path.join(bib_directory, bibkey)}.bib"
-
     bibfile = f"{os.path.join(bibliography, bibkey)}.bib"
-
-    logger.warning('This is the bifiile: ' + str(bibfile))
-    logger.warning('Does it exist?: ' + str(os.path.exists(bibfile)))
 
     if not os.path.exists(bibfile):
         logger.warning(

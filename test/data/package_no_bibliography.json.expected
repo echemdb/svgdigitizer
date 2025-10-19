@@ -34,9 +34,7 @@
                     "source": {
                         "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
                         "figure": "2b",
-                        "curve": "label",
-                        "bibdata": "",
-                        "citationKey": ""
+                        "curve": "label"
                     },
                     "curator": {
                         "name": "Albert Engstfeld",
