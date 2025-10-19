@@ -169,6 +169,7 @@ def _create_bibliography(bibliography, metadata):
     bibkey = metadata["source"]["citationKey"]
     if not bibkey:
         logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
+        del metadata["source"]["citationKey"]
         return ""
 
     bib_directory = os.path.dirname(bibliography)
