@@ -176,7 +176,7 @@ def _create_bibliography(svg, metadata):
 
     if not os.path.exists(bibfile):
         logger.warning(
-            f"A citation key with name {bibkey} was provided, but no BIB file was found."
+            f"A citation key with name {bibkey} was provided, but no BIB file {bibfile} in the directory {bib_directory} was found."
         )
         return ""
 
