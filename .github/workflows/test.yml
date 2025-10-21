@@ -30,4 +30,4 @@ jobs:
         run: pixi run -e ${{ matrix.environment }} pytest
       - name: cli
         # Check that invoking the CLI works in principle. The CLI itself is tested by pytest.
-        run: pixi run -e ${{ matrix.environment }} svgdigitizer digitizer test/data/xy.svg
+        run: pixi run -e ${{ matrix.environment }} svgdigitizer digitize test/data/xy.svg
