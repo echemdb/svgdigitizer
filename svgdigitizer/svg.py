@@ -1,5 +1,5 @@
 r"""
-Provides access to the elements of an SVG tracing a plot for the digitiver.
+Provides access to the elements of an SVG tracing a plot for the svgdigitizer.
 
 EXAMPLES:
 
@@ -39,10 +39,10 @@ We can recover the specification of that segment as it is encoded in the SVG::
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021 Albert Engstfeld
-#        Copyright (C) 2021 Johannes Hermann
-#        Copyright (C) 2021 Julian Rüth
-#        Copyright (C) 2021 Nicolas Hörmann
+#        Copyright (C)      2021 Albert Engstfeld
+#        Copyright (C)      2021 Johannes Hermann
+#        Copyright (C) 2021-2024 Julian Rüth
+#        Copyright (C)      2021 Nicolas Hörmann
 #
 #  svgdigitizer is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -382,9 +382,37 @@ class Text:
             setattr(self, key, value)
 
     def __repr__(self):
+        r"""
+        Return a printable representation of this text element.
+
+        EXAMPLES::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <text x="0" y="0">curve: 0</text>
+        ... </svg>'''))
+        >>> svg.get_texts()[0]
+        <text>curve: 0</text>
+
+        """
         return f"<text>{self._value}</text>"
 
     def __str__(self):
+        r"""
+        Return the inner text content of this text element.
+
+        EXAMPLES::
+
+        >>> from io import StringIO
+        >>> svg = SVG(StringIO(r'''
+        ... <svg>
+        ...   <text x="0" y="0">curve: 0</text>
+        ... </svg>'''))
+        >>> str(svg.get_texts()[0])
+        'curve: 0'
+
+        """
         return self._value
 
 
@@ -490,10 +518,29 @@ class LabeledPath:
         r"""
         Return the points defining this path.
 
+        INPUT:
+
+        - ``path`` -- an ``svgpathtools.path.Path``
+
         This returns the raw points in the `d` attribute, ignoring the
         commands that connect these points, i.e., ignoring whether these
         points are connected by `M` commands that do not actually draw
         anything, or any kind of visible curve.
+
+        EXAMPLES::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="100">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> path = svg.get_labeled_paths()[0][0].path
+            >>> LabeledPath.path_points(path)
+            [(0.0, 100.0), (100.0, 0.0)]
+
         """
         return [(path[0].start.real, path[0].start.imag)] + [
             (command.end.real, command.end.imag) for command in path
@@ -508,6 +555,21 @@ class LabeledPath:
         commands that connect these points, i.e., ignoring whether these
         points are connected by `M` commands that do not actually draw
         anything, or any kind of visible curve.
+
+        EXAMPLES::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="100">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> path = svg.get_labeled_paths()[0][0]
+            >>> path.points
+            [(0.0, 100.0), (100.0, 0.0)]
+
         """
         return LabeledPath.path_points(self.path)
 
@@ -564,4 +626,21 @@ class LabeledPath:
         return SVG.transform(self._path)
 
     def __repr__(self):
+        r"""
+        Return a printable representation of this labeled path.
+
+        EXAMPLES::
+
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g transform="translate(-100 -200)">
+            ...     <path d="M 0 100 L 100 0" transform="translate(100 200)" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> svg.get_labeled_paths()[0][0]
+            Path "curve: 0"
+
+        """
         return f'Path "{self.label}"'

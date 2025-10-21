@@ -4,6 +4,92 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.13.0
+====================
+
+**Added:**
+
+* Added arm64 platforms supported by pixi.
+* Added testing of arm64 platforms in CI.
+* Added nixOS test builds.
+
+**Changed:**
+
+* Changed validation of metadata to echemdb-metadata-schema 0.3.0.
+* Changed upper version limit of svg.path from 5 to 8.
+* Changed lower version limit of PyMuPDF from 1.25 to 1.23.
+
+
+
+v0.12.6
+====================
+
+**Added:**
+
+* Added an option in the CLI to create linked SVG file from image directly.
+* Added an option in the CLI to add an SVG template to the linked SVG file.
+
+**Changed:**
+
+* Changed version bound for pybtex from "">=0.24,<0.25" to ">=0.25,<0.26".
+* Changed PDF handling from pdf2image to PyMuPDF, allowing to run in pyodide.
+
+**Fixed:**
+
+* Fixed mimetype of image embedded in SVG.
+
+
+
+v0.12.5
+====================
+
+**Fixed:**
+
+* Fixed uploading wheel.
+
+
+
+v0.12.4
+====================
+
+**Added:**
+
+* Added wheel upload on new release.
+
+
+
+v0.12.3
+====================
+
+**Added:**
+
+* Added tests for validating output datapackages against echemdb's svgdigitizer Data Package schema.
+
+**Removed:**
+
+* Removed key `data description` from output Data Package, since the information is included in the key `figure description`.
+
+
+
+v0.12.2
+====================
+
+**Added:**
+
+* Added testing with Python 3.13.
+
+
+
+v0.12.1
+====================
+
+**Fixed:**
+
+* Fixed dependency issue, by re-including `scipy` and `svg.path` (see [feedstock issue](https://github.com/conda-forge/svgdigitizer-feedstock/pull/21)).
+* Fixed breaking tests on GitHub (tests should be more stable now since we switched to pixi for locked versions of dependencies.)
+
+
+
 v0.12.0
 ====================
 

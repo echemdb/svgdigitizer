@@ -36,35 +36,29 @@
                         "figure": "",
                         "curve": "blue"
                     },
-                    "figure description": {
-                        "version": 1,
+                    "figureDescription": {
                         "type": "digitized",
-                        "simultaneous measurements": [],
-                        "measurement type": "custom",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "custom",
                         "fields": [
                             {
                                 "name": "U",
                                 "type": "number",
                                 "unit": "V",
-                                "orientation": "x"
+                                "orientation": "horizontal"
                             },
                             {
                                 "name": "v",
                                 "type": "number",
                                 "unit": "m / s",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "random data",
-                        "scan rate": {
+                        "scanRate": {
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "custom"
                     }
                 }
             }

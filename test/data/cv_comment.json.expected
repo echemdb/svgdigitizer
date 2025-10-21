@@ -42,13 +42,13 @@
                         "orcid": "https://orcid.org/0000-0002-9686-3948",
                         "digitized": "2021-06-01"
                     },
-                    "electrochemical system": {
+                    "electrochemicalSystem": {
                         "electrolyte": {
                             "type": "aq",
                             "components": [
                                 {
                                     "name": "NaCl",
-                                    "sum formula": "NaCl",
+                                    "sumFormula": "NaCl",
                                     "concentration": {
                                         "value": 0.1,
                                         "unit": "M"
@@ -61,7 +61,7 @@
                                 },
                                 {
                                     "name": "water",
-                                    "sum formula": "H2O",
+                                    "sumFormula": "H2O",
                                     "type": "solvent",
                                     "proportion": {
                                         "value": 50,
@@ -70,7 +70,7 @@
                                     "source": {
                                         "refinement": "Sartorius Arium 611UV",
                                         "quality": "ultrapure water",
-                                        "total organic carbon": {
+                                        "totalOrganicCarbon": {
                                             "value": 3,
                                             "unit": "ppb"
                                         }
@@ -78,7 +78,7 @@
                                 },
                                 {
                                     "name": "ethanol",
-                                    "sum formula": "EtOH",
+                                    "sumFormula": "EtOH",
                                     "type": "solvent",
                                     "proportion": {
                                         "value": 50,
@@ -87,7 +87,7 @@
                                 },
                                 {
                                     "name": "sulfuric acid",
-                                    "sum formula": "H2SO4",
+                                    "sumFormula": "H2SO4",
                                     "type": "acid",
                                     "source": {
                                         "supplier": null,
@@ -110,20 +110,20 @@
                         },
                         "electrodes": {
                             "configuration": "three",
-                            "reference electrode": {
+                            "referenceElectrode": {
                                 "type": "RHE",
                                 "source": {
                                     "supplier": "SI Analytics"
                                 }
                             },
-                            "counter electrode": {
+                            "counterElectrode": {
                                 "material": "Pt",
-                                "crystallographic orientation": "poly",
+                                "crystallographicOrientation": "poly",
                                 "shape": "wire"
                             },
-                            "working electrode": {
+                            "workingElectrode": {
                                 "material": "Ni",
-                                "crystallographic orientation": 111,
+                                "crystallographicOrientation": 111,
                                 "source": {
                                     "supplier": null,
                                     "LOT": null
@@ -139,47 +139,41 @@
                                         "unit": "mm"
                                     }
                                 },
-                                "geometric electrolyte contact area": {
+                                "geometricElectrolyteContactArea": {
                                     "value": null,
                                     "unit": "cm-2"
                                 },
-                                "preparation procedure": null
+                                "preparationProcedure": null
                             }
                         }
                     },
                     "experimental": {
                         "tags": []
                     },
-                    "figure description": {
-                        "version": 1,
+                    "figureDescription": {
                         "type": "digitized",
-                        "simultaneous measurements": [],
-                        "measurement type": "CV",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "CV",
                         "fields": [
                             {
                                 "name": "E",
                                 "type": "number",
                                 "unit": "V",
-                                "orientation": "x",
+                                "orientation": "horizontal",
                                 "reference": "RHE"
                             },
                             {
                                 "name": "j",
                                 "type": "number",
                                 "unit": "uA cm-2",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "noisy data",
-                        "scan rate": {
+                        "scanRate": {
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "CV"
                     }
                 }
             }

@@ -151,17 +151,15 @@ class CV(SVGFigure):
         >>> cv.metadata  == \
         ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
         ...  'source': {'figure': '2b', 'curve': 'solid'},
-        ...  'figure description': {'version': 1,
-        ...                         'type': 'digitized',
-        ...                         'simultaneous measurements': ['SXRD', 'SHG'],
-        ...                         'measurement type': 'CV',
-        ...                         'scan rate': {'value': 50.0, 'unit': 'V / s'},
-        ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'x', 'reference': 'RHE', 'type': 'number'},
-        ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'y', 'type': 'number'}],
+        ...  'figureDescription': {'type': 'digitized',
+        ...                         'simultaneousMeasurements': ['SXRD', 'SHG'],
+        ...                         'measurementType': 'CV',
+        ...                         'scanRate': {'value': 50.0, 'unit': 'V / s'},
+        ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'horizontal', 'reference': 'RHE', 'type': 'number'},
+        ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'vertical', 'type': 'number'}],
         ...                         'comment': 'noisy data'},
-        ...  'data description': {'version': 1,
-        ...                       'type': 'digitized',
-        ...                       'measurement type': 'CV',
+        ...  'dataDescription': {'type': 'digitized',
+        ...                       'measurementType': 'CV',
         ...                       'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
         ...                                  {'name': 'j', 'type': 'number', 'unit': 'A / m2'},
         ...                                  {'name': 't', 'type': 'number', 'unit': 's'}]}}
@@ -192,7 +190,7 @@ class CV(SVGFigure):
         # TODO: use intersphinx to link Schema and Fields to frictionless docu (see #151).
         r"""
         A frictionless `Schema` object, including a `Field` object
-        describing the data generated with :meth:`df`.
+        describing the data generated with ``df``.
         Compared to :meth:`figure_schema` all fields are given in SI units.
         A time axis is also included.
 
@@ -277,7 +275,7 @@ class CV(SVGFigure):
         if self.force_si_units:
             if u.allclose(
                 1 * u.Unit(schema.get_field(self.svgplot.xlabel).custom["unit"]),
-                1 * u.V,
+                1 * u.V,  # pylint: disable=no-member
             ):
                 schema.update_field(self.svgplot.xlabel, {"unit": "V"})
         return schema
@@ -323,8 +321,8 @@ class CV(SVGFigure):
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.figure_schema  # doctest: +NORMALIZE_WHITESPACE
-            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'x', 'reference': 'RHE'},
-                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'y'}]}
+            {'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'orientation': 'horizontal', 'reference': 'RHE'},
+                        {'name': 'j', 'type': 'number', 'unit': 'uA / cm2', 'orientation': 'vertical'}]}
 
         """
         import re

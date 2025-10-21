@@ -10,18 +10,19 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      cv        Digitize a cylic voltammogram and create a frictionless...
-      digitize  Digitize a 2D plot.
-      figure    Digitize a figure with units on the axis and create a...
-      paginate  Render PDF pages as individual SVG files with linked PNG images.
-      plot      Display a plot of the data traced in an SVG.
+      create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
+      cv          Digitize a cylic voltammogram and create a frictionless...
+      digitize    Digitize a 2D plot.
+      figure      Digitize a figure with units on the axis and create a...
+      paginate    Render PDF pages as individual SVG files with linked PNG images.
+      plot        Display a plot of the data traced in an SVG.
 
 """
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
 #        Copyright (C) 2021-2023 Albert Engstfeld
-#        Copyright (C)      2021 Johannes Hermann
+#        Copyright (C) 2021-2025 Johannes Hermann
 #        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
 #
@@ -154,7 +155,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
 
 def _create_bibliography(svg, metadata):
     r"""
-    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citation key']`,
+    Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citationKey']`,
     when both requirements are met. Otherwise an empty string is returned.
 
     This is a helper method for :meth:`_create_outfiles`.
@@ -162,13 +163,11 @@ def _create_bibliography(svg, metadata):
     from pybtex.database import parse_file
 
     metadata.setdefault("source", {})
-    metadata["source"].setdefault("citation key", "")
+    metadata["source"].setdefault("citationKey", "")
 
-    bibkey = metadata["source"]["citation key"]
+    bibkey = metadata["source"]["citationKey"]
     if not bibkey:
-        logger.warning(
-            'No bibliography key found in metadata["source"]["citation key"]'
-        )
+        logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
         return ""
 
     bib_directory = os.path.dirname(svg)
@@ -308,7 +307,7 @@ def digitize_figure(
 @sampling_interval_option
 @outdir_option
 @click.option(
-    "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
+    "--metadata", type=click.File("rb"), default=None, help="YAML file with metadata"
 )
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
@@ -372,7 +371,9 @@ def digitize_cv(
 
             sampling_interval /= u.Unit(
                 cv.figure_schema.get_field(cv.svgplot.xlabel).custom["unit"]
-            ).to(u.V)
+            ).to(
+                u.V  # pylint: disable=no-member
+            )
 
     if metadata:
         import yaml
@@ -448,7 +449,7 @@ def _create_package(metadata, csvname, outdir):
     # Update fields in the datapackage describing the data in the CSV
     package_schema = resource.schema
     data_description_schema = Schema.from_descriptor(
-        {"fields": resource.custom["metadata"]["echemdb"]["data description"]["fields"]}
+        {"fields": resource.custom["metadata"]["echemdb"]["dataDescription"]["fields"]}
     )
 
     new_fields = []
@@ -463,7 +464,7 @@ def _create_package(metadata, csvname, outdir):
         )
 
     resource.schema = Schema.from_descriptor({"fields": new_fields})
-    del resource.custom["metadata"]["echemdb"]["data description"]["fields"]
+    del resource.custom["metadata"]["echemdb"]["dataDescription"]
 
     return package
 
@@ -498,15 +499,25 @@ def _write_metadata(out, metadata):
     out.write("\n")
 
 
-def _create_linked_svg(svg, png):
+def _create_linked_svg(svg, img, template_file):
     r"""
-    Write an SVG to `svg` that shows `png` as a linked image.
+    Write an SVG to `svg` that shows `image` as a linked image.
 
     This is a helper method for :meth:`paginate`.
     """
+    _create_svg(svg, img, template_file, linked=True)
+
+
+def _create_svg(svg, img, template_file, linked):
+    r"""
+    Write an SVG to `svg` that shows `image` either as a linked or embedded image.
+
+    This is a helper method for :meth:`paginate`.
+    """
+    # pylint: disable=too-many-locals
     from PIL import Image
 
-    width, height = Image.open(png).size
+    width, height = Image.open(img).size
 
     import svgwrite
 
@@ -518,29 +529,113 @@ def _create_linked_svg(svg, png):
 
     from svgwrite.extensions.inkscape import Inkscape
 
-    Inkscape(drawing)
+    inkscape = Inkscape(drawing)
 
-    img = drawing.add(
-        svgwrite.image.Image(
-            png,
-            insert=(0, 0),
-            size=(f"{width}px", f"{height}px"),
+    image_layer = inkscape.layer(id="image-layer", locked=True)
+    # add properties for svgedit
+    image_layer.attribs["class"] = "layer"
+    image_layer.set_desc(title="image-layer")
+    drawing.add(image_layer)
+
+    if linked:
+        image_layer.add(
+            svgwrite.image.Image(
+                img,
+                insert=(0, 0),
+                size=(width, height),
+            )
         )
-    )
+    else:
+        import base64
+        import mimetypes
 
-    # workaround: add missing locking attribute for image element
-    # https://github.com/mozman/svgwrite/blob/c8cbf6f615910b3818ccf939fce0e407c9c789cb/svgwrite/extensions/inkscape.py#L50
-    elements = drawing.validator.elements
-    elements["image"].valid_attributes = {
-        "sodipodi:insensitive",
-    } | elements["image"].valid_attributes
-    img.attribs["sodipodi:insensitive"] = "true"
+        img_mimetype = mimetypes.guess_type(img)[0]
+        with open(img, "rb") as f:
+            encoded = base64.b64encode(f.read()).decode()
+        img_data = f"data:{img_mimetype};base64,{encoded}"
+        image_layer.add(
+            svgwrite.image.Image(
+                href=(img_data),
+                insert=(0, 0),
+                size=(width, height),
+            )
+        )
 
-    drawing.save(pretty=True)
+    digitization_layer = inkscape.layer(id="digitization-layer", locked=False)
+
+    digitization_layer.attribs["class"] = "layer"
+    digitization_layer.set_desc(title="digitization-layer")
+    drawing.add(digitization_layer)
+
+    if template_file:
+        from xml.etree import ElementTree as ET
+
+        template_svg_root = ET.parse(template_file).getroot()
+        main_root = ET.ElementTree(ET.fromstring(drawing.tostring()))
+        layer_id = "digitization-layer"
+        source_layer = template_svg_root.find(
+            f".//{{http://www.w3.org/2000/svg}}g[@id='{layer_id}']"
+        )
+        target_layer = main_root.find(
+            f".//{{http://www.w3.org/2000/svg}}g[@id='{layer_id}']"
+        )
+        if source_layer is not None and target_layer is not None:
+            for elem in source_layer:
+                target_layer.append(elem)
+        main_root.write(svg, xml_declaration=True, encoding="utf-8")
+    else:
+        drawing.save(pretty=True)
 
 
 @click.command()
-@click.option("--onlypng", is_flag=True, help="Only produce png files.")
+@click.option(
+    "--template",
+    type=str,
+    default=None,
+    help="Add builtin template elements in SVG files.",
+)
+@click.option(
+    "--template-file",
+    type=click.Path(dir_okay=False),
+    default=None,
+    help="Add template elements from a custom SVG in the SVG file.",
+)
+@click.option(
+    "--outdir",
+    type=click.Path(file_okay=False),
+    default=None,
+    help="Write output files to this directory.",
+)
+@click.argument("img")
+def create_svg(img, template, outdir):
+    r"""
+    Write an SVG that shows `png` or `jpeg` as a linked image.
+
+    """
+    import mimetypes
+
+    mimetype = mimetypes.guess_type(img)[0]
+    if mimetype and mimetype.split("/")[1] in ["jpeg", "png"]:
+        svg = _outfile(img, suffix=".svg", outdir=outdir)
+        _create_svg(svg, img, template, True)
+    else:
+        raise click.BadParameter("Only PNG or JPEG image formats are supported.")
+
+
+@click.command()
+@click.option("--onlypng", is_flag=True, help="Only produce PNG files.")
+@click.option(
+    "--template",
+    type=click.Choice(["basic"]),
+    default=None,
+    help="Add builtin template elements in SVG files.",
+)
+@click.option(
+    "--template-file",
+    type=click.Path(dir_okay=False),
+    default=None,
+    help="Add template elements from a custom SVG in SVG files.",
+)
 @click.option(
     "--outdir",
     type=click.Path(file_okay=False),
@@ -548,7 +643,7 @@ def _create_linked_svg(svg, png):
     help="Write output files to this directory.",
 )
 @click.argument("pdf")
-def paginate(onlypng, pdf, outdir):
+def paginate(onlypng, template, template_file, pdf, outdir):
     """
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -561,20 +656,33 @@ def paginate(onlypng, pdf, outdir):
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
+    TESTS::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+
     """
-    from pdf2image import convert_from_path
+    from importlib.resources import files
 
-    pages = convert_from_path(pdf, dpi=600)
-    pngs = [
-        _outfile(pdf, suffix=f"_p{page}.png", outdir=outdir)
-        for page in range(len(pages))
-    ]
+    import pymupdf
 
-    for page, png in zip(pages, pngs):
-        page.save(png, "PNG")
+    if template and template_file:
+        raise click.BadParameter(
+            "Please provide either a file or a builtin template name."
+        )
+    if template:
+        template_file = files("svgdigitizer").joinpath(
+            "assets", f"template_{template}.svg"
+        )
 
+    doc = pymupdf.open(pdf)
+    for page_idx, page in enumerate(doc):
+        pix = page.get_pixmap(dpi=600)
+        png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
+        pix.save(png)
         if not onlypng:
-            _create_linked_svg(_outfile(png, suffix=".svg", outdir=outdir), png)
+            _create_linked_svg(
+                _outfile(png, suffix=".svg", outdir=outdir), png, template_file
+            )
 
 
 cli.add_command(plot)
@@ -582,6 +690,7 @@ cli.add_command(digitize)
 cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
+cli.add_command(create_svg)
 
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their

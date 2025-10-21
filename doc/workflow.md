@@ -104,7 +104,7 @@ Use the [CLI](cli.md) to create SVG and PNG files from the PDF, i.e., execute th
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer paginate mustermann_2021_svgdigitizer_1.pdf
+!svgdigitizer paginate /files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf
 ```
 
 The resulting filenames are of the form:
@@ -125,12 +125,12 @@ The data in Figure 2a in the example PDF on page 2 (filename containing `_p1`)  
 Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_f2a_blue.svg`. Here, `_f2a_blue` indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.
 
 ```{note}
-`_p1` can be ommited since the figure can unambiguously be identified by the figure and curve identifier label, e.g., `_f2a_blue`).
+`_p1` can be omitted since the figure can unambiguously be identified by the figure and curve identifier label, e.g., `_f2a_blue`.
 ```
 
 **2: Annotate the SVG and curve tracing**
 
-In principle the SVG is annotated and the curve us traced in the same way as described in the [usage](usage.md) section. A few additional notes are provide below the {download}`annotated SVG <./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg>`.
+In principle, the SVG is annotated and the curve is traced in the same way as described in the [usage](usage.md) section. A few additional notes are provide below the {download}`annotated SVG <./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1_f2a_blue.svg>`.
 
 ```{image} files/images/inkscape_final.png
 :class: bg-primary mb-1
@@ -145,21 +145,21 @@ Some remarks on the specific annotations:
 * The curve identifier should be a short unambiguous string, preferably without special characters.
 * A scan rate is mandatory. The information is not necessarily found in the figure (legend).
 * Add a figure identifier such as `figure: 2a`
-* Add tags describing the data with commonly used acronyms. In this case: `tags: BCV, HER`. Otherwise the data can hardly be classified.
+* Add tags describing the data with commonly used acronyms. In this case: `tags: BCV, HER`. Otherwise, the data can hardly be classified.
 * Feel free to add a comment to the plot. Use a full sentence, for example, `comment: The curve is a bit noisy.`
-* Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by `linked: DEMS`. The field can contain multiple types of measurements if applicable. Also feel free to use acronyms commonly used in the community.
+* Add a text field highlighting any additional measurements which were acquired simultaneously with the digitized curve and are shown in the same figure. In the example, the bottom plot shows DEMS data. This can be indicated by `linked: DEMS`. The field can contain multiple types of measurements if applicable. Also, feel free to use acronyms commonly used in the community.
 
 ## Step 4: Create a metadata file for each digitized curve
 
 Create a YAML file with the same name as the SVG file: `mustermann_2021_svgdigitizer_1_f2a_blue.yaml`
 
-The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml). Howevere, it is possibly more convenient to reuse existing YAML files which exist already in the [repository](https://github.com/echemdb/website/tree/main/literature)
+The general structure of the yaml file for the website is provided at [echemdb/electrochemistry-metadata-schema](https://github.com/echemdb/metadata-schema/blob/main/examples/file_schemas/svgdigitizer.yaml). However, it is possibly more convenient to reuse existing YAML files which exist already in the [repository](https://github.com/echemdb/electrochemistry-data/tree/main/literature/svgdigitizer).
 
 Adjust all keys in the file according to the content of the research article.
 
 ## Step 5: Submit to echemdb.org
 
-Propose a pull request in the GitHub repository that adds your directory to `website/literature`, e.g., by uploading the YAML, SVG and BIB files you created at https://github.com/echemdb/website/upload/main/literature/mustermann_2021_svgdigitizer_1 (replace `mustermann_2021_svgdigitizer_1` with the name of your data).
+Propose a pull request in the GitHub repository that adds your directory to `website/literature`, e.g., by uploading the YAML, SVG and BIB files you created at `https://github.com/echemdb/electrochemistry-data/upload/main/literature/svgdigitizer/mustermann_2021_svgdigitizer_1` (replace `mustermann_2021_svgdigitizer_1` with the name of your data).
 
 ## Notes
 

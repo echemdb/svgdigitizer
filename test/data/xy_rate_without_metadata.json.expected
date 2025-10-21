@@ -37,36 +37,30 @@
                         "figure": "",
                         "curve": "label"
                     },
-                    "figure description": {
-                        "version": 1,
+                    "figureDescription": {
                         "type": "digitized",
-                        "simultaneous measurements": [],
-                        "measurement type": "CV",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "CV",
                         "fields": [
                             {
                                 "name": "E",
                                 "type": "number",
                                 "unit": "V",
-                                "orientation": "x",
+                                "orientation": "horizontal",
                                 "reference": "unknown"
                             },
                             {
                                 "name": "j",
                                 "type": "number",
                                 "unit": "uA cm-2",
-                                "orientation": "y"
+                                "orientation": "vertical"
                             }
                         ],
                         "comment": "",
-                        "scan rate": {
+                        "scanRate": {
                             "value": 50.0,
                             "unit": "mV / s"
                         }
-                    },
-                    "data description": {
-                        "version": 1,
-                        "type": "digitized",
-                        "measurement type": "CV"
                     }
                 }
             }

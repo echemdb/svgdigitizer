@@ -46,11 +46,11 @@ conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock) for all
 platforms.
 
 If you don't have conda yet, we recommend to install
-[Miniforge](https://github.com/conda-forge/miniforge#miniforge3).
+[Miniforge](https://github.com/conda-forge/miniforge).
 
 Miniforge is already pre-configured for conda-forge. If you already had another
 release of conda installed, make sure the conda-forge channel is
-[configured correctly](https://conda-forge.org/docs/user/introduction.html#how-can-i-install-packages-from-conda-forge)
+[configured correctly](https://conda-forge.org/docs/user/introduction/#how-can-i-install-packages-from-conda-forge)
 
 Once your conda setup is ready, create a new `svgdigitizer` environment with
 the latest stable version of the svgdigitizer:
@@ -77,20 +77,33 @@ In case you use mamba instead of conda, replace `conda` with mamba in the exampl
 Install with pip for development
 --------------------------------
 
-If you want to work on the svgdigitizer itself, get a copy of the latest
-unreleased version of the svgdigitizer:
+If you want to work on the svgdigitizer itself, install [pixi](https://pixi.sh)
+and get a copy of the latest unreleased version of the svgdigitizer:
 
 ```sh
 git clone https://github.com/echemdb/svgdigitizer.git
+cd svgdigitizer
 ```
 
-Create an [editable](https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs) install of the svgdigitizer:
+To launch the svgdigitizer, run
 
 ```sh
-pip install -e svgdigitizer
+pixi run svgdigitizer
 ```
 
 Any changes you make to the files in your local copy of the svgdigitizer should
 now be available in your next Python session.
+
+To build the documentation locally, run
+
+```sh
+pixi run doc
+```
+
+and to run all doctests, run
+
+```sh
+pixi run doctest
+```
 
 We would love to see your contribution to the svgdigitizer.

@@ -2,7 +2,7 @@ project = 'svgdigitizer'
 copyright = '2021-2024, the svgdigitizer authors'
 author = 'the svgdigitizer authors'
 
-release = '0.12.0'
+release = '0.13.0'
 
 extensions = [
         "sphinx.ext.autodoc",
@@ -36,3 +36,9 @@ html_context = {
     'github_repo': 'svgdigitizer',
     'github_version': 'master/doc/',
 }
+
+# repology.org only passes the check locally but not in the Github CI. see #169
+linkcheck_ignore = [
+    "https://repology.org/*",
+    "https://scholar.google.com/"
+]
