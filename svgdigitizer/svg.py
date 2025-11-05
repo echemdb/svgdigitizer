@@ -36,6 +36,7 @@ We can recover the specification of that segment as it is encoded in the SVG::
     Path(Line(start=100j, end=(100+0j)))
 
 """
+
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #

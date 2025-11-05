@@ -8,6 +8,7 @@ A detailed description of different kinds of plots can be found
 in the :doc:`documentation </usage>`.
 
 """
+
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
