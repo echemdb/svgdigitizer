@@ -5,6 +5,7 @@ Click's own CliRunner is quite cumbersome to work with in some simple test
 scenarios so we wrap it in more convenient ways here.
 
 """
+
 # *********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -208,9 +209,10 @@ def test_svgdigitizer_cli(name, args):
             # If a JSON expected file exists, compare it
             json_expected = f"{name}.json.expected"
             if os.path.exists(json_expected):
-                with open(f"outdir/{name}.json", encoding="utf-8") as actual, open(
-                    json_expected, encoding="utf-8"
-                ) as expected:
+                with (
+                    open(f"outdir/{name}.json", encoding="utf-8") as actual,
+                    open(json_expected, encoding="utf-8") as expected,
+                ):
                     assert json.load(actual) == json.load(
                         expected
                     ), f"JSON mismatch for {name}"
