@@ -95,6 +95,7 @@ python = "3.14.*"
 check-jsonschema = "*"
 pytest = "*"
 pytest-xdist = "*"
+pytest-env = "*"
 
 [tool.pixi.feature.test.tasks]
 # To validate the metadata against a specific version preceded the version by `tags` such as `tags/0.3.0`.
@@ -135,4 +136,7 @@ filterwarnings = [
     "ignore:.*builtin type swigvarlink has no __module__ attribute.*:DeprecationWarning::",
     "ignore:.*builtin type SwigPyObject has no __module__ attribute.*:DeprecationWarning::",
     "ignore:.*builtin type SwigPyPacked has no __module__ attribute.*:DeprecationWarning::",
+]
+env = [
+    "MPLBACKEND=Agg"
 ]
