@@ -40,5 +40,6 @@ html_context = {
 # repology.org only passes the check locally but not in the Github CI. see #169
 linkcheck_ignore = [
     "https://repology.org/*",
-    "https://scholar.google.com/"
+    "https://scholar.google.com/",
+    "https://inkscape.org/"
 ]
