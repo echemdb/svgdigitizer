@@ -24,6 +24,7 @@ or the :doc:`documentation </workflow>` to create files for `echemdb <https://ww
 For the documentation below, the path of a CV is presented simply as a line.
 
 """
+
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
