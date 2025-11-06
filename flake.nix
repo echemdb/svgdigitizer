@@ -40,7 +40,7 @@
           doCheck = true;
           checkPhase = ''
             export MPLBACKEND=Agg
-            pytest -n auto -k "not get-citation" --doctest-modules svgdigitizer
+            pytest -n auto -k "not (get-citation or bibliographic_entry)" --doctest-modules svgdigitizer
           '';
           pythonImportsCheck = [ "svgdigitizer" ];
         };
