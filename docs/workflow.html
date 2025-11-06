@@ -145,30 +145,27 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;, line 10, in &lt;module&gt;
-    sys.exit(cli())
-             ^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1442, in __call__
-    return self.main(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1363, in main
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;</span>, line <span class=" -Color -Color-Magenta">10</span>, in <span class=" -Color -Color-Magenta">&lt;module&gt;</span>
+    sys.exit(<span class=" -Color -Color-Red">cli</span><span class=" -Color -Color-Bold -Color-Bold-Red">()</span>)
+             <span class=" -Color -Color-Red">~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1462</span>, in <span class=" -Color -Color-Magenta">__call__</span>
+    return <span class=" -Color -Color-Red">self.main</span><span class=" -Color -Color-Bold -Color-Bold-Red">(*args, **kwargs)</span>
+           <span class=" -Color -Color-Red">~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1383</span>, in <span class=" -Color -Color-Magenta">main</span>
     rv = self.invoke(ctx)
-         ^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1830, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1226, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 794, in invoke
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1850</span>, in <span class=" -Color -Color-Magenta">invoke</span>
+    return _process_result(<span class=" -Color -Color-Red">sub_ctx.command.invoke</span><span class=" -Color -Color-Bold -Color-Bold-Red">(sub_ctx)</span>)
+                           <span class=" -Color -Color-Red">~~~~~~~~~~~~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1246</span>, in <span class=" -Color -Color-Magenta">invoke</span>
+    return <span class=" -Color -Color-Red">ctx.invoke</span><span class=" -Color -Color-Bold -Color-Bold-Red">(self.callback, **ctx.params)</span>
+           <span class=" -Color -Color-Red">~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">814</span>, in <span class=" -Color -Color-Magenta">invoke</span>
     return callback(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 677, in paginate
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">678</span>, in <span class=" -Color -Color-Magenta">paginate</span>
     doc = pymupdf.open(pdf)
-          ^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/pymupdf/__init__.py&quot;, line 2957, in __init__
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/pymupdf/__init__.py&quot;</span>, line <span class=" -Color -Color-Magenta">2975</span>, in <span class=" -Color -Color-Magenta">__init__</span>
     raise FileNotFoundError(f&quot;no such file: &#39;{filename}&#39;&quot;)
-pymupdf.FileNotFoundError: no such file: &#39;/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf&#39;
+<span class=" -Color -Color-Bold -Color-Bold-Magenta">pymupdf.FileNotFoundError</span>: <span class=" -Color -Color-Magenta">no such file: &#39;/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf&#39;</span>
 </pre></div>
 </div>
 </div>

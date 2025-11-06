@@ -232,37 +232,41 @@ Only elements of the template SVG residing inside a group/layer with the <code c
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;, line 10, in &lt;module&gt;
-    sys.exit(cli())
-             ^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1442, in __call__
-    return self.main(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1363, in main
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;</span>, line <span class=" -Color -Color-Magenta">10</span>, in <span class=" -Color -Color-Magenta">&lt;module&gt;</span>
+    sys.exit(<span class=" -Color -Color-Red">cli</span><span class=" -Color -Color-Bold -Color-Bold-Red">()</span>)
+             <span class=" -Color -Color-Red">~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1462</span>, in <span class=" -Color -Color-Magenta">__call__</span>
+    return <span class=" -Color -Color-Red">self.main</span><span class=" -Color -Color-Bold -Color-Bold-Red">(*args, **kwargs)</span>
+           <span class=" -Color -Color-Red">~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1383</span>, in <span class=" -Color -Color-Magenta">main</span>
     rv = self.invoke(ctx)
-         ^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1830, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 1226, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/site-packages/click/core.py&quot;, line 794, in invoke
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1850</span>, in <span class=" -Color -Color-Magenta">invoke</span>
+    return _process_result(<span class=" -Color -Color-Red">sub_ctx.command.invoke</span><span class=" -Color -Color-Bold -Color-Bold-Red">(sub_ctx)</span>)
+                           <span class=" -Color -Color-Red">~~~~~~~~~~~~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1246</span>, in <span class=" -Color -Color-Magenta">invoke</span>
+    return <span class=" -Color -Color-Red">ctx.invoke</span><span class=" -Color -Color-Bold -Color-Bold-Red">(self.callback, **ctx.params)</span>
+           <span class=" -Color -Color-Red">~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">814</span>, in <span class=" -Color -Color-Magenta">invoke</span>
     return callback(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 683, in paginate
-    _create_linked_svg(
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 508, in _create_linked_svg
-    _create_svg(svg, img, template_file, linked=True)
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;, line 573, in _create_svg
-    template_svg_root = ET.parse(template_file).getroot()
-                        ^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/xml/etree/ElementTree.py&quot;, line 1204, in parse
-    tree.parse(source, parser)
-  File &quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.12/xml/etree/ElementTree.py&quot;, line 558, in parse
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">684</span>, in <span class=" -Color -Color-Magenta">paginate</span>
+    <span class=" -Color -Color-Red">_create_linked_svg</span><span class=" -Color -Color-Bold -Color-Bold-Red">(</span>
+    <span class=" -Color -Color-Red">~~~~~~~~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^</span>
+        <span class=" -Color -Color-Bold -Color-Bold-Red">_outfile(png, suffix=&quot;.svg&quot;, outdir=outdir), png, template_file</span>
+        <span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+    <span class=" -Color -Color-Bold -Color-Bold-Red">)</span>
+    <span class=" -Color -Color-Bold -Color-Bold-Red">^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">509</span>, in <span class=" -Color -Color-Magenta">_create_linked_svg</span>
+    <span class=" -Color -Color-Red">_create_svg</span><span class=" -Color -Color-Bold -Color-Bold-Red">(svg, img, template_file, linked=True)</span>
+    <span class=" -Color -Color-Red">~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">574</span>, in <span class=" -Color -Color-Magenta">_create_svg</span>
+    template_svg_root = <span class=" -Color -Color-Red">ET.parse</span><span class=" -Color -Color-Bold -Color-Bold-Red">(template_file)</span>.getroot()
+                        <span class=" -Color -Color-Red">~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/xml/etree/ElementTree.py&quot;</span>, line <span class=" -Color -Color-Magenta">1214</span>, in <span class=" -Color -Color-Magenta">parse</span>
+    <span class=" -Color -Color-Red">tree.parse</span><span class=" -Color -Color-Bold -Color-Bold-Red">(source, parser)</span>
+    <span class=" -Color -Color-Red">~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/xml/etree/ElementTree.py&quot;</span>, line <span class=" -Color -Color-Magenta">566</span>, in <span class=" -Color -Color-Magenta">parse</span>
     source = open(source, &quot;rb&quot;)
-             ^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: &#39;./files/others/custom_template.svg&#39;
+<span class=" -Color -Color-Bold -Color-Bold-Magenta">FileNotFoundError</span>: <span class=" -Color -Color-Magenta">[Errno 2] No such file or directory: &#39;./files/others/custom_template.svg&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -323,7 +327,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/0f4e073f1ac9f46eb2a899ca090d8da6f8e29f0298fea4e6776a707d3d603c7e.png" src="_images/0f4e073f1ac9f46eb2a899ca090d8da6f8e29f0298fea4e6776a707d3d603c7e.png" />
+<img alt="_images/0ea6214539b10fa703cc70ec731d5d40687b30d6d54b67be171a1ed80e85936e.png" src="_images/0ea6214539b10fa703cc70ec731d5d40687b30d6d54b67be171a1ed80e85936e.png" />
 </div>
 </div>
 <p>The resulting plot indicates that only the nodes of the spline were connected. To improve the tracing use the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
@@ -354,7 +358,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/9e66854bbb9fea2abfb15669142396e941619c0797af440c0f35b140e6efa5de.png" src="_images/9e66854bbb9fea2abfb15669142396e941619c0797af440c0f35b140e6efa5de.png" />
+<img alt="_images/c9723352819651fc8abc9b648126ef6bb64ec4822b93eebd8bd9d14031736de7.png" src="_images/c9723352819651fc8abc9b648126ef6bb64ec4822b93eebd8bd9d14031736de7.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -482,7 +486,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;distance [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/f5eb6556846b54bd1e0f5a069442fb5b7b3a5fbf32107921b830c762a95b4922.png" src="_images/f5eb6556846b54bd1e0f5a069442fb5b7b3a5fbf32107921b830c762a95b4922.png" />
+<img alt="_images/d3d90512597cab82e2c6d140a5ed09fc5591a49bd1c80baf78643ccca760e104.png" src="_images/d3d90512597cab82e2c6d140a5ed09fc5591a49bd1c80baf78643ccca760e104.png" />
 </div>
 </div>
 </section>
