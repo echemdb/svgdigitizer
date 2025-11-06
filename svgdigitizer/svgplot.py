@@ -148,6 +148,7 @@ class AxisOrientation(Enum):
     r"""
     The orientation of a plot axis.
     """
+
     HORIZONTAL = "horizontal"
     VERTICAL = "vertical"
 
@@ -212,6 +213,7 @@ class SVGPlot:
         1  1.0  1.0
 
     """
+
     _EPSILON = 1e-6
 
     def __init__(
@@ -1329,7 +1331,7 @@ class SVGPlot:
     @classmethod
     def _transformation(
         cls, x_1, x_2, y_1, y_2, algorithm, x_scaling_factor=1.0, y_scaling_factor=1.0
-    ):
+    ):  # pylint: disable=too-many-positional-arguments
         r"""
         Return the affine map from the SVG coordinate system to the plot
         coordinate system as a matrix.
@@ -1802,7 +1804,7 @@ class SVGPlot:
     @classmethod
     def _sample_snippet(
         cls, segment, sampling_interval, sample_from_x_length, t_range, x_length_range
-    ):
+    ):  # pylint: disable=too-many-positional-arguments
         r"""
         Sample the path segment `segment` at times in the range `[t_range[0],
         t_range[1]]` at equidistant steps spaced by `sampling_interval` on the

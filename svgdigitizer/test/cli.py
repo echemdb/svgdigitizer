@@ -5,6 +5,7 @@ Click's own CliRunner is quite cumbersome to work with in some simple test
 scenarios so we wrap it in more convenient ways here.
 
 """
+
 # *********************************************************************
 #  This file is part of svgdigitizer.
 #
