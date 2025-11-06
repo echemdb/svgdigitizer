@@ -24,7 +24,6 @@ import logging
 # ********************************************************************
 import os
 from functools import cached_property
-from typing import BinaryIO
 
 logger = logging.getLogger("svgdigitizer.pdf")
 
@@ -32,25 +31,20 @@ logger = logging.getLogger("svgdigitizer.pdf")
 class Pdf:
     "Handles all interactions with the PDF file."
 
-    def __init__(self, pdf_file: BinaryIO):
-        "Takes a file-like object."
-        self._pdf = pdf_file
-
-    @property
-    def pdf(self):
-        "Holds the PDF file."
-        return self._pdf
+    def __init__(self, pdf_filepath):
+        "Takes the path of a PDF file."
+        self._filepath = pdf_filepath
 
     @cached_property
     def doc(self):
         "Holds the opened PDF file."
         import pymupdf
 
-        return pymupdf.open(self._pdf)
+        return pymupdf.open(self._filepath)
 
     def _rename(self, new_name):
-        os.rename(self._pdf, new_name)
-        self._pdf.name = new_name
+        os.rename(self._filepath, new_name)
+        self._filepath = new_name
 
     @cached_property
     def doi(self):
