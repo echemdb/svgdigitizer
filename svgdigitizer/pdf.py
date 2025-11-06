@@ -96,8 +96,8 @@ class Pdf:
             >>> from svgdigitizer.pdf import Pdf
             >>> from svgdigitizer.test.cli import TemporaryData
             >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
-            ...     pdf = Pdf(os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
-            ...     pdf.bibliographic_entry
+            ...     # do not assign instance to variable which keeps the file open and fails for windows
+            ...     Pdf(os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf")).bibliographic_entry
             '@article{Hermann_2018, title={Enhanced Electrocatalytic Oxidation ... year={2018}, pages={J3192–J3198} }'
 
         """
