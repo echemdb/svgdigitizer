@@ -1,6 +1,7 @@
 r"""
 A collection of custom exceptions for svgdigitizer.
 """
+
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #

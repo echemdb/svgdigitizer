@@ -21,6 +21,7 @@ EXAMPLES::
       rename-by-key  Rename the provided PDF file by the key derived from...
 
 """
+
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
@@ -246,7 +247,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @skewed_option
 def digitize_figure(
     svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units
-):
+):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a figure with units on the axis and create a frictionless datapackage.
 
@@ -318,7 +319,7 @@ def digitize_figure(
 @skewed_option
 def digitize_cv(
     svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units
-):
+):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a cylic voltammogram and create a frictionless datapackage.
 
