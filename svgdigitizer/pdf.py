@@ -27,6 +27,132 @@ from functools import cached_property
 
 logger = logging.getLogger("svgdigitizer.pdf")
 
+# taken from https://github.com/retorquere/zotero-better-bibtex/blob/2be35ea03431b703bf6d2ebbf6b07d12dd352a0f/content/Preferences/preferences.yaml#L353
+default_skip_words = (
+    "a",
+    "ab",
+    "aboard",
+    "about",
+    "above",
+    "across",
+    "after",
+    "against",
+    "al",
+    "along",
+    "amid",
+    "among",
+    "an",
+    "and",
+    "anti",
+    "around",
+    "as",
+    "at",
+    "before",
+    "behind",
+    "below",
+    "beneath",
+    "beside",
+    "besides",
+    "between",
+    "beyond",
+    "but",
+    "by",
+    "d",
+    "da",
+    "das",
+    "de",
+    "del",
+    "dell",
+    "dello",
+    "dei",
+    "degli",
+    "della",
+    "dell",
+    "delle",
+    "dem",
+    "den",
+    "der",
+    "des",
+    "despite",
+    "die",
+    "do",
+    "down",
+    "du",
+    "during",
+    "ein",
+    "eine",
+    "einem",
+    "einen",
+    "einer",
+    "eines",
+    "el",
+    "en",
+    "et",
+    "except",
+    "for",
+    "from",
+    "gli",
+    "i",
+    "il",
+    "in",
+    "inside",
+    "into",
+    "is",
+    "l",
+    "la",
+    "las",
+    "le",
+    "les",
+    "like",
+    "lo",
+    "los",
+    "near",
+    "nor",
+    "of",
+    "off",
+    "on",
+    "onto",
+    "or",
+    "over",
+    "past",
+    "per",
+    "plus",
+    "round",
+    "save",
+    "since",
+    "so",
+    "some",
+    "sur",
+    "than",
+    "the",
+    "through",
+    "to",
+    "toward",
+    "towards",
+    "un",
+    "una",
+    "unas",
+    "under",
+    "underneath",
+    "une",
+    "unlike",
+    "uno",
+    "unos",
+    "until",
+    "up",
+    "upon",
+    "versus",
+    "via",
+    "von",
+    "while",
+    "with",
+    "within",
+    "without",
+    "yet",
+    "zu",
+    "zum",
+)
+
 
 class Pdf:
     "Handles all interactions with the PDF file."
@@ -89,7 +215,7 @@ class Pdf:
     @cached_property
     def bibliographic_entry(self):
         r"""
-        Get the citation from the DOI provided PDF file.
+        Get the citation from the DOI provided PDF file. Returns a bibtex string.
 
         EXAMPLES::
 
@@ -124,23 +250,30 @@ class Pdf:
         """
         from pybtex.database import parse_string
 
-        bibliography = parse_string(self.bibliographic_entry, bib_format="bibtex")
-        identifier = self._build_identifier(bibliography)
+        bibliography_data = parse_string(self.bibliographic_entry, bib_format="bibtex")
+        identifier = self.build_identifier(bibliography_data)
         self._rename(identifier + ".pdf")
 
     @staticmethod
-    def _build_identifier(citation):
+    def build_identifier(citation, skip_words=default_skip_words):
         """
-        Build the entry identifier based on bibtex citation.
+        Build the entry identifier based on a bibtex citation provided as `BibliographyData` (pybtex).
+        Some common title words are omitted from the identifier by default (see `skip_words`).
+        To change the omitted words it is possible to provide a custom word list.
 
         TESTS::
 
             >>> from svgdigitizer.pdf import Pdf
             >>> from pybtex.database import parse_string
-            >>> bibtex_string = ' @article{Mart_nez_Hincapi__2021, title={Surface charge and interfacial acid-base properties: pKa,2 of carbon dioxide at Pt(110)/perchloric acid solution interfaces.}, volume={388}, ISSN={0013-4686}, url={http://dx.doi.org/10.1016/j.electacta.2021.138639}, DOI={10.1016/j.electacta.2021.138639}, journal={Electrochimica Acta}, publisher={Elsevier BV}, author={Martínez-Hincapié, R. and Rodes, A. and Climent, V. and Feliu, J.M.}, year={2021}, month=aug, pages={138639} }' #pylint: disable=line-too-long
-            >>> bibliography = parse_string(bibtex_string, bib_format="bibtex")
-            >>> Pdf._build_identifier(bibliography)
+            >>> bibtex_string = '@article{Mart_nez_Hincapi__2021, title={Surface charge and interfacial acid-base properties: pKa,2 of carbon dioxide at Pt(110)/perchloric acid solution interfaces.}, volume={388}, ISSN={0013-4686}, url={http://dx.doi.org/10.1016/j.electacta.2021.138639}, DOI={10.1016/j.electacta.2021.138639}, journal={Electrochimica Acta}, publisher={Elsevier BV}, author={Martínez-Hincapié, R. and Rodes, A. and Climent, V. and Feliu, J.M.}, year={2021}, month=aug, pages={138639} }' #pylint: disable=line-too-long
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
             'martinez-hincapie_2021_surface_138639'
+
+            >>> bibtex_string = '@article{hermannEffectPHAnion2021, title = {The {{Effect}} of {{pH}} and {{Anion Adsorption}} on {{Formic Acid Oxidation}} on {{Au}}(111) {{Electrodes}}}, author = {Hermann, Johannes M. and Abdelrahman, Areeg and Jacob, Timo and Kibler, Ludwig A.}, year = 2021, month = jul, journal = {Electrochim. Acta}, volume = {385}, pages = {138279}, issn = {0013-4686}, doi = {10.1016/j.electacta.2021.138279} }' #pylint: disable=line-too-long
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'hermann_2021_effect_138279'
 
         """
         from slugify import slugify
@@ -148,8 +281,8 @@ class Pdf:
         entry = list(citation.entries.values())[0]
         first_author = entry.persons["author"][0].last_names[0]
         title_words = entry.fields["title"].split(" ")
-        first_word = title_words[0]
-        if "the" == first_word:  # maybe add more words?
+        first_word = slugify(title_words[0])
+        if first_word in skip_words:
             first_word = title_words[1]
         year = entry.fields["year"]
         first_page = (
