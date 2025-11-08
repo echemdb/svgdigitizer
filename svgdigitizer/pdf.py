@@ -159,18 +159,18 @@ class Pdf:
 
     def __init__(self, pdf_filepath):
         "Takes the path of a PDF file."
-        self._filepath = pdf_filepath
+        self.filepath = pdf_filepath
 
     @cached_property
     def doc(self):
         "Holds the opened PDF file."
         import pymupdf
 
-        return pymupdf.open(self._filepath)
+        return pymupdf.open(self.filepath)
 
     def _rename(self, new_name):
-        os.rename(self._filepath, new_name)
-        self._filepath = new_name
+        os.rename(self.filepath, new_name)
+        self.filepath = new_name
 
     @cached_property
     def doi(self):

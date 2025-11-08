@@ -725,9 +725,14 @@ def _parse_pages_option(_ctx, _param, value):
     default=None,
     help="Write output files to this directory.",
 )
+@click.option(
+    "--rename",
+    is_flag=True,
+    help="Specify if files should be named according to the echemdb identifier.",
+)
 @click.argument("pdf")
 def paginate(
-    pages, onlypng, template, template_file, pdf, outdir
+    pages, onlypng, rename, template, template_file, pdf, outdir
 ):  # pylint: disable=too-many-positional-arguments
     """
     Render PDF pages as individual SVG files with linked PNG images.
@@ -761,6 +766,8 @@ def paginate(
 
     doc = Pdf(pdf)
 
+    if rename:
+        doc.rename_by_key()
     if not pages:
         page_range = range(doc.num_pages)
     else:
@@ -771,7 +778,7 @@ def paginate(
             )
     for page_idx in page_range:
         pix = doc.export_png(page_idx, dpi=600)
-        png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
+        png = _outfile(doc.filepath, suffix=f"_p{page_idx}.png", outdir=outdir)
         pix.save(png)
         if not onlypng:
             _create_linked_svg(
