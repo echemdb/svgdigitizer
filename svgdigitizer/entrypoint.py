@@ -678,6 +678,28 @@ def create_svg(img, template, outdir):
 
 
 def _parse_pages_option(_ctx, _param, value):
+    """
+    Parse page range string and return list of page numbers. Raises if string does not obey the format or start page is higher than stop page.
+        TESTS::
+
+        >>> from svgdigitizer.entrypoint import _parse_pages_option
+        >>> _parse_pages_option(_, _, "1-2")
+        [1, 2]
+
+        >>> _parse_pages_option(_, _, "2-2")
+        [2]
+
+        >>> _parse_pages_option(_, _, "3-2")
+        Traceback (most recent call last):
+        ...
+        click.exceptions.BadParameter: Invalid range. Start must be less than or equal to end.
+
+        >>> _parse_pages_option(_, _, "2 3")
+        Traceback (most recent call last):
+        ...
+        click.exceptions.BadParameter: Invalid format. Use a single number or a range like '3-5'.
+
+    """
     import re
 
     if value is None:
@@ -694,7 +716,7 @@ def _parse_pages_option(_ctx, _param, value):
 
     if start > end:
         raise click.BadParameter(
-            f"Invalid range. Start ({start}) must be less than or equal to end ({end})."
+            "Invalid range. Start must be less than or equal to end."
         )
 
     return list(range(start, end + 1))
