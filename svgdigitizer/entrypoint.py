@@ -764,10 +764,6 @@ def paginate(
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
-    TESTS::
-
-        >>> from svgdigitizer.test.cli import invoke, TemporaryData
-
     """
     from importlib.resources import files
 
