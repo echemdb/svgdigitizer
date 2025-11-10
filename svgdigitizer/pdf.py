@@ -169,6 +169,7 @@ class Pdf:
         return pymupdf.open(self.filepath)
 
     def _rename(self, new_name):
+        "Rename the PDF and update its file path."
         os.rename(self.filepath, new_name)
         self.filepath = new_name
 
@@ -200,7 +201,7 @@ class Pdf:
 
     @staticmethod
     def _download_citation(doi):
-        "Download citation for DOI"
+        "Download citation using DOI"
         import requests
 
         resp = requests.get(
