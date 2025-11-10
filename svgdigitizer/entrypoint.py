@@ -604,10 +604,6 @@ def get_doi(pdf):
     ...     invoke(cli, "get-doi", os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
     10.1149/2.0251815jes
 
-    TESTS::
-
-        >>> from svgdigitizer.test.cli import invoke, TemporaryData
-
     """
     from .pdf import Pdf
 
