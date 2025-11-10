@@ -161,8 +161,19 @@
            <span class=" -Color -Color-Red">~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
   File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">814</span>, in <span class=" -Color -Color-Magenta">invoke</span>
     return callback(*args, **kwargs)
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">678</span>, in <span class=" -Color -Color-Magenta">paginate</span>
-    doc = pymupdf.open(pdf)
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">786</span>, in <span class=" -Color -Color-Magenta">paginate</span>
+    page_range = range(<span class=" -Color -Color-Bold -Color-Bold-Red">doc.num_pages</span>)
+                       <span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/functools.py&quot;</span>, line <span class=" -Color -Color-Magenta">1127</span>, in <span class=" -Color -Color-Magenta">__get__</span>
+    val = self.func(instance)
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/pdf.py&quot;</span>, line <span class=" -Color -Color-Magenta">241</span>, in <span class=" -Color -Color-Magenta">num_pages</span>
+    return <span class=" -Color -Color-Bold -Color-Bold-Red">self.doc</span>.page_count
+           <span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/functools.py&quot;</span>, line <span class=" -Color -Color-Magenta">1127</span>, in <span class=" -Color -Color-Magenta">__get__</span>
+    val = self.func(instance)
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/pdf.py&quot;</span>, line <span class=" -Color -Color-Magenta">169</span>, in <span class=" -Color -Color-Magenta">doc</span>
+    return <span class=" -Color -Color-Red">pymupdf.open</span><span class=" -Color -Color-Bold -Color-Bold-Red">(self.filepath)</span>
+           <span class=" -Color -Color-Red">~~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^</span>
   File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/pymupdf/__init__.py&quot;</span>, line <span class=" -Color -Color-Magenta">2975</span>, in <span class=" -Color -Color-Magenta">__init__</span>
     raise FileNotFoundError(f&quot;no such file: &#39;{filename}&#39;&quot;)
 <span class=" -Color -Color-Bold -Color-Bold-Magenta">pymupdf.FileNotFoundError</span>: <span class=" -Color -Color-Magenta">no such file: &#39;/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf&#39;</span>
