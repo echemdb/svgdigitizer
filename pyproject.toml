@@ -52,7 +52,7 @@ python-311 = ["test", "python-311"]
 python-312 = ["test", "python-312"]
 python-313 = ["test", "python-313"]
 python-314 = ["test", "python-314"]
-dev = ["dev", "doc", "test", "lint"]
+dev = ["dev", "doc", "test", "lint", "release"]
 
 [tool.pixi.dependencies]
 astropy = "*"
@@ -132,7 +132,15 @@ linkcheck = "cd doc && make linkcheck"
 
 [tool.pixi.feature.dev.dependencies]
 pip = "*"
-python = "3.14.*"
+
+[tool.pixi.feature.release.tasks]
+# To create a new release, run `pixi run release X.Y.Z`
+rever = { args = [ { "arg" = "version", "default" = "--help" } ],cmd = "rever {{ version }}" }
+
+[tool.pixi.feature.release.dependencies]
+twine = "*"
+rever = "*"
+make = "*"
 
 [tool.pytest.ini_options]
 filterwarnings = [
