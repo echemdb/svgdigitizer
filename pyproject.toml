@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "svgdigitizer"
-version = "0.13.0"
+version = "0.13.1"
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 description = "svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications."
 readme = "README.md"
