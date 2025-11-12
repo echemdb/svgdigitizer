@@ -4,6 +4,37 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.13.1
+====================
+
+**Added:**
+
+* Added Python 3.14 support.
+* Added DOI and citation handling to `paginate` cli command.
+* Added `--rename` option to the `paginate` cli command to rename the files with echemdb identifier.
+* Added `--pages` option to the `paginate` cli command allowing to limit the pages to be converted to png.
+* Added `get-doi` cli command to extract the DOI from the first page of the PDF file and print it.
+* Added `get-citiation` cli command to print the bibtex citation downloaded .
+* Added `rename-by-key` cli command to rename the pdf file using the identifier build from the citation.
+* Added requests to dependencies.
+* Added cli tests in pixi to test various cli commands on files previously run in the github workflows.
+
+**Changed:**
+
+* Changed lower version limit of PyMuPDF from 1.23 to 1.26.
+* Changed lower version limit of pybtex from  0.24 to 0.25.
+* Changed upper pillow version limit to 12.
+* Pinned pymupdf to >=1.26 <1.26.6.
+* Removed version bounds for black and pylint.
+* Updated to pixi 0.59 in github workflows and changed deprecated [tool.pixi.project] to [tool.pixi.workspace].
+
+**Removed:**
+
+* Removed Python 3.9 support.
+* Removed cli tests from github workflows.
+
+
+
 v0.13.0
 ====================
 

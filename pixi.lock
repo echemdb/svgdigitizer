@@ -34514,8 +34514,8 @@ packages:
   timestamp: 1751850865740
 - pypi: ./
   name: svgdigitizer
-  version: 0.13.0
-  sha256: 2ff18380c330464fece37633df3d8ddd8358e343fbc1fa794fc9feba47a5ba7f
+  version: 0.13.1
+  sha256: 101405f4aa59a348c3da9c4819bf1aaea3d3ac710dd926bb07845f53cd7c8d58
   requires_dist:
   - astropy>=5,<8
   - click>=8,<9
