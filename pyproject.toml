@@ -144,6 +144,9 @@ twine = "*"
 rever = "*"
 make = "*"
 
+[tool.pixi.feature.release.pypi-dependencies]
+build = "*"
+
 [tool.pytest.ini_options]
 filterwarnings = [
     "ignore:.*builtin type swigvarlink has no __module__ attribute.*:DeprecationWarning::",
