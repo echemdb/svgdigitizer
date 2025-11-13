@@ -69,10 +69,12 @@ skewed_option = click.option(
 
 bibliography_option = click.option(
     "--bibliography",
-    type=click.Path(file_okay=False),
-    default=".",
+    type=click.File("rb"),
+    # type=str,
+    default=None,
     help="Adds bibliography data from a bibfile located in a specified directory as descriptor to the datapackage.",
 )
+# @click.argument("svg", type=click.File("rb"))
 
 citation_key_option = click.option(
     "--citation-key",
@@ -168,7 +170,7 @@ def _create_svgplot(svg, sampling_interval, skewed):
 def _create_bibliography(bibliography, citation_key, metadata):
     r"""
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citationKey']`,
-    or from the provided `citation_key`when both requirements are met. 
+    or from the provided `citation_key`when both requirements are met.
     Otherwise an empty string is returned.
 
     This is a helper method for :meth:`_create_outfiles`.
@@ -187,10 +189,10 @@ def _create_bibliography(bibliography, citation_key, metadata):
 
     # bibfile = f"{os.path.join(bibliography)}.bib"
 
-    if not os.path.exists(bibliography):
-        raise FileNotFoundError(f"No bibliography file found at {bibliography}.")
-
-    bibdata = parse_file(bibliography, bib_format="bibtex")
+    from io import StringIO
+    content = bibliography.read().decode("utf-8")
+    bibdata = parse_file(StringIO(content), bib_format="bibtex")
+    # bibdata = parse_file(StringIO(bibliography), bib_format="bibtex")
 
     # logger.warning(
     #         f"A citation key with name {bibkey} was provided, but no BIB file was found."
@@ -202,7 +204,7 @@ def _create_bibliography(bibliography, citation_key, metadata):
         )
         return ""
 
-    return bibdata.entries[citation_key].to_string("bibtex")
+    return bibdata.entries[citation_key].to_string("bibtex"), citation_key
 
 
 @click.command()
@@ -425,7 +427,7 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):
 
     metadata = svgfigure.metadata
 
-    bibliography_data = _create_bibliography(bibliography, citation_key, metadata)
+    bibliography_data, new_citation_key = _create_bibliography(bibliography, citation_key, metadata)
 
     if bibliography_data:
         metadata.setdefault("source", {})
@@ -437,6 +439,15 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):
             )
 
         metadata["source"].update({"bibdata": bibliography_data})
+
+        metadata["source"].setdefault("citationKey", {})
+
+        if metadata["source"]["citationKey"]:
+            logger.warning(
+                f"Replace existing citation key in metadata with the new citation key '{new_citation_key}'."
+            )
+
+        metadata["source"].update({"citationKey": new_citation_key})
 
     package = _create_package(metadata, csvname, outdir)
 

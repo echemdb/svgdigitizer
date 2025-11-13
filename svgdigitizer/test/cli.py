@@ -159,12 +159,12 @@ class TemporaryData:
             ],
         ),
         (
-            "cv_bibliography",
+            "cv_bibliography_key",
             [
                 "cv",
-                "cv_bibliography.svg",
+                "cv_bibliography_key.svg",
                 "--metadata",
-                "cv_bibliography.yaml",
+                "cv_bibliography_key.yaml",
                 "--si-units",
                 "--bibliography",
                 "../bibliography/bibliography.bib",
