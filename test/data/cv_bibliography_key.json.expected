@@ -1,9 +1,9 @@
 {
     "resources": [
         {
-            "name": "figure_comment",
+            "name": "cv_bibliography_key",
             "type": "table",
-            "path": "figure_comment.csv",
+            "path": "cv_bibliography_key.csv",
             "scheme": "file",
             "format": "csv",
             "mediatype": "text/csv",
@@ -18,23 +18,25 @@
                     {
                         "name": "E",
                         "type": "number",
-                        "unit": "V"
+                        "unit": "V",
+                        "reference": "RHE"
                     },
                     {
                         "name": "j",
                         "type": "number",
-                        "unit": "uA cm-2"
+                        "unit": "A / m2"
                     }
                 ]
             },
             "metadata": {
                 "echemdb": {
-                    "version": "1",
+                    "version": 1,
                     "source": {
                         "doi": "https://doi.org/10.1016/0039-6028(85)90985-9",
-                        "citationKey": "Beden_1985_Voltammetric_833",
                         "figure": "2b",
-                        "curve": "label"
+                        "curve": "label",
+                        "bibdata": "@article{custom_key,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Bibliography in a subdirectory\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2025\",\n    abstract = \"Abstract.\"\n}\n",
+                        "citationKey": "custom_key"
                     },
                     "curator": {
                         "name": "Albert Engstfeld",
@@ -152,13 +154,14 @@
                     "figureDescription": {
                         "type": "digitized",
                         "simultaneousMeasurements": [],
-                        "measurementType": "custom",
+                        "measurementType": "CV",
                         "fields": [
                             {
                                 "name": "E",
                                 "type": "number",
                                 "unit": "V",
-                                "orientation": "horizontal"
+                                "orientation": "horizontal",
+                                "reference": "RHE"
                             },
                             {
                                 "name": "j",
@@ -167,7 +170,7 @@
                                 "orientation": "vertical"
                             }
                         ],
-                        "comment": "noisy data",
+                        "comment": "",
                         "scanRate": {
                             "value": 50.0,
                             "unit": "mV / s"
