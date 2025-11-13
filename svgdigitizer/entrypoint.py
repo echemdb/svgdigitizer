@@ -186,13 +186,16 @@ def _create_bibliography(bibliography, citation_key, metadata):
 
         citation_key = metadata["source"]["citationKey"]
         if not citation_key:
-            logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
+            logger.warning(
+                'No bibliography key found in metadata["source"]["citationKey"]'
+            )
             del metadata["source"]["citationKey"]
             return "", citation_key
 
     # bibfile = f"{os.path.join(bibliography)}.bib"
 
     from io import StringIO
+
     content = bibliography.read().decode("utf-8")
     bibdata = parse_file(StringIO(content), bib_format="bibtex")
     # bibdata = parse_file(StringIO(bibliography), bib_format="bibtex")
@@ -269,7 +272,14 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @citation_key_option
 @skewed_option
 def digitize_figure(
-    svg, sampling_interval, metadata, outdir, bibliography, citation_key, skewed, si_units
+    svg,
+    sampling_interval,
+    metadata,
+    outdir,
+    bibliography,
+    citation_key,
+    skewed,
+    si_units,
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a figure with units on the axis and create a frictionless datapackage.
@@ -326,7 +336,11 @@ def digitize_figure(
         )
 
     _create_outfiles(
-        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography, citation_key=citation_key
+        svgfigure=svgfigure,
+        svg=svg,
+        outdir=outdir,
+        bibliography=bibliography,
+        citation_key=citation_key,
     )
 
 
@@ -342,7 +356,14 @@ def digitize_figure(
 @si_option
 @skewed_option
 def digitize_cv(
-    svg, sampling_interval, metadata, outdir, skewed, bibliography, citation_key, si_units
+    svg,
+    sampling_interval,
+    metadata,
+    outdir,
+    skewed,
+    bibliography,
+    citation_key,
+    si_units,
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a cylic voltammogram and create a frictionless datapackage.
@@ -416,7 +437,11 @@ def digitize_cv(
         )
 
     _create_outfiles(
-        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography, citation_key=citation_key
+        svgfigure=svgfigure,
+        svg=svg,
+        outdir=outdir,
+        bibliography=bibliography,
+        citation_key=citation_key,
     )
 
 
@@ -430,7 +455,9 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):
 
     metadata = svgfigure.metadata
 
-    bibliography_data, new_citation_key = _create_bibliography(bibliography, citation_key, metadata)
+    bibliography_data, new_citation_key = _create_bibliography(
+        bibliography, citation_key, metadata
+    )
 
     if bibliography_data:
         metadata.setdefault("source", {})
