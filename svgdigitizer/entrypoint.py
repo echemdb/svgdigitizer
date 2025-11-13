@@ -71,10 +71,9 @@ bibliography_option = click.option(
     "--bibliography",
     type=click.File("rb"),
     # type=str,
-    default=None,
+    # default=None,
     help="Adds bibliography data from a bibfile located in a specified directory as descriptor to the datapackage.",
 )
-# @click.argument("svg", type=click.File("rb"))
 
 citation_key_option = click.option(
     "--citation-key",
@@ -175,6 +174,10 @@ def _create_bibliography(bibliography, citation_key, metadata):
 
     This is a helper method for :meth:`_create_outfiles`.
     """
+
+    if not bibliography:
+        return "", citation_key
+
     from pybtex.database import parse_file
 
     if not citation_key:
@@ -185,7 +188,7 @@ def _create_bibliography(bibliography, citation_key, metadata):
         if not citation_key:
             logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
             del metadata["source"]["citationKey"]
-            return ""
+            return "", citation_key
 
     # bibfile = f"{os.path.join(bibliography)}.bib"
 
@@ -202,7 +205,7 @@ def _create_bibliography(bibliography, citation_key, metadata):
         logger.warning(
             f"A citation key with name {citation_key} was provided, but not found in {bibliography}."
         )
-        return ""
+        return "", citation_key
 
     return bibdata.entries[citation_key].to_string("bibtex"), citation_key
 
