@@ -10,12 +10,15 @@ EXAMPLES::
     Options:
       --help  Show this message and exit.
     Commands:
-      create-svg  Write an SVG that shows `png` or `jpeg` as a linked image.
-      cv          Digitize a cylic voltammogram and create a frictionless...
-      digitize    Digitize a 2D plot.
-      figure      Digitize a figure with units on the axis and create a...
-      paginate    Render PDF pages as individual SVG files with linked PNG images.
-      plot        Display a plot of the data traced in an SVG.
+      create-svg     Write an SVG that shows `png` or `jpeg` as a linked image.
+      cv             Digitize a cylic voltammogram and create a frictionless...
+      digitize       Digitize a 2D plot.
+      figure         Digitize a figure with units on the axis and create a...
+      get-citation   Get the citation from the DOI provided PDF file.
+      get-doi        Get the DOI from the provided PDF file.
+      paginate       Render PDF pages as individual SVG files with linked PNG...
+      plot           Display a plot of the data traced in an SVG.
+      rename-by-key  Rename the provided PDF file by the key derived from...
 
 """
 
@@ -591,6 +594,53 @@ def _create_svg(svg, img, template_file, linked):
 
 
 @click.command()
+@click.argument("pdf")
+def get_doi(pdf):
+    r"""
+    Get the DOI from the provided PDF file.
+
+    EXAMPLES::
+
+    >>> from svgdigitizer.test.cli import invoke, TemporaryData
+    >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
+    ...     invoke(cli, "get-doi", os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf"))
+    10.1149/2.0251815jes
+
+    """
+    from .pdf import Pdf
+
+    print(Pdf(pdf).doi)
+
+
+@click.command()
+@click.argument("pdf")
+def get_citation(pdf):
+    r"""
+    Get the citation from the DOI provided PDF file.
+    """
+    from .pdf import Pdf
+
+    document = Pdf(pdf)
+    citation = document.bibliographic_entry
+
+    if not citation:
+        raise KeyError(f"Failed to get citation from DOI {document.doi}.")
+    print(citation)
+
+
+@click.command()
+@click.argument("pdf")
+def rename_by_key(pdf):
+    r"""
+    Rename the provided PDF file by the key derived from citation.
+
+    """
+    from .pdf import Pdf
+
+    Pdf(pdf).rename_by_key()
+
+
+@click.command()
 @click.option(
     "--template",
     type=str,
@@ -625,7 +675,57 @@ def create_svg(img, template, outdir):
         raise click.BadParameter("Only PNG or JPEG image formats are supported.")
 
 
+def _parse_pages_option(_ctx, _param, value):
+    """
+    Parse page range string and return list of page numbers. Raises if string does not obey the format or start page is higher than stop page.
+        TESTS::
+
+        >>> from svgdigitizer.entrypoint import _parse_pages_option
+        >>> _parse_pages_option(_, _, "1-2")
+        [1, 2]
+
+        >>> _parse_pages_option(_, _, "2-2")
+        [2]
+
+        >>> _parse_pages_option(_, _, "3-2")
+        Traceback (most recent call last):
+        ...
+        click.exceptions.BadParameter: Invalid range. Start must be less than or equal to end.
+
+        >>> _parse_pages_option(_, _, "2 3")
+        Traceback (most recent call last):
+        ...
+        click.exceptions.BadParameter: Invalid format. Use a single number or a range like '3-5'.
+
+    """
+    import re
+
+    if value is None:
+        return None
+
+    match = re.fullmatch(r"(\d+)(?:-(\d+))?", value)
+    if not match:
+        raise click.BadParameter(
+            "Invalid format. Use a single number or a range like '3-5'."
+        )
+
+    start = int(match.group(1))
+    end = int(match.group(2)) if match.group(2) else start
+
+    if start > end:
+        raise click.BadParameter(
+            "Invalid range. Start must be less than or equal to end."
+        )
+
+    return list(range(start, end + 1))
+
+
 @click.command()
+@click.option(
+    "--pages",
+    callback=_parse_pages_option,
+    help="Specify a single page (e.g., '2') or a range (e.g., '3-5').",
+)
 @click.option("--onlypng", is_flag=True, help="Only produce PNG files.")
 @click.option(
     "--template",
@@ -645,8 +745,15 @@ def create_svg(img, template, outdir):
     default=None,
     help="Write output files to this directory.",
 )
+@click.option(
+    "--rename",
+    is_flag=True,
+    help="Specify if files should be named according to the echemdb identifier.",
+)
 @click.argument("pdf")
-def paginate(onlypng, template, template_file, pdf, outdir):
+def paginate(
+    pages, onlypng, rename, template, template_file, pdf, outdir
+):  # pylint: disable=too-many-positional-arguments
     """
     Render PDF pages as individual SVG files with linked PNG images.
 
@@ -659,14 +766,10 @@ def paginate(onlypng, template, template_file, pdf, outdir):
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
         ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
-    TESTS::
-
-        >>> from svgdigitizer.test.cli import invoke, TemporaryData
-
     """
     from importlib.resources import files
 
-    import pymupdf
+    from .pdf import Pdf
 
     if template and template_file:
         raise click.BadParameter(
@@ -677,10 +780,21 @@ def paginate(onlypng, template, template_file, pdf, outdir):
             "assets", f"template_{template}.svg"
         )
 
-    doc = pymupdf.open(pdf)
-    for page_idx, page in enumerate(doc):
-        pix = page.get_pixmap(dpi=600)
-        png = _outfile(pdf, suffix=f"_p{page_idx}.png", outdir=outdir)
+    doc = Pdf(pdf)
+
+    if rename:
+        doc.rename_by_key()
+    if not pages:
+        page_range = range(doc.num_pages)
+    else:
+        page_range = pages
+        if page_range not in range(doc.num_pages):
+            raise click.BadParameter(
+                f"Invalid range. Page numbers must be within 0-{doc.num_pages}."
+            )
+    for page_idx in page_range:
+        pix = doc.export_png(page_idx, dpi=600)
+        png = _outfile(doc.filepath, suffix=f"_p{page_idx}.png", outdir=outdir)
         pix.save(png)
         if not onlypng:
             _create_linked_svg(
@@ -694,6 +808,9 @@ cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)
 cli.add_command(paginate)
 cli.add_command(create_svg)
+cli.add_command(get_doi)
+cli.add_command(get_citation)
+cli.add_command(rename_by_key)
 
 # Register command docstrings for doctesting.
 # Since commands are not functions anymore due to their decorator, their

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "svgdigitizer"
-version = "0.13.0"
+version = "0.13.1"
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 description = "svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications."
 readme = "README.md"
@@ -21,6 +21,7 @@ dependencies = [
     "pybtex>=0.25,<0.26",
     "pymupdf>=1.26,<1.26.6",
     "pyyaml>=6,<7",
+    "requests>2,<3",
     "scipy>=1.7,<2",
     "svg.path>=4.1,<8",
     "svgpathtools>=1.4,<2",
@@ -52,6 +53,7 @@ python-312 = ["test", "python-312"]
 python-313 = ["test", "python-313"]
 python-314 = ["test", "python-314"]
 dev = ["dev", "doc", "test", "lint"]
+release = ["release"]
 
 [tool.pixi.dependencies]
 astropy = "*"
@@ -65,6 +67,7 @@ poppler = "*"
 pybtex = "*"
 python = "*"
 pyyaml = "*"
+requests = "*"
 scipy = "*"
 "svg.path" = "*"
 svgpathtools = "*"
@@ -102,6 +105,7 @@ pytest-env = "*"
 # To validate the metadata against metadata in a specific branch use `head/branch-name`.
 validate = { args = [ { "arg" = "version", "default" = "tags/0.3.0" } ],cmd = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --base-uri https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')" }
 doctest = "pytest -n auto --doctest-modules svgdigitizer"
+pytest = "pytest -n auto svgdigitizer/**/*.py"
 
 [tool.pixi.feature.lint.dependencies]
 black = "*"
@@ -130,6 +134,18 @@ linkcheck = "cd doc && make linkcheck"
 [tool.pixi.feature.dev.dependencies]
 pip = "*"
 python = "3.14.*"
+
+[tool.pixi.feature.release.tasks]
+# To create a new release, run `pixi run rever X.Y.Z`
+rever = { args = [ { "arg" = "version", "default" = "--help" } ],cmd = "rever {{ version }}" }
+
+[tool.pixi.feature.release.dependencies]
+twine = "*"
+rever = "*"
+make = "*"
+
+[tool.pixi.feature.release.pypi-dependencies]
+build = "*"
 
 [tool.pytest.ini_options]
 filterwarnings = [
