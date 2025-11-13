@@ -155,6 +155,21 @@ class TemporaryData:
                 "cv_bibliography.yaml",
                 "--si-units",
                 "--bibliography",
+                "../bibliography/bibliography.bib",
+            ],
+        ),
+        (
+            "cv_bibliography",
+            [
+                "cv",
+                "cv_bibliography.svg",
+                "--metadata",
+                "cv_bibliography.yaml",
+                "--si-units",
+                "--bibliography",
+                "../bibliography/bibliography.bib",
+                "--citation-key",
+                "custom_key",
             ],
         ),
         (
@@ -177,6 +192,7 @@ class TemporaryData:
                 "figure_bibliography.yaml",
                 "--si-units",
                 "--bibliography",
+                "../bibliography/bibliography.bib",
             ],
         ),
         (

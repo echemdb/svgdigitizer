@@ -74,6 +74,13 @@ bibliography_option = click.option(
     help="Adds bibliography data from a bibfile located in a specified directory as descriptor to the datapackage.",
 )
 
+citation_key_option = click.option(
+    "--citation-key",
+    type=str,
+    default=None,
+    help="The citation related to this file, which is included in the bibliography provided with --bibliography.",
+)
+
 si_option = click.option(
     "--si-units",
     is_flag=True,
@@ -158,34 +165,44 @@ def _create_svgplot(svg, sampling_interval, skewed):
     )
 
 
-def _create_bibliography(bibliography, metadata):
+def _create_bibliography(bibliography, citation_key, metadata):
     r"""
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citationKey']`,
-    when both requirements are met. Otherwise an empty string is returned.
+    or from the provided `citation_key`when both requirements are met. 
+    Otherwise an empty string is returned.
 
     This is a helper method for :meth:`_create_outfiles`.
     """
     from pybtex.database import parse_file
 
-    metadata.setdefault("source", {})
-    metadata["source"].setdefault("citationKey", "")
+    if not citation_key:
+        metadata.setdefault("source", {})
+        metadata["source"].setdefault("citationKey", "")
 
-    bibkey = metadata["source"]["citationKey"]
-    if not bibkey:
-        logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
-        del metadata["source"]["citationKey"]
-        return ""
+        citation_key = metadata["source"]["citationKey"]
+        if not citation_key:
+            logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
+            del metadata["source"]["citationKey"]
+            return ""
 
-    bibfile = f"{os.path.join(bibliography, bibkey)}.bib"
+    # bibfile = f"{os.path.join(bibliography)}.bib"
 
-    if not os.path.exists(bibfile):
+    if not os.path.exists(bibliography):
+        raise FileNotFoundError(f"No bibliography file found at {bibliography}.")
+
+    bibdata = parse_file(bibliography, bib_format="bibtex")
+
+    # logger.warning(
+    #         f"A citation key with name {bibkey} was provided, but no BIB file was found."
+    #     )
+    #     return ""
+    if citation_key not in bibdata.entries:
         logger.warning(
-            f"A citation key with name {bibkey} was provided, but no BIB file was found."
+            f"A citation key with name {citation_key} was provided, but not found in {bibliography}."
         )
         return ""
 
-    bibdata = parse_file(bibfile, bib_format="bibtex")
-    return bibdata.entries[bibkey].to_string("bibtex")
+    return bibdata.entries[citation_key].to_string("bibtex")
 
 
 @click.command()
@@ -244,9 +261,10 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @bibliography_option
+@citation_key_option
 @skewed_option
 def digitize_figure(
-    svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units
+    svg, sampling_interval, metadata, outdir, bibliography, citation_key, skewed, si_units
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a figure with units on the axis and create a frictionless datapackage.
@@ -303,7 +321,7 @@ def digitize_figure(
         )
 
     _create_outfiles(
-        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography, citation_key=citation_key
     )
 
 
@@ -315,10 +333,11 @@ def digitize_figure(
 )
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
+@citation_key_option
 @si_option
 @skewed_option
 def digitize_cv(
-    svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units
+    svg, sampling_interval, metadata, outdir, skewed, bibliography, citation_key, si_units
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a cylic voltammogram and create a frictionless datapackage.
@@ -392,11 +411,11 @@ def digitize_cv(
         )
 
     _create_outfiles(
-        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography, citation_key=citation_key
     )
 
 
-def _create_outfiles(svgfigure, svg, outdir, bibliography):
+def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):
     """Writes a datapackage consisting of a CSV and JSON file from a :param:'svgfigure'
 
     This is a helper method for CLI commands that digitize an svgfigure.
@@ -406,7 +425,7 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography):
 
     metadata = svgfigure.metadata
 
-    bibliography_data = _create_bibliography(bibliography, metadata)
+    bibliography_data = _create_bibliography(bibliography, citation_key, metadata)
 
     if bibliography_data:
         metadata.setdefault("source", {})
