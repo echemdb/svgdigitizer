@@ -70,8 +70,6 @@ skewed_option = click.option(
 bibliography_option = click.option(
     "--bibliography",
     type=click.File("rb"),
-    # type=str,
-    # default=None,
     help="Adds bibliography data from a bibfile located in a specified directory as descriptor to the datapackage.",
 )
 
@@ -192,18 +190,11 @@ def _create_bibliography(bibliography, citation_key, metadata):
             del metadata["source"]["citationKey"]
             return "", citation_key
 
-    # bibfile = f"{os.path.join(bibliography)}.bib"
-
     from io import StringIO
 
     content = bibliography.read().decode("utf-8")
     bibdata = parse_file(StringIO(content), bib_format="bibtex")
-    # bibdata = parse_file(StringIO(bibliography), bib_format="bibtex")
 
-    # logger.warning(
-    #         f"A citation key with name {bibkey} was provided, but no BIB file was found."
-    #     )
-    #     return ""
     if citation_key not in bibdata.entries:
         logger.warning(
             f"A citation key with name {citation_key} was provided, but not found in {bibliography}."
