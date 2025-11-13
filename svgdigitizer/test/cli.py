@@ -155,7 +155,7 @@ class TemporaryData:
                 "cv_bibliography.yaml",
                 "--si-units",
                 "--bibliography",
-                "../bibliography/bibliography.bib",
+                "bibliography.bib",
             ],
         ),
         (
@@ -167,7 +167,7 @@ class TemporaryData:
                 "cv_bibliography_key.yaml",
                 "--si-units",
                 "--bibliography",
-                "../bibliography/bibliography.bib",
+                "bibliography.bib",
                 "--citation-key",
                 "custom_key",
             ],
@@ -181,6 +181,7 @@ class TemporaryData:
                 "package_no_bibliography.yaml",
                 "--si-units",
                 "--bibliography",
+                "bibliography.bib",
             ],
         ),
         (
@@ -192,7 +193,7 @@ class TemporaryData:
                 "figure_bibliography.yaml",
                 "--si-units",
                 "--bibliography",
-                "../bibliography/bibliography.bib",
+                "bibliography.bib",
             ],
         ),
         (
@@ -215,7 +216,7 @@ def test_svgdigitizer_cli(name, args):
     Test that the svgdigitizer CLI commands produce the expected CSV and JSON outputs.
     """
     cwd = os.getcwd()
-    with TemporaryData(f"data/{name}.*", "data/*.bib") as workdir:
+    with TemporaryData(f"data/{name}.*", "bibliography/bibliography.bib") as workdir:
         os.chdir(workdir)
         try:
             from svgdigitizer.entrypoint import cli
