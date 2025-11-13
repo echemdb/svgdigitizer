@@ -473,9 +473,10 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):
         metadata["source"].setdefault("citationKey", {})
 
         if metadata["source"]["citationKey"]:
-            logger.warning(
-                f"Replace existing citation key in metadata with the new citation key '{new_citation_key}'."
-            )
+            if new_citation_key != metadata["source"]["citationKey"]:
+                logger.warning(
+                    f"Replace existing citation key in metadata with the new citation key '{new_citation_key}'."
+                )
 
         metadata["source"].update({"citationKey": new_citation_key})
 
