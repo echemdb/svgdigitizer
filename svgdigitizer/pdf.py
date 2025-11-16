@@ -157,9 +157,10 @@ default_skip_words = (
 class Pdf:
     "Handles all interactions with the PDF file."
 
-    def __init__(self, pdf_filepath):
+    def __init__(self, pdf_filepath, doi=None):
         "Takes the path of a PDF file."
         self.filepath = pdf_filepath
+        self._doi = doi
 
     @cached_property
     def doc(self):
@@ -178,6 +179,8 @@ class Pdf:
         """
         Extract the DOI from the provided PDF. Since in some cases additional pages are prepended to the PDF, the DOI is extracted from either the first or second page.
         """
+        if self._doi:
+            return self._doi
         import re
 
         doc = self.doc
