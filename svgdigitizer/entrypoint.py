@@ -746,7 +746,7 @@ def _parse_pages_option(_ctx, _param, value):
 @click.option(
     "--doi",
     default=None,
-    help="Specify DOI if it is not extracted automatically from the PDF file.",
+    help="Specify DOI (e.g. '10.1021/ed047p365') if it is not extracted automatically from the PDF file.",
 )
 @click.option(
     "--rename",
