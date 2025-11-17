@@ -174,6 +174,8 @@ Options:
   --template [basic]    Add builtin template elements in SVG files.
   --template-file FILE  Add template elements from a custom SVG in SVG files.
   --outdir DIRECTORY    Write output files to this directory.
+  --doi TEXT            Specify DOI (e.g. &#39;10.1021/ed047p365&#39;) if it is not
+                        extracted automatically from the PDF file.
   --rename              Specify if files should be named according to the
                         echemdb identifier.
   --help                Show this message and exit.
@@ -255,7 +257,7 @@ Only elements of the template SVG residing inside a group/layer with the <code c
            <span class=" -Color -Color-Red">~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
   File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">814</span>, in <span class=" -Color -Color-Magenta">invoke</span>
     return callback(*args, **kwargs)
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">798</span>, in <span class=" -Color -Color-Magenta">paginate</span>
+  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">803</span>, in <span class=" -Color -Color-Magenta">paginate</span>
     <span class=" -Color -Color-Red">_create_linked_svg</span><span class=" -Color -Color-Bold -Color-Bold-Red">(</span>
     <span class=" -Color -Color-Red">~~~~~~~~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^</span>
         <span class=" -Color -Color-Bold -Color-Bold-Red">_outfile(png, suffix=&quot;.svg&quot;, outdir=outdir), png, template_file</span>
