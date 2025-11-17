@@ -744,13 +744,18 @@ def _parse_pages_option(_ctx, _param, value):
     help="Write output files to this directory.",
 )
 @click.option(
+    "--doi",
+    default=None,
+    help="Specify DOI (e.g. '10.1021/ed047p365') if it is not extracted automatically from the PDF file.",
+)
+@click.option(
     "--rename",
     is_flag=True,
     help="Specify if files should be named according to the echemdb identifier.",
 )
 @click.argument("pdf")
 def paginate(
-    pages, onlypng, rename, template, template_file, pdf, outdir
+    pages, onlypng, doi, rename, template, template_file, pdf, outdir
 ):  # pylint: disable=too-many-positional-arguments
     """
     Render PDF pages as individual SVG files with linked PNG images.
@@ -762,7 +767,7 @@ def paginate(
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/mustermann_2021_svgdigitizer_1.pdf") as directory:
-        ...     invoke(cli, "paginate", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
+        ...     invoke(cli, "paginate", "--pages", "1-2", os.path.join(directory, "mustermann_2021_svgdigitizer_1.pdf"))
 
     """
     from importlib.resources import files
@@ -778,21 +783,21 @@ def paginate(
             "assets", f"template_{template}.svg"
         )
 
-    doc = Pdf(pdf)
+    doc = Pdf(pdf, doi=doi)
 
     if rename:
         doc.rename_by_key()
     if not pages:
         page_range = range(doc.num_pages)
     else:
-        page_range = pages
-        if page_range not in range(doc.num_pages):
+        page_range = [p - 1 for p in pages]
+        if not set(page_range).issubset(range(doc.num_pages)):
             raise click.BadParameter(
-                f"Invalid range. Page numbers must be within 0-{doc.num_pages}."
+                f"Invalid range. Page numbers must be within 1-{doc.num_pages}."
             )
     for page_idx in page_range:
         pix = doc.export_png(page_idx, dpi=600)
-        png = _outfile(doc.filepath, suffix=f"_p{page_idx}.png", outdir=outdir)
+        png = _outfile(doc.filepath, suffix=f"_p{page_idx+1}.png", outdir=outdir)
         pix.save(png)
         if not onlypng:
             _create_linked_svg(
