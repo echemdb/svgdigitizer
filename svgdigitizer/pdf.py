@@ -187,8 +187,7 @@ class Pdf:
             match = re.match(pattern, self._doi)
             if match:
                 return self._doi
-            else:
-                raise ValueError("The provided DOI is not a valid.")
+            raise ValueError("The provided DOI is not a valid.")
 
         doc = self.doc
 
