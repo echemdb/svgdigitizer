@@ -177,11 +177,18 @@ class Pdf:
     @cached_property
     def doi(self):
         """
-        Extract the DOI from the provided PDF. Since in some cases additional pages are prepended to the PDF, the DOI is extracted from either the first or second page.
+        Extract the DOI from the provided PDF or the provided string. Since in some cases additional pages are prepended to the PDF, the DOI is extracted from either the first or second page.
         """
-        if self._doi:
-            return self._doi
         import re
+
+        pattern = r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+"
+
+        if self._doi:
+            match = re.match(pattern, self._doi)
+            if match:
+                return self._doi
+            else:
+                raise ValueError("The provided DOI is not a valid.")
 
         doc = self.doc
 
@@ -189,7 +196,7 @@ class Pdf:
             min(doc.page_count, 2)
         ):  # inspect the first (two) page(s)
             text = doc.get_page_text(page_num)
-            matches = re.findall(r"10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+", text)
+            matches = re.findall(pattern, text)
             if len(matches) == 0:
                 logger.info(f"No DOI found on page {page_num + 1}. Trying next page.")
             elif len(matches) > 1:
