@@ -40,7 +40,7 @@ packages = [
 ]
 
 [tool.setuptools.package-data]
-svgdigitizer = ["assets/template.svg"]
+svgdigitizer = ["assets/template_basic.svg"]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
