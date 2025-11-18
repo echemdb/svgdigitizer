@@ -36,7 +36,7 @@
                         "citationKey": "cv_bibliography",
                         "figure": "2b",
                         "curve": "label",
-                        "bibdata": "@article{cv_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Title\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2022\",\n    abstract = \"Abstract.\"\n}\n"
+                        "bibdata": "@article{cv_bibliography,\n    author = \"Engstfeld, Albert K and Rüth, Julian\",\n    title = \"Bibliography in a subdirectory\",\n    journal = \"Journal\",\n    volume = \"1\",\n    number = \"1\",\n    pages = \"1--10\",\n    year = \"2025\",\n    abstract = \"Abstract.\"\n}\n"
                     },
                     "curator": {
                         "name": "Albert Engstfeld",

@@ -25,7 +25,7 @@ EXAMPLES::
 # ********************************************************************
 #  This file is part of svgdigitizer.
 #
-#        Copyright (C) 2021-2023 Albert Engstfeld
+#        Copyright (C) 2021-2025 Albert Engstfeld
 #        Copyright (C) 2021-2025 Johannes Hermann
 #        Copyright (C) 2021-2023 Julian Rüth
 #        Copyright (C)      2021 Nicolas Hörmann
@@ -69,8 +69,15 @@ skewed_option = click.option(
 
 bibliography_option = click.option(
     "--bibliography",
-    is_flag=True,
-    help="Adds bibliography data from a bibfile as descriptor to the datapackage.",
+    type=click.File("rb"),
+    help="Adds bibliography data from a bibfile located in a specified directory as descriptor to the datapackage.",
+)
+
+citation_key_option = click.option(
+    "--citation-key",
+    type=str,
+    default=None,
+    help="The citation related to this file, which is included in the bibliography provided with --bibliography.",
 )
 
 si_option = click.option(
@@ -157,35 +164,44 @@ def _create_svgplot(svg, sampling_interval, skewed):
     )
 
 
-def _create_bibliography(svg, metadata):
+def _create_bibliography(bibliography, citation_key, metadata):
     r"""
     Return a bibtex string built from a BIB file and a key provided in `metadata['source']['citationKey']`,
-    when both requirements are met. Otherwise an empty string is returned.
+    or from the provided `citation_key` when both requirements are met.
+    Otherwise an empty string is returned.
 
     This is a helper method for :meth:`_create_outfiles`.
     """
+
+    if not bibliography:
+        return "", citation_key
+
     from pybtex.database import parse_file
 
-    metadata.setdefault("source", {})
-    metadata["source"].setdefault("citationKey", "")
+    if not citation_key:
+        metadata.setdefault("source", {})
+        metadata["source"].setdefault("citationKey", "")
 
-    bibkey = metadata["source"]["citationKey"]
-    if not bibkey:
-        logger.warning('No bibliography key found in metadata["source"]["citationKey"]')
-        return ""
+        citation_key = metadata["source"]["citationKey"]
+        if not citation_key:
+            logger.warning(
+                'No bibliography key found in metadata["source"]["citationKey"]'
+            )
+            del metadata["source"]["citationKey"]
+            return "", citation_key
 
-    bib_directory = os.path.dirname(svg)
+    from io import StringIO
 
-    bibfile = f"{os.path.join(bib_directory, bibkey)}.bib"
+    content = bibliography.read().decode("utf-8")
+    bibdata = parse_file(StringIO(content), bib_format="bibtex")
 
-    if not os.path.exists(bibfile):
+    if citation_key not in bibdata.entries:
         logger.warning(
-            f"A citation key with name {bibkey} was provided, but no BIB file was found."
+            f"A citation key with name {citation_key} was provided, but not found in {bibliography}."
         )
-        return ""
+        return "", citation_key
 
-    bibliography = parse_file(bibfile, bib_format="bibtex")
-    return bibliography.entries[bibkey].to_string("bibtex")
+    return bibdata.entries[citation_key].to_string("bibtex"), citation_key
 
 
 @click.command()
@@ -244,9 +260,17 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @bibliography_option
+@citation_key_option
 @skewed_option
 def digitize_figure(
-    svg, sampling_interval, metadata, outdir, bibliography, skewed, si_units
+    svg,
+    sampling_interval,
+    metadata,
+    outdir,
+    bibliography,
+    citation_key,
+    skewed,
+    si_units,
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a figure with units on the axis and create a frictionless datapackage.
@@ -303,7 +327,11 @@ def digitize_figure(
         )
 
     _create_outfiles(
-        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+        svgfigure=svgfigure,
+        svg=svg,
+        outdir=outdir,
+        bibliography=bibliography,
+        citation_key=citation_key,
     )
 
 
@@ -315,10 +343,18 @@ def digitize_figure(
 )
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
+@citation_key_option
 @si_option
 @skewed_option
 def digitize_cv(
-    svg, sampling_interval, metadata, outdir, skewed, bibliography, si_units
+    svg,
+    sampling_interval,
+    metadata,
+    outdir,
+    skewed,
+    bibliography,
+    citation_key,
+    si_units,
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a cylic voltammogram and create a frictionless datapackage.
@@ -392,11 +428,15 @@ def digitize_cv(
         )
 
     _create_outfiles(
-        svgfigure=svgfigure, svg=svg, outdir=outdir, bibliography=bibliography
+        svgfigure=svgfigure,
+        svg=svg,
+        outdir=outdir,
+        bibliography=bibliography,
+        citation_key=citation_key,
     )
 
 
-def _create_outfiles(svgfigure, svg, outdir, bibliography):
+def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):
     """Writes a datapackage consisting of a CSV and JSON file from a :param:'svgfigure'
 
     This is a helper method for CLI commands that digitize an svgfigure.
@@ -406,7 +446,11 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography):
 
     metadata = svgfigure.metadata
 
-    if bibliography:
+    bibliography_data, new_citation_key = _create_bibliography(
+        bibliography, citation_key, metadata
+    )
+
+    if bibliography_data:
         metadata.setdefault("source", {})
         metadata["source"].setdefault("bibdata", {})
 
@@ -415,7 +459,17 @@ def _create_outfiles(svgfigure, svg, outdir, bibliography):
                 "The key with name `bibliography` in the metadata will be overwritten with the new bibliography data."
             )
 
-        metadata["source"].update({"bibdata": _create_bibliography(svg, metadata)})
+        metadata["source"].update({"bibdata": bibliography_data})
+
+        metadata["source"].setdefault("citationKey", {})
+
+        if metadata["source"]["citationKey"]:
+            if new_citation_key != metadata["source"]["citationKey"]:
+                logger.warning(
+                    f"Replace existing citation key in metadata with the new citation key '{new_citation_key}'."
+                )
+
+        metadata["source"].update({"citationKey": new_citation_key})
 
     package = _create_package(metadata, csvname, outdir)
 

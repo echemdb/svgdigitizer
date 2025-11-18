@@ -5,7 +5,7 @@
 source:
     version: 1
     doi: 10.1039/C0CP01001D
-    bib: mustermann_2021_svgdigitizer_1 # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
+    citationKey: mustermann_2021_svgdigitizer_1 # AuthorName_YYYY_FirstWordTitle_pageNr. No prepositions. Fingers crossed that there is no duplicate.
     figure: 2a # depending on the subfigure labels use 1, 1b, or 1_3
     curve: blue # use a unique short description to identify the curve in the figure, i.e.. label, color, etc
 
