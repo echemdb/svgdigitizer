@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.5
+    jupytext_version: 1.18.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -73,7 +73,6 @@ Only elements of the template SVG residing inside a group/layer with the `id` at
 ```{code-cell} ipython3
 !svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template-file ./files/others/custom_template.svg
 ```
-
 
 (digitize)=
 ## `digitize`
@@ -286,13 +285,14 @@ For electrochemical data an example YAML can be found [here](https://github.com/
 
 ### `--bibliography`
 
-The flag `--bibliography` adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the [`figure`](figure) command and commands that inherit from `figure` such as the `cv` command.
+The flag `--bibliography` in combination with `--citation-key` adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the [`figure`](figure) command and commands that inherit from `figure` such as the `cv` command.
+If `--citation-key` is not provided a key is looked for in the metadata provided in the yaml via `--metadata`, where it must be stored in `source.citationKey`
 
 Requirements:
 
-* a file in the {download}`BibTex<./files/others/cyclist2023.bib>` format should exist in the same folder than the SVG (otherwise an empty string is returned)
-* a YAML file must exist which is invoked with the `--metadata` option.
-* the {download}`YAML file<./files/others/looping_scan_rate_bib.yaml>` file must contain a reference to the bib file such as
+* a BIB file containing BibTex styled citations such as in the {download}`here<./files/others/cyclist2023.bib>` .
+* a valid key that can be found in the BibTex file.
+* (optional) the {download}`YAML file<./files/others/looping_scan_rate_bib.yaml>` file must contain a citationKey to the bib file such as
 
 ```yaml
 source:
@@ -302,7 +302,7 @@ source:
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scan_rate_bib.svg --bibliography --metadata ./files/others/looping_scan_rate_bib.yaml --sampling-interval 0.01
+!svgdigitizer figure ./files/others/looping_scan_rate_bib.svg --bibliography ./files/others/cyclist2023.bib --metadata ./files/others/looping_scan_rate_bib.yaml --sampling-interval 0.01
 ```
 
 The bib file content is included in the resulting JSON of the datapackge
@@ -313,4 +313,8 @@ The bib file content is included in the resulting JSON of the datapackge
 from frictionless import Package
 package = Package('./files/others/looping_scan_rate_bib.json')
 package
+```
+
+```{code-cell} ipython3
+
 ```

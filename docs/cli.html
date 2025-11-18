@@ -296,7 +296,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/0ea6214539b10fa703cc70ec731d5d40687b30d6d54b67be171a1ed80e85936e.png" src="_images/0ea6214539b10fa703cc70ec731d5d40687b30d6d54b67be171a1ed80e85936e.png" />
+<img alt="_images/39934cff7e4f0d9ab4bc880a46116de307ab0184927d1061c282c34003e10ed4.png" src="_images/39934cff7e4f0d9ab4bc880a46116de307ab0184927d1061c282c34003e10ed4.png" />
 </div>
 </div>
 <p>The resulting plot indicates that only the nodes of the spline were connected. To improve the tracing use the <code class="docutils literal notranslate"><span class="pre">--sampling-interval</span></code> option.</p>
@@ -327,7 +327,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U&#39;, ylabel=&#39;v&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/c9723352819651fc8abc9b648126ef6bb64ec4822b93eebd8bd9d14031736de7.png" src="_images/c9723352819651fc8abc9b648126ef6bb64ec4822b93eebd8bd9d14031736de7.png" />
+<img alt="_images/3f14a82ca43ad6fbd53e2d1cfd0df33df3e186384eeed1f4f6de68a0b6903e67.png" src="_images/3f14a82ca43ad6fbd53e2d1cfd0df33df3e186384eeed1f4f6de68a0b6903e67.png" />
 </div>
 </div>
 <div class="admonition note">
@@ -403,8 +403,12 @@ Options:
   --metadata FILENAME        yaml file with metadata
   --si-units                 Convert units of the plot and CSV to SI (only if
                              they are compatible with astropy units).
-  --bibliography             Adds bibliography data from a bibfile as
-                             descriptor to the datapackage.
+  --bibliography FILENAME    Adds bibliography data from a bibfile located in
+                             a specified directory as descriptor to the
+                             datapackage.
+  --citation-key TEXT        The citation related to this file, which is
+                             included in the bibliography provided with
+                             --bibliography.
   --skewed                   Detect non-orthogonal skewed axes going through
                              the markers instead of assuming that axes are
                              perfectly horizontal and vertical.
@@ -455,7 +459,7 @@ Options:
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;distance [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/d3d90512597cab82e2c6d140a5ed09fc5591a49bd1c80baf78643ccca760e104.png" src="_images/d3d90512597cab82e2c6d140a5ed09fc5591a49bd1c80baf78643ccca760e104.png" />
+<img alt="_images/0ce520e827a7fcd52dd1c599b331fbc6484032538f6621181059f6c51d6fe99d.png" src="_images/0ce520e827a7fcd52dd1c599b331fbc6484032538f6621181059f6c51d6fe99d.png" />
 </div>
 </div>
 </section>
@@ -490,8 +494,12 @@ Options:
                              the x-axis values.
   --outdir DIRECTORY         Write output files to this directory.
   --metadata FILENAME        YAML file with metadata
-  --bibliography             Adds bibliography data from a bibfile as
-                             descriptor to the datapackage.
+  --bibliography FILENAME    Adds bibliography data from a bibfile located in
+                             a specified directory as descriptor to the
+                             datapackage.
+  --citation-key TEXT        The citation related to this file, which is
+                             included in the bibliography provided with
+                             --bibliography.
   --si-units                 Convert units of the plot and CSV to SI (only if
                              they are compatible with astropy units).
   --skewed                   Detect non-orthogonal skewed axes going through
@@ -653,12 +661,13 @@ Options:
 </section>
 <section id="bibliography">
 <h3><code class="docutils literal notranslate"><span class="pre">--bibliography</span></code><a class="headerlink" href="#bibliography" title="Link to this heading"></a></h3>
-<p>The flag <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code> adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code> such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command.</p>
+<p>The flag <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code> in combination with <code class="docutils literal notranslate"><span class="pre">--citation-key</span></code> adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code> such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command.
+If <code class="docutils literal notranslate"><span class="pre">--citation-key</span></code> is not provided a key is looked for in the metadata provided in the yaml via <code class="docutils literal notranslate"><span class="pre">--metadata</span></code>, where it must be stored in <code class="docutils literal notranslate"><span class="pre">source.citationKey</span></code></p>
 <p>Requirements:</p>
 <ul class="simple">
-<li><p>a file in the <a class="reference download internal" download="" href="_downloads/0bedde854050cea55bda0760ac710b3b/cyclist2023.bib"><code class="xref download docutils literal notranslate"><span class="pre">BibTex</span></code></a> format should exist in the same folder than the SVG (otherwise an empty string is returned)</p></li>
-<li><p>a YAML file must exist which is invoked with the <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> option.</p></li>
-<li><p>the <a class="reference download internal" download="" href="_downloads/33aa0005e6629134d025f1ed3f71821f/looping_scan_rate_bib.yaml"><code class="xref download docutils literal notranslate"><span class="pre">YAML</span> <span class="pre">file</span></code></a> file must contain a reference to the bib file such as</p></li>
+<li><p>a BIB file containing BibTex styled citations such as in the <a class="reference download internal" download="" href="_downloads/0bedde854050cea55bda0760ac710b3b/cyclist2023.bib"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a> .</p></li>
+<li><p>a valid key that can be found in the BibTex file.</p></li>
+<li><p>(optional) the <a class="reference download internal" download="" href="_downloads/33aa0005e6629134d025f1ed3f71821f/looping_scan_rate_bib.yaml"><code class="xref download docutils literal notranslate"><span class="pre">YAML</span> <span class="pre">file</span></code></a> file must contain a citationKey to the bib file such as</p></li>
 </ul>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">source</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">citationKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BIB_FILENAME</span><span class="w">  </span><span class="c1"># without file extension</span>
@@ -666,7 +675,7 @@ Options:
 </div>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scan_rate_bib.svg<span class="w"> </span>--bibliography<span class="w"> </span>--metadata<span class="w"> </span>./files/others/looping_scan_rate_bib.yaml<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>figure<span class="w"> </span>./files/others/looping_scan_rate_bib.svg<span class="w"> </span>--bibliography<span class="w"> </span>./files/others/cyclist2023.bib<span class="w"> </span>--metadata<span class="w"> </span>./files/others/looping_scan_rate_bib.yaml<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
 </pre></div>
 </div>
 </div>
