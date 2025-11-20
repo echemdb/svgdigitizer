@@ -4,6 +4,15 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.14.1
+====================
+
+**Changed:**
+
+* Changed version constraint again `pymupdf>=1.26,<2`.
+
+
+
 v0.14.0
 ====================
 
