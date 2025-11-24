@@ -16,7 +16,7 @@ jobs:
         os: ["ubuntu-latest", "ubuntu-24.04-arm", "macos-latest", "windows-latest"]
     steps:
       - name: checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with: { submodules: recursive }
       - uses: prefix-dev/setup-pixi@v0.9.3
         with: { pixi-version: v0.59.0 }
