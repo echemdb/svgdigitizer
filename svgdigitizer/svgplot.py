@@ -667,7 +667,7 @@ class SVGPlot:
 
         if len(variables) != 2:
             raise NotImplementedError(
-                f"Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables {list(grouped_ref_points.keys())} on the axes."
+                f"Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables {list(grouped_ref_points.keys())} on the axes. Please also check the supported variable naming scheme."
             )
 
         return grouped_ref_points
@@ -1547,7 +1547,7 @@ class SVGPlot:
 
         """
         patterns = {
-            "ref_point": r"^(?P<point>\w+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
+            "ref_point": r"^(?P<point>[\w|-|_| ]+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "scale_bar": r"^(?P<axis>\w+)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "curve": r"^curve: ?(?P<curve_id>.+)",
         }
