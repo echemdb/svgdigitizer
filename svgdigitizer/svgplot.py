@@ -620,7 +620,7 @@ class SVGPlot:
             >>> plot._grouped_ref_points
             Traceback (most recent call last):
             ...
-            NotImplementedError: Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables ['t'] on the axes.
+            NotImplementedError: Currently, there must be exactly two axes since we only support 2D plots. However, we found the variables ['t'] on the axes. Please also check the supported variable naming scheme.
 
         ::
 
