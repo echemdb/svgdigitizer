@@ -1526,7 +1526,9 @@ class SVGPlot:
             >>> plot.labeled_paths
             {'ref_point': [], 'scale_bar': [], 'curve': [[Path "curve: 0"]]}
 
-        TESTS::
+        TESTS:
+
+        Ignoring paths with unsupported labels.::
 
             >>> from svgdigitizer.svg import SVG
             >>> from io import StringIO
@@ -1545,9 +1547,36 @@ class SVGPlot:
             {'ref_point': [], 'scale_bar': [], 'curve': []}
             ['WARNING:svgplot:Ignoring <path> with unsupported label kurve: 0.']
 
+        Verify supported ref_point labels with dots, spaces, and underscores::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">ref.point_1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">data_label 2: 1</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> plot = SVGPlot(svg)
+            >>> len(plot.labeled_paths['ref_point'])
+            2
+
+            >>> labels = {str(path.label) for paths in plot.labeled_paths['ref_point'] for path in paths}
+            >>> # The order of the labels in the list can change.
+            >>> # Thus we test if all labels are extracted properly.
+            >>> labels == {"ref.point_1: 0", "data_label 2: 1"}
+            True
+
+
+
         """
         patterns = {
-            "ref_point": r"^(?P<point>[\w|-|_| ]+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
+            "ref_point": r"^(?P<point>[\w|\-|_|\.| ]+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "scale_bar": r"^(?P<axis>\w+)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "curve": r"^curve: ?(?P<curve_id>.+)",
         }
