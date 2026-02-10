@@ -28,6 +28,7 @@ in the :doc:`documentation </usage>`.
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import copy
 import logging
 from functools import cached_property
 
@@ -1648,7 +1649,7 @@ class SVGFigure:
         # Warn about any keys that will be replaced in _metadata
         self._warn_about_metadata_conflicts(self._metadata, metadata)
 
-        return merge({}, self._metadata, metadata)
+        return merge({}, copy.deepcopy(self._metadata), metadata)
 
     def _warn_about_metadata_conflicts(self, original, new, path=""):
         r"""
@@ -1663,6 +1664,52 @@ class SVGFigure:
             The new metadata dictionary that will override values
         path : str
             The current path in the nested dictionary (for logging purposes)
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">figure: 2b</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg), metadata={"source": {"figure": "1a"}})
+            >>> # Original metadata has the provided value
+            >>> figure._metadata["source"]["figure"]
+            '1a'
+            >>> # When metadata property is accessed, the merged result contains the SVG label "2b"
+            >>> merged_metadata = figure.metadata
+            >>> merged_metadata["source"]["figure"]
+            '2b'
+            >>> # Thanks to deepcopy, the original _metadata remains unchanged (not mutated by merge)
+            >>> figure._metadata["source"]["figure"]
+            '1a'
+            >>> # This demonstrates that the values differ (a warning was logged about this)
+            >>> figure._metadata["source"]["figure"] != merged_metadata["source"]["figure"]
+            True
+
         """
         for key, new_value in new.items():
             current_path = f"{path}.{key}" if path else key
