@@ -1576,7 +1576,7 @@ class SVGPlot:
 
         """
         patterns = {
-            "ref_point": r"^(?P<point>[\w|\-|_|\.| ]+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
+            "ref_point": r"^(?P<point>[\w\-_\. ]+\d)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "scale_bar": r"^(?P<axis>\w+)(_scale_bar|sb)\: ?(?P<value>-?\d+\.?\d*) *(?P<unit>.+)?",
             "curve": r"^curve: ?(?P<curve_id>.+)",
         }
