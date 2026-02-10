@@ -1513,6 +1513,9 @@ class SVGFigure:
         textlabels in the SVG file, as well as properties of the dataframe
         created with :meth:`df`.
 
+        The method will raise warnings if it replaces certain keys in the
+        metadata provided to the SVGFigure class.
+
         EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
@@ -1719,7 +1722,9 @@ class SVGFigure:
 
                 # Both are dictionaries: recurse
                 if isinstance(original_value, dict) and isinstance(new_value, dict):
-                    self._warn_about_metadata_conflicts(original_value, new_value, current_path)
+                    self._warn_about_metadata_conflicts(
+                        original_value, new_value, current_path
+                    )
                 # Values are different: log warning
                 elif original_value != new_value:
                     logger.warning(
