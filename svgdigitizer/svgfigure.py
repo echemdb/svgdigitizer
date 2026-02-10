@@ -1645,7 +1645,40 @@ class SVGFigure:
 
         from mergedeep import merge
 
+        # Warn about any keys that will be replaced in _metadata
+        self._warn_about_metadata_conflicts(self._metadata, metadata)
+
         return merge({}, self._metadata, metadata)
+
+    def _warn_about_metadata_conflicts(self, original, new, path=""):
+        r"""
+        Recursively check for conflicts between original and new metadata dictionaries.
+        Log warnings for any keys that exist in both and have different values.
+
+        Parameters
+        ----------
+        original : dict
+            The original metadata dictionary
+        new : dict
+            The new metadata dictionary that will override values
+        path : str
+            The current path in the nested dictionary (for logging purposes)
+        """
+        for key, new_value in new.items():
+            current_path = f"{path}.{key}" if path else key
+
+            if key in original:
+                original_value = original[key]
+
+                # Both are dictionaries: recurse
+                if isinstance(original_value, dict) and isinstance(new_value, dict):
+                    self._warn_about_metadata_conflicts(original_value, new_value, current_path)
+                # Values are different: log warning
+                elif original_value != new_value:
+                    logger.warning(
+                        f"Metadata field '{current_path}' is being replaced. "
+                        f"Original: {original_value} → New: {new_value}"
+                    )
 
     def plot(self):
         r"""Visualize the data in the figure.
