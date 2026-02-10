@@ -28,6 +28,7 @@ in the :doc:`documentation </usage>`.
 #  You should have received a copy of the GNU General Public License
 #  along with svgdigitizer. If not, see <https://www.gnu.org/licenses/>.
 # ********************************************************************
+import copy
 import logging
 from functools import cached_property
 
@@ -1512,6 +1513,9 @@ class SVGFigure:
         textlabels in the SVG file, as well as properties of the dataframe
         created with :meth:`df`.
 
+        The method will raise warnings if it replaces certain keys in the
+        metadata provided to the SVGFigure class.
+
         EXAMPLES::
 
             >>> from svgdigitizer.svg import SVG
@@ -1645,7 +1649,126 @@ class SVGFigure:
 
         from mergedeep import merge
 
-        return merge({}, self._metadata, metadata)
+        # Warn about any keys that will be replaced in _metadata
+        self._warn_about_metadata_conflicts(self._metadata, metadata)
+
+        return merge({}, copy.deepcopy(self._metadata), metadata)
+
+    def _warn_about_metadata_conflicts(self, original, new, path=""):
+        r"""
+        Recursively check for conflicts between original and new metadata dictionaries.
+        Log warnings for any keys that exist in both and have different values.
+
+        Parameters
+        ----------
+        original : dict
+            The original metadata dictionary
+        new : dict
+            The new metadata dictionary that will override values
+        path : str
+            The current path in the nested dictionary (for logging purposes)
+
+        EXAMPLES::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from svgdigitizer.svgplot import SVGPlot
+            >>> from svgdigitizer.svgfigure import SVGFigure
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">figure: 2b</text>
+            ... </svg>'''))
+            >>> figure = SVGFigure(SVGPlot(svg), metadata={"source": {"figure": "1a"}})
+            >>> # Original metadata has the provided value
+            >>> figure._metadata["source"]["figure"]
+            '1a'
+            >>> # When metadata property is accessed, the merged result contains the SVG label "2b"
+            >>> merged_metadata = figure.metadata
+            >>> merged_metadata["source"]["figure"]
+            '2b'
+            >>> # Deepcopy ensures that the original _metadata remains unchanged (not mutated by merge)
+            >>> figure._metadata["source"]["figure"]
+            '1a'
+            >>> # This demonstrates that the values differ (a warning was logged about this)
+            >>> figure._metadata["source"]["figure"] != merged_metadata["source"]["figure"]
+            True
+
+        TESTS:
+
+        When the original metadata doesn't have a field, no warning is raised::
+
+            >>> svg2 = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">figure: 3c</text>
+            ... </svg>'''))
+            >>> # Metadata without source.figure - no conflict expected
+            >>> figure2 = SVGFigure(SVGPlot(svg2), metadata={"experimental": {"tags": ["test"]}})
+            >>> metadata2 = figure2.metadata
+            >>> # The metadata now has the figure label from SVG, no warning was logged
+            >>> metadata2["source"]["figure"]
+            '3c'
+            >>> # Original metadata never had source.figure
+            >>> "source" in figure2._metadata
+            False
+
+        """
+        for key, new_value in new.items():
+            current_path = f"{path}.{key}" if path else key
+
+            if key in original:
+                original_value = original[key]
+
+                # Both are dictionaries: recurse
+                if isinstance(original_value, dict) and isinstance(new_value, dict):
+                    self._warn_about_metadata_conflicts(
+                        original_value, new_value, current_path
+                    )
+                # Values are different: log warning
+                elif original_value != new_value:
+                    logger.warning(
+                        f"Metadata field '{current_path}' is being replaced. "
+                        f"Original: {original_value} → New: {new_value}"
+                    )
 
     def plot(self):
         r"""Visualize the data in the figure.
