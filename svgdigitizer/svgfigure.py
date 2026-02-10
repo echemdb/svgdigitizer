@@ -1713,6 +1713,44 @@ class SVGFigure:
             >>> figure._metadata["source"]["figure"] != merged_metadata["source"]["figure"]
             True
 
+        TESTS:
+
+        When the original metadata doesn't have a field, no warning is raised::
+
+            >>> svg2 = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">E1: 0 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">E2: 1 V</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">j1: 0 A / cm2</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">j2: 1 A / cm2</text>
+            ...   </g>
+            ...   <text x="-200" y="330">figure: 3c</text>
+            ... </svg>'''))
+            >>> # Metadata without source.figure - no conflict expected
+            >>> figure2 = SVGFigure(SVGPlot(svg2), metadata={"experimental": {"tags": ["test"]}})
+            >>> metadata2 = figure2.metadata
+            >>> # The metadata now has the figure label from SVG, no warning was logged
+            >>> metadata2["source"]["figure"]
+            '3c'
+            >>> # Original metadata never had source.figure
+            >>> "source" in figure2._metadata
+            False
+
         """
         for key, new_value in new.items():
             current_path = f"{path}.{key}" if path else key
