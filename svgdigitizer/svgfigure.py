@@ -1706,7 +1706,7 @@ class SVGFigure:
             >>> merged_metadata = figure.metadata
             >>> merged_metadata["source"]["figure"]
             '2b'
-            >>> # Thanks to deepcopy, the original _metadata remains unchanged (not mutated by merge)
+            >>> # Deepcopy ensures that the original _metadata remains unchanged (not mutated by merge)
             >>> figure._metadata["source"]["figure"]
             '1a'
             >>> # This demonstrates that the values differ (a warning was logged about this)
