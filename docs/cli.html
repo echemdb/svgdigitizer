@@ -186,10 +186,18 @@ Options:
 <p><a class="reference download internal" download="" href="_downloads/58f393aebc2cca89f8e88b299072a59e/example_plot_paginate.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Example</span> <span class="pre">PDFs</span></code></a> for testing purposes are available in the <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> repository.</p>
 <section id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
-<p>Create an SVG with a linked PNG for each page in a PDF.</p>
+<p>Create an SVG with a linked PNG for specific pages in a PDF. Use <code class="docutils literal notranslate"><span class="pre">--pages</span></code> to select which pages to process.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer paginate [OPTIONS] PDF
+Try &#39;svgdigitizer paginate --help&#39; for help.
+
+Error: Invalid value: Invalid range. Page numbers must be within 1-1.
 </pre></div>
 </div>
 </div>
@@ -226,7 +234,7 @@ Options:
 can be embedded in the SVG from builtin templates with the <code class="docutils literal notranslate"><span class="pre">--template</span></code> option.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--template<span class="w"> </span>basic
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">1</span><span class="w"> </span>--template<span class="w"> </span>basic
 </pre></div>
 </div>
 </div>
@@ -235,7 +243,7 @@ can be embedded in the SVG from builtin templates with the <code class="docutils
 Only elements of the template SVG residing inside a group/layer with the <code class="docutils literal notranslate"><span class="pre">id</span></code> attribute <code class="docutils literal notranslate"><span class="pre">digitization-layer</span></code> are imported.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--template-file<span class="w"> </span>./files/others/custom_template.svg
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">1</span><span class="w"> </span>--template-file<span class="w"> </span>./files/others/custom_template.svg
 </pre></div>
 </div>
 </div>

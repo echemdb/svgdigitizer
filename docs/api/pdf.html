@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>svgdigitizer.pdf &mdash; svgdigitizer 0.14.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3a3a8e7f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="svgdigitizer.svg" href="svg.html" />
+    <link rel="prev" title="svgdigitizer.electrochemistry.cv" href="cv.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            svgdigitizer
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cv.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.electrochemistry.cv</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.pdf</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#svgdigitizer.pdf.Pdf"><code class="docutils literal notranslate"><span class="pre">Pdf</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.pdf.Pdf.bibliographic_entry"><code class="docutils literal notranslate"><span class="pre">Pdf.bibliographic_entry</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.pdf.Pdf.build_identifier"><code class="docutils literal notranslate"><span class="pre">Pdf.build_identifier()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.pdf.Pdf.doc"><code class="docutils literal notranslate"><span class="pre">Pdf.doc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.pdf.Pdf.doi"><code class="docutils literal notranslate"><span class="pre">Pdf.doi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.pdf.Pdf.export_png"><code class="docutils literal notranslate"><span class="pre">Pdf.export_png()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.pdf.Pdf.num_pages"><code class="docutils literal notranslate"><span class="pre">Pdf.num_pages</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.pdf.Pdf.rename_by_key"><code class="docutils literal notranslate"><span class="pre">Pdf.rename_by_key()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="svg.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svg</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="svgplot.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgplot</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="svgfigure.html"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.svgfigure</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#saving-data">Saving Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#special-figures">Special Figures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../workflow.html">Digitizing plots for echemdb</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">svgdigitizer</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">svgdigitizer.pdf</span></code></li>
+  
+  
+    
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/echemdb/svgdigitizer/blob/master/svgdigitizer/pdf.py" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-svgdigitizer.pdf">
+<span id="svgdigitizer-pdf"></span><h1><code class="docutils literal notranslate"><span class="pre">svgdigitizer.pdf</span></code><a class="headerlink" href="#module-svgdigitizer.pdf" title="Link to this heading"></a></h1>
+<p>Module for handling operations related to PDF files.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svgdigitizer.pdf.</span></span><span class="sig-name descname"><span class="pre">Pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf_filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.pdf.Pdf" title="Link to this definition"></a></dt>
+<dd><p>Handles all interactions with the PDF file.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.bibliographic_entry">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bibliographic_entry</span></span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.bibliographic_entry" title="Link to this definition"></a></dt>
+<dd><p>Get the citation from the DOI provided PDF file. Returns a bibtex string.</p>
+<p>EXAMPLES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.pdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pdf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.test.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">TemporaryData</span><span class="p">(</span><span class="s2">&quot;**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">directory</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="c1"># do not assign instance to variable which keeps the file open and fails for windows</span>
+<span class="gp">... </span>    <span class="n">Pdf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;Hermann_2018_J._Electrochem._Soc._165_J3192.pdf&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">bibliographic_entry</span>
+<span class="go">&#39;@article{Hermann_2018, title={Enhanced Electrocatalytic Oxidation ... year={2018}, pages={J3192–J3198} }&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.build_identifier">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_identifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">citation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('a',</span> <span class="pre">'ab',</span> <span class="pre">'aboard',</span> <span class="pre">'about',</span> <span class="pre">'above',</span> <span class="pre">'across',</span> <span class="pre">'after',</span> <span class="pre">'against',</span> <span class="pre">'al',</span> <span class="pre">'along',</span> <span class="pre">'amid',</span> <span class="pre">'among',</span> <span class="pre">'an',</span> <span class="pre">'and',</span> <span class="pre">'anti',</span> <span class="pre">'around',</span> <span class="pre">'as',</span> <span class="pre">'at',</span> <span class="pre">'before',</span> <span class="pre">'behind',</span> <span class="pre">'below',</span> <span class="pre">'beneath',</span> <span class="pre">'beside',</span> <span class="pre">'besides',</span> <span class="pre">'between',</span> <span class="pre">'beyond',</span> <span class="pre">'but',</span> <span class="pre">'by',</span> <span class="pre">'d',</span> <span class="pre">'da',</span> <span class="pre">'das',</span> <span class="pre">'de',</span> <span class="pre">'del',</span> <span class="pre">'dell',</span> <span class="pre">'dello',</span> <span class="pre">'dei',</span> <span class="pre">'degli',</span> <span class="pre">'della',</span> <span class="pre">'dell',</span> <span class="pre">'delle',</span> <span class="pre">'dem',</span> <span class="pre">'den',</span> <span class="pre">'der',</span> <span class="pre">'des',</span> <span class="pre">'despite',</span> <span class="pre">'die',</span> <span class="pre">'do',</span> <span class="pre">'down',</span> <span class="pre">'du',</span> <span class="pre">'during',</span> <span class="pre">'ein',</span> <span class="pre">'eine',</span> <span class="pre">'einem',</span> <span class="pre">'einen',</span> <span class="pre">'einer',</span> <span class="pre">'eines',</span> <span class="pre">'el',</span> <span class="pre">'en',</span> <span class="pre">'et',</span> <span class="pre">'except',</span> <span class="pre">'for',</span> <span class="pre">'from',</span> <span class="pre">'gli',</span> <span class="pre">'i',</span> <span class="pre">'il',</span> <span class="pre">'in',</span> <span class="pre">'inside',</span> <span class="pre">'into',</span> <span class="pre">'is',</span> <span class="pre">'l',</span> <span class="pre">'la',</span> <span class="pre">'las',</span> <span class="pre">'le',</span> <span class="pre">'les',</span> <span class="pre">'like',</span> <span class="pre">'lo',</span> <span class="pre">'los',</span> <span class="pre">'near',</span> <span class="pre">'nor',</span> <span class="pre">'of',</span> <span class="pre">'off',</span> <span class="pre">'on',</span> <span class="pre">'onto',</span> <span class="pre">'or',</span> <span class="pre">'over',</span> <span class="pre">'past',</span> <span class="pre">'per',</span> <span class="pre">'plus',</span> <span class="pre">'round',</span> <span class="pre">'save',</span> <span class="pre">'since',</span> <span class="pre">'so',</span> <span class="pre">'some',</span> <span class="pre">'sur',</span> <span class="pre">'than',</span> <span class="pre">'the',</span> <span class="pre">'through',</span> <span class="pre">'to',</span> <span class="pre">'toward',</span> <span class="pre">'towards',</span> <span class="pre">'un',</span> <span class="pre">'una',</span> <span class="pre">'unas',</span> <span class="pre">'under',</span> <span class="pre">'underneath',</span> <span class="pre">'une',</span> <span class="pre">'unlike',</span> <span class="pre">'uno',</span> <span class="pre">'unos',</span> <span class="pre">'until',</span> <span class="pre">'up',</span> <span class="pre">'upon',</span> <span class="pre">'versus',</span> <span class="pre">'via',</span> <span class="pre">'von',</span> <span class="pre">'while',</span> <span class="pre">'with',</span> <span class="pre">'within',</span> <span class="pre">'without',</span> <span class="pre">'yet',</span> <span class="pre">'zu',</span> <span class="pre">'zum')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.build_identifier" title="Link to this definition"></a></dt>
+<dd><p>Build the entry identifier based on a bibtex citation provided as <cite>BibliographyData</cite> (pybtex).
+Some common title words are omitted from the identifier by default (see <cite>skip_words</cite>).
+To change the omitted words it is possible to provide a custom word list.</p>
+<p>Examples:</p>
+<p>A complex title:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.pdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pdf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pybtex.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_string</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bibtex_string</span> <span class="o">=</span> <span class="s1">&#39;@article{Mar_Ol__2021, title={Surfaces are made by the devil: fooo,2 of XX(110)/other stuff.}, volume=</span><span class="si">{145}</span><span class="s1">, ISSN={0015-0057}, url={http://dx.doi.org/10.1016/j.what.2015.123456}, DOI={10.1016/j.what.2015.123456}, journal={My Journal}, publisher=</span><span class="si">{Publisher}</span><span class="s1">, author={Marí-Olé, J. and Foo, B.}, year=</span><span class="si">{2013}</span><span class="s1">, month=dec, pages=</span><span class="si">{4567}</span><span class="s1"> }&#39;</span> <span class="c1">#pylint: disable=line-too-long</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_string</span><span class="p">(</span><span class="n">bibtex_string</span><span class="p">,</span> <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
+<span class="go">&#39;mari-ole_2013_surfaces_4567&#39;</span>
+</pre></div>
+</div>
+<p>Special characters are skipped upon first word selection:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bibtex_string</span> <span class="o">=</span> <span class="s1">&#39;@article{hermannEffectPHAnion2021, title = {The {{Effect}} of {{pH}} and {{Anion Adsorption}} on {{Formic Acid Oxidation}} on {{Au}}(111) {{Electrodes}}}, author = {Hermann, Johannes M. and Abdelrahman, Areeg and Jacob, Timo and Kibler, Ludwig A.}, year = 2021, month = jul, journal = {Electrochim. Acta}, volume = </span><span class="si">{385}</span><span class="s1">, pages = </span><span class="si">{138279}</span><span class="s1">, issn = {0013-4686}, doi = {10.1016/j.electacta.2021.138279} }&#39;</span> <span class="c1">#pylint: disable=line-too-long</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_string</span><span class="p">(</span><span class="n">bibtex_string</span><span class="p">,</span> <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
+<span class="go">&#39;hermann_2021_effect_138279&#39;</span>
+</pre></div>
+</div>
+<p>Keep only the first meaningful word of the title:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bibtex_string</span> <span class="o">=</span> <span class="s1">&#39;@article{Hermann_2018, title={An in the foo bar article}, volume=</span><span class="si">{165}</span><span class="s1">, ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes}, DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.}, year=</span><span class="si">{2018}</span><span class="s1">, month=aug, pages={J3192–J3198} }&#39;</span> <span class="c1">#pylint: disable=line-too-long</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_string</span><span class="p">(</span><span class="n">bibtex_string</span><span class="p">,</span> <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
+<span class="go">&#39;hermann_2018_foo_j3192&#39;</span>
+</pre></div>
+</div>
+<p>Dashes in the first word are considered:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bibtex_string</span> <span class="o">=</span> <span class="s1">&#39;@article{Hermann_2018, title={An-in the foo bar article}, volume=</span><span class="si">{165}</span><span class="s1">, ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes}, DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.}, year=</span><span class="si">{2018}</span><span class="s1">, month=aug, pages={J3192–J3198} }&#39;</span> <span class="c1">#pylint: disable=line-too-long</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_string</span><span class="p">(</span><span class="n">bibtex_string</span><span class="p">,</span> <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
+<span class="go">&#39;hermann_2018_an-in_j3192&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.doc">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">doc</span></span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.doc" title="Link to this definition"></a></dt>
+<dd><p>Holds the opened PDF file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.doi">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">doi</span></span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.doi" title="Link to this definition"></a></dt>
+<dd><p>Extract the DOI from the provided PDF or the provided string. Since in some cases additional pages are prepended to the PDF, the DOI is extracted from either the first or second page.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.export_png">
+<span class="sig-name descname"><span class="pre">export_png</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.export_png" title="Link to this definition"></a></dt>
+<dd><p>Returns the requested PDF page as PNG with specified DPI.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.num_pages">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_pages</span></span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.num_pages" title="Link to this definition"></a></dt>
+<dd><p>Number of pages of the PDF file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.rename_by_key">
+<span class="sig-name descname"><span class="pre">rename_by_key</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.rename_by_key" title="Link to this definition"></a></dt>
+<dd><p>Rename the provided PDF file by the key derived from citation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cv.html" class="btn btn-neutral float-left" title="svgdigitizer.electrochemistry.cv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="svg.html" class="btn btn-neutral float-right" title="svgdigitizer.svg" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021-2024, the svgdigitizer authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

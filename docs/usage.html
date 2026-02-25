@@ -131,12 +131,20 @@
 <p>When the figure is included inside a PDF use the svgdigitizer <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a> to create an SVG from the PDF by typing.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/looping.pdf
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/looping.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer paginate [OPTIONS] PDF
+Try &#39;svgdigitizer paginate --help&#39; for help.
+
+Error: Invalid value: Invalid range. Page numbers must be within 1-1.
 </pre></div>
 </div>
 </div>
 </div>
-<p>An SVG file is created for each page of the PDF. The image is locked and acts as static background object.</p>
+<p>An SVG file is created for the specified page of the PDF. The image is locked and acts as static background object.</p>
 </section>
 </section>
 <section id="svg-annotation-basics">
