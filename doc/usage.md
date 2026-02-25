@@ -42,10 +42,10 @@ When the figure is included inside a PDF use the svgdigitizer [CLI](/cli.md) to 
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer paginate ./files/others/looping.pdf
+!svgdigitizer paginate ./files/others/looping.pdf --pages 0
 ```
 
-An SVG file is created for each page of the PDF. The image is locked and acts as static background object.
+An SVG file is created for the specified page of the PDF. The image is locked and acts as static background object.
 
 ## SVG Annotation (Basics)
 

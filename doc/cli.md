@@ -41,10 +41,10 @@ Create SVG and PNG files from a PDF with
 
 ### Examples
 
-Create an SVG with a linked PNG for each page in a PDF.
+Create an SVG with a linked PNG for specific pages in a PDF. Use `--pages` to select which pages to process.
 
 ```{code-cell} ipython3
-!svgdigitizer paginate ./files/others/example_plot_paginate.pdf
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --pages 0
 ```
 
 Download the resulting {download}`SVG (example_plot_paginate_p0.svg)<./files/others/example_plot_paginate_p0.svg>`.
@@ -64,14 +64,14 @@ In addition to the linked image, elements for annotating a curve in a figure
 can be embedded in the SVG from builtin templates with the `--template` option.
 
 ```{code-cell} ipython3
-!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template basic
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --pages 1 --template basic
 ```
 
 Custom templates can be included by providing to the `--template-file` argument a custom SVG  `<file path>`.
 Only elements of the template SVG residing inside a group/layer with the `id` attribute `digitization-layer` are imported.
 
 ```{code-cell} ipython3
-!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --template-file ./files/others/custom_template.svg
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --pages 1 --template-file ./files/others/custom_template.svg
 ```
 
 (digitize)=

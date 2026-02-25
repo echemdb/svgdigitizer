@@ -271,19 +271,37 @@ class Pdf:
         Some common title words are omitted from the identifier by default (see `skip_words`).
         To change the omitted words it is possible to provide a custom word list.
 
-        TESTS::
+        Examples:
+
+        A complex title::
 
             >>> from svgdigitizer.pdf import Pdf
             >>> from pybtex.database import parse_string
-            >>> bibtex_string = '@article{Mart_nez_Hincapi__2021, title={Surface charge and interfacial acid-base properties: pKa,2 of carbon dioxide at Pt(110)/perchloric acid solution interfaces.}, volume={388}, ISSN={0013-4686}, url={http://dx.doi.org/10.1016/j.electacta.2021.138639}, DOI={10.1016/j.electacta.2021.138639}, journal={Electrochimica Acta}, publisher={Elsevier BV}, author={Martínez-Hincapié, R. and Rodes, A. and Climent, V. and Feliu, J.M.}, year={2021}, month=aug, pages={138639} }' #pylint: disable=line-too-long
+            >>> bibtex_string = '@article{Mar_Ol__2021, title={Surfaces are made by the devil: fooo,2 of XX(110)/other stuff.}, volume={145}, ISSN={0015-0057}, url={http://dx.doi.org/10.1016/j.what.2015.123456}, DOI={10.1016/j.what.2015.123456}, journal={My Journal}, publisher={Publisher}, author={Marí-Olé, J. and Foo, B.}, year={2013}, month=dec, pages={4567} }' #pylint: disable=line-too-long
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
-            'martinez-hincapie_2021_surface_138639'
+            'mari-ole_2013_surfaces_4567'
+
+        Special characters are skipped upon first word selection::
 
             >>> bibtex_string = '@article{hermannEffectPHAnion2021, title = {The {{Effect}} of {{pH}} and {{Anion Adsorption}} on {{Formic Acid Oxidation}} on {{Au}}(111) {{Electrodes}}}, author = {Hermann, Johannes M. and Abdelrahman, Areeg and Jacob, Timo and Kibler, Ludwig A.}, year = 2021, month = jul, journal = {Electrochim. Acta}, volume = {385}, pages = {138279}, issn = {0013-4686}, doi = {10.1016/j.electacta.2021.138279} }' #pylint: disable=line-too-long
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2021_effect_138279'
+
+        Keep only the first meaningful word of the title::
+
+            >>> bibtex_string = '@article{Hermann_2018, title={An in the foo bar article}, volume={165}, ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes}, DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.}, year={2018}, month=aug, pages={J3192–J3198} }' #pylint: disable=line-too-long
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'hermann_2018_foo_j3192'
+
+        Dashes in the first word are considered::
+
+            >>> bibtex_string = '@article{Hermann_2018, title={An-in the foo bar article}, volume={165}, ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes}, DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.}, year={2018}, month=aug, pages={J3192–J3198} }' #pylint: disable=line-too-long
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'hermann_2018_an-in_j3192'
 
         """
         from slugify import slugify
@@ -291,9 +309,14 @@ class Pdf:
         entry = list(citation.entries.values())[0]
         first_author = entry.persons["author"][0].last_names[0]
         title_words = entry.fields["title"].split(" ")
-        first_word = slugify(title_words[0])
-        if first_word in skip_words:
-            first_word = title_words[1]
+        first_word = None
+        for word in title_words:
+            slugified_word = slugify(word)
+            if slugified_word not in skip_words:
+                first_word = slugified_word
+                break
+        if first_word is None:
+            first_word = slugify(title_words[0])
         year = entry.fields["year"]
         first_page = (
             entry.fields["pages"].split("–")[0].split("-")[0]
