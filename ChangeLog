@@ -4,6 +4,25 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.14.2
+====================
+
+**Added:**
+
+* Added `_warn_about_metadata_conflicts` to `SVGFigure` to warn about metadata replaced in the provided metadata by metadata extracted from the SVG.
+* Added `pdf.PDF` to the API section of the documentation.
+
+**Changed:**
+
+* Allow ` `, `-` and `_` in reference point labels in the svg.
+* Improve error message when the number of detected variables != 2.
+
+**Fixed:**
+
+* Fixed creation of identifier in `pdf.PDF`, to keep first meaningful word of the title.
+
+
+
 v0.14.1
 ====================
 
