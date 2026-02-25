@@ -19,6 +19,7 @@ API
 :caption: "Modules:"
 :maxdepth: 1
 api/cv.md
+api/pdf.md
 api/svg.md
 api/svgplot.md
 api/svgfigure.md
