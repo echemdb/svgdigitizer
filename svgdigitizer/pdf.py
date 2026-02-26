@@ -303,18 +303,32 @@ class Pdf:
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2018_an-in_j3192'
 
-            >>> bibtex_string = r'''@article{ fooo-bair_2012_random_110, author = {\'Alvaro-Monta{\~n}a, Baz and Author, Two}, title = {Ramdon title}, journal = {Journal}, volume = {3}, pages = {110--123}, year = {2012}, publisher = {Publisher} }''' #pylint: disable=line-too-long
+            >>> bibtex_string = '''@article{ fooo-bair_2012_random_110, author = {\\'Alvaro-Monta{\\~n}a, Baz and Author, Two}, title = {Ramdon title}, journal = {Journal}, volume = {3}, pages = {110--123}, year = {2012}, publisher = {Publisher} }''' #pylint: disable=line-too-long
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'alvaro-montana_2012_ramdon_110'
 
         """
+        import latexcodec  # pylint: disable=unused-import
         from slugify import slugify
-        import latexcodec
 
         entry = list(citation.entries.values())[0]
-        first_author = entry.persons["author"][0].last_names[0].encode("latin-1").decode("latex+latin").replace("{", "").replace("}", "")
-        title_words = entry.fields["title"].encode("latin-1").decode("latex+latin").replace("{", "").replace("}", "").split(" ")
+        first_author = (
+            entry.persons["author"][0]
+            .last_names[0]
+            .encode("latin-1")
+            .decode("latex+latin")
+            .replace("{", "")
+            .replace("}", "")
+        )
+        title_words = (
+            entry.fields["title"]
+            .encode("latin-1")
+            .decode("latex+latin")
+            .replace("{", "")
+            .replace("}", "")
+            .split(" ")
+        )
         first_word = None
         for word in title_words:
             slugified_word = slugify(word)
