@@ -138,6 +138,10 @@ class TemporaryData:
             ],
         ),
         (
+            "scalebar_axis_orientation",
+            ["cv", "scalebar_axis_orientation.svg", "--si-units"],
+        ),
+        (
             "cv_comment",
             ["cv", "cv_comment.svg", "--metadata", "cv_comment.yaml", "--si-units"],
         ),

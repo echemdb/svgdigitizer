@@ -177,14 +177,15 @@ class CV(SVGFigure):
             measurement_type=measurement_type,
             force_si_units=force_si_units,
         )
+
         assert self.svgplot.xlabel in [
             "U",
             "E",
-        ], f"The y-label must be 'E' or 'U and not '{self.svgplot.xlabel}'."
+        ], f"The x-label must be 'E' or 'U' and not '{self.svgplot.xlabel}'."
         assert self.svgplot.ylabel in [
             "I",
             "j",
-        ], f"The y-label must be 'I' or 'j and not '{self.svgplot.ylabel}'."
+        ], f"The y-label must be 'I' or 'j' and not '{self.svgplot.ylabel}'."
 
     @property
     def data_schema(self):

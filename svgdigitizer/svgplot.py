@@ -345,6 +345,7 @@ class SVGPlot:
         """
 
         def score(horizontal, vertical):
+            from math import hypot
             from numpy.linalg import qr
 
             A = self._transformation(
@@ -376,7 +377,38 @@ class SVGPlot:
             # We compute the absolute value of the trace of the rotation matrix
             # underlying Q which is 1 + |2 cos(α)| so a large trace means a
             # small angle of rotation.
-            return abs(Q[0][0]) + abs(Q[1][1])
+            rotation_score = abs(Q[0][0]) + abs(Q[1][1])
+
+            # Prefer assignments where the chosen horizontal axis runs mostly
+            # left-to-right and the chosen vertical axis runs mostly bottom-to-top
+            # in SVG coordinates.
+            hx = (
+                self.marked_points[f"{horizontal}2"][0][0]
+                - self.marked_points[f"{horizontal}1"][0][0]
+            )
+            hy = (
+                self.marked_points[f"{horizontal}2"][0][1]
+                - self.marked_points[f"{horizontal}1"][0][1]
+            )
+            vx = (
+                self.marked_points[f"{vertical}2"][0][0]
+                - self.marked_points[f"{vertical}1"][0][0]
+            )
+            vy = (
+                self.marked_points[f"{vertical}2"][0][1]
+                - self.marked_points[f"{vertical}1"][0][1]
+            )
+
+            horizontal_len = hypot(hx, hy)
+            vertical_len = hypot(vx, vy)
+
+            # Degenerate markers should not influence orientation decisions.
+            if horizontal_len < self._EPSILON or vertical_len < self._EPSILON:
+                alignment_score = 0
+            else:
+                alignment_score = abs(hx) / horizontal_len + abs(vy) / vertical_len
+
+            return rotation_score + alignment_score
 
         return (
             {
