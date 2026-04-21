@@ -1,0 +1,71 @@
+{
+    "resources": [
+        {
+            "name": "scalebar_axis_orientation",
+            "type": "table",
+            "path": "scalebar_axis_orientation.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "t",
+                        "type": "number",
+                        "unit": "s"
+                    },
+                    {
+                        "name": "E",
+                        "type": "number",
+                        "unit": "V",
+                        "reference": "RHE"
+                    },
+                    {
+                        "name": "I",
+                        "type": "number",
+                        "unit": "A"
+                    }
+                ]
+            },
+            "metadata": {
+                "echemdb": {
+                    "experimental": {
+                        "tags": [
+                            "BCV"
+                        ]
+                    },
+                    "source": {
+                        "figure": "1",
+                        "curve": "solid"
+                    },
+                    "figureDescription": {
+                        "type": "digitized",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "CV",
+                        "fields": [
+                            {
+                                "name": "E",
+                                "type": "number",
+                                "unit": "V",
+                                "orientation": "horizontal",
+                                "reference": "RHE"
+                            },
+                            {
+                                "name": "I",
+                                "type": "number",
+                                "unit": "uA",
+                                "orientation": "vertical"
+                            }
+                        ],
+                        "comment": "",
+                        "scanRate": {
+                            "value": 50.0,
+                            "unit": "mV / s"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
