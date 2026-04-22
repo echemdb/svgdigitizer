@@ -1,23 +1,3 @@
-**Added:**
-
-* Added <news item>.
-
 **Changed:**
 
-* Changed <news item>.
-
-**Removed:**
-
-* Removed <news item>.
-
-**Fixed:**
-
-* Fixed <news item>.
-
-**Deprecated:**
-
-* Deprecated <news item>.
-
-**Performance:**
-
-* Improved <news item>.
+* Changed axis orientation detection such that axis running from left to right are more accurately identified as x-axis.
