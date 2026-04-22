@@ -346,6 +346,7 @@ class SVGPlot:
 
         def score(horizontal, vertical):
             from math import hypot
+
             from numpy.linalg import qr
 
             A = self._transformation(
