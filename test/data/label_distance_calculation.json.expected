@@ -1,9 +1,9 @@
 {
     "resources": [
         {
-            "name": "scalebar_axis_orientation",
+            "name": "label_distance_calculation",
             "type": "table",
-            "path": "scalebar_axis_orientation.csv",
+            "path": "label_distance_calculation.csv",
             "scheme": "file",
             "format": "csv",
             "mediatype": "text/csv",
