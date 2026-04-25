@@ -138,8 +138,8 @@ class TemporaryData:
             ],
         ),
         (
-            "scalebar_axis_orientation",
-            ["cv", "scalebar_axis_orientation.svg", "--si-units"],
+            "label_distant_calculation",
+            ["cv", "label_distant_calculation.svg", "--si-units"],
         ),
         (
             "cv_comment",
