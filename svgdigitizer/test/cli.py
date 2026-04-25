@@ -138,8 +138,8 @@ class TemporaryData:
             ],
         ),
         (
-            "label_distant_calculation",
-            ["cv", "label_distant_calculation.svg", "--si-units"],
+            "label_distance_calculation",
+            ["cv", "label_distance_calculation.svg", "--si-units"],
         ),
         (
             "cv_comment",
