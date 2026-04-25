@@ -273,7 +273,7 @@ class SVG:
             >>> svg = SVG(StringIO(r'''
             ... <svg>
             ...   <g transform="translate(100, 10)">
-            ...     <text x="0" y="0" transform="translate(100, 10)">curve: 0</text>
+            ...     <text x="0" y="0" transform="translate(100, 10) rotate(30)">curve: 0</text>
             ...   </g>
             ... </svg>'''))
             >>> transformed = svg.transform(svg.svg.getElementsByTagName("text")[0])
@@ -378,6 +378,11 @@ class Text:
         transformed = SVG.transform(label)
         self.x = float(transformed.getAttribute("x"))
         self.y = float(transformed.getAttribute("y"))
+        self.rotation = 0.0
+
+        if transform := label.getAttribute("transform"):
+            if "rotate" in transform:
+                self.rotation = float(transform.split("rotate(")[1].split(")")[0])
 
         for key, value in match.groupdict().items():
             setattr(self, key, value)
@@ -492,6 +497,7 @@ class LabeledPath:
     def far(self):
         r"""
         Return the end point of this path that is furthest away from the label.
+        It calculates the orthogonal distance to a line through the text anchor, taking into account a rotation of the text.
 
         EXAMPLES::
 
@@ -507,12 +513,48 @@ class LabeledPath:
             >>> path.far
             (100.0, 0.0)
 
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M -100 100 L 100 100" />
+            ...     <text x="0" y="50" transform="rotate(50)">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> path = svg.get_labeled_paths()[0][0]
+            >>> path.far
+            (-100.0, 100.0)
+
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M -100 100 L 100 100" />
+            ...     <text x="0" y="50" transform="rotate(-50)">curve: 0</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> path = svg.get_labeled_paths()[0][0]
+            >>> path.far
+            (100.0, 100.0)
         """
-        text = self.label.x, self.label.y
-        endpoints = [self.points[0], self.points[-1]]
-        return max(
-            endpoints, key=lambda p: (text[0] - p[0]) ** 2 + (text[1] - p[1]) ** 2
-        )
+        from math import cos, pi, sin
+
+        rotation = self.label.rotation / 360 * 2 * pi
+        dir_x, dir_y = cos(rotation), sin(rotation)
+
+        def distance(p):
+            """The visual distance to the text is not strait forward to calculate.
+            We take the perpendicular distance to a line defined by anchor point an text direction.
+            Note: This might not cover all issues leading to secondary errors such as wrong axis
+            assignment.
+            """
+            dx = p[0] - self.label.x
+            dy = p[1] - self.label.y
+
+            perpendicular = abs(dx * (-dir_y) + dy * dir_x)
+            # this is a workaround mostly for the test cases where perpendicular distances are the same.
+            parallel = abs(dx * dir_x + dy * dir_y)
+            return (perpendicular, parallel)
+
+        return max([self.points[0], self.points[-1]], key=distance)
 
     @classmethod
     def path_points(cls, path):
