@@ -1058,7 +1058,7 @@ class SVGPlot:
             {'E': 18.3, 'j': 24.5}
 
         """
-        scaling_factors = {axis: 1 for axis in self.axis_variables}
+        scaling_factors = {axis: 1.0 for axis in self.axis_variables}
 
         for key in scaling_factors.keys():
             for label in self.svg.get_texts(
