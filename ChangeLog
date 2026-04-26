@@ -4,6 +4,15 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.14.3
+====================
+
+**Changed:**
+
+* Changed label distance calculation to use perpendicular distance to text direction which works better with some edge cases.
+
+
+
 v0.14.2
 ====================
 
