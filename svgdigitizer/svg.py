@@ -541,18 +541,18 @@ class LabeledPath:
         dir_x, dir_y = cos(rotation), sin(rotation)
 
         def distance(p):
-            """The visual distance to the text is not strait forward to calculate.
-            We take the perpendicular distance to a line defined by anchor point an text direction.
-            Note: This might not cover all issues leading to secondary errors such as wrong axis
-            assignment.
+            """Perpendicular distance from point to line (defined by text anchor and direction).
+            The perpendicularly projected distance on the line is calculated as fallback.
+            Note: This does not cover all edge cases to calculate the visual distance
+            between text and point.
             """
             dx = p[0] - self.label.x
             dy = p[1] - self.label.y
 
             perpendicular = abs(dx * (-dir_y) + dy * dir_x)
             # this is a workaround mostly for the test cases where perpendicular distances are the same.
-            parallel = abs(dx * dir_x + dy * dir_y)
-            return (perpendicular, parallel)
+            projected = abs(dx * dir_x + dy * dir_y)
+            return (perpendicular, projected)
 
         return max([self.points[0], self.points[-1]], key=distance)
 
