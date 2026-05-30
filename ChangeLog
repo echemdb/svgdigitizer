@@ -4,6 +4,15 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.14.4
+====================
+
+**Changed:**
+
+* Changed lower version bound of pymupdf to 1.27.1 to ensure compatibility with all platforms.
+
+
+
 v0.14.3
 ====================
 
