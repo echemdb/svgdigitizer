@@ -303,6 +303,11 @@ class Pdf:
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2018_an-in_j3192'
 
+        For some publications no pages are included in bibtex
+            >>> bibtex_string = '@article{White_2026, title={Emergent quantization from a dynamic vacuum}, volume={8}, ISSN={2643-1564}, url={http://dx.doi.org/10.1103/l8y7-r3rm}, DOI={10.1103/l8y7-r3rm}, number={1}, journal={Physical Review Research}, publisher={American Physical Society (APS)}, author={White, Harold and Vera, Jerry and Sylvester, Andre and Dudzinski, Leonard}, year={2026}, month=Mar }' #pylint: disable=line-too-long
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'white_2026_emergent'
         """
         from slugify import slugify
 
@@ -318,11 +323,14 @@ class Pdf:
         if first_word is None:
             first_word = slugify(title_words[0])
         year = entry.fields["year"]
+        # pages might not exist
         first_page = (
-            entry.fields["pages"].split("–")[0].split("-")[0]
+            entry.fields.get("pages", "").split("–")[0].split("-")[0]
         )  # split unicode "–" and normal hypen "-"
         slugified_strs = [
-            slugify(item) for item in [first_author, year, first_word, first_page]
+            slugify(item)
+            for item in [first_author, year, first_word, first_page]
+            if item
         ]
         identifier = "_".join(slugified_strs)
         return identifier
