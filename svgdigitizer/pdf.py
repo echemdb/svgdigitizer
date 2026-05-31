@@ -327,14 +327,14 @@ class Pdf:
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2018_an-in_j3192'
-        
+
         Special LaTex characters are translated to unicode::
 
             >>> bibtex_string = (
-            ... "@article{ fooo-bair_2012_random_110, "
-            ... "author = {\\'Alvaro-Monta{\\~n}a, Baz and Author, Two}, "
-            ... "title = {Ramdon title}, journal = {Journal}, volume = {3}, pages = {110--123}, "
-            ... "year = {2012}, publisher = {Publisher} }"
+            ... r"@article{ fooo-bair_2012_random_110, "
+            ... r"author = {\\'Alvaro-Monta{\\~n}a, Baz and Author, Two}, "
+            ... r"title = {Ramdon title}, journal = {Journal}, volume = {3}, pages = {110--123}, "
+            ... r"year = {2012}, publisher = {Publisher} }"
             ... )
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
