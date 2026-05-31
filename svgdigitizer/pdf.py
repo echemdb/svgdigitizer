@@ -277,39 +277,84 @@ class Pdf:
 
             >>> from svgdigitizer.pdf import Pdf
             >>> from pybtex.database import parse_string
-            >>> bibtex_string = '@article{Mar_Ol__2021, title={Surfaces are made by the devil: fooo,2 of XX(110)/other stuff.}, volume={145}, ISSN={0015-0057}, url={http://dx.doi.org/10.1016/j.what.2015.123456}, DOI={10.1016/j.what.2015.123456}, journal={My Journal}, publisher={Publisher}, author={Marí-Olé, J. and Foo, B.}, year={2013}, month=dec, pages={4567} }' #pylint: disable=line-too-long
+            >>> bibtex_string = (
+            ...     '@article{Mar_Ol__2021, title={Surfaces are made by the devil: fooo,2 of XX(110)/other stuff.},'
+            ...     ' volume={145}, ISSN={0015-0057}, url={http://dx.doi.org/10.1016/j.what.2015.123456},'
+            ...     ' DOI={10.1016/j.what.2015.123456}, journal={My Journal}, publisher={Publisher},'
+            ...     ' author={Marí-Olé, J. and Foo, B.}, year={2013}, month=dec, pages={4567} }'
+            ... )
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'mari-ole_2013_surfaces_4567'
 
         Special characters are skipped upon first word selection::
 
-            >>> bibtex_string = '@article{hermannEffectPHAnion2021, title = {The {{Effect}} of {{pH}} and {{Anion Adsorption}} on {{Formic Acid Oxidation}} on {{Au}}(111) {{Electrodes}}}, author = {Hermann, Johannes M. and Abdelrahman, Areeg and Jacob, Timo and Kibler, Ludwig A.}, year = 2021, month = jul, journal = {Electrochim. Acta}, volume = {385}, pages = {138279}, issn = {0013-4686}, doi = {10.1016/j.electacta.2021.138279} }' #pylint: disable=line-too-long
+            >>> bibtex_string = (
+            ...     '@article{hermannEffectPHAnion2021,'
+            ...     ' title = {The {{Effect}} of {{pH}} and {{Anion Adsorption}} on {{Formic Acid Oxidation}} on {{Au}}(111) {{Electrodes}}},'
+            ...     ' author = {Hermann, Johannes M. and Abdelrahman, Areeg and Jacob, Timo and Kibler, Ludwig A.},'
+            ...     ' year = 2021, month = jul, journal = {Electrochim. Acta},'
+            ...     ' volume = {385}, pages = {138279}, issn = {0013-4686}, doi = {10.1016/j.electacta.2021.138279} }'
+            ... )
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2021_effect_138279'
 
         Keep only the first meaningful word of the title::
 
-            >>> bibtex_string = '@article{Hermann_2018, title={An in the foo bar article}, volume={165}, ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes}, DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.}, year={2018}, month=aug, pages={J3192–J3198} }' #pylint: disable=line-too-long
+            >>> bibtex_string = (
+            ...     '@article{Hermann_2018, title={An in the foo bar article}, volume={165},'
+            ...     ' ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes},'
+            ...     ' DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society},'
+            ...     ' publisher={The Electrochemical Society},'
+            ...     ' author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.},'
+            ...     ' year={2018}, month=aug, pages={J3192–J3198} }'
+            ... )
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2018_foo_j3192'
 
         Dashes in the first word are considered::
 
-            >>> bibtex_string = '@article{Hermann_2018, title={An-in the foo bar article}, volume={165}, ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes}, DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society}, publisher={The Electrochemical Society}, author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.}, year={2018}, month=aug, pages={J3192–J3198} }' #pylint: disable=line-too-long
+            >>> bibtex_string = (
+            ...     '@article{Hermann_2018, title={An-in the foo bar article}, volume={165},'
+            ...     ' ISSN={0013-4651}, url={http://dx.doi.org/10.1149/2.0221810jes},'
+            ...     ' DOI={10.1149/2.0221810jes}, journal={Journal of The Electrochemical Society},'
+            ...     ' publisher={The Electrochemical Society},'
+            ...     ' author={Hermann, Johannes M. and Jacob, Timo and Kibler, Ludwig A.},'
+            ...     ' year={2018}, month=aug, pages={J3192–J3198} }'
+            ... )
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2018_an-in_j3192'
+        
+        Special LaTex characters are translated to unicode::
 
-            >>> bibtex_string = '''@article{ fooo-bair_2012_random_110, author = {\\'Alvaro-Monta{\\~n}a, Baz and Author, Two}, title = {Ramdon title}, journal = {Journal}, volume = {3}, pages = {110--123}, year = {2012}, publisher = {Publisher} }''' #pylint: disable=line-too-long
+            >>> bibtex_string = (
+            ... "@article{ fooo-bair_2012_random_110, "
+            ... "author = {\\'Alvaro-Monta{\\~n}a, Baz and Author, Two}, "
+            ... "title = {Ramdon title}, journal = {Journal}, volume = {3}, pages = {110--123}, "
+            ... "year = {2012}, publisher = {Publisher} }"
+            ... )
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'alvaro-montana_2012_ramdon_110'
 
+        For some publications no pages are included in bibtex::
+
+            >>> bibtex_string = (
+            ...     "@article{White_2026, title={Emergent quantization from a dynamic vacuum},"
+            ...     " volume={8}, ISSN={2643-1564}, url={http://dx.doi.org/10.1103/l8y7-r3rm},"
+            ...     " DOI={10.1103/l8y7-r3rm}, number={1}, journal={Physical Review Research},"
+            ...     " publisher={American Physical Society (APS)},"
+            ...     " author={White, Harold and Vera, Jerry and Sylvester, Andre and Dudzinski, Leonard},"
+            ...     " year={2026}, month=Mar }"
+            ... )
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'white_2026_emergent'
         """
-        import latexcodec  # pylint: disable=unused-import
+        import latexcodec as _  # noqa: F401  # registers "latex+latin" codec
         from slugify import slugify
 
         entry = list(citation.entries.values())[0]
@@ -338,11 +383,14 @@ class Pdf:
         if first_word is None:
             first_word = slugify(title_words[0])
         year = entry.fields["year"]
+        # pages might not exist
         first_page = (
-            entry.fields["pages"].split("–")[0].split("-")[0]
+            entry.fields.get("pages", "").split("–")[0].split("-")[0]
         )  # split unicode "–" and normal hypen "-"
         slugified_strs = [
-            slugify(item) for item in [first_author, year, first_word, first_page]
+            slugify(item)
+            for item in [first_author, year, first_word, first_page]
+            if item
         ]
         identifier = "_".join(slugified_strs)
         return identifier
