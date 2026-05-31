@@ -8,8 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>svgdigitizer.pdf &mdash; svgdigitizer 0.14.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
       <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
 
   
@@ -189,6 +189,18 @@ To change the omitted words it is possible to provide a custom word list.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_string</span><span class="p">(</span><span class="n">bibtex_string</span><span class="p">,</span> <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
 <span class="go">&#39;hermann_2018_an-in_j3192&#39;</span>
+</pre></div>
+</div>
+<p>Special LaTex characters are translated to unicode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bibtex_string</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span><span class="sa">r</span><span class="s2">&quot;@article{ fooo-bair_2012_random_110, &quot;</span>
+<span class="gp">... </span><span class="sa">r</span><span class="s2">&quot;author = {\&#39;Alvaro-Monta{\~n}a, Baz and Author, Two}, &quot;</span>
+<span class="gp">... </span><span class="sa">r</span><span class="s2">&quot;title = {Ramdon title}, journal = </span><span class="si">{Journal}</span><span class="s2">, volume = </span><span class="si">{3}</span><span class="s2">, pages = {110--123}, &quot;</span>
+<span class="gp">... </span><span class="sa">r</span><span class="s2">&quot;year = </span><span class="si">{2012}</span><span class="s2">, publisher = </span><span class="si">{Publisher}</span><span class="s2"> }&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_string</span><span class="p">(</span><span class="n">bibtex_string</span><span class="p">,</span> <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
+<span class="go">&#39;alvaro-montana_2012_ramdon_110&#39;</span>
 </pre></div>
 </div>
 <p>For some publications no pages are included in bibtex:</p>
