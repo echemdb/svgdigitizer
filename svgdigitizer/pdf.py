@@ -328,6 +328,18 @@ class Pdf:
             >>> Pdf.build_identifier(bibliography_data)
             'hermann_2018_an-in_j3192'
 
+        Special LaTex characters are translated to unicode::
+
+            >>> bibtex_string = (
+            ... r"@article{ fooo-bair_2012_random_110, "
+            ... r"author = {\\'Alvaro-Monta{\\~n}a, Baz and Author, Two}, "
+            ... r"title = {Ramdon title}, journal = {Journal}, volume = {3}, pages = {110--123}, "
+            ... r"year = {2012}, publisher = {Publisher} }"
+            ... )
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'alvaro-montana_2012_ramdon_110'
+
         For some publications no pages are included in bibtex::
 
             >>> bibtex_string = (
@@ -342,11 +354,26 @@ class Pdf:
             >>> Pdf.build_identifier(bibliography_data)
             'white_2026_emergent'
         """
+        import latexcodec as _  # noqa: F401  # registers "latex+latin" codec
         from slugify import slugify
 
         entry = list(citation.entries.values())[0]
-        first_author = entry.persons["author"][0].last_names[0]
-        title_words = entry.fields["title"].split(" ")
+        first_author = (
+            entry.persons["author"][0]
+            .last_names[0]
+            .encode("latin-1")
+            .decode("latex+latin")
+            .replace("{", "")
+            .replace("}", "")
+        )
+        title_words = (
+            entry.fields["title"]
+            .encode("latin-1")
+            .decode("latex+latin")
+            .replace("{", "")
+            .replace("}", "")
+            .split(" ")
+        )
         first_word = None
         for word in title_words:
             slugified_word = slugify(word)
