@@ -42,16 +42,18 @@ study is published, the underlying numerical data frequently becomes inaccessibl
 for older literature where digital data was never archived. `svgdigitizer` is a Python library
 and command-line tool that recovers the data from such figures by digitizing curves
 manually traced in carefully annotated Scalable Vector Graphics (SVG) files,
-an XML-based format that allows programmatic access to its elements.
+a XML-based format that allows programmatic access to its elements.
 The user imports a figure image into a
 vector graphics editor, e.g., Inkscape [@inkscape_2025], traces the curve of interest with Bézier
-paths, and annotates the coordinate system with text labels. `svgdigitizer` then applies an
+paths, and annotates the coordinate system with text labels  (\autoref{fig:workflow} left). `svgdigitizer` then applies an
 affine coordinate transformation to map SVG pixel coordinates to plot data coordinates and
 samples the Bézier paths at user-defined intervals to produce a tabular dataset. Physical unit
 information encoded in axis labels is parsed via `astropy.units` [@astropy_2022_astropy_167] and propagated to
 the output. The digitized data is exported as a *frictionless datapackage* [@frictionless_2026] — a
 CSV file accompanied by a JSON descriptor containing units, metadata, and bibliographic
-information, enabling FAIR (Findable, Accessible, Interoperable, and Reusable)-compliant [@wilkinson_2016_fair_160018] data.
+information, enabling FAIR (Findable, Accessible, Interoperable, and Reusable)-compliant [@wilkinson_2016_fair_160018] data  (\autoref{fig:workflow} right).
+
+![`svgdigitizer` transforms an annotated SVG figure into a frictionless datapackage consisting of a CSV file with the curve data and a JSON descriptor containing axis units and extracted metadata.\label{fig:workflow}](workflow.png)
 
 # Statement of Need
 
@@ -64,7 +66,7 @@ raw data.
 While in most cases specific values or summary statistics of measurement data is sufficient, and which can often be extracted from the text body manually or large language models, in some cases the entire curve must be preserved.
 
 `svgdigitizer` addresses this need for researchers who require systematic, reproducible, and
-metadata-rich digitization of the entire curve in a scientific plot. Beyond one-off data extraction, it is designed
+metadata-rich digitization of the entire curve in a scientific plot (see \autoref{fig:workflow}). Beyond one-off data extraction, it is designed
 for workflows in which the same figure may be re-digitized with different sampling parameters,
 or in which digitized data from many publications must be aggregated into a common curated
 dataset. The FAIR frictionless datapackage output format enables digitized data to be shared,
