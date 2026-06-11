@@ -128,7 +128,7 @@ labeled reference bar), numeric **scaling factors** (rescaling of an axis often 
 for a curve in multi-signal overlays), and
 **scatter plots** (extracting individual data points without Bézier interpolation).
 
-The standard output file of svgdigitizer are frictionless datapackages, which consist of a CSV (including the curve data) and a JSON (providing information on the axis units and additional metadata from the SVG).
+The standard output of svgdigitizer are frictionless datapackages, which consist of a CSV (including the curve data) and a JSON (providing information on the axis units and additional metadata from the SVG) file.
 During the creation of the datapackage, additional metadata can be added from external YAML and BibTeX files into the datapackage descriptor,
 producing a self-describing output bundle.
 
