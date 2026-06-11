@@ -79,7 +79,7 @@ and physically meaningful units.
 # State of the Field
 
 Several tools are available for extracting numerical data from published plots, ranging from web-based interfaces to windows-only desktop and cross-platform applications, and spanning both open-source and commercial licenses.
-Examples include WebPlotDigitizer [@rohatgi_2022], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], and OriginPro [@origin_2026].
+Examples include WebPlotDigitizer [@rohatgi_2022], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], or OriginPro [@origin_2026].
 These tools typically provide interactive workflows for recovering data points from graphical representations through manual selection or semi-automated detection methods, enabling plotted information to be converted into reusable numerical datasets. Furthermore they are
 well-suited to one-off, GUI-driven data extraction. However, they usually do not allow exporting physical units,
 nor produce structured metadata, nor offer a programmable Python API for
@@ -89,7 +89,7 @@ In the following, we briefly summarize the current limitations of the available 
 `svgdigitizer` was designed as a distinct tool rather than a contribution to existing projects for several reasons.
 First, the commonly available tools
 work with raster images where individual data points are selected on the curve by mouse clicks and to some extent by auto detection methods, which then present the final dataset. starry-digitizer allows interpolating between selected datapoints to get more fine grained dataset.
-Second, common tools sample across one of the axis (usually the x-axis). This presents an issue when a curve follows a path that has multiple y-axis values per x-axis value, leading to scattering of the output data upon sampling along the x-axis.
+Second, common tools sample across one of the axis (usually the $x$-axis). This presents an issue when a curve follows a path that has multiple $y$-axis values per $x$-axis value, leading to scattering of the output data upon sampling along the $x$-axis.
 Third, in most cases once the digitization process is finished, the curve-tracing and plot annotation (input data for the extraction process) is not preserved in a reusable, version-controllable artifact that can
 be reprocessed at any time with different parameters, without repeating the manual work.
 Fourth, extraction of physical units and the creation of standardized file formats including metadata is a central aspect to render output data reusable, which has only been adopted recently in the starry-digitizer.
@@ -100,8 +100,9 @@ the other scientific ecosystems, such as Python, and the development of domain s
 
 The `svgdigitizer` module is organized in a layered class hierarchy, each layer adding abstraction over
 the one below:
+
 - `SVG`: parses the carefully annotated SVG document object model (DOM) and exposes labeled paths and text elements.
-- `SVGPlot`: reads axis reference-point labels (e.g., `x1: -40`, `x2: 40`) and constructs an
+- `SVGPlot`: reads axis reference-point labels, e.g., `x1: -40`, `x2: 40`, and constructs an
   affine transformation from SVG pixel space to plot data space.
 - `SVGFigure`: adds unit handling, metadata extraction, and frictionless datapackage output.
 - `CV` (`svgdigitizer.electrochemistry`): a domain-specific subclass for cyclic voltammograms.
@@ -113,7 +114,7 @@ The carefully annotated SVG files used by `svgdigitizer` contain the following e
 A curve which consists of individual points manually placed by the user on the curve, which are connected by
 Bézier path segments.
  During the recovery process, these curves are sampled by solving polynomial root-finding problems via `scipy`
-[@scipy], yielding data points at configurable equidistant intervals along the x (or y) axis.
+[@scipy], yielding data points at configurable equidistant intervals along the $x$ (or $$y$) axis.
 This enables dense, uniform sampling of curved regions without user-specified point placement.
 Axis labels contain an identifier (two for each axis), the value, a unit, and in some special cases also additional information, such as `E2: 1 V vs. RHE`.
 The units follow the `astropy.units` notation, allowing for example, transformation of the data into SI units.
@@ -123,8 +124,8 @@ Metadata from annotations embedded
 in the SVG, such as additional text fields with comments or other information about the figure, is extracted as Python dictionary.
 
 Advanced annotation features include support for **scale bars** (deriving axis scale from a
-labeled reference bar), numeric **scaling factors** (
-rescaling of an axis often found for a curve in multi-signal overlays), and
+labeled reference bar), numeric **scaling factors** (rescaling of an axis often found
+for a curve in multi-signal overlays), and
 **scatter plots** (extracting individual data points without Bézier interpolation).
 
 The standard output file of svgdigitizer are frictionless datapackages, which consist of a CSV (including the curve data) and a JSON (providing information on the axis units and additional metadata from the SVG).
@@ -132,7 +133,10 @@ During the creation of the datapackage, additional metadata can be added from ex
 producing a self-describing output bundle.
 
 A CLI built with `click` [@click_2026] exposes the full feature set without Python knowledge in a convenient way. Notably, the
-`paginate` command converts PDF pages to SVG+PNG files ready for annotation, while optionally renaming (`--rename`) the file base to a sluggified identifier generated from the citation (retrieved with the extracted DOI from the PDF via [doi.org](https://doi.org)) streamlining provenance metadata collection. After curve tracing the `digitize` command yields a datapackage.
+`paginate` command converts PDF pages to SVG and PNG files ready for annotation (where the PNG is linked into the SVG),
+while optionally renaming (`--rename`) the file base to a sluggified identifier generated from the citation (retrieved with the extracted DOI from the PDF via [doi.org](https://doi.org)) 
+streamlining provenance metadata collection.
+After curve tracing the `digitize` command yields a datapackage.
 
 # Research Impact Statement
 
@@ -161,8 +165,7 @@ validated by the authors, who take full responsibility for the accuracy of the m
 
 # Acknowledgements
 
-AKE gratefully acknowledges support by the DFG (German Science Foundation) through the
-collaborative research centre SFB-1316 (project ID: 327886311).
+AKE gratefully acknowledges support by the DFG (German Science Foundation) through NFDI4Chem (project number: 441958208).
 
 
 # References
