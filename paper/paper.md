@@ -42,16 +42,18 @@ study is published, the underlying numerical data frequently becomes inaccessibl
 for older literature where digital data was never archived. `svgdigitizer` is a Python library
 and command-line tool that recovers the data from such figures by digitizing curves
 manually traced in carefully annotated Scalable Vector Graphics (SVG) files,
-an XML-based format that allows programmatic access to its elements.
+a XML-based format that allows programmatic access to its elements.
 The user imports a figure image into a
 vector graphics editor, e.g., Inkscape [@inkscape_2025], traces the curve of interest with Bézier
-paths, and annotates the coordinate system with text labels. `svgdigitizer` then applies an
+paths, and annotates the coordinate system with text labels  (\autoref{fig:workflow} left). `svgdigitizer` then applies an
 affine coordinate transformation to map SVG pixel coordinates to plot data coordinates and
 samples the Bézier paths at user-defined intervals to produce a tabular dataset. Physical unit
 information encoded in axis labels is parsed via `astropy.units` [@astropy_2022_astropy_167] and propagated to
 the output. The digitized data is exported as a *frictionless datapackage* [@frictionless_2026] — a
 CSV file accompanied by a JSON descriptor containing units, metadata, and bibliographic
-information, enabling FAIR (Findable, Accessible, Interoperable, and Reusable)-compliant [@wilkinson_2016_fair_160018] data.
+information, enabling FAIR (Findable, Accessible, Interoperable, and Reusable)-compliant [@wilkinson_2016_fair_160018] data  (\autoref{fig:workflow} right).
+
+![`svgdigitizer` transforms an annotated SVG figure into a frictionless datapackage consisting of a CSV file with the curve data and a JSON descriptor containing axis units and extracted metadata.\label{fig:workflow}](workflow.png)
 
 # Statement of Need
 
@@ -64,7 +66,7 @@ raw data.
 While in most cases specific values or summary statistics of measurement data is sufficient, and which can often be extracted from the text body manually or large language models, in some cases the entire curve must be preserved.
 
 `svgdigitizer` addresses this need for researchers who require systematic, reproducible, and
-metadata-rich digitization of the entire curve in a scientific plot. Beyond one-off data extraction, it is designed
+metadata-rich digitization of the entire curve in a scientific plot (see \autoref{fig:workflow}). Beyond one-off data extraction, it is designed
 for workflows in which the same figure may be re-digitized with different sampling parameters,
 or in which digitized data from many publications must be aggregated into a common curated
 dataset. The FAIR frictionless datapackage output format enables digitized data to be shared,
@@ -88,7 +90,7 @@ integration into automated workflows.
 In the following, we briefly summarize the current limitations of the available tools.
 `svgdigitizer` was designed as a distinct tool rather than a contribution to existing projects for several reasons.
 First, the commonly available tools
-work with raster images where individual data points are selected on the curve by mouse clicks and to some extent by auto detection methods, which then present the final dataset. starry-digitizer allows interpolating between selected datapoints to get more fine grained dataset.
+work with raster images where individual data points are selected on the curve by mouse clicks and to some extent by auto detection methods, which then present the final dataset. starry-digitizer allows interpolating between selected datapoints to get a more fine grained dataset.
 Second, common tools sample across one of the axis (usually the $x$-axis). This presents an issue when a curve follows a path that has multiple $y$-axis values per $x$-axis value, leading to scattering of the output data upon sampling along the $x$-axis.
 Third, in most cases once the digitization process is finished, the curve-tracing and plot annotation (input data for the extraction process) is not preserved in a reusable, version-controllable artifact that can
 be reprocessed at any time with different parameters, without repeating the manual work.
@@ -128,7 +130,7 @@ labeled reference bar), numeric **scaling factors** (rescaling of an axis often 
 for a curve in multi-signal overlays), and
 **scatter plots** (extracting individual data points without Bézier interpolation).
 
-The standard output file of svgdigitizer are frictionless datapackages, which consist of a CSV (including the curve data) and a JSON (providing information on the axis units and additional metadata from the SVG).
+The standard output of svgdigitizer are frictionless datapackages, which consist of a CSV (including the curve data) and a JSON (providing information on the axis units and additional metadata from the SVG) file.
 During the creation of the datapackage, additional metadata can be added from external YAML and BibTeX files into the datapackage descriptor,
 producing a self-describing output bundle.
 
