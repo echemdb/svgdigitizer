@@ -72,8 +72,8 @@ or in which digitized data from many publications must be aggregated into a comm
 dataset. The FAIR frictionless datapackage output format enables digitized data to be shared,
 versioned, and integrated into databases with minimal friction.
 
-A primary motivation for `svgdigitizer` is the [echemdb.org](https://www.echemdb.org/cv)
-community database of cyclic voltammograms [@echemdb_2026], where contributions are curated as SVG
+A primary motivation for `svgdigitizer` is the
+community database of cyclic voltammograms [@echemdb_2026; @ECHEMDATA], where contributions are curated as SVG
 files digitized with `svgdigitizer`. This workflow enables electrochemists to contribute
 historical literature data systematically, with each entry carrying full provenance metadata
 and physically meaningful units.
@@ -81,7 +81,7 @@ and physically meaningful units.
 # State of the Field
 
 Several tools are available for extracting numerical data from published plots, ranging from web-based interfaces to windows-only desktop and cross-platform applications, and spanning both open-source and commercial licenses.
-Examples include WebPlotDigitizer [@rohatgi_2022], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], or OriginPro [@origin_2026].
+Examples include WebPlotDigitizer [@rohatgi_2022], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], or OriginPro [@originpro_2026].
 These tools typically provide interactive workflows for recovering data points from graphical representations through manual selection or semi-automated detection methods, enabling plotted information to be converted into reusable numerical datasets. Furthermore they are
 well-suited to one-off, GUI-driven data extraction. However, they usually do not allow exporting physical units,
 nor produce structured metadata, nor offer a programmable Python API for
@@ -116,7 +116,7 @@ The carefully annotated SVG files used by `svgdigitizer` contain the following e
 A curve which consists of individual points manually placed by the user on the curve, which are connected by
 Bézier path segments.
  During the recovery process, these curves are sampled by solving polynomial root-finding problems via `scipy`
-[@scipy], yielding data points at configurable equidistant intervals along the $x$ (or $$y$) axis.
+[@virtanen_2020_scipy_261], yielding data points at configurable equidistant intervals along the $x$ (or $$y$) axis.
 This enables dense, uniform sampling of curved regions without user-specified point placement.
 Axis labels contain an identifier (two for each axis), the value, a unit, and in some special cases also additional information, such as `E2: 1 V vs. RHE`.
 The units follow the `astropy.units` notation, allowing for example, transformation of the data into SI units.
@@ -142,8 +142,8 @@ After curve tracing the `digitize` command yields a datapackage.
 
 # Research Impact Statement
 
-`svgdigitizer` underpins the [echemdb.org](https://www.echemdb.org/cv) cyclic voltammogram
-database [@echemdb], a community-curated collection of electrochemical measurements from the
+`svgdigitizer` underpins the cyclic voltammogram
+database [@echemdb_2026; @ECHEMDATA], a community-curated collection of electrochemical measurements from the
 literature.
 Some of the data were extracted for specific scientific purposes to address specific questions in the field of electrochemistry [@bergmann_2023_initiobased_8815; @heubach_2025_reproducibility_1910].
 The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolve other annotation errors by the community.[@ECHEMDATA]
