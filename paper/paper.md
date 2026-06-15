@@ -53,7 +53,7 @@ the output. The digitized data is exported as a *frictionless datapackage* [@fri
 CSV file accompanied by a JSON descriptor containing units, metadata, and bibliographic
 information, enabling FAIR (Findable, Accessible, Interoperable, and Reusable)-compliant [@wilkinson_2016_fair_160018] data  (\autoref{fig:workflow} right).
 
-![`svgdigitizer` transforms an annotated SVG figure into a frictionless datapackage consisting of a CSV file with the curve data and a JSON descriptor containing axis units and extracted metadata.\label{fig:workflow}](workflow.png)
+![`svgdigitizer` transforms an annotated SVG figure (left) into a frictionless datapackage consisting of a CSV file with the curve data and a JSON descriptor containing axis units and extracted metadata (right).\label{fig:workflow}](workflow.png)
 
 # Statement of Need
 
