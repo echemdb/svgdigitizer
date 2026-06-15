@@ -144,12 +144,10 @@ After curve tracing the `digitize` command yields a datapackage.
 database [@echemdb], a community-curated collection of electrochemical measurements from the
 literature.
 Some of the data were extracted for specific scientific purposes to address specific questions in the field of electrochemistry [@bergmann_2023_initiobased_8815; @heubach_2025_reproducibility_1910].
-The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolve other annotation errors by the community.<!-- Reference to the echemdb electrochemistry-data repository-->
+The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolve other annotation errors by the community.[@ECHEMDATA]
 The output data is made accessible to the community via the `unitpackage` [@engstfeld_2026_19051513] API.
-<!--I would remove the following sentence as it is too far from teh topic-->
-<!--Both tools form the data layer of
-a lightweight file-system-based approach to research data management described in
-[@engstfeld_2025_lightweight_013].-->
+Both tools form the data layer of a lightweight file-system-based approach 
+to research data management described in [@engstfeld_2025_lightweight_013].
 `svgdigitizer` was also used by Fritsche et al. to extract geometric features from weld cross sections of refill friction stir spot welds joining additive-manufactured to wrought aluminium alloys [@fritsche_2026_microstructure_116061].
 
 The package is distributed via [PyPI](https://pypi.org/project/svgdigitizer/) and
