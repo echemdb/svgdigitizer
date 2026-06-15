@@ -90,7 +90,7 @@ integration into automated workflows.
 In the following, we briefly summarize the current limitations of the available tools.
 `svgdigitizer` was designed as a distinct tool rather than a contribution to existing projects for several reasons.
 First, the commonly available tools
-work with raster images where individual data points are selected on the curve by mouse clicks and to some extent by auto detection methods, which then present the final dataset. starry-digitizer allows interpolating between selected datapoints to get more fine grained dataset.
+work with raster images where individual data points are selected on the curve by mouse clicks and to some extent by auto detection methods, which then present the final dataset. starry-digitizer allows interpolating between selected datapoints to get a more fine grained dataset.
 Second, common tools sample across one of the axis (usually the $x$-axis). This presents an issue when a curve follows a path that has multiple $y$-axis values per $x$-axis value, leading to scattering of the output data upon sampling along the $x$-axis.
 Third, in most cases once the digitization process is finished, the curve-tracing and plot annotation (input data for the extraction process) is not preserved in a reusable, version-controllable artifact that can
 be reprocessed at any time with different parameters, without repeating the manual work.
