@@ -154,7 +154,7 @@ to research data management described in [@engstfeld_2025_lightweight_013].
 
 The package is distributed via [PyPI](https://pypi.org/project/svgdigitizer/) and
 [conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock), is archived on Zenodo
-[@engstfeld_2026_18777355] under DOI 10.5281/zenodo.8428961, and has been under active development
+[@engstfeld_2026_20467078], and has been under active development
 since June 2021 with over 1,600 commits from multiple contributors.
 
 # AI Usage Disclosure
