@@ -100,6 +100,13 @@ outdir_option = click.option(
     help="Write output files to this directory.",
 )
 
+plot_option = click.option(
+    "--plot",
+    "make_plot",
+    is_flag=True,
+    help="Create a PNG showing the digitized curve with labeled axes and the same scale as in the original figure.",
+)
+
 
 def _outfile(template, suffix=None, outdir=None):
     r"""
@@ -138,6 +145,46 @@ def _outfile(template, suffix=None, outdir=None):
     os.makedirs(os.path.dirname(template) or ".", exist_ok=True)
 
     return template
+
+
+def _create_plotfile(plottable, svg, outdir):
+    r"""
+    Write a PNG visualizing the digitized curve of `plottable`.
+
+    The PNG is named like `svg` but with a ``.png`` suffix and written to
+    `outdir`, if specified. The curve is shown with labeled axes and the same
+    scale as in the original figure.
+
+    `plottable` is any object with a ``plot()`` method returning a
+    :class:`matplotlib.axes.Axes`, such as an :class:`SVGPlot`,
+    :class:`SVGFigure`, or :class:`CV`.
+
+    This is a helper method for CLI commands that digitize an SVG.
+
+    EXAMPLES::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy.svg") as directory:
+        ...     svg = os.path.join(directory, "xy.svg")
+        ...     with open(svg, mode="rb") as infile:
+        ...         svgplot = _create_svgplot(infile, sampling_interval=None, skewed=False)
+        ...     _create_plotfile(svgplot, svg, outdir=None)
+        ...     os.path.exists(os.path.join(directory, "xy.png"))
+        True
+
+    """
+    # Use a non-interactive backend so that writing the PNG does not require a
+    # display, which would otherwise fail, e.g., on a headless machine.
+    import matplotlib
+
+    matplotlib.use("Agg")
+
+    import matplotlib.pyplot as plt
+
+    axes = plottable.plot()
+    figure = axes.get_figure()
+    figure.savefig(_outfile(svg, suffix=".png", outdir=outdir), bbox_inches="tight")
+    plt.close(figure)
 
 
 def _create_svgplot(svg, sampling_interval, skewed):
@@ -228,8 +275,9 @@ def plot(svg, sampling_interval, skewed):
 @sampling_interval_option
 @outdir_option
 @skewed_option
+@plot_option
 @click.argument("svg", type=click.Path(exists=True))
-def digitize(svg, sampling_interval, outdir, skewed):
+def digitize(svg, sampling_interval, outdir, skewed, make_plot):
     """
     Digitize a 2D plot.
 
@@ -242,6 +290,13 @@ def digitize(svg, sampling_interval, outdir, skewed):
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
+    The ``--plot`` flag additionally writes a PNG of the digitized curve::
+
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "digitize", "--plot", os.path.join(directory, "xy_rate.svg"))
+        ...     os.path.exists(os.path.join(directory, "xy_rate.png"))
+        True
+
     """
     with open(svg, mode="rb") as infile:
         svg_plot = _create_svgplot(
@@ -249,6 +304,9 @@ def digitize(svg, sampling_interval, outdir, skewed):
         )
 
     svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
+
+    if make_plot:
+        _create_plotfile(svg_plot, svg, outdir=outdir)
 
 
 @click.command(name="figure")
@@ -262,6 +320,7 @@ def digitize(svg, sampling_interval, outdir, skewed):
 @bibliography_option
 @citation_key_option
 @skewed_option
+@plot_option
 def digitize_figure(
     svg,
     sampling_interval,
@@ -271,6 +330,7 @@ def digitize_figure(
     citation_key,
     skewed,
     si_units,
+    make_plot,
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a figure with units on the axis and create a frictionless datapackage.
@@ -334,6 +394,9 @@ def digitize_figure(
         citation_key=citation_key,
     )
 
+    if make_plot:
+        _create_plotfile(svgfigure, svg, outdir=outdir)
+
 
 @click.command(name="cv")
 @sampling_interval_option
@@ -346,6 +409,7 @@ def digitize_figure(
 @citation_key_option
 @si_option
 @skewed_option
+@plot_option
 def digitize_cv(
     svg,
     sampling_interval,
@@ -355,6 +419,7 @@ def digitize_cv(
     bibliography,
     citation_key,
     si_units,
+    make_plot,
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a cylic voltammogram and create a frictionless datapackage.
@@ -434,6 +499,9 @@ def digitize_cv(
         bibliography=bibliography,
         citation_key=citation_key,
     )
+
+    if make_plot:
+        _create_plotfile(svgfigure, svg, outdir=outdir)
 
 
 def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):

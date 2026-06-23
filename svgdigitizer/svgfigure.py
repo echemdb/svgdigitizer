@@ -33,7 +33,6 @@ import logging
 from functools import cached_property
 
 import astropy.units as u
-import matplotlib.pyplot as plt
 
 from svgdigitizer.exceptions import SVGAnnotationError
 
@@ -1805,16 +1804,24 @@ class SVGFigure:
             ... </svg>'''))
             >>> figure = SVGFigure(SVGPlot(svg))
             >>> figure.plot()
+            <Axes: xlabel='E [V]', ylabel='j [A / cm2]'>
 
         """
 
-        self.df.plot(
+        axes = self.df.plot(
             x=self.svgplot.xlabel,
             y=self.svgplot.ylabel,
+            legend=False,
         )
 
-        plt.xlabel(self.svgplot.xlabel + " [" + self.xunit + "]")
-        plt.ylabel(self.svgplot.ylabel + " [" + self.yunit + "]")
+        axes.set_xlabel(self.svgplot.xlabel + " [" + self.xunit + "]")
+        axes.set_ylabel(self.svgplot.ylabel + " [" + self.yunit + "]")
+
+        aspect_ratio = self.svgplot.data_aspect_ratio(self.df)
+        if aspect_ratio is not None:
+            axes.set_aspect(aspect_ratio)
+
+        return axes
 
 
 # Ensure that cached properties are tested, see
