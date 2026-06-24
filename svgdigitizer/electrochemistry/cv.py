@@ -144,8 +144,8 @@ class CV(SVGFigure):
     where the axis labels and the data are provided in SI units
     (not in the dimensions of the original cyclic voltammogram).::
 
-        >>> cv.plot()
-        <Axes: xlabel='E [V vs. RHE]', ylabel='j [A / m2]'>
+        >>> cv.plot()  # the volt may render as the equivalent `Wb / s` depending on the astropy version
+        <Axes: xlabel='E [...vs. RHE]', ylabel='j [A / m2]'>
 
     The properties of the original plot and the dataframe can be returned as a dict::
 

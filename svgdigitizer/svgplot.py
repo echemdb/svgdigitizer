@@ -2195,7 +2195,10 @@ class SVGPlot:
         pixels_per_x = width_px / width_data
         pixels_per_y = height_px / height_data
 
-        return pixels_per_y / pixels_per_x
+        # Cast to a plain float so that the value does not render as a NumPy
+        # scalar such as `np.float64(0.5)` whose repr depends on the NumPy
+        # version.
+        return float(pixels_per_y / pixels_per_x)
 
     def plot(self):
         r"""
