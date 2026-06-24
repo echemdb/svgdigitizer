@@ -17,7 +17,6 @@ EXAMPLES::
       get-citation   Get the citation from the DOI provided PDF file.
       get-doi        Get the DOI from the provided PDF file.
       paginate       Render PDF pages as individual SVG files with linked PNG...
-      plot           Display a plot of the data traced in an SVG.
       rename-by-key  Rename the provided PDF file by the key derived from...
 
 """
@@ -155,9 +154,8 @@ def _create_plotfile(plottable, svg, outdir):
     `outdir`, if specified. The curve is shown with labeled axes and the same
     scale as in the original figure.
 
-    `plottable` is any object with a ``plot()`` method returning a
-    :class:`matplotlib.axes.Axes`, such as an :class:`SVGPlot`,
-    :class:`SVGFigure`, or :class:`CV`.
+    `plottable` is any object with a ``plot()`` method returning a matplotlib
+    ``Axes``, such as an ``SVGPlot``, ``SVGFigure``, or ``CV``.
 
     This is a helper method for CLI commands that digitize an SVG.
 
@@ -249,26 +247,6 @@ def _create_bibliography(bibliography, citation_key, metadata):
         return "", citation_key
 
     return bibdata.entries[citation_key].to_string("bibtex"), citation_key
-
-
-@click.command()
-@sampling_interval_option
-@skewed_option
-@click.argument("svg", type=click.File("rb"))
-def plot(svg, sampling_interval, skewed):
-    """
-    Display a plot of the data traced in an SVG.
-    \f
-
-    EXAMPLES::
-
-        >>> from svgdigitizer.test.cli import invoke, TemporaryData
-        >>> with TemporaryData("**/xy.svg") as directory:
-        ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
-
-    """
-    svgplot = _create_svgplot(svg, sampling_interval=sampling_interval, skewed=skewed)
-    svgplot.plot()
 
 
 @click.command()
@@ -558,11 +536,16 @@ def _create_package(metadata, csvname, outdir):
     """
     from frictionless import Package, Resource, Schema
 
+    # Normalize the base path to the native separators. Otherwise frictionless
+    # mistakes a Windows path with forward slashes such as `C:/dir` for a remote
+    # URL (with scheme `C`) and fails to load the CSV.
+    basepath = os.path.normpath(outdir or os.path.dirname(csvname))
+
     package = Package(
         resources=[
             Resource(
                 path=os.path.basename(csvname),
-                basepath=outdir or os.path.dirname(csvname),
+                basepath=basepath,
             )
         ],
     )
@@ -927,7 +910,6 @@ def paginate(
             )
 
 
-cli.add_command(plot)
 cli.add_command(digitize)
 cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)

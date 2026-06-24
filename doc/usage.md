@@ -42,16 +42,16 @@ When the figure is included inside a PDF use the svgdigitizer [CLI](/cli.md) to 
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer paginate ./files/others/looping.pdf --pages 0
+!svgdigitizer paginate ./files/others/looping.pdf --pages 1
 ```
 
 An SVG file is created for the specified page of the PDF. The image is locked and acts as static background object.
 
 ## SVG Annotation (Basics)
 
-We consider the following {download}`example figure<./files/others/looping_p0.png>`.
+We consider the following {download}`example figure<./files/others/looping_p1.png>`.
 
-```{image} ./files/others/looping_p0.png
+```{image} ./files/others/looping_p1.png
 :width: 500px
 :align: center
 ```
@@ -63,7 +63,7 @@ The minimum requirements to digitize such a figure with `svgdigitizer` are:
   * The number can also be followed by a unit, such as `T1: 20 K` or `v1: 20 km / s`. (see [more on units below](units))
 * Tracing the curve with a *bezier path*  which is grouped with a text label of type `curve: identifier` ([see below](curvetracing))
 
-An {download}`annotated SVG <./files/others/looping.svg>` of the example figure is shown below and can be explored locally by placing it in the same folder as the {download}`example figure<./files/others/looping_p0.png>` above.
+An {download}`annotated SVG <./files/others/looping.svg>` of the example figure is shown below and can be explored locally by placing it in the same folder as the {download}`example figure<./files/others/looping_p1.png>` above.
 
 ```{image} ./files/others/looping_annotated.png
 :class: bg-primary mb-1
@@ -90,7 +90,7 @@ Alternatively the data can be digitized with the [CLI](cli.md)
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure looping.svg --sampling_interval 0.01
+!svgdigitizer figure ./files/others/looping.svg --sampling-interval 0.01
 ```
 
 (curvetracing)=

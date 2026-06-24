@@ -2136,7 +2136,7 @@ class SVGPlot:
         Return the aspect ratio that makes a plot of `df` use the same scale as
         the original figure in the SVG.
 
-        The value is meant to be passed to :meth:`matplotlib.axes.Axes.set_aspect`.
+        The value is meant to be passed to matplotlib's ``Axes.set_aspect``.
         It is the displayed length of one unit on the y-axis relative to one unit
         on the x-axis, computed from the curve's bounding box in SVG (pixel)
         coordinates and its extent in the data coordinates of `df`. When `df` is
@@ -2201,8 +2201,8 @@ class SVGPlot:
         r"""
         Visualize the data in this plot.
 
-        Returns the :class:`matplotlib.axes.Axes` with the plotted curve. The
-        axes use the same scale as the original figure in the SVG, see
+        Returns the matplotlib ``Axes`` with the plotted curve. The axes use the
+        same scale as the original figure in the SVG, see
         :meth:`data_aspect_ratio`.
 
         EXAMPLES::
