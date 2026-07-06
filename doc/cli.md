@@ -44,10 +44,10 @@ Create SVG and PNG files from a PDF with
 Create an SVG with a linked PNG for specific pages in a PDF. Use `--pages` to select which pages to process.
 
 ```{code-cell} ipython3
-!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --pages 0
+!svgdigitizer paginate ./files/others/example_plot_paginate.pdf --pages 1
 ```
 
-Download the resulting {download}`SVG (example_plot_paginate_p0.svg)<./files/others/example_plot_paginate_p0.svg>`.
+Download the resulting {download}`SVG (example_plot_paginate_p1.svg)<./files/others/example_plot_paginate_p1.svg>`.
 
 
 ## `create-svg`
@@ -136,24 +136,23 @@ df.plot(x='U', y='v', ylabel='v')
 The use of [`svgdigitizer digitize`](digitize) is discouraged when your axis labels contain units, because the output CSV does not contain this information. Use [`svgdigitizer figure`](figure) instead, which creates a frictionless datapackage (CSV + JSON).
 ```
 
-## `plot`
+### Plotting the digitized curve
 
-Display a plot of the data traced in an SVG
-
-```{code-cell} ipython3
-!svgdigitizer plot --help
-```
-
-```{note}
-The plot will only be displayed, when your shell is configure accordingly.
-```
-
-### Examples
-
-The plot of an annotated example SVG (with skewed axis) with a specific sampling interval can be created with
+All digitization commands (`digitize`, [`figure`](figure), and [`cv`](cv)) accept the `--plot` flag. It writes a PNG next to the other output files that shows the digitized curve with labeled axes (including units) and the same scale as in the original figure. This is convenient to visually verify the digitization.
 
 ```{code-cell} ipython3
-!svgdigitizer plot ./files/others/example_plot_p0_demo_digitize.svg --skewed --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/example_plot_p0_demo_digitize.svg --skewed --sampling-interval 0.01 --plot
+```
+
+```{code-cell} ipython3
+:align: center
+:class: bg-primary mb-1
+:tags: [hide-input, remove-stdout, remove-stderr]
+:width: 500px
+
+from IPython.display import Image
+
+Image('./files/others/example_plot_p0_demo_digitize.png')
 ```
 
 (figure)=
