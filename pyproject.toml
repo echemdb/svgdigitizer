@@ -11,7 +11,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 # Additions and removals of dependencies need to be reflected in flake.nix
 dependencies = [
-    "astropy>=5,<8",
+    "astropy>=5,<9",
     "click>=8,<9",
     "frictionless>=5.8.3,<6",
     "latexcodec>=2.0.1",
