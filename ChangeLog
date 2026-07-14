@@ -4,6 +4,20 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.14.5
+====================
+
+**Changed:**
+
+* Changed upper bound of astropy dependency to v9.
+
+**Fixed:**
+
+* Fixed `build_identfier` for bibtex citations without pages.
+* Fixed converting special characters to unicode in bibliographic entries.
+
+
+
 v0.14.4
 ====================
 
