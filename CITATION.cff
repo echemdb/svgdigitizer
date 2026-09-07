@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: 'svgdigitizer: A Python package for recovering data from plots of scientific publications'
+type: software
+authors:
+- given-names: Johannes M.
+  family-names: Hermann
+  orcid: https://orcid.org/0000-0001-7119-1295
+- given-names: Nicolas G.
+  family-names: Hörmann
+  orcid: https://orcid.org/0000-0001-6944-5575
+- given-names: Albert K.
+  family-names: Engstfeld
+  orcid: https://orcid.org/0000-0002-9686-3948
+- given-names: Julian
+  family-names: Rüth
+  orcid: https://orcid.org/0000-0002-3930-9107
+repository-code: https://github.com/echemdb/svgdigitizer
+license: GPL-3.0-only
