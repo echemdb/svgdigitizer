@@ -265,6 +265,31 @@ class Pdf:
         self._rename(identifier + ".pdf")
 
     @staticmethod
+    def _latex_to_unicode(value):
+        r"""
+        Return `value` with LaTeX escape sequences translated to unicode.
+
+        Values that already contain unicode characters outside latin-1
+        are returned unchanged.
+
+        Examples::
+
+            >>> from svgdigitizer.pdf import Pdf
+            >>> Pdf._latex_to_unicode(r"\'Alvaro-Monta{\~n}a")
+            'Álvaro-Monta{ñ}a'
+            >>> Pdf._latex_to_unicode("Jović")
+            'Jović'
+        """
+        import latexcodec as _  # noqa: F401  # registers "latex+latin" codec
+
+        try:
+            return value.encode("latin-1").decode("latex+latin")
+        except UnicodeEncodeError:
+            # The value contains characters outside latin-1,
+            # so it is already plain unicode rather than LaTeX-escaped.
+            return value
+
+    @staticmethod
     def build_identifier(citation, skip_words=default_skip_words):
         """
         Build the entry identifier based on a bibtex citation provided as `BibliographyData` (pybtex).
@@ -353,23 +378,28 @@ class Pdf:
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'white_2026_emergent'
+
+        Entries that already contain plain UTF-8 characters outside latin-1 are kept as-is::
+
+            >>> bibtex_string = (
+            ...     "@article{jovic_1996_test_1, author = {Jović, BM and Marinković, NS},"
+            ...     " title = {Hydrogen evolution — an em dash title}, year = {1996},"
+            ...     " pages = {1--10}, journal = {J} }"
+            ... )
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'jovic_1996_hydrogen_1'
         """
-        import latexcodec as _  # noqa: F401  # registers "latex+latin" codec
         from slugify import slugify
 
         entry = list(citation.entries.values())[0]
         first_author = (
-            entry.persons["author"][0]
-            .last_names[0]
-            .encode("latin-1")
-            .decode("latex+latin")
+            Pdf._latex_to_unicode(entry.persons["author"][0].last_names[0])
             .replace("{", "")
             .replace("}", "")
         )
         title_words = (
-            entry.fields["title"]
-            .encode("latin-1")
-            .decode("latex+latin")
+            Pdf._latex_to_unicode(entry.fields["title"])
             .replace("{", "")
             .replace("}", "")
             .split(" ")
