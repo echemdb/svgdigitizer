@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/License-GPL_3.0_or_later-blue.svg" alt="License: GPL 3.0 or later">
-  <a href="https://doi.org/10.5281/zenodo.8428961"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.8428961.svg" alt="DOI"></a>
+  <a href="https://doi.org/10.5281/zenodo.5874747"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5874747.svg" alt="DOI"></a>
 </p>
 
 <p align="center">Extract (x,y) data points from SVG files</p>
