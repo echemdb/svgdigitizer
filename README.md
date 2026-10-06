@@ -115,3 +115,12 @@ commonly found in the field of electrochemistry.
 ```
 
 The resulting `cv` object has the same properties as the `figure` object above.
+
+## Contributing and support
+
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) to learn how to set up a development environment, run the tests and submit a pull request.
+
+* Report bugs and request features in the [issue tracker](https://github.com/echemdb/svgdigitizer/issues).
+* Ask usage questions by opening an [issue](https://github.com/echemdb/svgdigitizer/issues/new) with the `question` label.
+
+Everyone participating in this project is expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
