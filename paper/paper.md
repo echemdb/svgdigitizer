@@ -159,7 +159,7 @@ since June 2021 with over 1,600 commits from multiple contributors.
 
 # AI Usage Disclosure
 
-No generative AI tools were used in the development of the `svgdigitizer` software package and its repository, including code, tests, and documentation. The initial draft of this manuscript was produced with the assistance of
+No generative AI tools were used in the development of the `svgdigitizer` software package, including code, tests, and documentation, with one exception: during the revision of this manuscript, the community guidelines and project metadata of the repository (contributing guidelines, code of conduct, citation file, and the corresponding sections of the README and documentation) were drafted with the assistance of Claude Opus 5.5 (Anthropic) and reviewed by the authors. The initial draft of this manuscript was produced with the assistance of
 Claude Sonnet 4.6 (Anthropic) as a writing aid, based on the documentation of the `svgdigitizer` project. All content was reviewed, revised, and
 validated by the authors, who take full responsibility for the accuracy of the manuscript.
 
