@@ -108,9 +108,9 @@ pytest-env = "*"
 [tool.pixi.feature.test.tasks]
 # To validate the metadata against a specific version preceded the version by `tags` such as `tags/0.3.0`.
 # To validate the metadata against metadata in a specific branch use `head/branch-name`.
-validate = { args = [ { "arg" = "version", "default" = "tags/0.3.0" } ],cmd = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --base-uri https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')" }
-doctest = "pytest -n auto --doctest-modules svgdigitizer"
-pytest = "pytest -n auto svgdigitizer/**/*.py"
+validate = { args = [ { "arg" = "version", "default" = "tags/0.3.0" } ],cmd = "check-jsonschema --schemafile https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --base-uri https://raw.githubusercontent.com/echemdb/metadata-schema/refs/{{ version }}/schemas/svgdigitizer_package.json --no-cache $(find ./test/data/ -type f -name '*.json.expected')", default-environment = "python-314" }
+doctest = { cmd = "pytest -n auto --doctest-modules svgdigitizer", default-environment = "python-314" }
+pytest = { cmd = "pytest -n auto svgdigitizer/**/*.py", default-environment = "python-314" }
 
 [tool.pixi.feature.lint.dependencies]
 black = "*"
