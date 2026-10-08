@@ -265,31 +265,6 @@ class Pdf:
         self._rename(identifier + ".pdf")
 
     @staticmethod
-    def _latex_to_unicode(value):
-        r"""
-        Return `value` with LaTeX escape sequences translated to unicode.
-
-        Values that already contain unicode characters outside latin-1
-        are returned unchanged.
-
-        Examples::
-
-            >>> from svgdigitizer.pdf import Pdf
-            >>> Pdf._latex_to_unicode(r"\'Alvaro-Monta{\~n}a")
-            'Álvaro-Monta{ñ}a'
-            >>> Pdf._latex_to_unicode("Jović")
-            'Jović'
-        """
-        import latexcodec as _  # noqa: F401  # registers "latex+latin" codec
-
-        try:
-            return value.encode("latin-1").decode("latex+latin")
-        except UnicodeEncodeError:
-            # The value contains characters outside latin-1,
-            # so it is already plain unicode rather than LaTeX-escaped.
-            return value
-
-    @staticmethod
     def build_identifier(citation, skip_words=default_skip_words):
         """
         Build the entry identifier based on a bibtex citation provided as `BibliographyData` (pybtex).
@@ -394,12 +369,17 @@ class Pdf:
 
         entry = list(citation.entries.values())[0]
         first_author = (
-            Pdf._latex_to_unicode(entry.persons["author"][0].last_names[0])
+            entry.persons["author"][0]
+            .last_names[0]
+            .encode("utf-8")
+            .decode("latex+utf8")
             .replace("{", "")
             .replace("}", "")
         )
         title_words = (
-            Pdf._latex_to_unicode(entry.fields["title"])
+            entry.fields["title"]
+            .encode("utf-8")
+            .decode("latex+utf8")
             .replace("{", "")
             .replace("}", "")
             .split(" ")
