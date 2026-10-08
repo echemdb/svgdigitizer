@@ -8,7 +8,8 @@ EXAMPLES::
     Usage: cli [OPTIONS] COMMAND [ARGS]...
       The svgdigitizer suite.
     Options:
-      --help  Show this message and exit.
+      --version  Show the version and exit.
+      --help     Show this message and exit.
     Commands:
       create-svg     Write an SVG that shows `png` or `jpeg` as a linked image.
       cv             Digitize a cylic voltammogram and create a frictionless...
@@ -19,6 +20,11 @@ EXAMPLES::
       paginate       Render PDF pages as individual SVG files with linked PNG...
       plot           Display a plot of the data traced in an SVG.
       rename-by-key  Rename the provided PDF file by the key derived from...
+
+The version of svgdigitizer::
+
+    >>> invoke(cli, "--version")  # doctest: +ELLIPSIS
+    svgdigitizer, version 0...
 
 """
 
@@ -48,10 +54,13 @@ import os
 
 import click
 
+from svgdigitizer import __version__
+
 logger = logging.getLogger("svgdigitizer")
 
 
 @click.group(help=__doc__.split("EXAMPLES")[0])
+@click.version_option(version=__version__, prog_name="svgdigitizer")
 def cli():
     r"""
     Entry point of the command line interface.
@@ -733,18 +742,18 @@ def _parse_pages_option(_ctx, _param, value):
         TESTS::
 
         >>> from svgdigitizer.entrypoint import _parse_pages_option
-        >>> _parse_pages_option(_, _, "1-2")
+        >>> _parse_pages_option(None, None, "1-2")
         [1, 2]
 
-        >>> _parse_pages_option(_, _, "2-2")
+        >>> _parse_pages_option(None, None, "2-2")
         [2]
 
-        >>> _parse_pages_option(_, _, "3-2")
+        >>> _parse_pages_option(None, None, "3-2")
         Traceback (most recent call last):
         ...
         click.exceptions.BadParameter: Invalid range. Start must be less than or equal to end.
 
-        >>> _parse_pages_option(_, _, "2 3")
+        >>> _parse_pages_option(None, None, "2 3")
         Traceback (most recent call last):
         ...
         click.exceptions.BadParameter: Invalid format. Use a single number or a range like '3-5'.
