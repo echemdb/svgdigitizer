@@ -21,3 +21,5 @@ jobs:
         run: pixi run black --diff --check
       - name: isort
         run: pixi run isort --check --diff
+      - name: CITATION.cff
+        run: pixi run cff
