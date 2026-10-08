@@ -215,21 +215,21 @@ class Pdf:
 
         url = "https://doi.org/" + doi
         try:
-            resp = requests.get(
+            response = requests.get(
                 url,
                 headers={"Accept": "application/x-bibtex; charset=utf-8"},
                 timeout=5,
             )
-        except requests.RequestException as e:
+        except requests.RequestException as error:
             raise ConnectionError(
-                f"Failed to download the citation for DOI {doi} from {url}: {e}"
-            ) from e
-        if not resp.ok:
+                f"Failed to download the citation for DOI {doi} from {url}: {error}"
+            ) from error
+        if not response.ok:
             raise ConnectionError(
                 f"Failed to download the citation for DOI {doi} from {url}: "
-                f"HTTP {resp.status_code} {resp.reason}"
+                f"HTTP {response.status_code} {response.reason}"
             )
-        return resp.text
+        return response.text
 
     @cached_property
     def bibliographic_entry(self):
