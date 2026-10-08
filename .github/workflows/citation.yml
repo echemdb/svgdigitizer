@@ -1,0 +1,36 @@
+name: Citation
+# Checks that citations can still be downloaded from doi.org and that their
+# format did not change. This depends on external services (doi.org, Crossref)
+# and therefore does not run for pull requests.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  citation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with: { pixi-version: v0.72.2 }
+      - name: compare downloaded citation with test data
+        shell: pixi run bash -e {0}
+        run: |
+          pixi run -e python-313 python - <<'EOF'
+          from pathlib import Path
+
+          from svgdigitizer.pdf import Pdf
+
+          stem = "test/data/Hermann_2018_J._Electrochem._Soc._165_J3192"
+          expected = Path(f"{stem}.bib").read_text(encoding="utf-8").strip()
+          downloaded = Pdf(f"{stem}.pdf").bibliographic_entry
+
+          if downloaded != expected:
+              raise SystemExit(
+                  "The citation downloaded from doi.org differs from the test data.\n"
+                  f"Expected:\n{expected}\nDownloaded:\n{downloaded}"
+              )
+          print("The downloaded citation matches the test data.")
+          EOF
