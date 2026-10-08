@@ -213,14 +213,23 @@ class Pdf:
         "Download citation using DOI"
         import requests
 
-        resp = requests.get(
-            "https://doi.org/" + doi,
-            headers={"Accept": "application/x-bibtex; charset=utf-8"},
-            timeout=5,
-        )
-        if resp.ok:
-            return resp.text
-        return None
+        url = "https://doi.org/" + doi
+        try:
+            resp = requests.get(
+                url,
+                headers={"Accept": "application/x-bibtex; charset=utf-8"},
+                timeout=5,
+            )
+        except requests.RequestException as e:
+            raise ConnectionError(
+                f"Failed to download the citation for DOI {doi} from {url}: {e}"
+            ) from e
+        if not resp.ok:
+            raise ConnectionError(
+                f"Failed to download the citation for DOI {doi} from {url}: "
+                f"HTTP {resp.status_code} {resp.reason}"
+            )
+        return resp.text
 
     @cached_property
     def bibliographic_entry(self):
