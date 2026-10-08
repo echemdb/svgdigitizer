@@ -49,7 +49,6 @@ For the documentation below, the path of a CV is presented simply as a line.
 import logging
 from functools import cached_property
 
-import matplotlib.pyplot as plt
 from astropy import units as u
 
 from svgdigitizer.svgfigure import SVGFigure
@@ -145,7 +144,8 @@ class CV(SVGFigure):
     where the axis labels and the data are provided in SI units
     (not in the dimensions of the original cyclic voltammogram).::
 
-        >>> cv.plot()
+        >>> cv.plot()  # the volt may render as the equivalent `Wb / s` depending on the astropy version
+        <Axes: xlabel='E [...vs. RHE]', ylabel='j [A / m2]'>
 
     The properties of the original plot and the dataframe can be returned as a dict::
 
@@ -383,11 +383,12 @@ class CV(SVGFigure):
             ... </svg>'''))
             >>> cv = CV(SVGPlot(svg))
             >>> cv.plot()
+            <Axes: xlabel='E [mV vs. unknown]', ylabel='j [uA / cm2]'>
 
         """
-        super().plot()
+        axes = super().plot()
 
-        plt.xlabel(
+        axes.set_xlabel(
             self.svgplot.xlabel
             + " ["
             + self.xunit
@@ -395,6 +396,8 @@ class CV(SVGFigure):
             + self.data_schema.get_field(self.svgplot.xlabel).custom["reference"]
             + "]"
         )
+
+        return axes
 
 
 # Ensure that cached properties are tested, see
