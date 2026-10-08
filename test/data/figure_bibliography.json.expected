@@ -172,6 +172,10 @@
                         "scanRate": {
                             "value": 50.0,
                             "unit": "K / s"
+                        },
+                        "software": {
+                            "name": "svgdigitizer",
+                            "version": "0.14.5"
                         }
                     }
                 }

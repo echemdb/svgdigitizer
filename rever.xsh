@@ -58,7 +58,16 @@ $ACTIVITIES = [
 $VERSION_BUMP_PATTERNS = [
     ('pyproject.toml', r'version =', 'version = "$VERSION"'),
     ('doc/conf.py', r"release = ", r"release = '$VERSION'"),
+    ('svgdigitizer/__init__.py', r'__version__ = ', '__version__ = "$VERSION"'),
 ]
+
+# The expected test output records the version of svgdigitizer in
+# figureDescription.software.version.
+import glob
+$VERSION_BUMP_PATTERNS.extend(
+    (expected, r'"version": "\d+\.\d+\.\d+"$', '"version": "$VERSION"')
+    for expected in sorted(glob.glob('test/data/*.json.expected'))
+)
 
 $CHANGELOG_FILENAME = 'ChangeLog'
 $CHANGELOG_TEMPLATE = 'TEMPLATE.rst'
