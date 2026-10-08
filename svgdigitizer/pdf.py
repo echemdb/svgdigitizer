@@ -354,7 +354,7 @@ class Pdf:
             >>> Pdf.build_identifier(bibliography_data)
             'white_2026_emergent'
 
-        Entries that already contain plain UTF-8 characters outside latin-1 are kept as-is::
+        Entries may also contain plain UTF-8 characters outside latin-1::
 
             >>> bibtex_string = (
             ...     "@article{jovic_1996_test_1, author = {Jović, BM and Marinković, NS},"
@@ -365,6 +365,7 @@ class Pdf:
             >>> Pdf.build_identifier(bibliography_data)
             'jovic_1996_hydrogen_1'
         """
+        import latexcodec as _  # noqa: F401  # registers "latex+utf8" codec
         from slugify import slugify
 
         entry = list(citation.entries.values())[0]
