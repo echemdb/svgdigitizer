@@ -12,12 +12,14 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: checkout
-        uses: actions/checkout@v6
-      - uses: prefix-dev/setup-pixi@v0.9.6
-        with: { pixi-version: v0.70.2 }
+        uses: actions/checkout@v7
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with: { pixi-version: v0.72.2 }
       - name: pylint
         run: pixi run pylint
       - name: black
         run: pixi run black --diff --check
       - name: isort
         run: pixi run isort --check --diff
+      - name: CITATION.cff
+        run: pixi run cff

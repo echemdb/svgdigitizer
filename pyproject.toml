@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "svgdigitizer"
-version = "0.14.4"
+version = "0.14.5"
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 description = "svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications."
 readme = "README.md"
 requires-python = ">=3.10"
 # Additions and removals of dependencies need to be reflected in flake.nix
 dependencies = [
-    "astropy>=5,<8",
+    "astropy>=5,<9",
     "click>=8,<9",
     "frictionless>=5.8.3,<6",
     "latexcodec>=2.0.1",
@@ -55,6 +55,7 @@ python-313 = ["test", "python-313"]
 python-314 = ["test", "python-314"]
 dev = ["dev", "doc", "test", "lint"]
 release = ["release"]
+cff = { features = ["cff"], no-default-feature = true }
 
 [tool.pixi.dependencies]
 astropy = "*"
@@ -121,6 +122,14 @@ pylint = "pylint svgdigitizer"
 black = "black svgdigitizer"
 isort = "isort --profile black svgdigitizer"
 lint = { depends-on = ["pylint", "black", "isort"] }
+
+# cffconvert requires jsonschema<4, which conflicts with check-jsonschema in the
+# test feature, so it lives in its own environment.
+[tool.pixi.feature.cff.dependencies]
+cffconvert = "*"
+
+[tool.pixi.feature.cff.tasks]
+cff = "cffconvert --validate -i CITATION.cff"
 
 [tool.pixi.feature.doc.dependencies]
 make = "*"

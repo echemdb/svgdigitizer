@@ -165,11 +165,20 @@ Currently the following datasets are supported:
 
 * [cyclic voltammograms](api/cv.md) (*I* vs. *E* — current vs. potential curves or *j* vs. *E* — current density vs. potential curves) commonly found in electrochemistry. For further details and requirements refer to the specific instructions of the [cv module](api/cv.md) itself or the detailed description on how to [digitize cyclic voltammograms](workflow.md) for the [echemdb](https://www.echemdb.org/).
 
-If you have used this project in the preparation of a publication, please cite it as described [on our zenodo page](https://zenodo.org/records/5881475).
+If you have used this project in the preparation of a publication, please cite it using the DOI [10.5281/zenodo.5874747](https://doi.org/10.5281/zenodo.5874747), which always refers to the latest release. Please also state the version of the svgdigitizer you used.
 
 ## Datapackage interaction
 
 Datapackges created with `svgplot` (or modules inheriting from `svgplot` such as `cv`) can be loaded with the ['unitpackage' module](https://echemdb.github.io/unitpackage/) to create a database of the digitized data. In case your own data has the same datapackage structure, the digitized data can easily be compared with your own data.
+
+## Contributing and support
+
+Contributions are welcome! Please read our [contributing guidelines](https://github.com/echemdb/svgdigitizer/blob/master/CONTRIBUTING.md) to learn how to set up a development environment, run the tests and submit a pull request.
+
+* Report bugs and request features in the [issue tracker](https://github.com/echemdb/svgdigitizer/issues).
+* Ask usage questions by opening an [issue](https://github.com/echemdb/svgdigitizer/issues/new) with the `question` label.
+
+Everyone participating in this project is expected to follow our [Code of Conduct](https://github.com/echemdb/svgdigitizer/blob/master/CODE_OF_CONDUCT.md).
 
 ```{toctree}
 :maxdepth: 2
