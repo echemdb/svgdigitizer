@@ -42,9 +42,10 @@ study is published, the underlying numerical data frequently becomes inaccessibl
 for older literature where digital data was never archived. `svgdigitizer` is a Python library
 and command-line tool that recovers the data from such figures by digitizing curves
 manually traced in carefully annotated Scalable Vector Graphics (SVG) files,
-a XML-based format that allows programmatic access to its elements.
+an XML-based format that also allows programmatic access to its elements.
+The annotated SVG file is the persistent record of the digitization: it can be kept under version control, corrected later, and re-processed at any time to re-derive the data.
 The user imports a figure image into a
-vector graphics editor, e.g., Inkscape [@inkscape_2025], traces the curve of interest with Bézier
+vector graphics editor, e.g., Inkscape [@inkscape_2025], creates a high-level model of the curve of interest by tracing it with Bézier
 paths, and annotates the coordinate system with text labels  (\autoref{fig:workflow} left). `svgdigitizer` then applies an
 affine coordinate transformation to map SVG pixel coordinates to plot data coordinates and
 samples the Bézier paths at user-defined intervals to produce a tabular dataset. Physical unit
@@ -66,37 +67,37 @@ raw data.
 While in most cases specific values or summary statistics of measurement data is sufficient, and which can often be extracted from the text body manually or large language models, in some cases the entire curve must be preserved.
 
 `svgdigitizer` addresses this need for researchers who require systematic, reproducible, and
-metadata-rich digitization of the entire curve in a scientific plot (see \autoref{fig:workflow}). Beyond one-off data extraction, it is designed
-for workflows in which the same figure may be re-digitized with different sampling parameters,
-or in which digitized data from many publications must be aggregated into a common curated
-dataset. The FAIR frictionless datapackage output format enables digitized data to be shared,
+metadata-rich digitization of the entire curve in a scientific plot (see \autoref{fig:workflow}).
+Rather than treating digitization as a one-off extraction, it preserves the manual curve tracing, which models the measurement data, and plot annotation as a reusable SVG artifact.
+The same figure can therefore be re-processed with different sampling parameters,
+annotation errors can be corrected later by anyone with access to the file, and digitized data from many publications can be aggregated into a common curated
+dataset in which every entry can be traced back to, and re-derived from, its annotated figure. The FAIR frictionless datapackage output format enables digitized data to be shared,
 versioned, and integrated into databases with minimal friction.
 
 A primary motivation for `svgdigitizer` is the
 community database of cyclic voltammograms [@echemdb_2026; @ECHEMDATA], where contributions are curated as SVG
-files digitized with `svgdigitizer`. This workflow enables electrochemists to contribute
+files digitized with `svgdigitizer` in a version-controlled repository. This workflow enables electrochemists to contribute
 historical literature data systematically, with each entry carrying full provenance metadata
-and physically meaningful units.
+and physically meaningful units, and allows the community to review and correct the tracings at any time.
 
 # State of the Field
 
-Several tools are available for extracting numerical data from published plots, ranging from web-based interfaces to windows-only desktop and cross-platform applications, and spanning both open-source and commercial licenses.
-Examples include WebPlotDigitizer [@rohatgi_2022], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], or OriginPro [@originpro_2026].
-These tools typically provide interactive workflows for recovering data points from graphical representations through manual selection or semi-automated detection methods, enabling plotted information to be converted into reusable numerical datasets. Furthermore they are
-well-suited to one-off, GUI-driven data extraction. However, they usually do not allow exporting physical units,
-nor produce structured metadata, nor offer a programmable Python API for
-integration into automated workflows.
+Several tools are available for extracting numerical data from published plots, ranging from web-based interfaces to Windows-only desktop and cross-platform applications, and spanning both open-source and commercial licenses.
+Examples include WebPlotDigitizer [@rohatgi_2022], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], and OriginPro [@originpro_2026], as well as the Python-based PlotDigitizer [@dilawar_singh_2024_13292942], which supports batch processing of similar plots, and PyDigitizer [@nedelcu_2023_pydigitizer_012015].
+These tools provide interactive or command-line workflows in which data points are selected on a raster image by mouse clicks or (semi-)automated detection, and they are well suited to one-off data extraction.
 
-In the following, we briefly summarize the current limitations of the available tools.
-`svgdigitizer` was designed as a distinct tool rather than a contribution to existing projects for several reasons.
-First, the commonly available tools
-work with raster images where individual data points are selected on the curve by mouse clicks and to some extent by auto detection methods, which then present the final dataset. starry-digitizer allows interpolating between selected datapoints to get a more fine grained dataset.
-Second, common tools sample across one of the axis (usually the $x$-axis). This presents an issue when a curve follows a path that has multiple $y$-axis values per $x$-axis value, leading to scattering of the output data upon sampling along the $x$-axis.
-Third, in most cases once the digitization process is finished, the curve-tracing and plot annotation (input data for the extraction process) is not preserved in a reusable, version-controllable artifact that can
-be reprocessed at any time with different parameters, without repeating the manual work.
-Fourth, extraction of physical units and the creation of standardized file formats including metadata is a central aspect to render output data reusable, which has only been adopted recently in the starry-digitizer.
-Finally, open source APIs are lacking, which limit the integration with
-the other scientific ecosystems, such as Python, and the development of domain specific modules to extract specific types of data according to pre defined standards.
+All of these tools perform the digitization on a raster image and produce a list of data points as their result.
+`svgdigitizer` differs from them in the following aspects.
+First and most importantly, the digitization itself, i.e., the traced curve together with the axis calibration, units, and metadata, is preserved in an annotated SVG file.
+This plain-text artifact can be stored under version control next to the data, reviewed and corrected by others, and re-processed at any time, e.g., with a different sampling interval, without repeating the manual work.
+Some tools, such as WebPlotDigitizer, can save the axis calibration together with the selected points or the settings of their automatic extraction in tool-specific project files, but not the traced curve itself, nor the physical units and metadata of the plot.
+Second, the traced Bézier path is a continuous model of the curve rather than a set of selected points.
+Data points are sampled from this model at any desired resolution, segment by segment along the path, so that curves with multiple $y$-values per $x$-value, such as cyclic voltammograms, are reproduced without the scattering that occurs in common tools, which sample along one of the axes; starry-digitizer mitigates this by interpolating between selected points.
+Third, physical units and metadata are exported together with the data as a standardized frictionless datapackage, which among the tools above has only recently been adopted by starry-digitizer.
+Finally, the Python API allows building domain-specific modules on top of the general workflow, such as the module for cyclic voltammograms described below.
+
+We built `svgdigitizer` as a separate tool rather than contributing to an existing digitizer, because its central design decision, to make the annotated vector graphic rather than a list of extracted points the primary record of a digitization, determines the data model of the entire workflow from the input to the output.
+Instead of implementing a graphical interface of its own, `svgdigitizer` relies on established vector graphics editors, such as Inkscape, for tracing, and focuses on the reproducible conversion of the annotated SVG into data.
 
 # Software Design
 
