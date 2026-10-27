@@ -35,6 +35,7 @@ from functools import cached_property
 import astropy.units as u
 import matplotlib.pyplot as plt
 
+from svgdigitizer import __version__
 from svgdigitizer.exceptions import SVGAnnotationError
 
 logger = logging.getLogger("svgfigure")
@@ -1560,7 +1561,8 @@ class SVGFigure:
             ...             {'name': 'j', 'type': 'number', 'orientation': 'vertical', 'unit': 'uA / cm2'}],
             ...  'comment': 'noisy data',
             ...  'scanRate': {'value': 50.0, 'unit': 'V / s'},
-            ...  'simultaneousMeasurements': ['SXRD', 'SHG']},
+            ...  'simultaneousMeasurements': ['SXRD', 'SHG'],
+            ...  'software': {'name': 'svgdigitizer', 'version': __version__}},
             ...  'dataDescription': {'type': 'digitized', 'measurementType': 'custom', 'fields':
             ...                       [{'name': 'E', 'type': 'number', 'unit': 'mV'},
             ...                       {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'},
@@ -1609,7 +1611,8 @@ class SVGFigure:
             ...  'fields': [{'name': 'E', 'type': 'number', 'orientation': 'horizontal', 'unit': 'mV'},
             ...             {'name': 'j', 'type': 'number', 'orientation': 'vertical', 'unit': 'uA / cm2'}],
             ...  'comment': 'noisy data',
-            ...  'simultaneousMeasurements': ['SXRD', 'SHG']},
+            ...  'simultaneousMeasurements': ['SXRD', 'SHG'],
+            ...  'software': {'name': 'svgdigitizer', 'version': __version__}},
             ...  'dataDescription': {'type': 'digitized', 'measurementType': 'custom', 'fields':
             ...                       [{'name': 'E', 'type': 'number', 'unit': 'mV'},
             ...                       {'name': 'j', 'type': 'number', 'unit': 'uA / cm2'}]}}
@@ -1630,6 +1633,10 @@ class SVGFigure:
                 "measurementType": self.measurement_type,
                 "fields": self.figure_schema.to_dict()["fields"],
                 "comment": self.comment,
+                "software": {
+                    "name": "svgdigitizer",
+                    "version": __version__,
+                },
             },
             "dataDescription": {
                 "type": "digitized",
