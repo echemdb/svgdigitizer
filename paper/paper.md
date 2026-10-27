@@ -138,7 +138,7 @@ After the curves have been traced, the `figure` and `cv` commands convert the an
 database [@echemdb_2026; @ECHEMDATA], a community-curated collection of electrochemical measurements from the
 literature.
 Some of the data were extracted for specific scientific purposes to address specific questions in the field of electrochemistry [@bergmann_2023_initiobased_8815; @heubach_2025_reproducibility_1910].
-The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolve other annotation errors by the community.[@ECHEMDATA]
+The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolve other annotation errors by the community [@ECHEMDATA].
 The output data is made accessible to the community via the `unitpackage` [@engstfeld_2026_19051513] API.
 Both tools form the data layer of a lightweight file-system-based approach
 to research data management described in [@engstfeld_2025_lightweight_013].
