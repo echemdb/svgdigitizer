@@ -30,7 +30,7 @@ affiliations:
     ror: 03k9qs827
   - name: Julian Rüth GmbH, Weinbergstr. 48, D-97261 Güntersleben, Germany
     index: 3
-date: 23 March 2026
+date: 26 October 2026
 bibliography: paper.bib
 ---
 
@@ -83,7 +83,7 @@ and physically meaningful units, and allows the community to review and correct 
 # State of the Field
 
 Several tools are available for extracting numerical data from published plots, ranging from web-based interfaces to Windows-only desktop and cross-platform applications, and spanning both open-source and commercial licenses.
-Examples include WebPlotDigitizer [@rohatgi_2022], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], and OriginPro [@originpro_2026], as well as the Python-based PlotDigitizer [@dilawar_singh_2024_13292942], which supports batch processing of similar plots, and PyDigitizer [@nedelcu_2023_pydigitizer_012015].
+Examples include WebPlotDigitizer [@rohatgi_2024], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], and OriginPro [@originpro_2026], as well as the Python-based PlotDigitizer [@dilawar_singh_2024_13292942], which supports batch processing of similar plots, and PyDigitizer [@nedelcu_2023_pydigitizer_012015].
 These tools provide interactive or command-line workflows in which data points are selected on a raster image by mouse clicks or (semi-)automated detection, and they are well suited to one-off data extraction.
 
 All of these tools perform the digitization on a raster image and produce a list of data points as their result.
@@ -116,8 +116,8 @@ upright plots) and *mark-aligned* (for skewed or scanned figures with non-orthog
 The carefully annotated SVG files used by `svgdigitizer` contain the following elements, required for the data recovery workflow.
 A curve which consists of individual points manually placed by the user on the curve, which are connected by
 Bézier path segments.
- During the recovery process, these curves are sampled by solving polynomial root-finding problems via `scipy`
-[@virtanen_2020_scipy_261], yielding data points at configurable equidistant intervals along the $x$ (or $$y$) axis.
+During the recovery process, these curves are sampled by solving polynomial root-finding problems via `scipy`
+[@virtanen_2020_scipy_261], yielding data points at configurable equidistant intervals along the $x$ (or $y$) axis.
 This enables dense, uniform sampling of curved regions without user-specified point placement.
 Axis labels contain an identifier (two for each axis), the value, a unit, and in some special cases also additional information, such as `E2: 1 V vs. RHE`.
 The units follow the `astropy.units` notation, allowing for example, transformation of the data into SI units.
@@ -137,7 +137,7 @@ producing a self-describing output bundle.
 
 A CLI built with `click` [@click_2026] exposes the full feature set without Python knowledge in a convenient way. Notably, the
 `paginate` command converts PDF pages to SVG and PNG files ready for annotation (where the PNG is linked into the SVG),
-while optionally renaming (`--rename`) the file base to a sluggified identifier generated from the citation (retrieved with the extracted DOI from the PDF via [doi.org](https://doi.org)) 
+while optionally renaming (`--rename`) the file base to a sluggified identifier generated from the citation (retrieved with the extracted DOI from the PDF via [doi.org](https://doi.org))
 streamlining provenance metadata collection.
 After curve tracing the `digitize` command yields a datapackage.
 
@@ -149,14 +149,14 @@ literature.
 Some of the data were extracted for specific scientific purposes to address specific questions in the field of electrochemistry [@bergmann_2023_initiobased_8815; @heubach_2025_reproducibility_1910].
 The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolve other annotation errors by the community.[@ECHEMDATA]
 The output data is made accessible to the community via the `unitpackage` [@engstfeld_2026_19051513] API.
-Both tools form the data layer of a lightweight file-system-based approach 
+Both tools form the data layer of a lightweight file-system-based approach
 to research data management described in [@engstfeld_2025_lightweight_013].
-`svgdigitizer` was also used by Fritsche et al. to extract geometric features from weld cross sections of refill friction stir spot welds joining additive-manufactured to wrought aluminium alloys [@fritsche_2026_microstructure_116061].
+`svgdigitizer` was also used by Fritsche et al. to extract geometric features from weld cross sections of refill friction stir spot welds joining additive-manufactured to wrought aluminum alloys [@fritsche_2026_microstructure_116061].
 
 The package is distributed via [PyPI](https://pypi.org/project/svgdigitizer/) and
 [conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock), is archived on Zenodo
 [@engstfeld_2026_21364209], and has been under active development
-since June 2021 with over 1,600 commits from multiple contributors.
+since June 2021 with about 1,800 commits from multiple contributors.
 
 # AI Usage Disclosure
 
