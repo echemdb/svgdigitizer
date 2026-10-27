@@ -64,7 +64,7 @@ data that is often available only in graphical form. This problem is particularl
 historical literature, where measurements were never stored digitally beyond the printed figure,
 but it equally affects modern publications that do not accompany figures with machine-readable
 raw data.
-While in most cases specific values or summary statistics of measurement data is sufficient, and which can often be extracted from the text body manually or large language models, in some cases the entire curve must be preserved.
+While in many cases specific values or summary statistics of the measurement data are sufficient, which can often be extracted from the text body, in other cases the entire curve must be preserved.
 
 `svgdigitizer` addresses this need for researchers who require systematic, reproducible, and
 metadata-rich digitization of the entire curve in a scientific plot (see \autoref{fig:workflow}).
