@@ -90,7 +90,7 @@ Alternatively the data can be digitized with the [CLI](cli.md)
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure looping.svg --sampling_interval 0.01
+!svgdigitizer figure ./files/others/looping.svg --sampling-interval 0.01
 ```
 
 (curvetracing)=
