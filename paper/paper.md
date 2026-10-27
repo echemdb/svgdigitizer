@@ -83,17 +83,17 @@ and physically meaningful units, and allows the community to review and correct 
 # State of the Field
 
 Several tools are available for extracting numerical data from published plots, ranging from web-based interfaces to Windows-only desktop and cross-platform applications, and spanning both open-source and commercial licenses.
-Examples include WebPlotDigitizer [@rohatgi_2024], starry-digitizer (built on WebPlotDigitizer) [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], and OriginPro [@originpro_2026], as well as the Python-based PlotDigitizer [@dilawar_singh_2024_13292942], which supports batch processing of similar plots, and PyDigitizer [@nedelcu_2023_pydigitizer_012015].
+Examples include WebPlotDigitizer [@rohatgi_2024], starry-digitizer [@KATSURA2025], Engauge Digitizer [@mark_mitchell_2020_3941227], and OriginPro [@originpro_2026], as well as the Python-based PlotDigitizer [@dilawar_singh_2024_13292942], which supports batch processing of similar plots, and PyDigitizer [@nedelcu_2023_pydigitizer_012015].
 These tools provide interactive or command-line workflows in which data points are selected on a raster image by mouse clicks or (semi-)automated detection, and they are well suited to one-off data extraction.
 
 All of these tools perform the digitization on a raster image and produce a list of data points as their result.
 `svgdigitizer` differs from them in the following aspects.
 First and most importantly, the digitization itself, i.e., the traced curve together with the axis calibration, units, and metadata, is preserved in an annotated SVG file.
 This plain-text artifact can be stored under version control next to the data, reviewed and corrected by others, and re-processed at any time, e.g., with a different sampling interval, without repeating the manual work.
-Some tools, such as WebPlotDigitizer, can save the axis calibration together with the selected points or the settings of their automatic extraction in tool-specific project files, but not the traced curve itself, nor the physical units and metadata of the plot.
-Second, the traced Bézier path is a continuous model of the curve rather than a set of selected points.
-Data points are sampled from this model at any desired resolution, segment by segment along the path, so that curves with multiple $y$-values per $x$-value, such as cyclic voltammograms, are reproduced without the scattering that occurs in common tools, which sample along one of the axes; starry-digitizer mitigates this by interpolating between selected points.
-Third, physical units and metadata are exported together with the data as a standardized frictionless datapackage, which among the tools above has only recently been adopted by starry-digitizer.
+Some tools, such as WebPlotDigitizer [@rohatgi_2024], can save the axis calibration together with the selected points or the settings of their automatic extraction in tool-specific project files, but not the traced curve itself, nor the physical units and metadata of the plot.
+Second, the traced Bézier path used in our work is a continuous model of the curve rather than a set of selected points.
+Data points are sampled from this model at any desired resolution, segment by segment along the path, so that curves with multiple $y$-values per $x$-value, such as cyclic voltammograms, are reproduced without the scattering that occurs in common tools, which sample along one of the axes. Note that starry-digitizer mitigates this by interpolating between selected points.
+Third, physical units and metadata are exported in our tool along with the data as a standardized frictionless datapackage, so that the output is self-describing and can be validated and processed by generic tools.
 Finally, the Python API allows building domain-specific modules on top of the general workflow, such as the module for cyclic voltammograms described below.
 
 We built `svgdigitizer` as a separate tool rather than contributing to an existing digitizer, because its central design decision, to make the annotated vector graphic rather than a list of extracted points the primary record of a digitization, determines the data model of the entire workflow from the input to the output.
