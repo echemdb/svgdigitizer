@@ -55,6 +55,7 @@ python-313 = ["test", "python-313"]
 python-314 = ["test", "python-314"]
 dev = ["dev", "doc", "test", "lint"]
 release = ["release"]
+cff = { features = ["cff"], no-default-feature = true }
 
 [tool.pixi.dependencies]
 astropy = "*"
@@ -121,6 +122,14 @@ pylint = "pylint svgdigitizer"
 black = "black svgdigitizer"
 isort = "isort --profile black svgdigitizer"
 lint = { depends-on = ["pylint", "black", "isort"] }
+
+# cffconvert requires jsonschema<4, which conflicts with check-jsonschema in the
+# test feature, so it lives in its own environment.
+[tool.pixi.feature.cff.dependencies]
+cffconvert = "*"
+
+[tool.pixi.feature.cff.tasks]
+cff = "cffconvert --validate -i CITATION.cff"
 
 [tool.pixi.feature.doc.dependencies]
 make = "*"
