@@ -43,18 +43,18 @@ for older literature where digital data was never archived. `svgdigitizer` is a 
 and command-line tool that recovers the data from such figures by digitizing curves
 manually traced in carefully annotated Scalable Vector Graphics (SVG) files,
 an XML-based format that also allows programmatic access to its elements.
-The annotated SVG file is the persistent record of the digitization: it can be kept under version control, corrected later, and re-processed at any time to re-derive the data.
+The annotated SVG file is the persistent record of the digitization, which can be kept under version control, corrected later, and re-processed at any time to re-derive the data.
 The user imports a figure image into a
 vector graphics editor, e.g., Inkscape [@inkscape_2025], creates a high-level model of the curve of interest by tracing it with Bézier
 paths, and annotates the coordinate system with text labels  (\autoref{fig:workflow} left). `svgdigitizer` then applies an
 affine coordinate transformation to map SVG pixel coordinates to plot data coordinates and
 samples the Bézier paths at user-defined intervals to produce a tabular dataset. Physical unit
 information encoded in axis labels is parsed via `astropy.units` [@astropy_2022_astropy_167] and propagated to
-the output. The digitized data is exported as a *frictionless datapackage* [@frictionless_2026] — a
+the output. The digitized data is exported as a *Frictionless Data Package* [@frictionless_2026] — a
 CSV file accompanied by a JSON descriptor containing units, metadata, and bibliographic
 information, enabling FAIR (Findable, Accessible, Interoperable, and Reusable)-compliant [@wilkinson_2016_fair_160018] data  (\autoref{fig:workflow} right).
 
-![`svgdigitizer` transforms an annotated SVG figure (left) into a frictionless datapackage consisting of a CSV file with the curve data and a JSON descriptor containing axis units and extracted metadata (right).\label{fig:workflow}](workflow.png)
+![`svgdigitizer` transforms an annotated SVG figure (left) into a Data Package consisting of a CSV file with the curve data and a JSON descriptor containing axis units and extracted metadata (right).\label{fig:workflow}](workflow.png)
 
 # Statement of Need
 
@@ -71,7 +71,7 @@ metadata-rich digitization of the entire curve in a scientific plot (see \autore
 Rather than treating digitization as a one-off extraction, it preserves the manual curve tracing, which models the measurement data, and plot annotation as a reusable SVG artifact.
 The same figure can therefore be re-processed with different sampling parameters,
 annotation errors can be corrected later by anyone with access to the file, and digitized data from many publications can be aggregated into a common curated
-dataset in which every entry can be traced back to, and re-derived from, its annotated figure. The FAIR frictionless datapackage output format enables digitized data to be shared,
+dataset in which every entry can be traced back to, and re-derived from, its annotated figure. The FAIR Data Package output format enables digitized data to be shared,
 versioned, and integrated into databases with minimal friction.
 
 A primary motivation for `svgdigitizer` is the
@@ -93,7 +93,7 @@ This plain-text artifact can be stored under version control next to the data, r
 Some tools, such as WebPlotDigitizer [@rohatgi_2024], can save the axis calibration together with the selected points or the settings of their automatic extraction in tool-specific project files, but not the traced curve itself, nor the physical units and metadata of the plot.
 Second, the traced Bézier path used in our work is a continuous model of the curve rather than a set of selected points.
 Data points are sampled from this model at any desired resolution, segment by segment along the path, so that curves with multiple $y$-values per $x$-value, such as cyclic voltammograms, are reproduced without the scattering that occurs in common tools, which sample along one of the axes. Note that starry-digitizer mitigates this by interpolating between selected points.
-Third, physical units and metadata are exported in our tool along with the data as a standardized frictionless datapackage, so that the output is self-describing and can be validated and processed by generic tools.
+Third, physical units and metadata are exported in our tool along with the data as a standardized Frictionless Data Package, so that the output is self-describing and can be validated and processed by generic tools.
 Finally, the Python API allows building domain-specific modules on top of the general workflow, such as the module for cyclic voltammograms described below.
 
 We built `svgdigitizer` as a separate tool rather than contributing to an existing digitizer, because its central design decision, to make the annotated vector graphic rather than a list of extracted points the primary record of a digitization, determines the data model of the entire workflow from the input to the output.
@@ -114,7 +114,7 @@ the one below.
 - `SVG`: parses the carefully annotated SVG document object model (DOM) and exposes labeled paths and text elements.
 - `SVGPlot`: reads axis reference-point labels, e.g., `x1: -40`, `x2: 40`, and constructs an
   affine transformation from SVG pixel space to plot data space.
-- `SVGFigure`: adds unit handling, metadata extraction, and frictionless datapackage output.
+- `SVGFigure`: adds unit handling, metadata extraction, and Data Package output.
 - `CV` (`svgdigitizer.electrochemistry`): a domain-specific subclass for cyclic voltammograms.
 
 Two coordinate transformation modes are supported, the default *axis-aligned* mode for standard
@@ -127,10 +127,10 @@ The curves are sampled by solving polynomial root-finding problems via `scipy`
 For scatter plots, the sampling is omitted and the placed points are used directly.
 Further labels, e.g., `scan rate: 50 mV / s` to reconstruct the time axis of time series data, scale bars, and scaling factors of individual curves, are interpreted in the same way, while all other text annotations are extracted as metadata.
 
-The output is a frictionless datapackage, i.e., a CSV file with the curve data and a JSON descriptor with the axis units and the metadata from the SVG, which can be complemented with metadata from external YAML and BibTeX files.
+The output is a Data Package, i.e., a CSV file with the curve data and a JSON descriptor with the axis units and the metadata from the SVG, which can be complemented with metadata from external YAML and BibTeX files.
 A CLI built with `click` [@click_2026] exposes this workflow without Python knowledge.
 For example, the `paginate` command converts the pages of a PDF into SVG files ready for annotation and optionally names them after the citation retrieved via the DOI of the publication.
-After the curves have been traced, the `figure` and `cv` commands convert the annotated SVG into a datapackage.
+After the curves have been traced, the `figure` and `cv` commands convert the annotated SVG into a Data Package.
 
 # Research Impact Statement
 
@@ -151,13 +151,13 @@ since June 2021 with about 1,800 commits from multiple contributors.
 
 # AI Usage Disclosure
 
-No generative AI tools were used in the development of the `svgdigitizer` software package, including code, tests, and documentation, with one exception: during the revision of this manuscript, the community guidelines and project metadata of the repository (contributing guidelines, code of conduct, citation file, and the corresponding sections of the README and documentation) were drafted with the assistance of Claude Opus 5.5 (Anthropic) and reviewed by the authors. The initial draft of this manuscript was produced with the assistance of
+No generative AI tools were used in the development of the `svgdigitizer` software package, including code, tests, and documentation, with one exception. During the revision of this manuscript, the community guidelines and project metadata of the repository (contributing guidelines, code of conduct, citation file, and the corresponding sections of the README and documentation) were drafted with the assistance of Claude Opus 5.5 (Anthropic) and reviewed by the authors. The initial draft of this manuscript was produced with the assistance of
 Claude Sonnet 4.6 (Anthropic) as a writing aid, based on the documentation of the `svgdigitizer` project. All content was reviewed, revised, and
 validated by the authors, who take full responsibility for the accuracy of the manuscript.
 
 # Acknowledgements
 
-AKE gratefully acknowledges support by the DFG (German Science Foundation) through NFDI4Chem (project number: 441958208).
+AKE gratefully acknowledges support by the DFG (German Science Foundation) through NFDI4Chem (project number 441958208).
 
 
 # References
