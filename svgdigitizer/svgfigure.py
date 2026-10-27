@@ -248,7 +248,7 @@ class SVGFigure:
             figure_label = self._metadata.get("source", {}).get("figure", "")
             if not figure_label:
                 logger.warning(
-                    "No text with `figure` containing a label such as `figure: 1a` found in the SVG."
+                    "No figure label found in the SVG. If the plot originates from a publication, consider adding a text label such as `figure: 1a` to the SVG."
                 )
             return figure_label
 
