@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/License-GPL_3.0_or_later-blue.svg" alt="License: GPL 3.0 or later">
-  <a href="https://doi.org/10.5281/zenodo.8428961"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.8428961.svg" alt="DOI"></a>
+  <a href="https://doi.org/10.5281/zenodo.5874747"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5874747.svg" alt="DOI"></a>
 </p>
 
 <p align="center">Extract (x,y) data points from SVG files</p>
@@ -115,3 +115,12 @@ commonly found in the field of electrochemistry.
 ```
 
 The resulting `cv` object has the same properties as the `figure` object above.
+
+## Contributing and support
+
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) to learn how to set up a development environment, run the tests and submit a pull request.
+
+* Report bugs and request features in the [issue tracker](https://github.com/echemdb/svgdigitizer/issues).
+* Ask usage questions by opening an [issue](https://github.com/echemdb/svgdigitizer/issues/new) with the `question` label.
+
+Everyone participating in this project is expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
