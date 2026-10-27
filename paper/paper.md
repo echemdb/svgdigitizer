@@ -101,8 +101,15 @@ Instead of implementing a graphical interface of its own, `svgdigitizer` relies 
 
 # Software Design
 
-The `svgdigitizer` module is organized in a layered class hierarchy, each layer adding abstraction over
-the one below:
+The central design decision of `svgdigitizer` is to rely on curves traced manually by the user rather than on automatic curve detection.
+This choice costs human effort for every figure, and it requires the user to follow annotation conventions and to work in an external vector graphics editor.
+In return, every data point originates from a traced path that can be inspected directly on top of the original figure in the vector graphics program.
+A faulty tracing or label can be corrected later, also by others, directly in the SVG without repeating the remaining work.
+Furthermore, manual tracing avoids misdetection of curves, e.g., of overlapping or crossing curves of the same color or of curves partially hidden behind labels.
+Since tracing and labeling are done in a general-purpose vector graphics editor, the user does not need to learn a dedicated graphical interface, and the package does not need to maintain one.
+
+The `svgdigitizer` module is organized in a layered class hierarchy, in which each layer adds abstraction over
+the one below.
 
 - `SVG`: parses the carefully annotated SVG document object model (DOM) and exposes labeled paths and text elements.
 - `SVGPlot`: reads axis reference-point labels, e.g., `x1: -40`, `x2: 40`, and constructs an
@@ -110,36 +117,20 @@ the one below:
 - `SVGFigure`: adds unit handling, metadata extraction, and frictionless datapackage output.
 - `CV` (`svgdigitizer.electrochemistry`): a domain-specific subclass for cyclic voltammograms.
 
-Two coordinate transformation modes are supported: *axis-aligned* (default, for standard
-upright plots) and *mark-aligned* (for skewed or scanned figures with non-orthogonal axes).
+Two coordinate transformation modes are supported, the default *axis-aligned* mode for standard
+upright plots and the *mark-aligned* mode for skewed or scanned figures with non-orthogonal axes.
 
-The carefully annotated SVG files used by `svgdigitizer` contain the following elements, required for the data recovery workflow.
-A curve which consists of individual points manually placed by the user on the curve, which are connected by
-Bézier path segments.
-During the recovery process, these curves are sampled by solving polynomial root-finding problems via `scipy`
-[@virtanen_2020_scipy_261], yielding data points at configurable equidistant intervals along the $x$ (or $y$) axis.
-This enables dense, uniform sampling of curved regions without user-specified point placement.
-Axis labels contain an identifier (two for each axis), the value, a unit, and in some special cases also additional information, such as `E2: 1 V vs. RHE`.
-The units follow the `astropy.units` notation, allowing for example, transformation of the data into SI units.
-The label is decomposed using regular expressions, where the values allow for reconstructing the curve.
-A text label `scan rate: 50 mV / s` can be added to the curve, which allows reconstructing the time axis of the time series data.
-Metadata from annotations embedded
-in the SVG, such as additional text fields with comments or other information about the figure, is extracted as Python dictionary.
+An annotated SVG contains a curve, traced as a path which consists of Bézier segments through points placed manually by the user on the curve, and text labels for two reference points on each axis, consisting of an identifier, a value, and optionally a unit, which can include a reference, such as `E2: 1 V vs. RHE`.
+The labels are decomposed with regular expressions, and the units are parsed with `astropy.units`, which allows, e.g., converting the data into SI units.
+The curves are sampled by solving polynomial root-finding problems via `scipy`
+[@virtanen_2020_scipy_261], yielding data points at configurable equidistant intervals along the $x$ (or $y$) axis, independent of how many points the user placed on the curve.
+For scatter plots, the sampling is omitted and the placed points are used directly.
+Further labels, e.g., `scan rate: 50 mV / s` to reconstruct the time axis of time series data, scale bars, and scaling factors of individual curves, are interpreted in the same way, while all other text annotations are extracted as metadata.
 
-Advanced annotation features include support for **scale bars** (deriving axis scale from a
-labeled reference bar), numeric **scaling factors** (rescaling of an axis often found
-for a curve in multi-signal overlays), and
-**scatter plots** (extracting individual data points without Bézier interpolation).
-
-The standard output of svgdigitizer are frictionless datapackages, which consist of a CSV (including the curve data) and a JSON (providing information on the axis units and additional metadata from the SVG) file.
-During the creation of the datapackage, additional metadata can be added from external YAML and BibTeX files into the datapackage descriptor,
-producing a self-describing output bundle.
-
-A CLI built with `click` [@click_2026] exposes the full feature set without Python knowledge in a convenient way. Notably, the
-`paginate` command converts PDF pages to SVG and PNG files ready for annotation (where the PNG is linked into the SVG),
-while optionally renaming (`--rename`) the file base to a sluggified identifier generated from the citation (retrieved with the extracted DOI from the PDF via [doi.org](https://doi.org))
-streamlining provenance metadata collection.
-After curve tracing the `digitize` command yields a datapackage.
+The output is a frictionless datapackage, i.e., a CSV file with the curve data and a JSON descriptor with the axis units and the metadata from the SVG, which can be complemented with metadata from external YAML and BibTeX files.
+A CLI built with `click` [@click_2026] exposes this workflow without Python knowledge.
+For example, the `paginate` command converts the pages of a PDF into SVG files ready for annotation and optionally names them after the citation retrieved via the DOI of the publication.
+After the curves have been traced, the `figure` and `cv` commands convert the annotated SVG into a datapackage.
 
 # Research Impact Statement
 
