@@ -178,6 +178,18 @@ class Pdf:
     def doi(self):
         """
         Extract the DOI from the provided PDF or the provided string. Since in some cases additional pages are prepended to the PDF, the DOI is extracted from either the first or second page.
+
+        EXAMPLES:
+
+        The DOI of this PDF is found on the second page, since the publisher prepended a cover page::
+
+            >>> from svgdigitizer.pdf import Pdf
+            >>> from svgdigitizer.test.cli import TemporaryData
+            >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
+            ...     # do not assign instance to variable which keeps the file open and fails for windows
+            ...     Pdf(os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf")).doi
+            '10.1149/2.0251815jes'
+
         """
         import re
 
@@ -209,29 +221,61 @@ class Pdf:
         raise ValueError("No DOI found. Extraction of DOI failed.")
 
     @staticmethod
-    def _download_citation(doi):
-        "Download citation using DOI"
+    def _download_citation(doi, attempts=3, delay=2):
+        r"""
+        Download the bibtex citation for `doi` from doi.org.
+
+        Network errors, rate limits and server errors, which occur occasionally
+        with the registration agencies behind doi.org such as Crossref, are
+        retried up to `attempts` times, waiting `delay` seconds in between.
+        """
+        import time
+
         import requests
 
-        resp = requests.get(
-            "https://doi.org/" + doi,
-            headers={"Accept": "application/x-bibtex; charset=utf-8"},
-            timeout=5,
+        url = "https://doi.org/" + doi
+        for attempt in range(1, attempts + 1):
+            try:
+                response = requests.get(
+                    url,
+                    headers={"Accept": "application/x-bibtex; charset=utf-8"},
+                    timeout=5,
+                )
+            except requests.RequestException as error:
+                reason = str(error)
+            else:
+                if response.ok:
+                    return response.text
+                reason = f"HTTP {response.status_code} {response.reason}"
+                if response.status_code < 500 and response.status_code != 429:
+                    # Client errors such as an unknown DOI do not resolve by retrying.
+                    break
+
+            if attempt < attempts:
+                logger.info(
+                    f"Download of the citation for DOI {doi} failed ({reason}). Retrying in {delay} s."
+                )
+                time.sleep(delay)
+
+        raise ConnectionError(
+            f"Failed to download the citation for DOI {doi} from {url}: {reason}"
         )
-        if resp.ok:
-            return resp.text
-        return None
 
     @cached_property
     def bibliographic_entry(self):
         r"""
         Get the citation from the DOI provided PDF file. Returns a bibtex string.
 
+        The citation is downloaded from doi.org. Since this depends on an
+        external service, the example is not run when testing. The expected
+        output is stored in `test/data/Hermann_2018_J._Electrochem._Soc._165_J3192.bib`
+        and compared to a fresh download by a scheduled workflow.
+
         EXAMPLES::
 
             >>> from svgdigitizer.pdf import Pdf
             >>> from svgdigitizer.test.cli import TemporaryData
-            >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:
+            >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf") as directory:  # doctest: +SKIP
             ...     # do not assign instance to variable which keeps the file open and fails for windows
             ...     Pdf(os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.pdf")).bibliographic_entry
             '@article{Hermann_2018, title={Enhanced Electrocatalytic Oxidation ... year={2018}, pages={J3192–J3198} }'
@@ -353,23 +397,46 @@ class Pdf:
             >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
             >>> Pdf.build_identifier(bibliography_data)
             'white_2026_emergent'
+
+        Entries may also contain plain UTF-8 characters outside latin-1::
+
+            >>> bibtex_string = (
+            ...     "@article{jovic_1996_test_1, author = {Jović, BM and Marinković, NS},"
+            ...     " title = {Hydrogen evolution — an em dash title}, year = {1996},"
+            ...     " pages = {1--10}, journal = {J} }"
+            ... )
+            >>> bibliography_data = parse_string(bibtex_string, bib_format="bibtex")
+            >>> Pdf.build_identifier(bibliography_data)
+            'jovic_1996_hydrogen_1'
+
+        A citation as returned by doi.org for the PDF in the test data, see :meth:`bibliographic_entry`::
+
+            >>> from pybtex.database import parse_file
+            >>> from svgdigitizer.test.cli import TemporaryData
+            >>> with TemporaryData("**/Hermann_2018_J._Electrochem._Soc._165_J3192.bib") as directory:
+            ...     bibliography_data = parse_file(
+            ...         os.path.join(directory, "Hermann_2018_J._Electrochem._Soc._165_J3192.bib"),
+            ...         bib_format="bibtex",
+            ...     )
+            >>> Pdf.build_identifier(bibliography_data)
+            'hermann_2018_enhanced_j3192'
         """
-        import latexcodec as _  # noqa: F401  # registers "latex+latin" codec
+        import latexcodec as _  # noqa: F401  # registers "latex+utf8" codec
         from slugify import slugify
 
         entry = list(citation.entries.values())[0]
         first_author = (
             entry.persons["author"][0]
             .last_names[0]
-            .encode("latin-1")
-            .decode("latex+latin")
+            .encode("utf-8")
+            .decode("latex+utf8")
             .replace("{", "")
             .replace("}", "")
         )
         title_words = (
             entry.fields["title"]
-            .encode("latin-1")
-            .decode("latex+latin")
+            .encode("utf-8")
+            .decode("latex+utf8")
             .replace("{", "")
             .replace("}", "")
             .split(" ")
