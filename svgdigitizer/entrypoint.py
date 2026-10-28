@@ -559,6 +559,7 @@ def _create_package(metadata, csvname, outdir):
         # frictionless considers absolute Windows paths with forward slashes,
         # such as `C:/data`, to be remote URLs with the scheme `c`.
         # Normalizing turns them into `C:\data`.
+        # See https://github.com/frictionlessdata/frictionless-py/issues/1872
         basepath = os.path.normpath(basepath)
 
     package = Package(
