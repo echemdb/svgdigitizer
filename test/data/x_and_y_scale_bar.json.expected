@@ -1,0 +1,62 @@
+{
+    "resources": [
+        {
+            "name": "x_and_y_scale_bar",
+            "type": "table",
+            "path": "x_and_y_scale_bar.csv",
+            "scheme": "file",
+            "format": "csv",
+            "mediatype": "text/csv",
+            "encoding": "utf-8",
+            "schema": {
+                "fields": [
+                    {
+                        "name": "x",
+                        "type": "number",
+                        "unit": "V"
+                    },
+                    {
+                        "name": "y",
+                        "type": "number",
+                        "unit": "µA cm⁻²"
+                    }
+                ]
+            },
+            "metadata": {
+                "echemdb": {
+                    "experimental": {
+                        "tags": []
+                    },
+                    "source": {
+                        "figure": "",
+                        "curve": "red"
+                    },
+                    "figureDescription": {
+                        "type": "digitized",
+                        "simultaneousMeasurements": [],
+                        "measurementType": "custom",
+                        "fields": [
+                            {
+                                "name": "x",
+                                "type": "number",
+                                "unit": "V",
+                                "orientation": "horizontal"
+                            },
+                            {
+                                "name": "y",
+                                "type": "number",
+                                "unit": "µA cm⁻²",
+                                "orientation": "vertical"
+                            }
+                        ],
+                        "comment": "",
+                        "software": {
+                            "name": "svgdigitizer",
+                            "version": "0.14.5"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

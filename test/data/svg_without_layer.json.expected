@@ -1,9 +1,9 @@
 {
     "resources": [
         {
-            "name": "looping",
+            "name": "svg_without_layer",
             "type": "table",
-            "path": "looping.csv",
+            "path": "svg_without_layer.csv",
             "scheme": "file",
             "format": "csv",
             "mediatype": "text/csv",
@@ -11,14 +11,14 @@
             "schema": {
                 "fields": [
                     {
-                        "name": "d",
+                        "name": "x",
                         "type": "number",
-                        "unit": "m"
+                        "unit": "V"
                     },
                     {
-                        "name": "h",
+                        "name": "y",
                         "type": "number",
-                        "unit": "m"
+                        "unit": "µA cm⁻²"
                     }
                 ]
             },
@@ -29,7 +29,7 @@
                     },
                     "source": {
                         "figure": "",
-                        "curve": "blue"
+                        "curve": "red"
                     },
                     "figureDescription": {
                         "type": "digitized",
@@ -37,19 +37,23 @@
                         "measurementType": "custom",
                         "fields": [
                             {
-                                "name": "d",
+                                "name": "x",
                                 "type": "number",
-                                "unit": "m",
+                                "unit": "V",
                                 "orientation": "horizontal"
                             },
                             {
-                                "name": "h",
+                                "name": "y",
                                 "type": "number",
-                                "unit": "m",
+                                "unit": "µA cm⁻²",
                                 "orientation": "vertical"
                             }
                         ],
-                        "comment": ""
+                        "comment": "",
+                        "software": {
+                            "name": "svgdigitizer",
+                            "version": "0.14.5"
+                        }
                     }
                 }
             }

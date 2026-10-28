@@ -13,12 +13,11 @@ EXAMPLES::
     Commands:
       create-svg     Write an SVG that shows `png` or `jpeg` as a linked image.
       cv             Digitize a cylic voltammogram and create a frictionless...
-      digitize       Digitize a 2D plot.
-      figure         Digitize a figure with units on the axis and create a...
+      digitize       Digitize a 2D plot and create a frictionless datapackage.
+      figure         Alias of the `digitize` command. (DEPRECATED: Use...
       get-citation   Get the citation from the DOI provided PDF file.
       get-doi        Get the DOI from the provided PDF file.
       paginate       Render PDF pages as individual SVG files with linked PNG...
-      plot           Display a plot of the data traced in an SVG.
       rename-by-key  Rename the provided PDF file by the key derived from...
 
 The version of svgdigitizer::
@@ -109,6 +108,20 @@ outdir_option = click.option(
     help="Write output files to this directory.",
 )
 
+metadata_option = click.option(
+    "--metadata",
+    type=click.File("rb"),
+    default=None,
+    help="YAML file with metadata that is added to the datapackage.",
+)
+
+plot_option = click.option(
+    "--plot",
+    "make_plot",
+    is_flag=True,
+    help="Create a PNG showing the digitized curve with labeled axes and the same scale as in the original figure.",
+)
+
 
 def _outfile(template, suffix=None, outdir=None):
     r"""
@@ -147,6 +160,45 @@ def _outfile(template, suffix=None, outdir=None):
     os.makedirs(os.path.dirname(template) or ".", exist_ok=True)
 
     return template
+
+
+def _create_plotfile(plottable, svg, outdir):
+    r"""
+    Write a PNG visualizing the digitized curve of `plottable`.
+
+    The PNG is named like `svg` but with a ``.png`` suffix and written to
+    `outdir`, if specified. The curve is shown with labeled axes and the same
+    scale as in the original figure.
+
+    `plottable` is any object with a ``plot()`` method returning a matplotlib
+    ``Axes``, such as an ``SVGPlot``, ``SVGFigure``, or ``CV``.
+
+    This is a helper method for CLI commands that digitize an SVG.
+
+    EXAMPLES::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy.svg") as directory:
+        ...     svg = os.path.join(directory, "xy.svg")
+        ...     with open(svg, mode="rb") as infile:
+        ...         svgplot = _create_svgplot(infile, sampling_interval=None, skewed=False)
+        ...     _create_plotfile(svgplot, svg, outdir=None)
+        ...     os.path.exists(os.path.join(directory, "xy.png"))
+        True
+
+    """
+    # Use a non-interactive backend so that writing the PNG does not require a
+    # display, which would otherwise fail, e.g., on a headless machine.
+    import matplotlib
+
+    matplotlib.use("Agg")
+
+    import matplotlib.pyplot as plt
+
+    axes = plottable.plot()
+    figure = axes.get_figure()
+    figure.savefig(_outfile(svg, suffix=".png", outdir=outdir), bbox_inches="tight")
+    plt.close(figure)
 
 
 def _create_svgplot(svg, sampling_interval, skewed):
@@ -215,63 +267,15 @@ def _create_bibliography(bibliography, citation_key, metadata):
 
 @click.command()
 @sampling_interval_option
-@skewed_option
-@click.argument("svg", type=click.File("rb"))
-def plot(svg, sampling_interval, skewed):
-    """
-    Display a plot of the data traced in an SVG.
-    \f
-
-    EXAMPLES::
-
-        >>> from svgdigitizer.test.cli import invoke, TemporaryData
-        >>> with TemporaryData("**/xy.svg") as directory:
-        ...     invoke(cli, "plot", os.path.join(directory, "xy.svg"))
-
-    """
-    svgplot = _create_svgplot(svg, sampling_interval=sampling_interval, skewed=skewed)
-    svgplot.plot()
-
-
-@click.command()
-@sampling_interval_option
 @outdir_option
-@skewed_option
-@click.argument("svg", type=click.Path(exists=True))
-def digitize(svg, sampling_interval, outdir, skewed):
-    """
-    Digitize a 2D plot.
-
-    Produces a CSV from the curve traced in the SVG.
-    \f
-
-    EXAMPLES::
-
-        >>> from svgdigitizer.test.cli import invoke, TemporaryData
-        >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
-
-    """
-    with open(svg, mode="rb") as infile:
-        svg_plot = _create_svgplot(
-            infile, sampling_interval=sampling_interval, skewed=skewed
-        )
-
-    svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
-
-
-@click.command(name="figure")
-@sampling_interval_option
-@outdir_option
-@click.option(
-    "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
-)
+@metadata_option
 @click.argument("svg", type=click.Path(exists=True))
 @si_option
 @bibliography_option
 @citation_key_option
 @skewed_option
-def digitize_figure(
+@plot_option
+def digitize(
     svg,
     sampling_interval,
     metadata,
@@ -280,19 +284,32 @@ def digitize_figure(
     citation_key,
     skewed,
     si_units,
+    make_plot,
 ):  # pylint: disable=too-many-positional-arguments
     """
-    Digitize a figure with units on the axis and create a frictionless datapackage.
+    Digitize a 2D plot and create a frictionless datapackage.
 
-    The resulting CVS contains a time axis, when text label with a scan rate is given
+    Produces a CSV from the curve traced in the SVG and a JSON describing the CSV,
+    including the units of the axes.
+    The resulting CSV contains a time axis, when a text label with a scan rate is given
     in the SVG whose units must be of type `x-axis unit / time unit`, such as `scan rate: 50 K / s`.
-    \f
+
+
 
     EXAMPLES::
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
+        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
+        ...     sorted(name for name in os.listdir(directory) if name.startswith("xy_rate."))
+        ['xy_rate.csv', 'xy_rate.json', 'xy_rate.svg']
+
+    The ``--plot`` flag additionally writes a PNG of the digitized curve::
+
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "digitize", "--plot", os.path.join(directory, "xy_rate.svg"))
+        ...     os.path.exists(os.path.join(directory, "xy_rate.png"))
+        True
 
     TESTS:
 
@@ -303,7 +320,7 @@ def digitize_figure(
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     os.chdir(directory)
         ...     try:
-        ...         invoke(cli, "figure", "xy_rate.svg")
+        ...         invoke(cli, "digitize", "xy_rate.svg")
         ...     finally:
         ...         os.chdir(cwd)
 
@@ -312,7 +329,7 @@ def digitize_figure(
 
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     outdir = os.path.join(directory, "outdir").replace(os.sep, "/")
-        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"), "--outdir", outdir)
+        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"), "--outdir", outdir)
         ...     sorted(os.listdir(outdir))
         ['xy_rate.csv', 'xy_rate.json']
 
@@ -327,7 +344,7 @@ def digitize_figure(
         ...         print(SVGFigure(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
+        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
     """
     if metadata:
@@ -352,18 +369,53 @@ def digitize_figure(
         citation_key=citation_key,
     )
 
+    if make_plot:
+        _create_plotfile(svgfigure, svg, outdir=outdir)
+
+
+@click.command(
+    name="figure",
+    deprecated="Use `digitize` instead.",
+)
+@sampling_interval_option
+@outdir_option
+@metadata_option
+@click.argument("svg", type=click.Path(exists=True))
+@si_option
+@bibliography_option
+@citation_key_option
+@skewed_option
+@plot_option
+@click.pass_context
+def digitize_figure(ctx, **kwargs):
+    """
+    Alias of the `digitize` command.
+
+
+
+    EXAMPLES::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
+        ...     sorted(name for name in os.listdir(directory) if name.startswith("xy_rate."))
+        DeprecationWarning: The command 'figure' is deprecated. Use `digitize` instead.
+        ['xy_rate.csv', 'xy_rate.json', 'xy_rate.svg']
+
+    """
+    ctx.invoke(digitize, **kwargs)
+
 
 @click.command(name="cv")
 @sampling_interval_option
 @outdir_option
-@click.option(
-    "--metadata", type=click.File("rb"), default=None, help="YAML file with metadata"
-)
+@metadata_option
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
 @citation_key_option
 @si_option
 @skewed_option
+@plot_option
 def digitize_cv(
     svg,
     sampling_interval,
@@ -373,6 +425,7 @@ def digitize_cv(
     bibliography,
     citation_key,
     si_units,
+    make_plot,
 ):  # pylint: disable=too-many-positional-arguments
     """
     Digitize a cylic voltammogram and create a frictionless datapackage.
@@ -453,6 +506,9 @@ def digitize_cv(
         citation_key=citation_key,
     )
 
+    if make_plot:
+        _create_plotfile(svgfigure, svg, outdir=outdir)
+
 
 def _create_outfiles(svgfigure, svg, outdir, bibliography, citation_key):
     """Writes a datapackage consisting of a CSV and JSON file from a :param:'svgfigure'
@@ -513,6 +569,7 @@ def _create_package(metadata, csvname, outdir):
         # frictionless considers absolute Windows paths with forward slashes,
         # such as `C:/data`, to be remote URLs with the scheme `c`.
         # Normalizing turns them into `C:\data`.
+        # See https://github.com/frictionlessdata/frictionless-py/issues/1872
         basepath = os.path.normpath(basepath)
 
     package = Package(
@@ -884,7 +941,6 @@ def paginate(
             )
 
 
-cli.add_command(plot)
 cli.add_command(digitize)
 cli.add_command(digitize_figure)
 cli.add_command(digitize_cv)

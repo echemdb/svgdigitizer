@@ -74,12 +74,12 @@ Options:
 
 Commands:
   cv        Digitize a cylic voltammogram and create a frictionless datapackage.
-  digitize  Digitize a 2D plot.
-  figure    Digitize a figure with units on the axis and create a frictionless datapackage.
+  digitize  Digitize a 2D plot and create a frictionless datapackage.
+  figure    Alias of the `digitize` command. (DEPRECATED: Use `digitize` instead.)
   paginate  Render PDF pages as individual SVG files with linked PNG images.
   plot      Display a plot of the data traced in an SVG.
 
-$ svgdigitizer figure doc/files/others/looping_scan_rate.svg --sampling-interval 0.01
+$ svgdigitizer digitize doc/files/others/looping_scan_rate.svg --sampling-interval 0.01
 ```
 
 ## API
