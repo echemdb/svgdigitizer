@@ -118,6 +118,10 @@
 <dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.bibliographic_entry">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bibliographic_entry</span></span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.bibliographic_entry" title="Link to this definition"></a></dt>
 <dd><p>Get the citation from the DOI provided PDF file. Returns a bibtex string.</p>
+<p>The citation is downloaded from doi.org. Since this depends on an
+external service, the example is not run when testing. The expected
+output is stored in <cite>test/data/Hermann_2018_J._Electrochem._Soc._165_J3192.bib</cite>
+and compared to a fresh download by a scheduled workflow.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.pdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pdf</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.test.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryData</span>
@@ -217,6 +221,29 @@ To change the omitted words it is possible to provide a custom word list.</p>
 <span class="go">&#39;white_2026_emergent&#39;</span>
 </pre></div>
 </div>
+<p>Entries may also contain plain UTF-8 characters outside latin-1:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bibtex_string</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;@article{jovic_1996_test_1, author = {Jović, BM and Marinković, NS},&quot;</span>
+<span class="gp">... </span>    <span class="s2">&quot; title = {Hydrogen evolution — an em dash title}, year = </span><span class="si">{1996}</span><span class="s2">,&quot;</span>
+<span class="gp">... </span>    <span class="s2">&quot; pages = {1--10}, journal = </span><span class="si">{J}</span><span class="s2"> }&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_string</span><span class="p">(</span><span class="n">bibtex_string</span><span class="p">,</span> <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
+<span class="go">&#39;jovic_1996_hydrogen_1&#39;</span>
+</pre></div>
+</div>
+<p>A citation as returned by doi.org for the PDF in the test data, see <a class="reference internal" href="#svgdigitizer.pdf.Pdf.bibliographic_entry" title="svgdigitizer.pdf.Pdf.bibliographic_entry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bibliographic_entry()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pybtex.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.test.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">TemporaryData</span><span class="p">(</span><span class="s2">&quot;**/Hermann_2018_J._Electrochem._Soc._165_J3192.bib&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">directory</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">bibliography_data</span> <span class="o">=</span> <span class="n">parse_file</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;Hermann_2018_J._Electrochem._Soc._165_J3192.bib&quot;</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">bib_format</span><span class="o">=</span><span class="s2">&quot;bibtex&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Pdf</span><span class="o">.</span><span class="n">build_identifier</span><span class="p">(</span><span class="n">bibliography_data</span><span class="p">)</span>
+<span class="go">&#39;hermann_2018_enhanced_j3192&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py property">
@@ -229,6 +256,16 @@ To change the omitted words it is possible to provide a custom word list.</p>
 <dt class="sig sig-object py" id="svgdigitizer.pdf.Pdf.doi">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">doi</span></span><a class="headerlink" href="#svgdigitizer.pdf.Pdf.doi" title="Link to this definition"></a></dt>
 <dd><p>Extract the DOI from the provided PDF or the provided string. Since in some cases additional pages are prepended to the PDF, the DOI is extracted from either the first or second page.</p>
+<p>EXAMPLES:</p>
+<p>The DOI of this PDF is found on the second page, since the publisher prepended a cover page:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.pdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pdf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.test.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">TemporaryData</span><span class="p">(</span><span class="s2">&quot;**/Hermann_2018_J._Electrochem._Soc._165_J3192.pdf&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">directory</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="c1"># do not assign instance to variable which keeps the file open and fails for windows</span>
+<span class="gp">... </span>    <span class="n">Pdf</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;Hermann_2018_J._Electrochem._Soc._165_J3192.pdf&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">doi</span>
+<span class="go">&#39;10.1149/2.0251815jes&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
