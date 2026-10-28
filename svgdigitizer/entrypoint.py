@@ -13,8 +13,8 @@ EXAMPLES::
     Commands:
       create-svg     Write an SVG that shows `png` or `jpeg` as a linked image.
       cv             Digitize a cylic voltammogram and create a frictionless...
-      digitize       Digitize a 2D plot.
-      figure         Digitize a figure with units on the axis and create a...
+      digitize       Digitize a 2D plot and create a frictionless datapackage.
+      figure         Alias of the `digitize` command. (DEPRECATED: Use...
       get-citation   Get the citation from the DOI provided PDF file.
       get-doi        Get the DOI from the provided PDF file.
       paginate       Render PDF pages as individual SVG files with linked PNG...
@@ -106,6 +106,13 @@ outdir_option = click.option(
     type=click.Path(file_okay=False),
     default=None,
     help="Write output files to this directory.",
+)
+
+metadata_option = click.option(
+    "--metadata",
+    type=click.File("rb"),
+    default=None,
+    help="YAML file with metadata that is added to the datapackage.",
 )
 
 plot_option = click.option(
@@ -261,15 +268,33 @@ def _create_bibliography(bibliography, citation_key, metadata):
 @click.command()
 @sampling_interval_option
 @outdir_option
+@metadata_option
+@click.argument("svg", type=click.Path(exists=True))
+@si_option
+@bibliography_option
+@citation_key_option
 @skewed_option
 @plot_option
-@click.argument("svg", type=click.Path(exists=True))
-def digitize(svg, sampling_interval, outdir, skewed, make_plot):
+def digitize(
+    svg,
+    sampling_interval,
+    metadata,
+    outdir,
+    bibliography,
+    citation_key,
+    skewed,
+    si_units,
+    make_plot,
+):  # pylint: disable=too-many-positional-arguments
     """
-    Digitize a 2D plot.
+    Digitize a 2D plot and create a frictionless datapackage.
 
-    Produces a frictionless datapackage (CSV + JSON) from the curve traced in the SVG.
-    \f
+    Produces a CSV from the curve traced in the SVG and a JSON describing the CSV,
+    including the units of the axes.
+    The resulting CSV contains a time axis, when a text label with a scan rate is given
+    in the SVG whose units must be of type `x-axis unit / time unit`, such as `scan rate: 50 K / s`.
+
+
 
     EXAMPLES::
 
@@ -286,62 +311,6 @@ def digitize(svg, sampling_interval, outdir, skewed, make_plot):
         ...     os.path.exists(os.path.join(directory, "xy_rate.png"))
         True
 
-    """
-    with open(svg, mode="rb") as infile:
-        from svgdigitizer.svgfigure import SVGFigure
-
-        svgfigure = SVGFigure(
-            _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed)
-        )
-
-    _create_outfiles(
-        svgfigure=svgfigure,
-        svg=svg,
-        outdir=outdir,
-        bibliography=None,
-        citation_key=None,
-    )
-
-    if make_plot:
-        _create_plotfile(svgfigure, svg, outdir=outdir)
-
-
-@click.command(name="figure")
-@sampling_interval_option
-@outdir_option
-@click.option(
-    "--metadata", type=click.File("rb"), default=None, help="yaml file with metadata"
-)
-@click.argument("svg", type=click.Path(exists=True))
-@si_option
-@bibliography_option
-@citation_key_option
-@skewed_option
-@plot_option
-def digitize_figure(
-    svg,
-    sampling_interval,
-    metadata,
-    outdir,
-    bibliography,
-    citation_key,
-    skewed,
-    si_units,
-    make_plot,
-):  # pylint: disable=too-many-positional-arguments
-    """
-    Digitize a figure with units on the axis and create a frictionless datapackage.
-
-    The resulting CVS contains a time axis, when text label with a scan rate is given
-    in the SVG whose units must be of type `x-axis unit / time unit`, such as `scan rate: 50 K / s`.
-    \f
-
-    EXAMPLES::
-
-        >>> from svgdigitizer.test.cli import invoke, TemporaryData
-        >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
-
     TESTS:
 
     The command can be invoked on files in the current directory::
@@ -351,7 +320,7 @@ def digitize_figure(
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     os.chdir(directory)
         ...     try:
-        ...         invoke(cli, "figure", "xy_rate.svg")
+        ...         invoke(cli, "digitize", "xy_rate.svg")
         ...     finally:
         ...         os.chdir(cwd)
 
@@ -360,7 +329,7 @@ def digitize_figure(
 
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     outdir = os.path.join(directory, "outdir").replace(os.sep, "/")
-        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"), "--outdir", outdir)
+        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"), "--outdir", outdir)
         ...     sorted(os.listdir(outdir))
         ['xy_rate.csv', 'xy_rate.json']
 
@@ -375,7 +344,7 @@ def digitize_figure(
         ...         print(SVGFigure(SVGPlot(SVG(svg))).figure_schema.get_field("E").custom["unit"])
         mV
         >>> with TemporaryData("**/xy_rate.svg") as directory:
-        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
+        ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
     """
     if metadata:
@@ -404,12 +373,43 @@ def digitize_figure(
         _create_plotfile(svgfigure, svg, outdir=outdir)
 
 
+@click.command(
+    name="figure",
+    deprecated="Use `digitize` instead.",
+)
+@sampling_interval_option
+@outdir_option
+@metadata_option
+@click.argument("svg", type=click.Path(exists=True))
+@si_option
+@bibliography_option
+@citation_key_option
+@skewed_option
+@plot_option
+@click.pass_context
+def digitize_figure(ctx, **kwargs):
+    """
+    Alias of the `digitize` command.
+
+
+
+    EXAMPLES::
+
+        >>> from svgdigitizer.test.cli import invoke, TemporaryData
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"))
+        ...     sorted(name for name in os.listdir(directory) if name.startswith("xy_rate."))
+        DeprecationWarning: The command 'figure' is deprecated. Use `digitize` instead.
+        ['xy_rate.csv', 'xy_rate.json', 'xy_rate.svg']
+
+    """
+    ctx.invoke(digitize, **kwargs)
+
+
 @click.command(name="cv")
 @sampling_interval_option
 @outdir_option
-@click.option(
-    "--metadata", type=click.File("rb"), default=None, help="YAML file with metadata"
-)
+@metadata_option
 @click.argument("svg", type=click.Path(exists=True))
 @bibliography_option
 @citation_key_option
