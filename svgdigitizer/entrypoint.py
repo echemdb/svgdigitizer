@@ -345,6 +345,15 @@ def digitize_figure(
         ...     finally:
         ...         os.chdir(cwd)
 
+    The output directory can be an absolute path with forward slashes, such as
+    `C:/data` on Windows::
+
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     outdir = os.path.join(directory, "outdir").replace(os.sep, "/")
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"), "--outdir", outdir)
+        ...     sorted(os.listdir(outdir))
+        ['xy_rate.csv', 'xy_rate.json']
+
     The command can be invoked without sampling when data is not given in volts::
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
@@ -545,10 +554,12 @@ def _create_package(metadata, csvname, outdir):
     """
     from frictionless import Package, Resource, Schema
 
-    # Normalize the base path to the native separators. Otherwise frictionless
-    # mistakes a Windows path with forward slashes such as `C:/dir` for a remote
-    # URL (with scheme `C`) and fails to load the CSV.
-    basepath = os.path.normpath(outdir or os.path.dirname(csvname))
+    basepath = outdir or os.path.dirname(csvname)
+    if basepath:
+        # frictionless considers absolute Windows paths with forward slashes,
+        # such as `C:/data`, to be remote URLs with the scheme `c`.
+        # Normalizing turns them into `C:\data`.
+        basepath = os.path.normpath(basepath)
 
     package = Package(
         resources=[

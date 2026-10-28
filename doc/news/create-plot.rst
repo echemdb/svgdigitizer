@@ -12,5 +12,4 @@
 
 **Fixed:**
 
-* Fixed ``figure`` and ``cv`` failing to create a data package when ``--outdir`` was an absolute path with forward slashes.
 * Fixed several issues in the documentation.
