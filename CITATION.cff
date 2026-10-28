@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: >-
+  If you use svgdigitizer in your research, please cite it using the
+  metadata below and state the version you used.
+title: svgdigitizer
+abstract: >-
+  svgdigitizer is a Python library and command line tool to recover the
+  measured data underlying plots in scientific publications.
+type: software
+authors:
+  - family-names: Engstfeld
+    given-names: Albert Kilian
+    orcid: https://orcid.org/0000-0002-9686-3948
+    affiliation: Ulm University
+  - family-names: Hermann
+    given-names: Johannes M.
+    orcid: https://orcid.org/0000-0001-7119-1295
+    affiliation: Ulm University
+  - family-names: Hörmann
+    given-names: Nicolas G.
+    orcid: https://orcid.org/0000-0001-6944-5575
+    affiliation: Fritz-Haber-Institut der Max-Planck-Gesellschaft
+  - family-names: Rüth
+    given-names: Julian
+    orcid: https://orcid.org/0000-0002-3930-9107
+# The concept DOI always resolves to the latest release, so this file does
+# not need to be updated for new versions.
+doi: 10.5281/zenodo.5874747
+repository-code: https://github.com/echemdb/svgdigitizer
+url: https://echemdb.github.io/svgdigitizer/
+license: GPL-3.0-or-later
+keywords:
+  - data digitization
+  - plot digitizer
+  - SVG
+  - FAIR data
+  - electrochemistry
