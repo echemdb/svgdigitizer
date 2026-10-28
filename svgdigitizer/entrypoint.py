@@ -268,7 +268,7 @@ def digitize(svg, sampling_interval, outdir, skewed, make_plot):
     """
     Digitize a 2D plot.
 
-    Produces a CSV from the curve traced in the SVG.
+    Produces a frictionless datapackage (CSV + JSON) from the curve traced in the SVG.
     \f
 
     EXAMPLES::
@@ -276,6 +276,8 @@ def digitize(svg, sampling_interval, outdir, skewed, make_plot):
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
         >>> with TemporaryData("**/xy_rate.svg") as directory:
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
+        ...     sorted(name for name in os.listdir(directory) if name.startswith("xy_rate."))
+        ['xy_rate.csv', 'xy_rate.json', 'xy_rate.svg']
 
     The ``--plot`` flag additionally writes a PNG of the digitized curve::
 
@@ -286,14 +288,22 @@ def digitize(svg, sampling_interval, outdir, skewed, make_plot):
 
     """
     with open(svg, mode="rb") as infile:
-        svg_plot = _create_svgplot(
-            infile, sampling_interval=sampling_interval, skewed=skewed
+        from svgdigitizer.svgfigure import SVGFigure
+
+        svgfigure = SVGFigure(
+            _create_svgplot(infile, sampling_interval=sampling_interval, skewed=skewed)
         )
 
-    svg_plot.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
+    _create_outfiles(
+        svgfigure=svgfigure,
+        svg=svg,
+        outdir=outdir,
+        bibliography=None,
+        citation_key=None,
+    )
 
     if make_plot:
-        _create_plotfile(svg_plot, svg, outdir=outdir)
+        _create_plotfile(svgfigure, svg, outdir=outdir)
 
 
 @click.command(name="figure")
