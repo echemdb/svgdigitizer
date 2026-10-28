@@ -8,7 +8,8 @@ EXAMPLES::
     Usage: cli [OPTIONS] COMMAND [ARGS]...
       The svgdigitizer suite.
     Options:
-      --help  Show this message and exit.
+      --version  Show the version and exit.
+      --help     Show this message and exit.
     Commands:
       create-svg     Write an SVG that shows `png` or `jpeg` as a linked image.
       cv             Digitize a cylic voltammogram and create a frictionless...
@@ -19,6 +20,11 @@ EXAMPLES::
       paginate       Render PDF pages as individual SVG files with linked PNG...
       plot           Display a plot of the data traced in an SVG.
       rename-by-key  Rename the provided PDF file by the key derived from...
+
+The version of svgdigitizer::
+
+    >>> invoke(cli, "--version")  # doctest: +ELLIPSIS
+    svgdigitizer, version 0...
 
 """
 
@@ -48,10 +54,13 @@ import os
 
 import click
 
+from svgdigitizer import __version__
+
 logger = logging.getLogger("svgdigitizer")
 
 
 @click.group(help=__doc__.split("EXAMPLES")[0])
+@click.version_option(version=__version__, prog_name="svgdigitizer")
 def cli():
     r"""
     Entry point of the command line interface.
@@ -298,6 +307,15 @@ def digitize_figure(
         ...     finally:
         ...         os.chdir(cwd)
 
+    The output directory can be an absolute path with forward slashes, such as
+    `C:/data` on Windows::
+
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     outdir = os.path.join(directory, "outdir").replace(os.sep, "/")
+        ...     invoke(cli, "figure", os.path.join(directory, "xy_rate.svg"), "--outdir", outdir)
+        ...     sorted(os.listdir(outdir))
+        ['xy_rate.csv', 'xy_rate.json']
+
     The command can be invoked without sampling when data is not given in volts::
 
         >>> from svgdigitizer.test.cli import invoke, TemporaryData
@@ -490,11 +508,18 @@ def _create_package(metadata, csvname, outdir):
     """
     from frictionless import Package, Resource, Schema
 
+    basepath = outdir or os.path.dirname(csvname)
+    if basepath:
+        # frictionless considers absolute Windows paths with forward slashes,
+        # such as `C:/data`, to be remote URLs with the scheme `c`.
+        # Normalizing turns them into `C:\data`.
+        basepath = os.path.normpath(basepath)
+
     package = Package(
         resources=[
             Resource(
                 path=os.path.basename(csvname),
-                basepath=outdir or os.path.dirname(csvname),
+                basepath=basepath,
             )
         ],
     )
@@ -733,18 +758,18 @@ def _parse_pages_option(_ctx, _param, value):
         TESTS::
 
         >>> from svgdigitizer.entrypoint import _parse_pages_option
-        >>> _parse_pages_option(_, _, "1-2")
+        >>> _parse_pages_option(None, None, "1-2")
         [1, 2]
 
-        >>> _parse_pages_option(_, _, "2-2")
+        >>> _parse_pages_option(None, None, "2-2")
         [2]
 
-        >>> _parse_pages_option(_, _, "3-2")
+        >>> _parse_pages_option(None, None, "3-2")
         Traceback (most recent call last):
         ...
         click.exceptions.BadParameter: Invalid range. Start must be less than or equal to end.
 
-        >>> _parse_pages_option(_, _, "2 3")
+        >>> _parse_pages_option(None, None, "2 3")
         Traceback (most recent call last):
         ...
         click.exceptions.BadParameter: Invalid format. Use a single number or a range like '3-5'.
