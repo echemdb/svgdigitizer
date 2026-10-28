@@ -77,10 +77,16 @@ Only elements of the template SVG residing inside a group/layer with the `id` at
 (digitize)=
 ## `digitize`
 
-Produces a CSV from the curve traced in the SVG.
+Produces a [frictionless datapackage](https://frictionlessdata.io/) (CSV + JSON) from the curve traced in the SVG.
+The JSON describes the CSV, including the units found in the axis labels and the version of `svgdigitizer` used for digitization.
+In addition it will reconstruct a time axis, when the rate at which the data on the x-axis is given in a text label in the SVG such as `scan rate: 30 m/s`. Here the unit must be equivalent to that on the x-axis divided by a time.
 
 ```{code-cell} ipython3
 !svgdigitizer digitize --help
+```
+
+```{note}
+Flags `--bibliography`, `--metadata` and `si-units` are covered in the [advanced section](advanced-flags) section below.
 ```
 
 ### Examples
@@ -92,7 +98,7 @@ Consider the following skewed plot.
 :align: center
 ```
 
-An unskewed digitized CSV can be created with
+An unskewed digitized datapackage can be created with
 
 ```{code-cell} ipython3
 !svgdigitizer digitize ./files/others/example_plot_p0_demo_digitize.svg --skewed
@@ -132,13 +138,9 @@ df = pd.read_csv('./files/others/example_plot_p0_demo_digitize.csv')
 df.plot(x='U', y='v', ylabel='v')
 ```
 
-```{note}
-The use of [`svgdigitizer digitize`](digitize) is discouraged when your axis labels contain units, because the output CSV does not contain this information. Use [`svgdigitizer figure`](figure) instead, which creates a frictionless datapackage (CSV + JSON).
-```
-
 ### Plotting the digitized curve
 
-All digitization commands (`digitize`, [`figure`](figure), and [`cv`](cv)) accept the `--plot` flag. It writes a PNG next to the other output files that shows the digitized curve with labeled axes (including units) and the same scale as in the original figure. This is convenient to visually verify the digitization.
+All digitization commands ([`digitize`](digitize) and [`cv`](cv)) accept the `--plot` flag. It writes a PNG next to the other output files that shows the digitized curve with labeled axes (including units) and the same scale as in the original figure. This is convenient to visually verify the digitization.
 
 ```{code-cell} ipython3
 !svgdigitizer digitize ./files/others/example_plot_p0_demo_digitize.svg --skewed --sampling-interval 0.01 --plot
@@ -155,20 +157,7 @@ from IPython.display import Image
 Image('./files/others/example_plot_p0_demo_digitize.png')
 ```
 
-(figure)=
-## `figure`
-
-The figure command produces a CSV and an JSON with additional metadata, which contains, for example, information on the axis units. In addition it will reconstruct a time axis, when the rate at which the data on the x-axis is given in a text label in the SVG such as `scan rate: 30 m/s`. Here the unit must be equivalent to that on the x-axis divided by a time.
-
-```{code-cell} ipython3
-!svgdigitizer figure --help
-```
-
-```{note}
-Flags `--bibliography`, `--metadata` and `si-units` are covered in the [advanced section](advanced-flags) section below.
-```
-
-### Examples
+### Reconstructing a time axis
 
 Consider the following figure where the annotated {download}`SVG (looping_scan_rate.svg)<./files/others/looping_scan_rate.svg>` contains a scan rate.
 
@@ -181,7 +170,7 @@ Digitize the figure with
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scan_rate.svg --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/looping_scan_rate.svg --sampling-interval 0.01
 ```
 
 Resulting in
@@ -195,9 +184,16 @@ df = pd.read_csv('./files/others/looping_scan_rate.csv')
 df.plot(x='d', y='height', xlabel='distance [m]', ylabel='height [m]', legend=False)
 ```
 
+(figure)=
+## `figure`
+
+```{deprecated} 0.15.0
+The `figure` command is an alias of the [`digitize`](digitize) command and will be removed in a future version. Use [`digitize`](digitize) instead, which accepts the same options.
+```
+
 ## `cv`
 
-The `cv` option is designed specifically to digitze [cyclic voltammograms (CVs)](https://en.wikipedia.org/wiki/Cyclic_voltammetry). Overall the command `cv` has the same functionality as the [`figure`](figure) command. The differences are as follows.
+The `cv` option is designed specifically to digitze [cyclic voltammograms (CVs)](https://en.wikipedia.org/wiki/Cyclic_voltammetry). Overall the command `cv` has the same functionality as the [`digitize`](digitize) command. The differences are as follows.
 
 * Certain keys in the output metadata are directly related to cyclic voltammetry measurements.
 * The units on the x-axis must be equivalent to volt `U` given in units of `V` and those on the y-axis equivalent to current `I` in units of `A` or current density `j` in units of `A / m2`.
@@ -235,7 +231,7 @@ which can be digitzed via
 
 ### `--si-units`
 
-The flag `--si-unit` is used by the [`figure`](figure) command and commands that inherit from `figure`, such as the `cv` command. The units are converted to SI units, if they are compatible with the [astropy](https://www.astropy.org/) unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.
+The flag `--si-unit` is used by the [`digitize`](digitize) and the [`cv`](cv) command. The units are converted to SI units, if they are compatible with the [astropy](https://www.astropy.org/) unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.
 
 ```{warning}
 In some cases conversion to SI units might not result in the desired output. For example, even though `V` is considered as an SI unit, astropy might convert the unit to `W / A` or `A Ohm`.
@@ -243,7 +239,7 @@ In some cases conversion to SI units might not result in the desired output. For
 
 ### `--metadata`
 
-The flag `--metadata` allows adding metadata to the resource of the datapackage from a yaml file. It is used by the [`figure`](figure) command and commands that inherit from `figure`, such as the `cv` command.
+The flag `--metadata` allows adding metadata to the resource of the datapackage from a yaml file. It is used by the [`digitize`](digitize) and the [`cv`](cv) command.
 
 Consider the following figure where the annotated {download}`SVG (looping_scan_rate.svg)<./files/others/looping_scan_rate.svg>`.
 
@@ -256,7 +252,7 @@ We collect additional metadata in a {download}`YAML file (looping_scan_rate_yaml
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scan_rate_yaml.svg --metadata ./files/others/looping_scan_rate_yaml.yaml --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/looping_scan_rate_yaml.svg --metadata ./files/others/looping_scan_rate_yaml.yaml --sampling-interval 0.01
 ```
 
 The metadata from the YAML is included in the JSON of the resulting datapackage and is accessible with a JSON loader
@@ -284,7 +280,7 @@ For electrochemical data an example YAML can be found [here](https://github.com/
 
 ### `--bibliography`
 
-The flag `--bibliography` in combination with `--citation-key` adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the [`figure`](figure) command and commands that inherit from `figure` such as the `cv` command.
+The flag `--bibliography` in combination with `--citation-key` adds a bibtex bibliography entry to the JSON of the produced datapackage. It is used by the [`digitize`](digitize) and the [`cv`](cv) command.
 If `--citation-key` is not provided a key is looked for in the metadata provided in the yaml via `--metadata`, where it must be stored in `source.citationKey`
 
 Requirements:
@@ -301,7 +297,7 @@ source:
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scan_rate_bib.svg --bibliography ./files/others/cyclist2023.bib --metadata ./files/others/looping_scan_rate_bib.yaml --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/looping_scan_rate_bib.svg --bibliography ./files/others/cyclist2023.bib --metadata ./files/others/looping_scan_rate_bib.yaml --sampling-interval 0.01
 ```
 
 The bib file content is included in the resulting JSON of the datapackge
