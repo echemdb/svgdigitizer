@@ -149,6 +149,7 @@ class CV(SVGFigure):
 
     The properties of the original plot and the dataframe can be returned as a dict::
 
+        >>> from svgdigitizer import __version__
         >>> cv.metadata  == \
         ... {'experimental': {'tags': ['BCV', 'HER', 'OER']},
         ...  'source': {'figure': '2b', 'curve': 'solid'},
@@ -158,7 +159,8 @@ class CV(SVGFigure):
         ...                         'scanRate': {'value': 50.0, 'unit': 'V / s'},
         ...                         'fields': [{'name': 'E','unit': 'mV', 'orientation': 'horizontal', 'reference': 'RHE', 'type': 'number'},
         ...                                    {'name': 'j', 'unit': 'uA / cm2', 'orientation': 'vertical', 'type': 'number'}],
-        ...                         'comment': 'noisy data'},
+        ...                         'comment': 'noisy data',
+        ...                         'software': {'name': 'svgdigitizer', 'version': __version__}},
         ...  'dataDescription': {'type': 'digitized',
         ...                       'measurementType': 'CV',
         ...                       'fields': [{'name': 'E', 'type': 'number', 'unit': 'V', 'reference': 'RHE'},
