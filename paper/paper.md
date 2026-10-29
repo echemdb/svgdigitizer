@@ -104,7 +104,7 @@ Instead of implementing a graphical interface of its own, `svgdigitizer` relies 
 The central design decision of `svgdigitizer` is to rely on curves traced manually by the user rather than on automatic curve detection.
 This choice costs human effort for every figure, and it requires the user to follow annotation conventions and to work in an external vector graphics editor.
 In return, every data point originates from a traced path that can be inspected directly on top of the original figure in the vector graphics program.
-A faulty tracing or label can be corrected later, also by others, directly in the SVG without repeating the remaining work.
+A inaccurate tracing or label can be corrected later, by anyone, directly in the SVG, without redoing the rest of the work.
 Furthermore, manual tracing avoids misdetection of curves, e.g., of overlapping or crossing curves of the same color or of curves partially hidden behind labels.
 Since tracing and labeling are done in a general-purpose vector graphics editor, the user does not need to learn a dedicated graphical interface, and the package does not need to maintain one.
 
