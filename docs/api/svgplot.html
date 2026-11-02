@@ -61,6 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.axis_orientations"><code class="docutils literal notranslate"><span class="pre">SVGPlot.axis_orientations</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.axis_variables"><code class="docutils literal notranslate"><span class="pre">SVGPlot.axis_variables</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.curve"><code class="docutils literal notranslate"><span class="pre">SVGPlot.curve</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.data_aspect_ratio"><code class="docutils literal notranslate"><span class="pre">SVGPlot.data_aspect_ratio()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.df"><code class="docutils literal notranslate"><span class="pre">SVGPlot.df</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.figure_schema"><code class="docutils literal notranslate"><span class="pre">SVGPlot.figure_schema</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.from_svg"><code class="docutils literal notranslate"><span class="pre">SVGPlot.from_svg()</span></code></a></li>
@@ -533,6 +534,52 @@ in the plot coordinate system.</p>
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.data_aspect_ratio">
+<span class="sig-name descname"><span class="pre">data_aspect_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.data_aspect_ratio" title="Link to this definition"></a></dt>
+<dd><p>Return the aspect ratio that makes a plot of <cite>df</cite> use the same scale as
+the original figure in the SVG.</p>
+<p>The value is meant to be passed to matplotlib’s <code class="docutils literal notranslate"><span class="pre">Axes.set_aspect</span></code>.
+It is the displayed length of one unit on the y-axis relative to one unit
+on the x-axis, computed from the curve’s bounding box in SVG (pixel)
+coordinates and its extent in the data coordinates of <cite>df</cite>. When <cite>df</cite> is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.df" title="svgdigitizer.svgplot.SVGPlot.df"><code class="xref py py-attr docutils literal notranslate"><span class="pre">df</span></code></a> is used.</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> when the aspect ratio cannot be determined, e.g., when
+the curve has no extent along one of the axes.</p>
+<p>EXAMPLES:</p>
+<p>Here one unit on the y-axis spans half as many pixels as one unit on the
+x-axis, so the y-axis is displayed half as long:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">svg</span> <span class="o">=</span> <span class="n">SVG</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">&lt;svg&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 100 L 100 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;curve: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 0 200 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;0&quot; y=&quot;200&quot;&gt;x1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M 100 200 L 100 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;100&quot; y=&quot;200&quot;&gt;x2: 1&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 100 L 0 100&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;100&quot;&gt;y1: 0&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;g&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;path d=&quot;M -100 0 L 0 0&quot; /&gt;</span>
+<span class="gp">... </span><span class="s1">    &lt;text x=&quot;-100&quot; y=&quot;0&quot;&gt;y2: 2&lt;/text&gt;</span>
+<span class="gp">... </span><span class="s1">  &lt;/g&gt;</span>
+<span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span><span class="o">.</span><span class="n">data_aspect_ratio</span><span class="p">()</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.df">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.df" title="Link to this definition"></a></dt>
@@ -927,6 +974,9 @@ coordinate system, or <cite>None</cite> if that point’s coordinate is not know
 <dt class="sig sig-object py" id="svgdigitizer.svgplot.SVGPlot.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#svgdigitizer.svgplot.SVGPlot.plot" title="Link to this definition"></a></dt>
 <dd><p>Visualize the data in this plot.</p>
+<p>Returns the matplotlib <code class="docutils literal notranslate"><span class="pre">Axes</span></code> with the plotted curve. The axes use the
+same scale as the original figure in the SVG, see
+<a class="reference internal" href="#svgdigitizer.svgplot.SVGPlot.data_aspect_ratio" title="svgdigitizer.svgplot.SVGPlot.data_aspect_ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">data_aspect_ratio()</span></code></a>.</p>
 <p>EXAMPLES:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">svgdigitizer.svg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVG</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
@@ -955,6 +1005,7 @@ coordinate system, or <cite>None</cite> if that point’s coordinate is not know
 <span class="gp">... </span><span class="s1">&lt;/svg&gt;&#39;&#39;&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span> <span class="o">=</span> <span class="n">SVGPlot</span><span class="p">(</span><span class="n">svg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="go">&lt;Axes: xlabel=&#39;x [s]&#39;, ylabel=&#39;y [cm]&#39;&gt;</span>
 </pre></div>
 </div>
 </dd></dl>

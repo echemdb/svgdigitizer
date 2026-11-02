@@ -57,18 +57,15 @@
 <li class="toctree-l2"><a class="reference internal" href="#create-svg"><code class="docutils literal notranslate"><span class="pre">create-svg</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#digitize"><code class="docutils literal notranslate"><span class="pre">digitize</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#plot"><code class="docutils literal notranslate"><span class="pre">plot</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-the-digitized-curve">Plotting the digitized curve</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#figure"><code class="docutils literal notranslate"><span class="pre">figure</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#cv"><code class="docutils literal notranslate"><span class="pre">cv</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-flags">Advanced flags</a><ul>
@@ -142,7 +139,6 @@ Commands:
   get-citation   Get the citation from the DOI provided PDF file.
   get-doi        Get the DOI from the provided PDF file.
   paginate       Render PDF pages as individual SVG files with linked PNG...
-  plot           Display a plot of the data traced in an SVG.
   rename-by-key  Rename the provided PDF file by the key derived from...
 </pre></div>
 </div>
@@ -190,20 +186,12 @@ Options:
 <p>Create an SVG with a linked PNG for specific pages in a PDF. Use <code class="docutils literal notranslate"><span class="pre">--pages</span></code> to select which pages to process.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">0</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer paginate [OPTIONS] PDF
-Try &#39;svgdigitizer paginate --help&#39; for help.
-
-Error: Invalid value: Invalid range. Page numbers must be within 1-1.
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/example_plot_paginate.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">1</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Download the resulting <a class="reference download internal" download="" href="_downloads/2522b22e30a7f8e2620d6a364dd59e3d/example_plot_paginate_p0.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(example_plot_paginate_p0.svg)</span></code></a>.</p>
+<p>Download the resulting <a class="reference download internal" download="" href="_downloads/6cbd3ed1acf42684811bc787f129107b/example_plot_paginate_p1.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(example_plot_paginate_p1.svg)</span></code></a>.</p>
 </section>
 </section>
 <section id="create-svg">
@@ -273,6 +261,9 @@ Options:
   --skewed                   Detect non-orthogonal skewed axes going through
                              the markers instead of assuming that axes are
                              perfectly horizontal and vertical.
+  --plot                     Create a PNG showing the digitized curve with
+                             labeled axes and the same scale as in the
+                             original figure.
   --help                     Show this message and exit.
 </pre></div>
 </div>
@@ -344,50 +335,38 @@ Options:
 <p>The use of <a class="reference internal" href="#digitize"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">svgdigitizer</span> <span class="pre">digitize</span></code></span></a> is discouraged when your axis labels contain units, because the output CSV does not contain this information. Use <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">svgdigitizer</span> <span class="pre">figure</span></code></span></a> instead, which creates a frictionless datapackage (CSV + JSON).</p>
 </div>
 </section>
-</section>
-<section id="plot">
-<h2><code class="docutils literal notranslate"><span class="pre">plot</span></code><a class="headerlink" href="#plot" title="Link to this heading"></a></h2>
-<p>Display a plot of the data traced in an SVG</p>
+<section id="plotting-the-digitized-curve">
+<h3>Plotting the digitized curve<a class="headerlink" href="#plotting-the-digitized-curve" title="Link to this heading"></a></h3>
+<p>All digitization commands (<code class="docutils literal notranslate"><span class="pre">digitize</span></code>, <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a>, and <a class="reference internal" href="api/cv.html#module-svgdigitizer.electrochemistry.cv" title="svgdigitizer.electrochemistry.cv"><span class="xref myst py py-mod"><code class="docutils literal notranslate"><span class="pre">cv</span></code></span></a>) accept the <code class="docutils literal notranslate"><span class="pre">--plot</span></code> flag. It writes a PNG next to the other output files that shows the digitized curve with labeled axes (including units) and the same scale as in the original figure. This is convenient to visually verify the digitization.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>plot<span class="w"> </span>--help
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>digitize<span class="w"> </span>./files/others/example_plot_p0_demo_digitize.svg<span class="w"> </span>--skewed<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01<span class="w"> </span>--plot
 </pre></div>
 </div>
 </div>
+</div>
+<div class="cell tag_hide-input tag_remove-stdout tag_remove-stderr docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">Image</span><span class="p">(</span><span class="s1">&#39;./files/others/example_plot_p0_demo_digitize.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer plot [OPTIONS] SVG
-
-  Display a plot of the data traced in an SVG.
-
-Options:
-  --sampling-interval FLOAT  Sampling interval on the x-axis with respect to
-                             the x-axis values.
-  --skewed                   Detect non-orthogonal skewed axes going through
-                             the markers instead of assuming that axes are
-                             perfectly horizontal and vertical.
-  --help                     Show this message and exit.
-</pre></div>
-</div>
-</div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The plot will only be displayed, when your shell is configure accordingly.</p>
-</div>
-<section id="id3">
-<h3>Examples<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
-<p>The plot of an annotated example SVG (with skewed axis) with a specific sampling interval can be created with</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>plot<span class="w"> </span>./files/others/example_plot_p0_demo_digitize.svg<span class="w"> </span>--skewed<span class="w"> </span>--sampling-interval<span class="w"> </span><span class="m">0</span>.01
-</pre></div>
-</div>
+<img alt="_images/5949d51e011ecad297a67c192be270dff53aab183184af95dd76f526b3df94c8.png" src="_images/5949d51e011ecad297a67c192be270dff53aab183184af95dd76f526b3df94c8.png" />
 </div>
 </div>
 </section>
 </section>
 <section id="figure">
-<span id="id4"></span><h2><code class="docutils literal notranslate"><span class="pre">figure</span></code><a class="headerlink" href="#figure" title="Link to this heading"></a></h2>
+<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">figure</span></code><a class="headerlink" href="#figure" title="Link to this heading"></a></h2>
 <p>The figure command produces a CSV and an JSON with additional metadata, which contains, for example, information on the axis units. In addition it will reconstruct a time axis, when the rate at which the data on the x-axis is given in a text label in the SVG such as <code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">rate:</span> <span class="pre">30</span> <span class="pre">m/s</span></code>. Here the unit must be equivalent to that on the x-axis divided by a time.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -421,6 +400,9 @@ Options:
   --skewed                   Detect non-orthogonal skewed axes going through
                              the markers instead of assuming that axes are
                              perfectly horizontal and vertical.
+  --plot                     Create a PNG showing the digitized curve with
+                             labeled axes and the same scale as in the
+                             original figure.
   --help                     Show this message and exit.
 </pre></div>
 </div>
@@ -430,8 +412,8 @@ Options:
 <p class="admonition-title">Note</p>
 <p>Flags <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code>, <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">si-units</span></code> are covered in the <a class="reference internal" href="#advanced-flags"><span class="std std-ref">advanced section</span></a> section below.</p>
 </div>
-<section id="id5">
-<h3>Examples<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<section id="id4">
+<h3>Examples<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>Consider the following figure where the annotated <a class="reference download internal" download="" href="_downloads/846d047f351becb5276d379bdfa9a153/looping_scan_rate.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span> <span class="pre">(looping_scan_rate.svg)</span></code></a> contains a scan rate.</p>
 <a class="reference internal image-reference" href="_images/looping_scan_rate_annotated.png"><img alt="_images/looping_scan_rate_annotated.png" src="_images/looping_scan_rate_annotated.png" style="width: 400px;" />
 </a>
@@ -514,6 +496,9 @@ Options:
   --skewed                   Detect non-orthogonal skewed axes going through
                              the markers instead of assuming that axes are
                              perfectly horizontal and vertical.
+  --plot                     Create a PNG showing the digitized curve with
+                             labeled axes and the same scale as in the
+                             original figure.
   --help                     Show this message and exit.
 </pre></div>
 </div>
@@ -523,8 +508,8 @@ Options:
 <p class="admonition-title">Note</p>
 <p>Flags <code class="docutils literal notranslate"><span class="pre">--bibliography</span></code>, <code class="docutils literal notranslate"><span class="pre">--metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">si-units</span></code> are covered in the <a class="reference internal" href="#advanced-flags"><span class="std std-ref">advanced section</span></a> section below.</p>
 </div>
-<section id="id6">
-<h3>Examples<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<section id="id5">
+<h3>Examples<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>An annotated example <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">SVG</span></code></a> is shown in the following figure.</p>
 <a class="reference internal image-reference" href="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png"><img alt="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" src="_images/mustermann_2021_svgdigitizer_1_f2a_blue.png" style="width: 400px;" />
 </a>
@@ -539,7 +524,7 @@ Options:
 </section>
 </section>
 <section id="advanced-flags">
-<span id="id7"></span><h2>Advanced flags<a class="headerlink" href="#advanced-flags" title="Link to this heading"></a></h2>
+<span id="id6"></span><h2>Advanced flags<a class="headerlink" href="#advanced-flags" title="Link to this heading"></a></h2>
 <section id="si-units">
 <h3><code class="docutils literal notranslate"><span class="pre">--si-units</span></code><a class="headerlink" href="#si-units" title="Link to this heading"></a></h3>
 <p>The flag <code class="docutils literal notranslate"><span class="pre">--si-unit</span></code> is used by the <a class="reference internal" href="#figure"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">figure</span></code></span></a> command and commands that inherit from <code class="docutils literal notranslate"><span class="pre">figure</span></code>, such as the <code class="docutils literal notranslate"><span class="pre">cv</span></code> command. The units are converted to SI units, if they are compatible with the <a class="reference external" href="https://www.astropy.org/">astropy</a> unit package. The values in the CSV are scaled respectively and the new units are provided in the output JSON files.</p>

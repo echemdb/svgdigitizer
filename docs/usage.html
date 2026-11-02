@@ -131,15 +131,7 @@
 <p>When the figure is included inside a PDF use the svgdigitizer <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a> to create an SVG from the PDF by typing.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/looping.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">0</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usage: svgdigitizer paginate [OPTIONS] PDF
-Try &#39;svgdigitizer paginate --help&#39; for help.
-
-Error: Invalid value: Invalid range. Page numbers must be within 1-1.
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/others/looping.pdf<span class="w"> </span>--pages<span class="w"> </span><span class="m">1</span>
 </pre></div>
 </div>
 </div>
@@ -149,8 +141,8 @@ Error: Invalid value: Invalid range. Page numbers must be within 1-1.
 </section>
 <section id="svg-annotation-basics">
 <h2>SVG Annotation (Basics)<a class="headerlink" href="#svg-annotation-basics" title="Link to this heading"></a></h2>
-<p>We consider the following <a class="reference download internal" download="" href="_downloads/476d7e244b5a3d0d323f5abc7d9e86e2/looping_p0.png"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">figure</span></code></a>.</p>
-<a class="reference internal image-reference" href="_images/looping_p0.png"><img alt="_images/looping_p0.png" class="align-center" src="_images/looping_p0.png" style="width: 500px;" />
+<p>We consider the following <a class="reference download internal" download="" href="_downloads/d5456b5efe681b988832a938fe5a6bfa/looping_p1.png"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">figure</span></code></a>.</p>
+<a class="reference internal image-reference" href="_images/looping_p1.png"><img alt="_images/looping_p1.png" class="align-center" src="_images/looping_p1.png" style="width: 500px;" />
 </a>
 <p>The minimum requirements to digitize such a figure with <code class="docutils literal notranslate"><span class="pre">svgdigitizer</span></code> are:</p>
 <ul class="simple">
@@ -162,7 +154,7 @@ Error: Invalid value: Invalid range. Page numbers must be within 1-1.
 </li>
 <li><p>Tracing the curve with a <em>bezier path</em>  which is grouped with a text label of type <code class="docutils literal notranslate"><span class="pre">curve:</span> <span class="pre">identifier</span></code> (<a class="reference internal" href="#curvetracing"><span class="std std-ref">see below</span></a>)</p></li>
 </ul>
-<p>An <a class="reference download internal" download="" href="_downloads/f2fc828c330e883e90decece763656ec/looping.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a> of the example figure is shown below and can be explored locally by placing it in the same folder as the <a class="reference download internal" download="" href="_downloads/476d7e244b5a3d0d323f5abc7d9e86e2/looping_p0.png"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">figure</span></code></a> above.</p>
+<p>An <a class="reference download internal" download="" href="_downloads/f2fc828c330e883e90decece763656ec/looping.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a> of the example figure is shown below and can be explored locally by placing it in the same folder as the <a class="reference download internal" download="" href="_downloads/d5456b5efe681b988832a938fe5a6bfa/looping_p1.png"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">figure</span></code></a> above.</p>
 <a class="bg-primary mb-1 reference internal image-reference" href="_images/looping_annotated.png"><img alt="_images/looping_annotated.png" class="bg-primary mb-1 align-center" src="_images/looping_annotated.png" style="width: 500px;" />
 </a>
 <p>The figure can be retraced, for example in 0.01 steps, with respect to the x-axis values with the API.</p>
@@ -182,7 +174,10 @@ Error: Invalid value: Invalid range. Page numbers must be within 1-1.
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
 </pre></div>
 </div>
-<img alt="_images/a405a00ae642de4450b3f76a48ad23ae2edba5b32a970916fa88f0264cf70363.png" src="_images/a405a00ae642de4450b3f76a48ad23ae2edba5b32a970916fa88f0264cf70363.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;d [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/4d324df2534a1cec312c98e61f6b1f114fc13633b601f624c1a2dca9422edff3.png" src="_images/4d324df2534a1cec312c98e61f6b1f114fc13633b601f624c1a2dca9422edff3.png" />
 </div>
 </div>
 <p>Alternatively the data can be digitized with the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a></p>
@@ -194,7 +189,9 @@ Error: Invalid value: Invalid range. Page numbers must be within 1-1.
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
-No figure label found in the SVG. If the plot originates from a publication, consider adding a text label such as `figure: 1a` to the SVG.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No figure label found in the SVG. If the plot originates from a publication, consider adding a text label such as `figure: 1a` to the SVG.
 </pre></div>
 </div>
 </div>
@@ -358,7 +355,10 @@ No figure label found in the SVG. If the plot originates from a publication, con
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e0e514434915982c997d76693d1544792ed7149274a0b1b339991c7f329cc576.png" src="_images/e0e514434915982c997d76693d1544792ed7149274a0b1b339991c7f329cc576.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;U [V]&#39;, ylabel=&#39;v [m / s]&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/5949d51e011ecad297a67c192be270dff53aab183184af95dd76f526b3df94c8.png" src="_images/5949d51e011ecad297a67c192be270dff53aab183184af95dd76f526b3df94c8.png" />
 </div>
 </div>
 <p>Alternatively use the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a> and add the option <code class="docutils literal notranslate"><span class="pre">--skewed</span></code></p>
@@ -401,7 +401,10 @@ An <a class="reference download internal" download="" href="_downloads/3dd78e4d7
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6a72b7780171546044e3ddb5785aeeda6dfe29ad8da3b6b5e7df6bb787e015e3.png" src="_images/6a72b7780171546044e3ddb5785aeeda6dfe29ad8da3b6b5e7df6bb787e015e3.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;d [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/834002b0951a422b2aaf1a67ee1fd33ed7e871bd604245e362ab30e737c7755a.png" src="_images/834002b0951a422b2aaf1a67ee1fd33ed7e871bd604245e362ab30e737c7755a.png" />
 </div>
 </div>
 <p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a>.</p>
@@ -413,9 +416,7 @@ An <a class="reference download internal" download="" href="_downloads/3dd78e4d7
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No text with scan rate found in the SVG or provided metadata.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>No figure label found in the SVG. If the plot originates from a publication, consider adding a text label such as `figure: 1a` to the SVG.
+No figure label found in the SVG. If the plot originates from a publication, consider adding a text label such as `figure: 1a` to the SVG.
 </pre></div>
 </div>
 </div>
@@ -453,7 +454,10 @@ An <a class="reference download internal" download="" href="_downloads/d540543f4
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6aec85c4d7e1bc00e28c83dcec5d8423c04793df33b2528289f66d00d81dcba1.png" src="_images/6aec85c4d7e1bc00e28c83dcec5d8423c04793df33b2528289f66d00d81dcba1.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;d [m]&#39;, ylabel=&#39;height [m]&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/548ff848ff5d8d8ee115ae0654570406260b9edcf78022244b3dba618a77863d.png" src="_images/548ff848ff5d8d8ee115ae0654570406260b9edcf78022244b3dba618a77863d.png" />
 </div>
 </div>
 <p>or simply by using one of the digitizing options of the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a>.</p>

@@ -139,64 +139,26 @@
 <p>Use the <a class="reference internal" href="cli.html"><span class="std std-doc">CLI</span></a> to create SVG and PNG files from the PDF, i.e., execute the following command in the folder with the PDF.</p>
 <div class="cell tag_remove-stderr docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/bin/svgdigitizer&quot;</span>, line <span class=" -Color -Color-Magenta">10</span>, in <span class=" -Color -Color-Magenta">&lt;module&gt;</span>
-    sys.exit(<span class=" -Color -Color-Red">cli</span><span class=" -Color -Color-Bold -Color-Bold-Red">()</span>)
-             <span class=" -Color -Color-Red">~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^</span>
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1524</span>, in <span class=" -Color -Color-Magenta">__call__</span>
-    return <span class=" -Color -Color-Red">self.main</span><span class=" -Color -Color-Bold -Color-Bold-Red">(*args, **kwargs)</span>
-           <span class=" -Color -Color-Red">~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^</span>
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1445</span>, in <span class=" -Color -Color-Magenta">main</span>
-    rv = self.invoke(ctx)
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1912</span>, in <span class=" -Color -Color-Magenta">invoke</span>
-    return _process_result(<span class=" -Color -Color-Red">sub_ctx.command.invoke</span><span class=" -Color -Color-Bold -Color-Bold-Red">(sub_ctx)</span>)
-                           <span class=" -Color -Color-Red">~~~~~~~~~~~~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^</span>
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">1308</span>, in <span class=" -Color -Color-Magenta">invoke</span>
-    return <span class=" -Color -Color-Red">ctx.invoke</span><span class=" -Color -Color-Bold -Color-Bold-Red">(self.callback, **ctx.params)</span>
-           <span class=" -Color -Color-Red">~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/click/core.py&quot;</span>, line <span class=" -Color -Color-Magenta">877</span>, in <span class=" -Color -Color-Magenta">invoke</span>
-    return callback(*args, **kwargs)
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/entrypoint.py&quot;</span>, line <span class=" -Color -Color-Magenta">870</span>, in <span class=" -Color -Color-Magenta">paginate</span>
-    page_range = range(<span class=" -Color -Color-Bold -Color-Bold-Red">doc.num_pages</span>)
-                       <span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^</span>
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/functools.py&quot;</span>, line <span class=" -Color -Color-Magenta">1126</span>, in <span class=" -Color -Color-Magenta">__get__</span>
-    val = self.func(instance)
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/pdf.py&quot;</span>, line <span class=" -Color -Color-Magenta">294</span>, in <span class=" -Color -Color-Magenta">num_pages</span>
-    return <span class=" -Color -Color-Bold -Color-Bold-Red">self.doc</span>.page_count
-           <span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^</span>
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/functools.py&quot;</span>, line <span class=" -Color -Color-Magenta">1126</span>, in <span class=" -Color -Color-Magenta">__get__</span>
-    val = self.func(instance)
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/svgdigitizer/pdf.py&quot;</span>, line <span class=" -Color -Color-Magenta">170</span>, in <span class=" -Color -Color-Magenta">doc</span>
-    return <span class=" -Color -Color-Red">pymupdf.open</span><span class=" -Color -Color-Bold -Color-Bold-Red">(self.filepath)</span>
-           <span class=" -Color -Color-Red">~~~~~~~~~~~~</span><span class=" -Color -Color-Bold -Color-Bold-Red">^^^^^^^^^^^^^^^</span>
-  File <span class=" -Color -Color-Magenta">&quot;/home/runner/work/svgdigitizer/svgdigitizer/.pixi/envs/dev/lib/python3.14/site-packages/pymupdf/__init__.py&quot;</span>, line <span class=" -Color -Color-Magenta">2992</span>, in <span class=" -Color -Color-Magenta">__init__</span>
-    raise FileNotFoundError(f&quot;no such file: &#39;{filename}&#39;&quot;)
-<span class=" -Color -Color-Bold -Color-Bold-Magenta">pymupdf.FileNotFoundError</span>: <span class=" -Color -Color-Magenta">no such file: &#39;/files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>svgdigitizer<span class="w"> </span>paginate<span class="w"> </span>./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf
 </pre></div>
 </div>
 </div>
 </div>
-<p>The resulting filenames are of the form:</p>
-<p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p0.png</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p0.svg</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.png</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.svg</span></code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The page count starts from 0. It does not reflect the original page number in the PDF.</p>
+<p>The page count starts from 1 and matches the page number in the PDF.</p>
 </div>
 </section>
 <section id="step-3-digitize-a-plot">
 <h2>Step 3: Digitize a plot<a class="headerlink" href="#step-3-digitize-a-plot" title="Link to this heading"></a></h2>
 <p><strong>1: Select an svg file with a plot to be digitized</strong></p>
-<p>The data in Figure 2a in the example PDF on page 2 (filename containing <code class="docutils literal notranslate"><span class="pre">_p1</span></code>)  contains three curves, which can be identified by their colors. Each digitized curve should be in a separate SVG file.
-Therefore, create a copy of the SVG file of page two (<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p1.svg</span></code>) and rename it to<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.svg</span></code>. Here, <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code> indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.</p>
+<p>The data in Figure 2a in the example PDF on page 2 (filename containing <code class="docutils literal notranslate"><span class="pre">_p2</span></code>)  contains three curves, which can be identified by their colors. Each digitized curve should be in a separate SVG file.
+Therefore, create a copy of the SVG file of page two (<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_p2.svg</span></code>) and rename it to<code class="docutils literal notranslate"><span class="pre">mustermann_2021_svgdigitizer_1_f2a_blue.svg</span></code>. Here, <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code> indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">_p1</span></code> can be omitted since the figure can unambiguously be identified by the figure and curve identifier label, e.g., <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">_p2</span></code> can be omitted since the figure can unambiguously be identified by the figure and curve identifier label, e.g., <code class="docutils literal notranslate"><span class="pre">_f2a_blue</span></code>.</p>
 </div>
 <p><strong>2: Annotate the SVG and curve tracing</strong></p>
 <p>In principle, the SVG is annotated and the curve is traced in the same way as described in the <a class="reference internal" href="usage.html"><span class="std std-doc">usage</span></a> section. A few additional notes are provide below the <a class="reference download internal" download="" href="_downloads/fc4051acb4e89bd50929129aca2cfdd3/mustermann_2021_svgdigitizer_1_f2a_blue.svg"><code class="xref download docutils literal notranslate"><span class="pre">annotated</span> <span class="pre">SVG</span></code></a>.</p>
