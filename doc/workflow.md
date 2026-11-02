@@ -104,28 +104,26 @@ Use the [CLI](cli.md) to create SVG and PNG files from the PDF, i.e., execute th
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer paginate /files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf
+!svgdigitizer paginate ./files/mustermann_2021_svgdigitizer_1/mustermann_2021_svgdigitizer_1.pdf
 ```
 
-The resulting filenames are of the form:
+`mustermann_2021_svgdigitizer_1_p1.png`
 
-`mustermann_2021_svgdigitizer_1_p0.png`
-
-`mustermann_2021_svgdigitizer_1_p0.svg`
+`mustermann_2021_svgdigitizer_1_p1.svg`
 
 ```{note}
-The page count starts from 0. It does not reflect the original page number in the PDF.
+The page count starts from 1 and matches the page number in the PDF.
 ```
 
 ## Step 3: Digitize a plot
 
 **1: Select an svg file with a plot to be digitized**
 
-The data in Figure 2a in the example PDF on page 2 (filename containing `_p1`)  contains three curves, which can be identified by their colors. Each digitized curve should be in a separate SVG file.
-Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p1.svg`) and rename it to`mustermann_2021_svgdigitizer_1_f2a_blue.svg`. Here, `_f2a_blue` indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.
+The data in Figure 2a in the example PDF on page 2 (filename containing `_p2`)  contains three curves, which can be identified by their colors. Each digitized curve should be in a separate SVG file.
+Therefore, create a copy of the SVG file of page two (`mustermann_2021_svgdigitizer_1_p2.svg`) and rename it to`mustermann_2021_svgdigitizer_1_f2a_blue.svg`. Here, `_f2a_blue` indicates that the digitized curve is in Fig. 2b and that the curve is blue. The identifier will later also be included in the SVG file.
 
 ```{note}
-`_p1` can be omitted since the figure can unambiguously be identified by the figure and curve identifier label, e.g., `_f2a_blue`.
+`_p2` can be omitted since the figure can unambiguously be identified by the figure and curve identifier label, e.g., `_f2a_blue`.
 ```
 
 **2: Annotate the SVG and curve tracing**

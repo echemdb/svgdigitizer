@@ -2131,9 +2131,82 @@ class SVGPlot:
 
         return pd.DataFrame(points, columns=[self.xlabel, self.ylabel])
 
+    def data_aspect_ratio(self, df=None):
+        r"""
+        Return the aspect ratio that makes a plot of `df` use the same scale as
+        the original figure in the SVG.
+
+        The value is meant to be passed to matplotlib's ``Axes.set_aspect``.
+        It is the displayed length of one unit on the y-axis relative to one unit
+        on the x-axis, computed from the curve's bounding box in SVG (pixel)
+        coordinates and its extent in the data coordinates of `df`. When `df` is
+        ``None``, :attr:`df` is used.
+
+        Returns ``None`` when the aspect ratio cannot be determined, e.g., when
+        the curve has no extent along one of the axes.
+
+        EXAMPLES:
+
+        Here one unit on the y-axis spans half as many pixels as one unit on the
+        x-axis, so the y-axis is displayed half as long::
+
+            >>> from svgdigitizer.svg import SVG
+            >>> from io import StringIO
+            >>> svg = SVG(StringIO(r'''
+            ... <svg>
+            ...   <g>
+            ...     <path d="M 0 100 L 100 0" />
+            ...     <text x="0" y="0">curve: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 0 200 L 0 100" />
+            ...     <text x="0" y="200">x1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M 100 200 L 100 100" />
+            ...     <text x="100" y="200">x2: 1</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 100 L 0 100" />
+            ...     <text x="-100" y="100">y1: 0</text>
+            ...   </g>
+            ...   <g>
+            ...     <path d="M -100 0 L 0 0" />
+            ...     <text x="-100" y="0">y2: 2</text>
+            ...   </g>
+            ... </svg>'''))
+            >>> SVGPlot(svg).data_aspect_ratio()
+            0.5
+
+        """
+        if df is None:
+            df = self.df
+
+        xmin, xmax, ymin, ymax = self.labeled_paths["curve"][0][0].path.bbox()
+        width_px = abs(xmax - xmin)
+        height_px = abs(ymax - ymin)
+
+        width_data = abs(df[self.xlabel].max() - df[self.xlabel].min())
+        height_data = abs(df[self.ylabel].max() - df[self.ylabel].min())
+
+        if not (width_px and height_px and width_data and height_data):
+            return None
+
+        pixels_per_x = width_px / width_data
+        pixels_per_y = height_px / height_data
+
+        # Cast to a plain float so that the value does not render as a NumPy
+        # scalar such as `np.float64(0.5)` whose repr depends on the NumPy
+        # version.
+        return float(pixels_per_y / pixels_per_x)
+
     def plot(self):
         r"""
         Visualize the data in this plot.
+
+        Returns the matplotlib ``Axes`` with the plotted curve. The axes use the
+        same scale as the original figure in the SVG, see
+        :meth:`data_aspect_ratio`.
 
         EXAMPLES::
 
@@ -2164,15 +2237,22 @@ class SVGPlot:
             ... </svg>'''))
             >>> plot = SVGPlot(svg)
             >>> plot.plot()
+            <Axes: xlabel='x [s]', ylabel='y [cm]'>
 
         """
-        self.df.plot(
+        axes = self.df.plot(
             x=self.xlabel,
             y=self.ylabel,
             xlabel=f"{self.xlabel} [{self.axis_labels[self.xlabel]}]",
             ylabel=f"{self.ylabel} [{self.axis_labels[self.ylabel]}]",
             legend=False,
         )
+
+        aspect_ratio = self.data_aspect_ratio()
+        if aspect_ratio is not None:
+            axes.set_aspect(aspect_ratio)
+
+        return axes
 
 
 # Ensure that cached properties are tested, see
