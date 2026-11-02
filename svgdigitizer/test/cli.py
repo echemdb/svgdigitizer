@@ -191,7 +191,7 @@ class TemporaryData:
         (
             "figure_bibliography",
             [
-                "figure",
+                "digitize",
                 "figure_bibliography.svg",
                 "--metadata",
                 "figure_bibliography.yaml",
@@ -211,7 +211,7 @@ class TemporaryData:
         ),
         (
             "figure_comment",
-            ["figure", "figure_comment.svg", "--metadata", "figure_comment.yaml"],
+            ["digitize", "figure_comment.svg", "--metadata", "figure_comment.yaml"],
         ),
     ],
 )
