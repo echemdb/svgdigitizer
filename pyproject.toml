@@ -1,11 +1,12 @@
 [build-system]
-requires = ["setuptools>=61.2"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "svgdigitizer"
 version = "0.15.0"
-classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 description = "svgdigitizer is a Python library and command line tool to recover the measured data underlying plots in scientific publications."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -36,12 +37,13 @@ svgdigitizer = "svgdigitizer.entrypoint:cli"
 [tool.setuptools]
 packages = [
     "svgdigitizer",
+    "svgdigitizer.assets",
     "svgdigitizer.electrochemistry",
     "svgdigitizer.test",
 ]
 
 [tool.setuptools.package-data]
-svgdigitizer = ["assets/template_basic.svg"]
+"svgdigitizer.assets" = ["template_basic.svg"]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
