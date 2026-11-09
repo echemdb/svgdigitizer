@@ -149,7 +149,8 @@ python = "3.14.*"
 
 [tool.pixi.feature.release.tasks]
 # To create a new release, run `pixi run rever X.Y.Z`
-rever = { args = [ { "arg" = "version", "default" = "--help" } ],cmd = "rever {{ version }}" }
+# PYTHONUTF8 makes rever read files as UTF-8 on Windows (where the default is cp1252).
+rever = { args = [ { "arg" = "version", "default" = "--help" } ], cmd = "rever {{ version }}", env = { PYTHONUTF8 = "1" } }
 
 [tool.pixi.feature.release.dependencies]
 twine = "*"
