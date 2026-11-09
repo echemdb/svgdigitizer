@@ -191,7 +191,7 @@ class TemporaryData:
         (
             "figure_bibliography",
             [
-                "figure",
+                "digitize",
                 "figure_bibliography.svg",
                 "--metadata",
                 "figure_bibliography.yaml",
@@ -211,7 +211,7 @@ class TemporaryData:
         ),
         (
             "figure_comment",
-            ["figure", "figure_comment.svg", "--metadata", "figure_comment.yaml"],
+            ["digitize", "figure_comment.svg", "--metadata", "figure_comment.yaml"],
         ),
     ],
 )
@@ -244,6 +244,56 @@ def test_svgdigitizer_cli(name, args):
                 pandas.read_csv(f"outdir/{name}.csv"),
                 pandas.read_csv(csv_expected),
             )
+
+        finally:
+            os.chdir(cwd)
+
+
+def test_digitize_only_csv():
+    """
+    Test that the digitize command with --only-csv writes the expected CSV but no JSON.
+    """
+    cwd = os.getcwd()
+    with TemporaryData("data/xy.*") as workdir:
+        os.chdir(workdir)
+        try:
+            from svgdigitizer.entrypoint import cli
+
+            invoke(cli, "digitize", "xy.svg", "--only-csv", "--outdir", "outdir")
+
+            assert sorted(os.listdir("outdir")) == ["xy.csv"]
+            pandas.testing.assert_frame_equal(
+                pandas.read_csv("outdir/xy.csv"),
+                pandas.read_csv("xy.csv.expected"),
+            )
+
+        finally:
+            os.chdir(cwd)
+
+
+def test_digitize_only_csv_warns_about_json_options(caplog):
+    """
+    Test that the digitize command with --only-csv warns about options that only affect the JSON.
+    """
+    cwd = os.getcwd()
+    with TemporaryData("data/xy.*", "bibliography/bibliography.bib") as workdir:
+        os.chdir(workdir)
+        try:
+            from svgdigitizer.entrypoint import cli
+
+            invoke(
+                cli,
+                "digitize",
+                "xy.svg",
+                "--only-csv",
+                "--bibliography",
+                "bibliography.bib",
+                "--outdir",
+                "outdir",
+            )
+
+            assert sorted(os.listdir("outdir")) == ["xy.csv"]
+            assert "have no effect with --only-csv" in caplog.text
 
         finally:
             os.chdir(cwd)
