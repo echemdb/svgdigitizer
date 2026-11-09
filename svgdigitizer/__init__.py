@@ -31,4 +31,4 @@ The version of the installed svgdigitizer::
 # ********************************************************************
 
 # The version is updated automatically on release by rever, see rever.xsh.
-__version__ = "0.14.5"
+__version__ = "0.15.0"
