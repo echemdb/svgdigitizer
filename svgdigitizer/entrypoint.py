@@ -275,6 +275,11 @@ def _create_bibliography(bibliography, citation_key, metadata):
 @citation_key_option
 @skewed_option
 @plot_option
+@click.option(
+    "--only-csv",
+    is_flag=True,
+    help="Only write the CSV and no JSON describing it.",
+)
 def digitize(
     svg,
     sampling_interval,
@@ -285,7 +290,8 @@ def digitize(
     skewed,
     si_units,
     make_plot,
-):  # pylint: disable=too-many-positional-arguments
+    only_csv,
+):  # pylint: disable=too-many-positional-arguments,too-many-arguments
     """
     Digitize a 2D plot and create a frictionless datapackage.
 
@@ -310,7 +316,21 @@ def digitize(
         ...     os.path.exists(os.path.join(directory, "xy_rate.png"))
         True
 
+    The ``--only-csv`` flag writes the CSV without the JSON::
+
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "digitize", "--only-csv", os.path.join(directory, "xy_rate.svg"))
+        ...     sorted(name for name in os.listdir(directory) if name.startswith("xy_rate."))
+        ['xy_rate.csv', 'xy_rate.svg']
+
     TESTS:
+
+    Options that only add to the JSON can be combined with ``--only-csv``, but have no effect::
+
+        >>> with TemporaryData("**/xy_rate.svg") as directory:
+        ...     invoke(cli, "digitize", "--only-csv", os.path.join(directory, "xy_rate.svg"), "--citation-key", "key")
+        ...     sorted(name for name in os.listdir(directory) if name.startswith("xy_rate."))
+        ['xy_rate.csv', 'xy_rate.svg']
 
     The command can be invoked on files in the current directory::
 
@@ -346,6 +366,11 @@ def digitize(
         ...     invoke(cli, "digitize", os.path.join(directory, "xy_rate.svg"))
 
     """
+    if only_csv and (bibliography or citation_key):
+        logger.warning(
+            "The options --bibliography and --citation-key have no effect with --only-csv, since they only add information to the JSON."
+        )
+
     if metadata:
         import yaml
 
@@ -360,13 +385,16 @@ def digitize(
             force_si_units=si_units,
         )
 
-    _create_outfiles(
-        svgfigure=svgfigure,
-        svg=svg,
-        outdir=outdir,
-        bibliography=bibliography,
-        citation_key=citation_key,
-    )
+    if only_csv:
+        svgfigure.df.to_csv(_outfile(svg, suffix=".csv", outdir=outdir), index=False)
+    else:
+        _create_outfiles(
+            svgfigure=svgfigure,
+            svg=svg,
+            outdir=outdir,
+            bibliography=bibliography,
+            citation_key=citation_key,
+        )
 
     if make_plot:
         _create_plotfile(svgfigure, svg, outdir=outdir)
