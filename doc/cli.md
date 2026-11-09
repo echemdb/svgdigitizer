@@ -157,6 +157,18 @@ from IPython.display import Image
 Image('./files/others/example_plot_p0_demo_digitize.png')
 ```
 
+### CSV only
+
+For a quick look at the data, e.g., when the absolute values or the units of the axes are not relevant, the `--only-csv` flag writes only the CSV and no JSON.
+
+```sh .noeval
+svgdigitizer digitize ./files/others/example_plot_p0_demo_digitize.svg --skewed --sampling-interval 0.01 --only-csv
+```
+
+```{note}
+Without the JSON, the CSV does not record the units of the axes or how it was created. The flags `--bibliography` and `--citation-key` can be combined with `--only-csv`, but have no effect, since they only add information to the JSON. From the YAML provided with `--metadata` only a scan rate is used to reconstruct a time axis in the CSV.
+```
+
 ### Reconstructing a time axis
 
 Consider the following figure where the annotated {download}`SVG (looping_scan_rate.svg)<./files/others/looping_scan_rate.svg>` contains a scan rate.
