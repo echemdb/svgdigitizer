@@ -293,8 +293,7 @@ def digitize(
     including the units of the axes.
     The resulting CSV contains a time axis, when a text label with a scan rate is given
     in the SVG whose units must be of type `x-axis unit / time unit`, such as `scan rate: 50 K / s`.
-
-
+    \f
 
     EXAMPLES::
 
@@ -390,8 +389,7 @@ def digitize(
 def digitize_figure(ctx, **kwargs):
     """
     Alias of the `digitize` command.
-
-
+    \f
 
     EXAMPLES::
 
