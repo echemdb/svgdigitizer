@@ -90,7 +90,7 @@ Alternatively the data can be digitized with the [CLI](cli.md)
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping.svg --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/looping.svg --sampling-interval 0.01
 ```
 
 (curvetracing)=
@@ -211,7 +211,7 @@ Alternatively use the [CLI](cli.md) and add the option `--skewed`
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/example_plot_skewed.svg --skewed --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/example_plot_skewed.svg --skewed --sampling-interval 0.01
 ```
 
 ### Scaling Factors
@@ -252,7 +252,7 @@ or simply by using one of the digitizing options of the [CLI](cli.md).
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scaling_factor.svg --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/looping_scaling_factor.svg --sampling-interval 0.01
 ```
 
 ### Scale Bars
@@ -302,7 +302,7 @@ or simply by using one of the digitizing options of the [CLI](cli.md).
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scale_bar.svg --sampling-interval 0.01
+!svgdigitizer digitize ./files/others/looping_scale_bar.svg --sampling-interval 0.01
 ```
 
 ### Scatter Plots
@@ -342,7 +342,7 @@ Alternatively use one of the digitizing options of the [CLI](cli.md), omitting t
 ```{code-cell} ipython3
 :tags: [remove-stderr]
 
-!svgdigitizer figure ./files/others/looping_scale_bar.svg
+!svgdigitizer digitize ./files/others/looping_scale_bar.svg
 ```
 
 ```{note}

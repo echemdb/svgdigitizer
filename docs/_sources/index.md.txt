@@ -78,7 +78,7 @@ The sampling of the *bezier paths* can be set by `--sampling-interval` which spe
 In this specific case also indicate that the axes are `--skewed`.
 
 ```sh .noeval
-svgdigitizer figure example_plot_p0_demo.svg --sampling-interval 0.01 --skewed
+svgdigitizer digitize example_plot_p0_demo.svg --sampling-interval 0.01 --skewed
 ```
 
 +++
