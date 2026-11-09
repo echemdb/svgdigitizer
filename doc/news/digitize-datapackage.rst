@@ -1,6 +1,7 @@
 **Added:**
 
 * Added the ``--metadata``, ``--si-units``, ``--bibliography``, and ``--citation-key`` options to the ``digitize`` CLI command.
+* Added an ``--only-csv`` flag to the ``digitize`` CLI command, which writes only the CSV without the JSON.
 
 **Changed:**
 
