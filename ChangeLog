@@ -4,6 +4,48 @@ svgdigitizer Change Log
 
 .. current developments
 
+v0.15.0
+====================
+
+**Added:**
+
+* Added `CONTRIBUTING.md` with guidelines for reporting issues, asking questions and contributing code or documentation.
+* Added `CODE_OF_CONDUCT.md` based on the Contributor Covenant 3.0.
+* Added "Contributing and support" sections to the README and the documentation landing page.
+* Added `CITATION.cff` so that GitHub shows a "Cite this repository" button.
+* Added a `cff` pixi task and a CI check that validate `CITATION.cff`.
+* Added a ``--plot`` flag to the ``digitize``, ``figure``, and ``cv`` CLI commands which writes a PNG of the digitized curve with labeled axes (including units) and the same scale as in the original figure.
+* Added the ``--metadata``, ``--si-units``, ``--bibliography``, and ``--citation-key`` options to the ``digitize`` CLI command.
+* Added an ``--only-csv`` flag to the ``digitize`` CLI command, which writes only the CSV without the JSON.
+* Added retries to the download of citations from doi.org, since the services behind it occasionally fail with server errors.
+* Added `svgdigitizer.__version__` and a `--version` flag to the `svgdigitizer` command line interface.
+* Added the name and version of svgdigitizer as `figureDescription.software` to the metadata of the created datapackages.
+
+**Changed:**
+
+* Changed the DOI in the README and the documentation to the Zenodo concept DOI, which always refers to the latest release.
+* Changed the ``plot()`` methods of ``SVGPlot``, ``SVGFigure``, and ``CV`` to return the matplotlib ``Axes`` and to use the same scale as in the original figure.
+* Changed the ``digitize`` CLI command to create a frictionless datapackage (CSV + JSON) instead of only a CSV, so that the units and the version of svgdigitizer are recorded with the data (see `#247 <https://github.com/echemdb/svgdigitizer/issues/247>`_). When the SVG contains a scan rate, the CSV also contains a time axis.
+
+**Deprecated:**
+
+* Deprecated the ``figure`` CLI command, which is now an alias of the ``digitize`` command.
+
+**Removed:**
+
+* Removed `.zenodo.json`. Zenodo now takes the release metadata from `CITATION.cff`.
+* Removed the ``plot`` CLI command which is superseded by the ``--plot`` flag of the digitization commands.
+
+**Fixed:**
+
+* Fixed several issues in the documentation.
+* Fixed `Pdf.build_identifier` crashing with a `UnicodeEncodeError` when the bibtex entry contains plain UTF-8 characters outside latin-1 (e.g., `ć`, `ž`, or an em dash `—`). LaTeX escape sequences are now decoded with the `latex+utf8` codec, which also handles entries mixing LaTeX escapes and such characters.
+* Fixed `Pdf.bibliographic_entry` failing with an unrelated `AttributeError` when the citation could not be downloaded. A `ConnectionError` describing the network error or HTTP status is now raised instead.
+* Fixed the CLI example in the usage documentation, which used a non-existing `--sampling_interval` flag and a wrong path to the SVG file.
+* Fixed `svgdigitizer figure` and `svgdigitizer cv` failing on Windows when the output directory or the SVG is given as an absolute path with forward slashes, such as `C:/data`.
+
+
+
 v0.14.5
 ====================
 
