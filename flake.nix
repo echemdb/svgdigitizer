@@ -23,6 +23,7 @@
             astropy
             click
             frictionless
+            latexcodec
             matplotlib
             mergedeep
             pandas
@@ -31,6 +32,7 @@
             pymupdf
             pytest
             pyyaml
+            requests
             scipy
             svg-path
             svgpathtools
@@ -54,6 +56,7 @@
             astropy
             click
             frictionless
+            latexcodec
             matplotlib
             mergedeep
             pandas
@@ -62,6 +65,7 @@
             pymupdf
             pytest
             pyyaml
+            requests
             scipy
             svg-path
             svgpathtools
