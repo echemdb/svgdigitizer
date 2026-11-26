@@ -64,7 +64,7 @@ data that is often available only in graphical form. This problem is particularl
 historical literature, where measurements were never stored digitally beyond the printed figure,
 but it equally affects modern publications that do not accompany figures with machine-readable
 raw data.
-While in many cases specific values or summary statistics of the measurement data are sufficient, which can often be extracted from the text body, in other cases the entire curve must be preserved.
+In many cases, specific values or summary statistics of the measurement data are sufficient, and these can often be extracted from the text body. In other cases, however, the entire curve must be preserved.
 
 `svgdigitizer` addresses this need for researchers who require systematic, reproducible, and
 metadata-rich digitization of the entire curve in a scientific plot (see \autoref{fig:workflow}).
@@ -104,7 +104,7 @@ Instead of implementing a graphical interface of its own, `svgdigitizer` relies 
 The central design decision of `svgdigitizer` is to rely on curves traced manually by the user rather than on automatic curve detection.
 This choice costs human effort for every figure, and it requires the user to follow annotation conventions and to work in an external vector graphics editor.
 In return, every data point originates from a traced path that can be inspected directly on top of the original figure in the vector graphics program.
-A inaccurate tracing or label can be corrected later, by anyone, directly in the SVG, without redoing the rest of the work.
+An inaccurate tracing or label can be corrected later, by anyone, directly in the SVG, without redoing the rest of the work.
 Furthermore, manual tracing avoids misdetection of curves, e.g., of overlapping or crossing curves of the same color or of curves partially hidden behind labels.
 Since tracing and labeling are done in a general-purpose vector graphics editor, the user does not need to learn a dedicated graphical interface, and the package does not need to maintain one.
 
@@ -137,12 +137,12 @@ After the curves have been traced, the `figure` and `cv` commands convert the an
 `svgdigitizer` underpins the cyclic voltammogram
 database [@echemdb_2026; @ECHEMDATA], a community-curated collection of electrochemical measurements from the
 literature.
-Some of the data were extracted for specific scientific purposes to address specific questions in the field of electrochemistry [@bergmann_2023_initiobased_8815; @heubach_2025_reproducibility_1910].
-The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolve other annotation errors by the community [@ECHEMDATA].
+Some of the data were extracted to address specific questions in the field of electrochemistry [@bergmann_2023_initiobased_8815; @heubach_2025_reproducibility_1910].
+The input data of the database is stored in the above described file formats (SVG and YAML), which allows adjusting curve tracings or resolving other annotation errors by the community [@ECHEMDATA].
 The output data is made accessible to the community via the `unitpackage` [@engstfeld_2026_19051513] API.
 Both tools form the data layer of a lightweight file-system-based approach
-to research data management described in [@engstfeld_2025_lightweight_013].
-`svgdigitizer` was also used by Fritsche et al. to extract geometric features from weld cross sections of refill friction stir spot welds joining additive-manufactured to wrought aluminum alloys [@fritsche_2026_microstructure_116061].
+to research data management described by @engstfeld_2025_lightweight_013.
+`svgdigitizer` was also used by @fritsche_2026_microstructure_116061 to extract geometric features from weld cross sections of refill friction stir spot welds joining additive-manufactured to wrought aluminum alloys.
 
 The package is distributed via [PyPI](https://pypi.org/project/svgdigitizer/) and
 [conda-forge](https://github.com/conda-forge/svgdigitizer-feedstock), is archived on Zenodo
